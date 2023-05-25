@@ -5,7 +5,24 @@ const exit_btn = info_box.querySelector(".buttons .quit");
 const continue_btn = info_box.querySelector(".buttons .restart");
 const quiz_box = document.querySelector(".quiz_box");
 const result_box = document.querySelector(".result_box");
-const option_list = document.querySelector(".option_list");    
+const option_list = document.querySelector(".option_list"); 
+const mute_btn = document.querySelector(".mute_btn");  
+
+
+let winSound = new Audio("./assets/sounds/win.mp3");
+let loseSound = new Audio("./assets/sounds/game-over.mp3");
+let bgSound = new Audio("./assets/sounds/bg.mp3");
+
+// if mute button clicked
+mute_btn.onclick = ()=>{
+    if(bgSound.muted){
+        bgSound.muted = false;
+        mute_btn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+    }else{
+        bgSound.muted = true;
+        mute_btn.innerHTML = '<i class="fas fa-volume-up"></i>';
+    }
+}
 
 // if startQuiz button clicked
 start_btn.onclick = ()=>{
@@ -19,7 +36,10 @@ exit_btn.onclick = ()=>{
 continue_btn.onclick = ()=>{
     info_box.classList.remove("activeInfo"); //hide info box
     quiz_box.classList.add("activeQuiz"); //show quiz box
-    showQuetions(0); //calling showQestions function
+    showQuestions(0); //calling showQestions function
+    queCounter(1); //passing 1 parameter to queCounter
+    bgSound.play();
+
 }
 let que_count = 0;
 let que_numb = 1;
@@ -37,7 +57,7 @@ restart_quiz.onclick = ()=>{
     que_numb = 1;
     userScore = 0;
     widthValue = 0;
-    showQuetions(que_count); //calling showQestions function
+    showQuestions(que_count); //calling showQestions function
     clearInterval(counter); //clear counter
     clearInterval(counterLine); //clear counterLine
     next_btn.classList.remove("show"); //hide the next button
@@ -53,18 +73,22 @@ next_btn.onclick = ()=>{
     if(que_count < questions.length - 1){ //if question count is less than total question length
         que_count++; //increment the que_count value
         que_numb++; //increment the que_numb value
-        showQuetions(que_count); //calling showQestions function
+        showQuestions(que_count); //calling showQestions function
         clearInterval(counter); //clear counter
         clearInterval(counterLine); //clear counterLine
         next_btn.classList.remove("show"); //hide the next button
+        queCounter(que_numb); //passing que_numb value to queCounter
     }else{
         clearInterval(counter); //clear counter
         clearInterval(counterLine); //clear counterLine
         showResult(); //calling showResult function
+        queCounter(1); //passing que_numb value to queCounter
+        bgSound.pause();
+        bgSound.currentTime = 0;
     }
 }
 // getting questions and options from array
-function showQuetions(index){
+function showQuestions(index){
     const que_text = document.querySelector(".que_text");
     //creating a new span and div tag for question and option and passing the value using array index
     let que_tag = '<span>'+ questions[index].numb + ". " + questions[index].question +'</span>';
@@ -124,13 +148,22 @@ function showResult(){
         //creating a new span tag and passing the user score number and total question number
         let scoreTag = '<span>and congrats! You got  <p>'+ userScore +'</p> out of <p>'+ questions.length +'</p></span>';
         scoreText.innerHTML = scoreTag;  //adding new span tag inside score_Text
+        winSound.play(); // play win sound
     }
     else if(userScore > 1){ // if user scored more than 1
         let scoreTag = '<span>and nice, You got  <p>'+ userScore +'</p> out of <p>'+ questions.length +'</p></span>';
         scoreText.innerHTML = scoreTag;
+        winSound.play(); // play win sound
     }
     else{ // if user scored less than 1
         let scoreTag = '<span>but sorry, You got <p>'+ userScore +'</p> out of <p>'+ questions.length +'</p></span>';
         scoreText.innerHTML = scoreTag;
+        loseSound.play(); // play lose sound
     }
+}
+
+function queCounter(index){
+    //creating a new span tag and passing the question number and total question
+    let totalQueCounTag = '<span><p>'+ index +'</p> of <p>'+ questions.length +'</p> Questions</span>';
+    bottom_ques_counter.innerHTML = totalQueCounTag;  //adding new span tag inside bottom_ques_counter
 }
