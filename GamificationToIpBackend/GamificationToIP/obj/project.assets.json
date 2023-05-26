@@ -10619,11 +10619,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Yehor\\Desktop\\project2.0\\GamificationToIpBackend2\\GamificationToIP\\GamificationToIP.csproj",
+      "projectUniqueName": "C:\\Users\\Yehor\\Desktop\\project2.0\\GamificationToIpBackend\\GamificationToIP\\GamificationToIP.csproj",
       "projectName": "GamificationToIP",
-      "projectPath": "C:\\Users\\Yehor\\Desktop\\project2.0\\GamificationToIpBackend2\\GamificationToIP\\GamificationToIP.csproj",
+      "projectPath": "C:\\Users\\Yehor\\Desktop\\project2.0\\GamificationToIpBackend\\GamificationToIP\\GamificationToIP.csproj",
       "packagesPath": "C:\\Users\\Yehor\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Yehor\\Desktop\\project2.0\\GamificationToIpBackend2\\GamificationToIP\\obj\\",
+      "outputPath": "C:\\Users\\Yehor\\Desktop\\project2.0\\GamificationToIpBackend\\GamificationToIP\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Yehor\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -10711,13 +10711,5 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.101\\RuntimeIdentifierGraph.json"
       }
     }
-  },
-  "logs": [
-    {
-      "code": "Undefined",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Problem reading the cache file C:\\Users\\Yehor\\Desktop\\project2.0\\GamificationToIpBackend2\\GamificationToIP\\obj\\project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
-    }
-  ]
+  }
 }

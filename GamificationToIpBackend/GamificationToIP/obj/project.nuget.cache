@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "1bixseAfCrNh3Qk1wkP7ZD4kKxrYCsa2/h0Yd0ouffWeLPRSXB8cr42wNdzErWGy0svNxxiHP1tPdfLCvhNrtQ==",
+  "dgSpecHash": "ZhCW9bbPbdvCbtXvbKjr1iZblzFXqBb0j7jNa8mcVgsO6CgfiwfhxrfRzv6tiiKQwnzuXCgrWNEXLt7ekHMI6Q==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Yehor\\Desktop\\project2.0\\GamificationToIpBackend2\\GamificationToIP\\GamificationToIP.csproj",
+  "projectFilePath": "C:\\Users\\Yehor\\Desktop\\project2.0\\GamificationToIpBackend\\GamificationToIP\\GamificationToIP.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Yehor\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\Yehor\\.nuget\\packages\\messagepack\\2.1.152\\messagepack.2.1.152.nupkg.sha512",
@@ -189,12 +189,5 @@
     "C:\\Users\\Yehor\\.nuget\\packages\\system.xml.readerwriter\\4.3.0\\system.xml.readerwriter.4.3.0.nupkg.sha512",
     "C:\\Users\\Yehor\\.nuget\\packages\\system.xml.xdocument\\4.3.0\\system.xml.xdocument.4.3.0.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "Undefined",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Problem reading the cache file C:\\Users\\Yehor\\Desktop\\project2.0\\GamificationToIpBackend2\\GamificationToIP\\obj\\project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
-    }
-  ]
+  "logs": []
 }
