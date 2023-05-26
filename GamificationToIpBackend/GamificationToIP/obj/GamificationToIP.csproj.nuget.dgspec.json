@@ -1,24 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Stephen\\AAD\\gamication_ip\\GamificationToIpBackend\\GamificationToIP\\GamificationToIP.csproj": {}
+    "C:\\Users\\Yehor\\Desktop\\project2.0\\GamificationToIpBackend2\\GamificationToIP\\GamificationToIP.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Stephen\\AAD\\gamication_ip\\GamificationToIpBackend\\GamificationToIP\\GamificationToIP.csproj": {
+    "C:\\Users\\Yehor\\Desktop\\project2.0\\GamificationToIpBackend2\\GamificationToIP\\GamificationToIP.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Stephen\\AAD\\gamication_ip\\GamificationToIpBackend\\GamificationToIP\\GamificationToIP.csproj",
+        "projectUniqueName": "C:\\Users\\Yehor\\Desktop\\project2.0\\GamificationToIpBackend2\\GamificationToIP\\GamificationToIP.csproj",
         "projectName": "GamificationToIP",
-        "projectPath": "C:\\Users\\Stephen\\AAD\\gamication_ip\\GamificationToIpBackend\\GamificationToIP\\GamificationToIP.csproj",
-        "packagesPath": "C:\\Users\\Stephen\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Stephen\\AAD\\gamication_ip\\GamificationToIpBackend\\GamificationToIP\\obj\\",
+        "projectPath": "C:\\Users\\Yehor\\Desktop\\project2.0\\GamificationToIpBackend2\\GamificationToIP\\GamificationToIP.csproj",
+        "packagesPath": "C:\\Users\\Yehor\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Yehor\\Desktop\\project2.0\\GamificationToIpBackend2\\GamificationToIP\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\Stephen\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\Yehor\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -26,7 +22,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -65,6 +60,10 @@
               "target": "Package",
               "version": "[7.0.5, )"
             },
+            "Microsoft.Extensions.Logging.Console": {
+              "target": "Package",
+              "version": "[7.0.0, )"
+            },
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
               "version": "[6.0.13, )"
@@ -97,7 +96,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.200\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.101\\RuntimeIdentifierGraph.json"
         }
       }
     }

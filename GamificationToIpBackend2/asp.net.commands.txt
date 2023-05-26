@@ -1,4 +1,0 @@
-Add-Migration SecondMigration -c ApplicationDbContext -o Data/Migrations - will add migration which later will be used to create/drop tables
-Update-Database - will create tables
-Drop-Database - will drop tables
-dotnet run seeddata - will clear all previous data in db and will seed the new data in db
