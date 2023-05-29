@@ -1,8 +1,9 @@
 ﻿using BulkyBookWeb.Models;
+using GamificationAPI.Interfaces;
 using GamificationToIP.Context;
 using Microsoft.EntityFrameworkCore;
 
-public class StudentService
+public class StudentService : IStudents
 {
     private readonly ApplicationDbContext _dbContext;
 
@@ -44,5 +45,15 @@ public class StudentService
             _dbContext.Set<Student>().Remove(student);
             await _dbContext.SaveChangesAsync();
         }
+    }
+
+    public Task<List<Student>> GetStudentsAsync()
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Student> GetStudentByUserNameAsync(string userName)
+    {
+        throw new NotImplementedException();
     }
 }
