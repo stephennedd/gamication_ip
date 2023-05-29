@@ -36,7 +36,8 @@ namespace GamificationAPI.Controllers
             {
                 if(await _highScoreService.CheckIfItsHighScore(highScore, leaderboardName) == true)
                 {
-                    //update high score in db
+                    await _leaderboardService.AddHighScoreAsync(highScore, leaderboardName);
+                    return Ok();
                 }
                 else
                 {

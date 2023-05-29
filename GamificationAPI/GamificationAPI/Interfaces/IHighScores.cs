@@ -6,7 +6,8 @@ namespace GamificationAPI.Interfaces
     {
         Task<List<HighScore>> GetHighScoresAsync();
         Task<HighScore> GetHighScoreByIdAsync(int id);
-        Task<HighScore> GetHighScoreByStudentIdAsync(int studentId);
+        Task<List<HighScore>> GetHighScoreByStudentIdAsync(int studentId);
+        Task<bool> CheckIfItsHighScore(HighScore newHighScore, string leaderboardName);
         Task AddHighScoreAsync(HighScore highScore);
         Task UpdateHighScoreAsync(HighScore highScore);
         Task DeleteHighScoreAsync(int id);
