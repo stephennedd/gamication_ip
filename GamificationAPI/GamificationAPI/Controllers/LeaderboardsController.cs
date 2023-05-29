@@ -21,6 +21,12 @@ public class LeaderboardController : ControllerBase
         var leaderboard = await _leaderboardService.GetLeaderboardsAsync();
         return Ok(leaderboard);
     }
+    [HttpGet("{LeaderboardName}")]
+    public async Task<IActionResult> GetLeaderboard(string LeaderboardName)
+    {
+        var leaderboard = await _leaderboardService.GetLeaderboardByNameAsync(LeaderboardName);
+        return Ok(leaderboard);
+    }
     [HttpPost]
     public async Task<IActionResult> CreateNewLeaderboard(string LeaderboardName)
     {
