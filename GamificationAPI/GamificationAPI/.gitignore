@@ -1,0 +1,56 @@
+# Visual Studio Code
+.vscode/
+
+# Visual Studio
+*.suo
+*.user
+*.sln.docstates
+
+# Build output
+bin/
+obj/
+
+# Packages
+*.nuget.props
+*.nuget.targets
+project.lock.json
+.DS_Store
+*.swp
+**/.DS_Store
+**/.vscode
+
+# User-specific files
+*_i.c
+*_p.c
+*.ilk
+*.meta
+*.obj
+*.pch
+*.pdb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tmp_proj
+*.log
+*.vs/
+*.idea/
+*.cache/
+*.bak/
+*.userprefs
+*.bak
+*.suo
+*.cache
+
+# Other
+Thumbs.db
+*.user
+*.bak
+*.orig
+*.testsettings
+*.msi
+*.Deploy.xml

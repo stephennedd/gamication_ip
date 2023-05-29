@@ -1,0 +1,31 @@
+﻿{
+  "tests": [
+    {
+      "description": "Test your knowledge of HTML basics.",
+      "image_url": "https://example.com/test-image.jpg",
+      "questions": [
+        {
+          "question": "What does HTML stand for?",
+          "correct_answer": "Hypertext Markup Language",
+          "selected_answer": "",
+          "answers": [
+            {
+              "identifier": "A",
+              "answer": "Hypertext Makeup Language"
+            },
+            {
+              "identifier": "B",
+              "answer": "Hyper Markup Language"
+            },
+            {
+              "identifier": "C",
+              "answer": "Hypster Marking Language"
+            }
+          ]
+        }
+      ],
+      "time_seconds": 300,
+      "title": "HTML Basics Test"
+    }
+  ]
+}
