@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="main.css" />
+		<script defer src="main.js"></script>
+		<title>Gamification</title>
+		<script
+			defer
+			src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
+		<script defer src="Games/Breakout/breakout3.js"></script>
+	</head>
+	<body>
+		<div id="corridor">
+			<img src="Media/Images/background.png" id="background" />
+
+			<img
+				src="Media/Images/Arcade Machine - Saxion with bottom and screen.png"
+				id="machine"
+				class="blur" />
+
+			<div id="quiz" class="hide">
+				<div id="question"></div>
+				<div id="answers"></div>
+			</div>
+
+			<div id="game" class="hide"></div>
+			<!-- <canvas id="canvas" width="800" height="600" class="hide"></canvas> -->
+		</div>
+
+		<button id="animate">Animate</button>
+		<button id="back">GO back</button>
+	</body>
+</html>
