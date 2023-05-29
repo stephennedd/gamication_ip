@@ -1,4 +1,5 @@
 ﻿using BulkyBookWeb.Models;
+using GamificationAPI.Interfaces;
 using GamificationAPI.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,11 +10,11 @@ namespace GamificationAPI.Controllers
     [ApiController]
     public class HighScoresController : ControllerBase
     {
-        private readonly LeaderboardService _leaderboardService;
-        private readonly HighScoreService _highScoreService;
-        private readonly StudentService _studentService;
+        private readonly ILeaderboards _leaderboardService;
+        private readonly IHighScores _highScoreService;
+        private readonly IStudents _studentService;
 
-        public HighScoresController(LeaderboardService leaderboardService, HighScoreService highScoreService, StudentService studentService)
+        public HighScoresController(ILeaderboards leaderboardService, IHighScores highScoreService, IStudents studentService)
         {
             _leaderboardService = leaderboardService;
             _highScoreService = highScoreService;

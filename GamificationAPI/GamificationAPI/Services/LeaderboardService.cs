@@ -1,12 +1,14 @@
 ﻿using BulkyBookWeb.Models;
+using GamificationAPI.Interfaces;
 using GamificationAPI.Models;
+using GamificationToIP.Context;
 using Microsoft.EntityFrameworkCore;
 
-public class LeaderboardService
+public class LeaderboardService : ILeaderboards
 {
-    private readonly DbContext _dbContext;
+    private readonly ApplicationDbContext _dbContext;
 
-    public LeaderboardService(DbContext dbContext)
+    public LeaderboardService(ApplicationDbContext dbContext)
     {
         _dbContext = dbContext;
     }
@@ -86,5 +88,10 @@ public class LeaderboardService
             
         }
         return false;
-    } 
+    }
+
+    public Task UpdateLeaderboardAsync(string name, string newName, string newDescription, string newImageURL)
+    {
+        throw new NotImplementedException();
+    }
 }

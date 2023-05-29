@@ -1,11 +1,12 @@
 ﻿using BulkyBookWeb.Models;
+using GamificationToIP.Context;
 using Microsoft.EntityFrameworkCore;
 
 public class StudentService
 {
-    private readonly DbContext _dbContext;
+    private readonly ApplicationDbContext _dbContext;
 
-    public StudentService(DbContext dbContext)
+    public StudentService(ApplicationDbContext dbContext)
     {
         _dbContext = dbContext;
     }

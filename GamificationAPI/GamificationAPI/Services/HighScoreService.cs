@@ -1,9 +1,10 @@
 ﻿using BulkyBookWeb.Models;
+using GamificationAPI.Interfaces;
 using GamificationAPI.Models;
 using GamificationToIP.Context;
 using Microsoft.EntityFrameworkCore;
 
-public class HighScoreService
+public class HighScoreService : IHighScores
 {
     private readonly ApplicationDbContext _dbContext;
 
@@ -41,7 +42,7 @@ public class HighScoreService
 
     }
 
-    public async Task<List<HighScore>> GetHighScoresByStudentIdAsync(int studentId)
+    public async Task<List<HighScore>> GetHighScoreByStudentIdAsync(int studentId)
     {
         return await _dbContext.Set<HighScore>()
             .Include(h => h.Student)
@@ -71,4 +72,10 @@ public class HighScoreService
             await _dbContext.SaveChangesAsync();
         }
     }
+
+    public Task<List<HighScore>> GetHighScoresAsync()
+    {
+        throw new NotImplementedException();
+    }
+
 }

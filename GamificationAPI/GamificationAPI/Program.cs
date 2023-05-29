@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using GamificationToIP.Context;
 using GamificationToIP.Seed;
+using GamificationAPI.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddTransient<ILeaderboards, LeaderboardService>();
+builder.Services.AddTransient<IStudents, StudentService>();
+builder.Services.AddTransient<IHighScores, HighScoreService>();
 
 var app = builder.Build();
 if (args.Length == 1 && args[0].ToLower() == "seeddata")
