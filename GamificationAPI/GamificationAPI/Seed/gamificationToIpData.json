@@ -6,20 +6,20 @@
       "questions": [
         {
           "question": "What does HTML stand for?",
-          "correct_answer": "Hypertext Markup Language",
+          "correct_answer": "Hyper Text Markup Language",
           "selected_answer": "",
           "answers": [
             {
               "identifier": "A",
-              "answer": "Hypertext Makeup Language"
+              "answer": "Hyper Text Preprocessor"
             },
             {
               "identifier": "B",
-              "answer": "Hyper Markup Language"
+              "answer": "Hyper Text Markup Language"
             },
             {
               "identifier": "C",
-              "answer": "Hypster Marking Language"
+              "answer": "Hyper Text Multiple Language"
             },
             {
               "identifier": "D",
@@ -46,7 +46,7 @@
             },
             {
               "identifier": "D",
-              "answer": "Computer Style Sheet"
+              "answer": "Cascading Style Sheet"
             }
           ]
         },

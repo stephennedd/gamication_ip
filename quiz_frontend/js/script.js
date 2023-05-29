@@ -26,6 +26,16 @@ mute_btn.onclick = ()=>{
 
 // if startQuiz button clicked
 start_btn.onclick = ()=>{
+    fetch('https://localhost:7186/api/tests/1')
+  .then(response => response.json())
+  .then(data => {
+    // Assuming the response data is an array of questions
+    questions = data['questions'];
+    console.log(questions);
+  })
+  .catch(error => {
+    console.error('Error fetching questions:', error);
+  });
     info_box.classList.add("activeInfo"); //show info box
 }
 // if exitQuiz button clicked
@@ -91,11 +101,11 @@ next_btn.onclick = ()=>{
 function showQuestions(index){
     const que_text = document.querySelector(".que_text");
     //creating a new span and div tag for question and option and passing the value using array index
-    let que_tag = '<span>'+ questions[index].numb + ". " + questions[index].question +'</span>';
-    let option_tag = '<div class="option"><span>'+ questions[index].options[0] +'</span></div>'
-    + '<div class="option"><span>'+ questions[index].options[1] +'</span></div>'
-    + '<div class="option"><span>'+ questions[index].options[2] +'</span></div>'
-    + '<div class="option"><span>'+ questions[index].options[3] +'</span></div>';
+    let que_tag = '<span>'+ questions[index].id + ". " + questions[index].questionText +'</span>';
+    let option_tag = '<div class="option"><span>'+ questions[index].answers[0].answerText +'</span></div>'
+    + '<div class="option"><span>'+ questions[index].answers[1].answerText +'</span></div>'
+    + '<div class="option"><span>'+ questions[index].answers[2].answerText +'</span></div>'
+    + '<div class="option"><span>'+ questions[index].answers[3].answerText +'</span></div>';
     que_text.innerHTML = que_tag; //adding new span tag inside que_tag
     option_list.innerHTML = option_tag; //adding new div tag inside option_tag
     
@@ -113,7 +123,7 @@ function optionSelected(answer){
     clearInterval(counter); //clear counter
     clearInterval(counterLine); //clear counterLine
     let userAns = answer.textContent; //getting user selected option
-    let correcAns = questions[que_count].answer; //getting correct answer from array
+    let correcAns = questions[que_count].correctAnswer; //getting correct answer from array
     const allOptions = option_list.children.length; //getting all option items
     
     if(userAns == correcAns){ //if user selected option is equal to array's correct answer

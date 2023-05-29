@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using GamificationToIP.Context;
 using GamificationToIP.Seed;
 using GamificationAPI.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,16 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<ILeaderboards, LeaderboardService>();
 builder.Services.AddTransient<IStudents, StudentService>();
 builder.Services.AddTransient<IHighScores, HighScoreService>();
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
+});
 
 var app = builder.Build();
 if (args.Length == 1 && args[0].ToLower() == "seeddata")
@@ -48,6 +59,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors();
 
 app.UseHttpsRedirection();
 
