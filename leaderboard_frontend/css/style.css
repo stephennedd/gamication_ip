@@ -1,0 +1,121 @@
+/* importing google fonts */
+@import url('https://fonts.googleapis.com/css2?family=Bree+Serif&family=Press+Start+2P&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+:root {
+    --black: #000000;
+    --pink: #ff00ff;
+    --button: #ffffff;
+    --text: #ffffff;
+    --leaderboard_text: #00bd1f;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.container {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    z-index: -1;
+}
+
+.title {
+    position: absolute;
+    font-family: 'Press Start 2P';
+    font-size: 28px;
+    color: var(--text);
+    text-align: center;
+    margin-top: 50px;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    top: 10%;
+}
+
+.buttons {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    top: 25%;
+}
+
+.start_btn {
+    border: none;
+    background-color: var(--black);
+    color: var(--pink);
+    font-family: 'VT323';
+    font-size: 24px;
+    margin-right: 50px;
+    font-stretch: expanded;
+    cursor: pointer;
+}
+
+.quit_btn {
+    border: none;
+    background-color: var(--black);
+    color: var(--button);
+    font-family: 'VT323';
+    font-size: 24px;
+    font-stretch: expanded;
+    cursor: pointer;
+}
+
+.leaderboard {
+    position: fixed;
+    top: 40%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.leaderboard-container {
+    max-height: 50vh;
+    overflow-y: auto;
+}
+
+.leaderboard-container::-webkit-scrollbar {
+    width: 10px;
+}
+
+.leaderboard-table {
+    border-collapse: collapse;
+    font-family: 'VT323';
+    font-size: 24px;
+    color: var(--leaderboard_text);
+}
+
+.leaderboard-table thead {
+    position: sticky;
+    top: 0;
+    background-color: var(--black);
+}
+
+.leaderboard-table th,
+.leaderboard-table td {
+    padding: 20px;
+    text-align: left;
+    border-bottom: 2px dashed #00bd1f;
+}
+
+
+.leaderboard-table th:nth-child(2),
+.leaderboard-table td:nth-child(2) {
+    width: 320px;
+}
+
+
+
+.leaderboard-table tr:hover {
+    background-color: #00440b;
+}
+
+.leaderboard-table th {
+    font-weight: bold;
+}
+

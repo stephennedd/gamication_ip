@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <!-- background -->
+    <div id="container">
+    </div>
+
+    <!-- title -->
+    <div class="title">
+        <h1>Leaderboard</h1>
+    </div>
+
+    <!-- buttons -->
+    <div class="buttons">
+        <button class="start_btn">Start Game</button>
+        <button class="quit_btn">Quit</button>
+    </div>
+    
+    <!-- leaderboard -->
+    <div class="leaderboard">
+        <div class="leaderboard-container">
+            <table class="leaderboard-table">
+                <thead>
+                    <tr>
+                        <th>Position</th>
+                        <th>Player Name</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboard-body">
+                    <!-- Leaderboard data will be dynamically added here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <script src="./js/starfield.js"></script>
+    <script>
+        //  Get the container and turn it into a starfield.
+        var container = document.getElementById('container');
+        var starfield = new Starfield();
+        starfield.initialise(container);
+        starfield.start();
+    </script>
+    <script>
+        // Sample leaderboard data (you can replace this with your API or data source)
+        const leaderboardData = [
+            { playerName: "John", score: 500 },
+            { playerName: "Emma", score: 400 },
+            { playerName: "Michael", score: 300 },
+            { playerName: "Sophia", score: 200 },
+            { playerName: "William", score: 100 },
+            { playerName: "John", score: 500 },
+            { playerName: "Emma", score: 400 },
+            { playerName: "Michael", score: 300 },
+            { playerName: "Sophia", score: 200 },
+            { playerName: "William", score: 100 },
+            { playerName: "John", score: 500 },
+            { playerName: "Emma", score: 400 },
+            { playerName: "Michael", score: 300 },
+            { playerName: "Sophia", score: 200 },
+            { playerName: "William", score: 100 },
+            { playerName: "John", score: 500 },
+            { playerName: "Emma", score: 400 },
+            { playerName: "Michael", score: 300 },
+            { playerName: "Sophia", score: 200 },
+            { playerName: "William", score: 100 },
+            { playerName: "John", score: 500 },
+            { playerName: "Emma", score: 400 },
+            { playerName: "Michael", score: 300 },
+            { playerName: "Sophia", score: 200 },
+            { playerName: "William", score: 100 },
+
+        ];
+
+        // Function to populate the leaderboard table
+        function populateLeaderboard() {
+            // Sort the leaderboard data based on scores in descending order
+            leaderboardData.sort((a, b) => b.score - a.score);
+
+            const leaderboardBody = document.getElementById('leaderboard-body');
+            leaderboardBody.innerHTML = ''; // Clear existing leaderboard data
+
+            leaderboardData.forEach((entry, index) => {
+                const position = index + 1;
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${position}</td>
+                    <td>${entry.playerName}</td>
+                    <td>${entry.score}</td>
+                `;
+                leaderboardBody.appendChild(row);
+            });
+        }
+
+        // Call the function to populate the leaderboard on page load
+        populateLeaderboard();
+    </script>
+</body>
+</html>

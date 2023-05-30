@@ -6,20 +6,116 @@
       "questions": [
         {
           "question": "What does HTML stand for?",
-          "correct_answer": "Hypertext Markup Language",
+          "correct_answer": "Hyper Text Markup Language",
           "selected_answer": "",
           "answers": [
             {
               "identifier": "A",
-              "answer": "Hypertext Makeup Language"
+              "answer": "Hyper Text Preprocessor"
             },
             {
               "identifier": "B",
-              "answer": "Hyper Markup Language"
+              "answer": "Hyper Text Markup Language"
             },
             {
               "identifier": "C",
-              "answer": "Hypster Marking Language"
+              "answer": "Hyper Text Multiple Language"
+            },
+            {
+              "identifier": "D",
+              "answer": "Hyper Tool Multi Language"
+            }
+          ]
+        },
+        {
+          "question": "What does CSS stand for?",
+          "correct_answer": "Cascading Style Sheet",
+          "selected_answer": "",
+          "answers": [
+            {
+              "identifier": "A",
+              "answer": "Common Style Sheet"
+            },
+            {
+              "identifier": "B",
+              "answer": "Colorful Style Sheet"
+            },
+            {
+              "identifier": "C",
+              "answer": "Computer Style Sheet"
+            },
+            {
+              "identifier": "D",
+              "answer": "Cascading Style Sheet"
+            }
+          ]
+        },
+        {
+          "question": "What does SQL stand for?",
+          "correct_answer": "Structured Query Language",
+          "selected_answer": "",
+          "answers": [
+            {
+              "identifier": "A",
+              "answer": "Stylish Question Language"
+            },
+            {
+              "identifier": "B",
+              "answer": "Stylesheet Query Language"
+            },
+            {
+              "identifier": "C",
+              "answer": "Statement Question Language"
+            },
+            {
+              "identifier": "D",
+              "answer": "Structured Query Language"
+            }
+          ]
+        },
+        {
+          "question": "What does PHP stand for?",
+          "correct_answer": "Hypertext Preprocessor",
+          "selected_answer": "",
+          "answers": [
+            {
+              "identifier": "A",
+              "answer": "Hypertext Preprocessor"
+            },
+            {
+              "identifier": "B",
+              "answer": "Hypertext Programming"
+            },
+            {
+              "identifier": "C",
+              "answer": "Hypertext Preprogramming"
+            },
+            {
+              "identifier": "D",
+              "answer": "Hometext Preprocessor"
+            }
+          ]
+        },
+        {
+          "question": "What does XML stand for?",
+          "correct_answer": "eXtensible Markup Language",
+          "selected_answer": "",
+          "answers": [
+            {
+              "identifier": "A",
+              "answer": "eXtensible Markup Language"
+            },
+            {
+              "identifier": "B",
+              "answer": "eXecutable Multiple Language"
+            },
+            {
+              "identifier": "C",
+              "answer": "eXTra Multi-Program Language"
+            },
+            {
+              "identifier": "D",
+              "answer": "eXamine Multiple Language"
             }
           ]
         }

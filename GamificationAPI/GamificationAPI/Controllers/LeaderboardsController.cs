@@ -1,20 +1,17 @@
 ﻿using BulkyBookWeb.Models;
+using GamificationAPI.Interfaces;
 using GamificationAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 
 [Route("api/[controller]")]
 [ApiController]
-public class ScoreboardController : ControllerBase
+public class LeaderboardController : ControllerBase
 {
-    private readonly LeaderboardService _leaderboardService;
-    private readonly HighScoreService _highScoreService;
-    private readonly StudentService _studentService;
+    private readonly ILeaderboards _leaderboardService;
 
-    public ScoreboardController(LeaderboardService leaderboardService, HighScoreService highScoreService, StudentService studentService)
+    public LeaderboardController(ILeaderboards leaderboardService)
     {
         _leaderboardService = leaderboardService;
-        _highScoreService = highScoreService;
-        _studentService = studentService;
     }
 
     // GET: api/scoreboard
@@ -22,6 +19,12 @@ public class ScoreboardController : ControllerBase
     public async Task<IActionResult> GetAllLeaderboard()
     {
         var leaderboard = await _leaderboardService.GetLeaderboardsAsync();
+        return Ok(leaderboard);
+    }
+    [HttpGet("{LeaderboardName}")]
+    public async Task<IActionResult> GetLeaderboard(string LeaderboardName)
+    {
+        var leaderboard = await _leaderboardService.GetLeaderboardByNameAsync(LeaderboardName);
         return Ok(leaderboard);
     }
     [HttpPost]
