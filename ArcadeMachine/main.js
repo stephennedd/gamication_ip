@@ -18,10 +18,20 @@ function moveCorridor() {
 	setTimeout(() => {
 		canvas.classList.remove('hide');
 	}, 1850);
+
+	// setTimeout(() => {
+	// 	canvas.classList.add('crtOn');
+	// }, 1850);
 }
 
 function walkBack() {
 	arcadeMachine.classList.remove('move-out-machine');
+
+	// canvas.classList.remove('crtOn');
+	// canvas.classList.add('crtOff');
+	// setTimeout(() => {
+	// 	canvas.classList.add('hide');
+	// }, 500);
 
 	canvas.classList.add('hide');
 

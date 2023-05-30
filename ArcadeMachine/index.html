@@ -4,13 +4,25 @@
 		<meta charset="UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Gamification</title>
+		<link
+			rel="preload"
+			as="font"
+			href="Media/Fonts/Press_Start_2P/PressStart2P-Regular.ttf"
+			type="font/ttf" />
 		<link rel="stylesheet" href="main.css" />
 		<script defer src="main.js"></script>
-		<title>Gamification</title>
+		<link
+			rel="icon"
+			type="image/png"
+			sizes="32x32"
+			href="Media/Images/favicon-32x32.png" />
+
 		<script
 			defer
 			src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
-		<script defer src="Games/Breakout/breakout3.js"></script>
+
+		<script defer src="/Games/Breakout/breakout.js"></script>
 	</head>
 	<body>
 		<div id="corridor">
@@ -21,13 +33,9 @@
 				id="machine"
 				class="blur" />
 
-			<div id="quiz" class="hide">
-				<div id="question"></div>
-				<div id="answers"></div>
-			</div>
+			<!-- <iframe src="/quiz_frontend/index.html" id="quiz" class="hide"></iframe> -->
 
-			<div id="game" class="hide"></div>
-			<!-- <canvas id="canvas" width="800" height="600" class="hide"></canvas> -->
+			<div id="game" class="hide crt"></div>
 		</div>
 
 		<button id="animate">Animate</button>
