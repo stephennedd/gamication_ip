@@ -13,5 +13,6 @@ namespace GamificationAPI.Interfaces
         Task CreateLeaderboardAsync(string name);
         Task UpdateLeaderboardAsync(string name, string newName, string newDescription, string newImageURL);
         Task<bool> CheckIfStudentHasHighScoreInLeadeboard(Student student, string name);
+        
     }
 }

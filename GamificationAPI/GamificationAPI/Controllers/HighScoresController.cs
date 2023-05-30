@@ -36,7 +36,7 @@ namespace GamificationAPI.Controllers
             {
                 if(await _highScoreService.CheckIfItsHighScore(highScore, leaderboardName) == true)
                 {
-                    await _leaderboardService.AddHighScoreAsync(highScore, leaderboardName);
+                    await _highScoreService.UpdateHighScoreAsync(highScore, leaderboardName);
                     return Ok();
                 }
                 else
@@ -44,8 +44,12 @@ namespace GamificationAPI.Controllers
                     return BadRequest("This is not High Score");
                 }
             }
-
-            return Ok();
+            else
+            {
+                await _leaderboardService.AddHighScoreAsync(highScore, leaderboardName);
+                return Ok();
+            }
+      
         }
 
         
