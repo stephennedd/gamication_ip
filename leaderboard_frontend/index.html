@@ -12,6 +12,15 @@
     <div id="container">
     </div>
 
+    <div class="dropdown">
+        <button class="dropbtn">Select leaderboard</button>
+            <div class="dropdown-content">
+                <a class="dropdown-link" href="#">Overall leaderboard</a>
+                <a class="dropdown-link" href="#">Frogger leaderboard</a>
+                <a class="dropdown-link" href="#">FlappyBird leaderboard</a>
+            </div>
+    </div> 
+
     <!-- title -->
     <div class="title">
         <h1>Leaderboard</h1>
@@ -23,6 +32,7 @@
         <button class="quit_btn">Quit</button>
     </div>
     
+
     <!-- leaderboard -->
     <div class="leaderboard">
         <div class="leaderboard-container">
@@ -32,6 +42,7 @@
                         <th>Position</th>
                         <th>Player Name</th>
                         <th>Score</th>
+                        <th>Badges</th>
                     </tr>
                 </thead>
                 <tbody id="leaderboard-body">
@@ -41,43 +52,15 @@
         </div>
     </div>
     
-    <script src="./js/starfield.js"></script>
-    <script>
-        //  Get the container and turn it into a starfield.
-        var container = document.getElementById('container');
-        var starfield = new Starfield();
-        starfield.initialise(container);
-        starfield.start();
-    </script>
+    
     <script>
         // Sample leaderboard data (you can replace this with your API or data source)
         const leaderboardData = [
-            { playerName: "John", score: 500 },
-            { playerName: "Emma", score: 400 },
-            { playerName: "Michael", score: 300 },
-            { playerName: "Sophia", score: 200 },
-            { playerName: "William", score: 100 },
-            { playerName: "John", score: 500 },
-            { playerName: "Emma", score: 400 },
-            { playerName: "Michael", score: 300 },
-            { playerName: "Sophia", score: 200 },
-            { playerName: "William", score: 100 },
-            { playerName: "John", score: 500 },
-            { playerName: "Emma", score: 400 },
-            { playerName: "Michael", score: 300 },
-            { playerName: "Sophia", score: 200 },
-            { playerName: "William", score: 100 },
-            { playerName: "John", score: 500 },
-            { playerName: "Emma", score: 400 },
-            { playerName: "Michael", score: 300 },
-            { playerName: "Sophia", score: 200 },
-            { playerName: "William", score: 100 },
-            { playerName: "John", score: 500 },
-            { playerName: "Emma", score: 400 },
-            { playerName: "Michael", score: 300 },
-            { playerName: "Sophia", score: 200 },
-            { playerName: "William", score: 100 },
-
+            { playerName: "John", score: 500, badges: ["badge1.png", "badge2.png"] },
+            { playerName: "Emma", score: 400 , badges: ["badge3.png"]},
+            { playerName: "Michael", score: 300, badges: []  },
+            { playerName: "Sophia", score: 200 , badges: ["badge4.png"]},
+            { playerName: "William", score: 100, badges: ["badge5.png", "badge6.png"] },
         ];
 
         // Function to populate the leaderboard table
@@ -96,6 +79,7 @@
                     <td>${position}</td>
                     <td>${entry.playerName}</td>
                     <td>${entry.score}</td>
+                    <td>${entry.badges.map(badge => `<img src="./assets/images/${badge}" height="25px" alt="Badge">`).join('')}</td>
                 `;
                 leaderboardBody.appendChild(row);
             });
@@ -103,6 +87,15 @@
 
         // Call the function to populate the leaderboard on page load
         populateLeaderboard();
+    </script>
+
+    <script src="./js/starfield.js"></script>
+    <script>
+        //  Get the container and turn it into a starfield.
+        var container = document.getElementById('container');
+        var starfield = new Starfield();
+        starfield.initialise(container);
+        starfield.start();
     </script>
 </body>
 </html>
