@@ -52,7 +52,21 @@ namespace GamificationAPI.Controllers
       
         }
 
-        
+        [HttpDelete]
+        public async Task<IActionResult> DeleteHighScoreById(int highScoreId)
+        {
+            try
+            {
+                await _highScoreService.DeleteHighScoreAsync(highScoreId);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+
     }
     
 

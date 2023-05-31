@@ -22,7 +22,7 @@ public class LeaderboardController : ControllerBase
         return Ok(leaderboard);
     }
     [HttpGet("{LeaderboardName}")]
-    public async Task<IActionResult> GetLeaderboard(string LeaderboardName)
+    public async Task<IActionResult> GetLeaderboardById(string LeaderboardName)
     {
         var leaderboard = await _leaderboardService.GetLeaderboardByNameAsync(LeaderboardName);
         return Ok(leaderboard);
