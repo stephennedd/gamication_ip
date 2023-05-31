@@ -24,17 +24,28 @@ public class LeaderboardController : ControllerBase
     [HttpGet("{LeaderboardName}")]
     public async Task<IActionResult> GetLeaderboardById(string LeaderboardName)
     {
+        if (string.IsNullOrEmpty(LeaderboardName))
+        {
+            return BadRequest();
+        }
+
         var leaderboard = await _leaderboardService.GetLeaderboardByNameAsync(LeaderboardName);
+
+        if (leaderboard is null)
+        {
+            return NotFound();
+        }
+
         return Ok(leaderboard);
     }
     [HttpPost]
     public async Task<IActionResult> CreateNewLeaderboard(string LeaderboardName)
     {
-        if (!ModelState.IsValid)
+        if (string.IsNullOrEmpty(LeaderboardName) || !ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
-        
+
         await _leaderboardService.CreateLeaderboardAsync(LeaderboardName);
         return Ok();
     }
