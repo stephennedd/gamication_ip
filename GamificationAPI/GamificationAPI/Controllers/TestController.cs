@@ -1,55 +1,49 @@
-﻿using GamificationToIP.Context;
+﻿using GamificationAPI.Interfaces;
+using GamificationToIP.Context;
 using GamificationToIP.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+
 
 [Route("api/tests")]
 [ApiController]
 public class TestController : ControllerBase
 {
-    private readonly ApplicationDbContext _context;
 
-    public TestController(ApplicationDbContext context)
+    private readonly ITests _testService;
+
+    public TestController(ITests testService)
     {
-        _context = context;
+        _testService = testService;
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<TestDto>> GetTest(int id)
     {
-        var test = await _context.Tests
-            .Include(t => t.Questions)
-                .ThenInclude(q => q.Answers)
-            .FirstOrDefaultAsync(t => t.Id == id);
-
-        if (test == null)
+       var test = await _testService.GetTestByIdAsync(id);
+        var jsonSettings = new JsonSerializerSettings
         {
-            return NotFound();
-        }
-
-        var testDto = new TestDto
-        {
-            Id = test.Id,
-            Title = test.Title,
-            ImageUrl = test.ImageUrl,
-            Description = test.Description,
-            TimeSeconds = test.TimeSeconds,
-            Questions = test.Questions.Select(q => new QuestionDto
-            {
-                Id = q.Id,
-                QuestionText = q.QuestionText,
-                CorrectAnswer = q.CorrectAnswer,
-                SelectedAnswer = q.SelectedAnswer,
-                Answers = q.Answers.Select(a => new AnswerDto
-                {
-                    Id = a.Id,
-                    Identifier = a.Identifier,
-                    AnswerText = a.AnswerText
-                }).ToList()
-            }).ToList()
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
         };
 
-        return testDto;
+        var json = JsonConvert.SerializeObject(test, Formatting.None, jsonSettings);
+
+        return Content(json, "application/json");
+    }
+
+    [HttpGet("{id}/questions")]
+    public async Task<ActionResult<TestDto>> GetTestQuestions(int id)
+    {
+        var questions = await _testService.GetQuestionsByTestIdAsync(id);
+        var jsonSettings = new JsonSerializerSettings
+        {
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+        };
+
+        var json = JsonConvert.SerializeObject(questions, Formatting.None, jsonSettings);
+
+        return Content(json, "application/json");
     }
 }
 
@@ -68,7 +62,7 @@ public class QuestionDto
     public int Id { get; set; }
     public string QuestionText { get; set; }
     public string CorrectAnswer { get; set; }
-    public string SelectedAnswer { get; set; }
+    public string SelectedAnswer { get; set; } 
     public List<AnswerDto> Answers { get; set; }
 }
 

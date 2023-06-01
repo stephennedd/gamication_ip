@@ -20,7 +20,11 @@ namespace GamificationToIP.Context
         public DbSet<StudentResult> StudentResults { get; set; }
         public DbSet<HighScore> HighScores { get; set; }
         public DbSet<Leaderboard> Leaderboards { get; set; }
+        public DbSet<GeneratedTest> GeneratedTest { get; set; }
 
+        public DbSet<StudentAnswer> StudentAnswers { get; set; }
+
+        public DbSet<StudentQuestion> StudentQuestions { get; set; }
 
     }
 }

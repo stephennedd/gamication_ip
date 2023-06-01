@@ -1,4 +1,5 @@
-﻿using GamificationToIP.Context;
+﻿using BulkyBookWeb.Models;
+using GamificationToIP.Context;
 using GamificationToIP.Models;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -28,7 +29,23 @@ namespace GamificationToIP.Seed
 
                 _logger.LogInformation("This is an information message.");
 
-                foreach (var test in gamificationToIpData.tests)
+                foreach (var student in gamificationToIpData.students)
+                {
+                    var newStudent = new Student
+                    {
+                     FirstName = student?.FirstName,
+                     LastName = student?.LastName,
+                     MiddleName = student?.MiddleName,
+                     Email = student?.Email,
+                     Password = student?.Password,
+                     IsBanned = student?.IsBanned,     
+                    };
+
+                    applicationDbContext.Set<Student>().Add(newStudent);
+                    await applicationDbContext.SaveChangesAsync();
+                }
+
+                    foreach (var test in gamificationToIpData.tests)
                 {
                     var newTest = new Test
                     {

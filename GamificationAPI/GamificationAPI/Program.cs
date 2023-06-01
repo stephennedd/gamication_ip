@@ -4,13 +4,22 @@ using GamificationToIP.Context;
 using GamificationToIP.Seed;
 using GamificationAPI.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+
 builder.Services.AddScoped<DatabaseSeeder>();
+
+// Configure JsonSerializerOptions with ReferenceHandler.Preserve
+builder.Services.AddMvc().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+});
 
 //Register
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -21,6 +30,11 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<ILeaderboards, LeaderboardService>();
 builder.Services.AddTransient<IStudents, StudentService>();
 builder.Services.AddTransient<IHighScores, HighScoreService>();
+builder.Services.AddTransient<IGeneratedTests, GeneratedTestService>();
+builder.Services.AddTransient<ITests, TestService>();
+builder.Services.AddTransient<IStudentAnswers, StudentAnswerService>();
+builder.Services.AddTransient<IStudentQuestions, StudentQuestionService>();
+
 
 builder.Services.AddCors(options =>
 {
