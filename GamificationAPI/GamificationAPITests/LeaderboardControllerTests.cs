@@ -16,6 +16,14 @@ namespace GamificationAPITests
             var mockLeaderboardsService = new Mock<ILeaderboards>();
             var controller = new LeaderboardController(mockLeaderboardsService.Object);
 
+            var mockLeaderboards = new List<Leaderboard> {
+                new Leaderboard(),
+                new Leaderboard(),
+                new Leaderboard()
+            };
+
+            mockLeaderboardsService.Setup(s => s.GetLeaderboardsAsync()).ReturnsAsync(mockLeaderboards);
+
             // Act
             var result = await controller.GetAllLeaderboard();
 
@@ -51,7 +59,7 @@ namespace GamificationAPITests
 
             var leaderboardName = "NewLeaderboard";
 
-            mockLeaderboardsService.Setup(s => s.CreateLeaderboardAsync(leaderboardName)).Returns(Task.CompletedTask);
+            mockLeaderboardsService.Setup(s => s.CreateLeaderboardAsync(leaderboardName)).ReturnsAsync(true);
 
             // Act
             var result = await controller.CreateNewLeaderboard(leaderboardName);
@@ -59,7 +67,6 @@ namespace GamificationAPITests
             // Assert
             Assert.IsType<OkResult>(result);
         }
-
         [Fact]
         public async Task Delete_DeleteLeaderboard_ReturnsOK_WhenLeaderboardIsDeleted()
         {
@@ -69,7 +76,10 @@ namespace GamificationAPITests
 
             var leaderboardName = "LeaderboardToDelete";
 
-            mockLeaderboardsService.Setup(s => s.DeleteLeaderboardAsync(leaderboardName)).Returns(Task.CompletedTask);
+            var leaderboard = new Leaderboard { Name = leaderboardName };
+
+            mockLeaderboardsService.Setup(s => s.GetLeaderboardByNameAsync(leaderboardName)).ReturnsAsync(leaderboard);
+            mockLeaderboardsService.Setup(s => s.DeleteLeaderboardAsync(leaderboardName)).ReturnsAsync(true);
 
             // Act
             var result = await controller.DeleteLeaderboard(leaderboardName);
@@ -106,7 +116,63 @@ namespace GamificationAPITests
             var result = await controller.CreateNewLeaderboard(leaderboardName);
 
             // Assert
-            Assert.IsType<BadRequestResult>(result);
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
+        [Fact]
+        public async Task Get_GetLeaderboardById_ReturnsOkResult_WhenLeaderboardExists()
+        {
+            // Arrange
+            var mockLeaderboardsService = new Mock<ILeaderboards>();
+            var controller = new LeaderboardController(mockLeaderboardsService.Object);
+
+            var leaderboardName = "ExistingLeaderboard";
+            var leaderboard = new Leaderboard();
+
+            mockLeaderboardsService.Setup(s => s.GetLeaderboardByNameAsync(leaderboardName)).ReturnsAsync(leaderboard);
+
+            // Act
+            var result = await controller.GetLeaderboardById(leaderboardName);
+
+            // Assert
+            var okResult = Assert.IsType<OkObjectResult>(result);
+            var returnedLeaderboard = Assert.IsType<Leaderboard>(okResult.Value);
+        }
+
+        [Fact]
+        public async Task Post_CreateNewLeaderboard_ReturnsConflict_WhenLeaderboardAlreadyExists()
+        {
+            // Arrange
+            var mockLeaderboardsService = new Mock<ILeaderboards>();
+            var controller = new LeaderboardController(mockLeaderboardsService.Object);
+
+            var leaderboardName = "ExistingLeaderboard";
+            var leaderboard = new Leaderboard();
+
+            mockLeaderboardsService.Setup(s => s.GetLeaderboardByNameAsync(leaderboardName)).ReturnsAsync(leaderboard);
+
+            // Act
+            var result = await controller.CreateNewLeaderboard(leaderboardName);
+
+            // Assert
+            Assert.IsType<ConflictObjectResult>(result);
+        }
+
+        [Fact]
+        public async Task Delete_DeleteLeaderboard_ReturnsNotFound_WhenLeaderboardDoesNotExist()
+        {
+            // Arrange
+            var mockLeaderboardsService = new Mock<ILeaderboards>();
+            var controller = new LeaderboardController(mockLeaderboardsService.Object);
+
+            var leaderboardName = "NonExistentLeaderboard";
+
+            mockLeaderboardsService.Setup(s => s.GetLeaderboardByNameAsync(leaderboardName)).ReturnsAsync((Leaderboard)null);
+
+            // Act
+            var result = await controller.DeleteLeaderboard(leaderboardName);
+
+            // Assert
+            Assert.IsType<NotFoundObjectResult>(result);
         }
     }
     
