@@ -1,0 +1,23 @@
+﻿{
+    "questionText": "What is a block in blockchain?",
+    "correctAnswer": "A block is a collection of data records.",
+    "selectedAnswer": "",
+    "answers": [
+      {
+        "identifier": "A",
+        "answerText": "A block is a collection of data records."
+      },
+      {
+        "identifier": "B",
+        "answerText": "A block is a digital currency."
+      },
+      {
+        "identifier": "C",
+        "answerText": "A block is a cryptographic algorithm."
+      },
+      {
+        "identifier": "D",
+        "answerText": "A block is a type of blockchain consensus mechanism."
+      }
+  ]
+}

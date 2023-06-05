@@ -51,58 +51,36 @@ public class TestController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateTest([FromBody] TestDto test)
+    public async Task<ActionResult<TestDto>> CreateTest([FromBody] TestDto test)
     {
+        var testDto = await _testService.CreateTest(test);
 
-        var newTest = new Test
+        var jsonSettings = new JsonSerializerSettings
         {
-            Title = test.Title,
-            ImageUrl = test.ImageUrl,
-            Description = test.Description,
-            TimeSeconds = test.TimeSeconds
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
         };
 
-        _dbContext.Set<Test>().Add(newTest);
-        await _dbContext.SaveChangesAsync();
+        var json = JsonConvert.SerializeObject(testDto, Formatting.None, jsonSettings);
 
-        foreach (var question in test.Questions)
-        {
-            var newQuestion = new Question
-            {
-                QuestionText = question.QuestionText,
-                CorrectAnswer = question.CorrectAnswer,
-                SelectedAnswer = question.SelectedAnswer,
-                TestId = newTest.Id
-            };
-
-            _dbContext.Set<Question>().Add(newQuestion);
-            await _dbContext.SaveChangesAsync();
-
-            foreach (var answer in question.Answers)
-            {
-                var newAnswer = new Answer
-                {
-                    Identifier = answer.Identifier,
-                    AnswerText = answer.AnswerText,
-                    QuestionId = newQuestion.Id
-
-                };
-
-                _dbContext.Set<Answer>().Add(newAnswer);
-                await _dbContext.SaveChangesAsync();
-            }
-        }
-
-        return Ok();
+        return Content(json, "application/json");
     }
-    
-}
 
-public class CreateTestRequest
-{
- 
-}
+    [HttpPost("tests/{testId}/questions")]
+    public async Task<ActionResult<QuestionDto>> AddQuestionToTest(int testId, [FromBody] QuestionDto newQuestionDto)
+    {
+        var questionDto = await _testService.AddQuestionToTest(testId, newQuestionDto);
 
+        var jsonSettings = new JsonSerializerSettings
+        {
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+        };
+
+        var json = JsonConvert.SerializeObject(questionDto, Formatting.None, jsonSettings);
+
+        return Content(json, "application/json");
+    }
+
+}
 
 public class TestDto
 {

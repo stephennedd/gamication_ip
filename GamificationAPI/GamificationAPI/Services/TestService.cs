@@ -3,6 +3,7 @@ using GamificationAPI.Interfaces;
 using GamificationAPI.Models;
 using GamificationToIP.Context;
 using GamificationToIP.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -77,6 +78,85 @@ public class TestService : ITests
         var questionDtos = test.Questions.Select(q => MapQuestionToDto(q)).ToList();
 
         return questionDtos;
+    }
+    public async Task<TestDto> CreateTest(TestDto test)
+    {
+
+        var newTest = new Test
+        {
+            Title = test.Title,
+            ImageUrl = test.ImageUrl,
+            Description = test.Description,
+            TimeSeconds = test.TimeSeconds
+        };
+
+        _dbContext.Set<Test>().Add(newTest);
+        await _dbContext.SaveChangesAsync();
+
+        foreach (var question in test.Questions)
+        {
+            var newQuestion = new Question
+            {
+                QuestionText = question.QuestionText,
+                CorrectAnswer = question.CorrectAnswer,
+                SelectedAnswer = question.SelectedAnswer,
+                TestId = newTest.Id
+            };
+
+            _dbContext.Set<Question>().Add(newQuestion);
+            await _dbContext.SaveChangesAsync();
+
+            foreach (var answer in question.Answers)
+            {
+                var newAnswer = new Answer
+                {
+                    Identifier = answer.Identifier,
+                    AnswerText = answer.AnswerText,
+                    QuestionId = newQuestion.Id
+
+                };
+
+                _dbContext.Set<Answer>().Add(newAnswer);
+                await _dbContext.SaveChangesAsync();
+            }
+        }
+        return test;
+    }
+    public async Task<QuestionDto> AddQuestionToTest(int testId, QuestionDto questionDto)
+    {
+        var test = await _dbContext.Tests.FindAsync(testId);
+
+        if (test == null)
+        {
+            throw new BadHttpRequestException("The test with given testId does not exist");
+        }
+
+        var newQuestion = new Question
+        {
+            QuestionText = questionDto.QuestionText,
+            CorrectAnswer = questionDto.CorrectAnswer,
+            SelectedAnswer = questionDto.SelectedAnswer,
+            TestId = testId
+        };
+
+        _dbContext.Questions.Add(newQuestion);
+        await _dbContext.SaveChangesAsync();
+
+        foreach (var answerDto in questionDto.Answers)
+        {
+            var newAnswer = new Answer
+            {
+                Identifier = answerDto.Identifier,
+                AnswerText = answerDto.AnswerText,
+                QuestionId = newQuestion.Id
+            };
+
+            _dbContext.Answers.Add(newAnswer);
+        }
+
+        await _dbContext.SaveChangesAsync();
+
+        return questionDto;
     }
 
     private QuestionDto MapQuestionToDto(Question question)
