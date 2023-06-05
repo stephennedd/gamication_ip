@@ -44,59 +44,32 @@ public class GeneratedTestController : ControllerBase
         return Ok("Test was generated");
     }
 
+    [HttpPut("studentQuestions/{studentQuestionId}/answer")]
+    public async Task<ActionResult<string>> SaveStudentAnswer(int studentQuestionId, [FromBody] GenerateUpdateStudentAnswer requestBody)
+    {
+        var answerId = requestBody.AnswerId;
+       
+        var response = await _generatedTestService.SaveStudentAnswer(studentQuestionId,answerId);
+
+        return response;
+    }
+
     [HttpGet("{studentId}/{testId}")]
     public async Task<ActionResult<GeneratedTestDto>> GetGeneratedTest(int studentId, int testId)
     {
-        var generatedTest = await _dbContext.GeneratedTest
-        .Include(gt => gt.Test)
-        .Include(gt => gt.Test.Questions)
-        .ThenInclude(q => q.Answers)
-        .FirstOrDefaultAsync(gt => gt.StudentId == studentId && gt.TestId == testId);
-
-        if (generatedTest == null)
-        {
-            return NotFound();
-        }
-
-        var studentQuestions = await _dbContext.StudentQuestions
-            .Include(sq => sq.Question)
-            .Where(sq => sq.GeneratedTestId == generatedTest.Id)
-            .OrderBy(sq => sq.Id)
-            .ToListAsync();
-
-        var generatedTestDto = new GeneratedTestDto
-        {
-            Id = generatedTest.Test.Id,
-            Title = generatedTest.Test.Title,
-            ImageUrl = generatedTest.Test.ImageUrl,
-            Description = generatedTest.Test.Description,
-            TimeSeconds = generatedTest.Test.TimeSeconds,
-            Questions = studentQuestions.Select(sq => new GeneratedQuestionDto
-            {
-                Id = sq.Question.Id,
-                QuestionText = sq.Question.QuestionText,
-                CorrectAnswer = sq.Question.CorrectAnswer,
-                SelectedAnswer = sq.Question.SelectedAnswer,
-                Answers = sq.Question.Answers.Select(a => new GeneratedAnswerDto
-                {
-                    Id = a.Id,
-                    Identifier = a.Identifier,
-                    AnswerText = a.AnswerText
-                }).ToList()
-            }).ToList()
-        };
+        var generatedTest = await _generatedTestService.GetGeneratedTest(studentId,testId);
 
         var jsonSettings = new JsonSerializerSettings
         {
             ReferenceLoopHandling = ReferenceLoopHandling.Ignore
         };
 
-        var json = JsonConvert.SerializeObject(generatedTestDto, Formatting.None, jsonSettings);
+        var json = JsonConvert.SerializeObject(generatedTest, Formatting.None, jsonSettings);
 
         return Content(json, "application/json");
     }
-}
 
+}
 public class GenerateTestRequest
 {
     public int TestId { get; set; }
@@ -104,28 +77,7 @@ public class GenerateTestRequest
     public int NumberOfQuestions { get; set; }
 }
 
-public class GeneratedTestDto
-{
-    public int Id { get; set; }
-    public string Title { get; set; }
-    public string ImageUrl { get; set; }
-    public string Description { get; set; }
-    public int TimeSeconds { get; set; }
-    public List<GeneratedQuestionDto> Questions { get; set; }
-}
-
-public class GeneratedQuestionDto
-{
-    public int Id { get; set; }
-    public string QuestionText { get; set; }
-    public string CorrectAnswer { get; set; }
-    public string SelectedAnswer { get; set; }
-    public List<GeneratedAnswerDto> Answers { get; set; }
-}
-
-public class GeneratedAnswerDto
-{
-    public int Id { get; set; }
-    public string Identifier { get; set; }
-    public string AnswerText { get; set; }
+public class GenerateUpdateStudentAnswer
+{ 
+    public int AnswerId { get; set; }
 }

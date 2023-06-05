@@ -8,8 +8,9 @@ namespace GamificationAPI.Models
         public int Id { get; set; }
         public int GeneratedTestId { get; set; }
         public int QuestionId { get; set; }
-        public bool IsAnswered { get; set; }
+        public int? AnswerId { get; set; }
         public Question Question { get; set; }
+        public Answer Answer { get; set; }
         public GeneratedTest GeneratedTest { get; set; }
     }
 }

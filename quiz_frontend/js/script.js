@@ -135,14 +135,37 @@ function showQuestions(index){
 // creating the new div tags which for icons
 let tickIconTag = '<div class="icon tick"><i class="fas fa-check"></i></div>';
 let crossIconTag = '<div class="icon cross"><i class="fas fa-times"></i></div>';
+
+// Function to handle the student's answer submission
+async function submitAnswer(answerId, studentQuestionId) {
+    // Perform your fetch request here with the selected option
+    await fetch(`https://localhost:7186/api/generatedTests/studentQuestions/${studentQuestionId}/answer`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        answerId: answerId
+      })
+    })
+      .then(response => response.json())
+      .then(data => {
+        // Process the response data
+        console.log(data);
+      })
+      .catch(error => {
+        console.error('Error submitting answer:', error);
+      });
+  }
 //if user clicked on option
-function optionSelected(answer){
+async function optionSelected(answer){
+  //  await submitAnswer(answer.Id,questions[que_count].Id)
     clearInterval(counter); //clear counter
     clearInterval(counterLine); //clear counterLine
     let userAns = answer.textContent; //getting user selected option
     let correcAns = questions[que_count].CorrectAnswer; //getting correct answer from array
     const allOptions = option_list.children.length; //getting all option items
-    
+  
     if(userAns == correcAns){ //if user selected option is equal to array's correct answer
         userScore += 1; //upgrading score value with 1
         answer.classList.add("correct"); //adding green color to correct selected option

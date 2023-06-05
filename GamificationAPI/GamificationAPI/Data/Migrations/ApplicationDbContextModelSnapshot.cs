@@ -120,29 +120,6 @@ namespace GamificationAPI.Data.Migrations
                     b.ToTable("Leaderboards");
                 });
 
-            modelBuilder.Entity("GamificationAPI.Models.StudentAnswer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AnswerId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("GeneratedTestId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AnswerId");
-
-                    b.HasIndex("GeneratedTestId");
-
-                    b.ToTable("StudentAnswers");
-                });
-
             modelBuilder.Entity("GamificationAPI.Models.StudentQuestion", b =>
                 {
                     b.Property<int>("Id")
@@ -151,16 +128,18 @@ namespace GamificationAPI.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("GeneratedTestId")
+                    b.Property<int?>("AnswerId")
                         .HasColumnType("integer");
 
-                    b.Property<bool>("IsAnswered")
-                        .HasColumnType("boolean");
+                    b.Property<int>("GeneratedTestId")
+                        .HasColumnType("integer");
 
                     b.Property<int>("QuestionId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AnswerId");
 
                     b.HasIndex("GeneratedTestId");
 
@@ -318,27 +297,12 @@ namespace GamificationAPI.Data.Migrations
                     b.Navigation("Student");
                 });
 
-            modelBuilder.Entity("GamificationAPI.Models.StudentAnswer", b =>
+            modelBuilder.Entity("GamificationAPI.Models.StudentQuestion", b =>
                 {
                     b.HasOne("GamificationToIP.Models.Answer", "Answer")
                         .WithMany()
-                        .HasForeignKey("AnswerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AnswerId");
 
-                    b.HasOne("GamificationAPI.Models.GeneratedTest", "GeneratedTest")
-                        .WithMany()
-                        .HasForeignKey("GeneratedTestId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Answer");
-
-                    b.Navigation("GeneratedTest");
-                });
-
-            modelBuilder.Entity("GamificationAPI.Models.StudentQuestion", b =>
-                {
                     b.HasOne("GamificationAPI.Models.GeneratedTest", "GeneratedTest")
                         .WithMany()
                         .HasForeignKey("GeneratedTestId")
@@ -350,6 +314,8 @@ namespace GamificationAPI.Data.Migrations
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Answer");
 
                     b.Navigation("GeneratedTest");
 
