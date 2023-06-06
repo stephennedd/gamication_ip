@@ -1,0 +1,100 @@
+﻿{
+  "title": "Blockchain Fundamentals",
+  "imageUrl": "https://example.com/blockchain.jpg",
+  "description": "This course provides an introduction to blockchain technology and its applications.",
+  "timeSeconds": 3600,
+  "questions": [
+    {
+      "questionText": "What is a blockchain?",
+      "correctAnswer": "A decentralized and distributed digital ledger.",
+      "selectedAnswer": "",
+      "answers": [
+        {
+          "identifier": "A",
+          "answerText": "A decentralized and distributed digital ledger."
+        },
+        {
+          "identifier": "B",
+          "answerText": "A type of cryptocurrency."
+        },
+        {
+          "identifier": "C",
+          "answerText": "A centralized database managed by a single authority."
+        },
+        {
+          "identifier": "D",
+          "answerText": "A technology used for cloud storage."
+        }
+      ]
+    },
+    {
+      "questionText": "Which of the following is a characteristic of blockchain?",
+      "correctAnswer": "Immutability",
+      "selectedAnswer": "",
+      "answers": [
+        {
+          "identifier": "A",
+          "answerText": "High scalability"
+        },
+        {
+          "identifier": "B",
+          "answerText": "Low security"
+        },
+        {
+          "identifier": "C",
+          "answerText": "Immutability"
+        },
+        {
+          "identifier": "D",
+          "answerText": "Centralized control"
+        }
+      ]
+    },
+    {
+      "questionText": "What is a smart contract?",
+      "correctAnswer": "Self-executing contract with predefined rules.",
+      "selectedAnswer": "",
+      "answers": [
+        {
+          "identifier": "A",
+          "answerText": "A contract that can only be executed by a lawyer."
+        },
+        {
+          "identifier": "B",
+          "answerText": "A contract that requires physical signatures."
+        },
+        {
+          "identifier": "C",
+          "answerText": "A contract used for real estate transactions."
+        },
+        {
+          "identifier": "D",
+          "answerText": "Self-executing contract with predefined rules."
+        }
+      ]
+    },
+    {
+      "questionText": "What is the role of miners in a blockchain network?",
+      "correctAnswer": "To validate and add new transactions to the blockchain.",
+      "selectedAnswer": "",
+      "answers": [
+        {
+          "identifier": "A",
+          "answerText": "To encrypt data stored in the blockchain."
+        },
+        {
+          "identifier": "B",
+          "answerText": "To manage user wallets."
+        },
+        {
+          "identifier": "C",
+          "answerText": "To create new cryptocurrencies."
+        },
+        {
+          "identifier": "D",
+          "answerText": "To validate and add new transactions to the blockchain."
+        }
+      ]
+    }
+  ]
+}

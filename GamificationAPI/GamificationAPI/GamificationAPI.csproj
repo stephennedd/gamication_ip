@@ -30,7 +30,11 @@
   </ItemGroup>
 
   <ItemGroup>
+<<<<<<< HEAD
     <Folder Include="Data\Migrations\" />
+=======
+    <Folder Include="Data\" />
+>>>>>>> 785c9158420a7fa2bab96e2e171f34e9e7caffc9
   </ItemGroup>
 
 </Project>
