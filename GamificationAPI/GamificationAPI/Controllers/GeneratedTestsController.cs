@@ -44,7 +44,7 @@ public class GeneratedTestController : ControllerBase
         return Ok("Test was generated");
     }
 
-    [HttpPut("studentQuestions/{studentQuestionId}/answer")]
+    [HttpPost("studentQuestions/{studentQuestionId}/answer")]
     public async Task<ActionResult<string>> SaveStudentAnswer(int studentQuestionId, [FromBody] GenerateUpdateStudentAnswer requestBody)
     {
         var answerId = requestBody.AnswerId;

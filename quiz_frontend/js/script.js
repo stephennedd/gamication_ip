@@ -119,10 +119,10 @@ function showQuestions(index){
     const que_text = document.querySelector(".que_text");
     //creating a new span and div tag for question and option and passing the value using array index
     let que_tag = '<span>'+ (index+1)+ ". " + questions[index].QuestionText +'</span>';
-    let option_tag = '<div class="option"><span>'+ questions[index].Answers[0].AnswerText +'</span></div>'
-    + '<div class="option"><span>'+ questions[index].Answers[1].AnswerText +'</span></div>'
-    + '<div class="option"><span>'+ questions[index].Answers[2].AnswerText +'</span></div>'
-    + '<div class="option"><span>'+ questions[index].Answers[3].AnswerText +'</span></div>';
+    let option_tag = '<div class="option" data-answer-id="' + questions[index].Answers[0].Id + '"><span>' + questions[index].Answers[0].AnswerText + '</span></div>'
+    + '<div class="option" data-answer-id="' + questions[index].Answers[1].Id + '"><span>' + questions[index].Answers[1].AnswerText + '</span></div>'
+    + '<div class="option" data-answer-id="' + questions[index].Answers[2].Id + '"><span>' + questions[index].Answers[2].AnswerText + '</span></div>'
+    + '<div class="option" data-answer-id="' + questions[index].Answers[3].Id + '"><span>' + questions[index].Answers[3].AnswerText + '</span></div>';
     que_text.innerHTML = que_tag; //adding new span tag inside que_tag
     option_list.innerHTML = option_tag; //adding new div tag inside option_tag
     
@@ -139,27 +139,27 @@ let crossIconTag = '<div class="icon cross"><i class="fas fa-times"></i></div>';
 // Function to handle the student's answer submission
 async function submitAnswer(answerId, studentQuestionId) {
     // Perform your fetch request here with the selected option
-    await fetch(`https://localhost:7186/api/generatedTests/studentQuestions/${studentQuestionId}/answer`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        answerId: answerId
-      })
-    })
-      .then(response => response.json())
-      .then(data => {
-        // Process the response data
-        console.log(data);
-      })
-      .catch(error => {
-        console.error('Error submitting answer:', error);
+    try {
+      // Perform your fetch request here with the selected option
+      await fetch(`https://localhost:7186/api/generatedTests/studentQuestions/${studentQuestionId}/answer`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          answerId: answerId
+        })
       });
+  
+      console.log("Answer submitted successfully!");
+    } catch (error) {
+      console.error('Error submitting answer:', error);
+    }
   }
 //if user clicked on option
 async function optionSelected(answer){
-  //  await submitAnswer(answer.Id,questions[que_count].Id)
+    const answerId = answer.getAttribute("data-answer-id");
+    await submitAnswer(answerId,questions[que_count].Id)
     clearInterval(counter); //clear counter
     clearInterval(counterLine); //clear counterLine
     let userAns = answer.textContent; //getting user selected option

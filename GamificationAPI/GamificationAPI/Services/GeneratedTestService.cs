@@ -132,7 +132,7 @@ public class GeneratedTestService : IGeneratedTests
         .Include(gt => gt.Test)
         .Include(gt => gt.Test.Questions)
         .ThenInclude(q => q.Answers)
-        .FirstOrDefaultAsync(gt => gt.StudentId == studentId && gt.TestId == testId);
+        .FirstOrDefaultAsync(gt => gt.StudentId == studentId && gt.TestId == testId); 
 
         if (generatedTest == null)
         {
@@ -154,7 +154,7 @@ public class GeneratedTestService : IGeneratedTests
             TimeSeconds = generatedTest.Test.TimeSeconds,
             Questions = studentQuestions.Select(sq => new GeneratedQuestionDto
             {
-                Id = sq.Question.Id,
+                Id = sq.Id,
                 QuestionText = sq.Question.QuestionText,
                 CorrectAnswer = sq.Question.CorrectAnswer,
                 SelectedAnswer = sq.Question.SelectedAnswer,
