@@ -47,28 +47,31 @@ public class LeaderboardService : ILeaderboards
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task DeleteLeaderboardAsync(string name)
+    public async Task<bool> DeleteLeaderboardAsync(string name)
     {
         var leaderboard = await GetLeaderboardByNameAsync(name);
 
         if (leaderboard != null)
         {
-            _dbContext.Set<Leaderboard>().Remove(leaderboard);
+            _dbContext.Leaderboards.Remove(leaderboard);
             await _dbContext.SaveChangesAsync();
+            return true;
         }
+        return false;
     }
-    public async Task CreateLeaderboardAsync(string name)
+    public async Task<bool> CreateLeaderboardAsync(string name)
     {
         var leaderboard = await GetLeaderboardByNameAsync(name);
-        if (leaderboard != null)
+        if (leaderboard != null || string.IsNullOrWhiteSpace(name))
         {
-            return;
+            return false;
         }
         else 
         {
             leaderboard = new Leaderboard { Name = name };
             _dbContext.Set<Leaderboard>().Add(leaderboard);
             await _dbContext.SaveChangesAsync();
+            return true;
         }
     }
     public async Task<bool> CheckIfStudentHasHighScoreInLeadeboard(Student student, string name)

@@ -22,32 +22,63 @@ public class LeaderboardController : ControllerBase
         return Ok(leaderboard);
     }
     [HttpGet("{LeaderboardName}")]
-    public async Task<IActionResult> GetLeaderboard(string LeaderboardName)
+    public async Task<IActionResult> GetLeaderboardById(string LeaderboardName)
     {
+        if (string.IsNullOrEmpty(LeaderboardName))
+        {
+            return BadRequest();
+        }
+
         var leaderboard = await _leaderboardService.GetLeaderboardByNameAsync(LeaderboardName);
+
+        if (leaderboard is null)
+        {
+            return NotFound();
+        }
+
         return Ok(leaderboard);
     }
     [HttpPost]
-    public async Task<IActionResult> CreateNewLeaderboard(string LeaderboardName)
+    public async Task<IActionResult> CreateNewLeaderboard(string leaderboardName)
     {
-        if (!ModelState.IsValid)
+        if (string.IsNullOrWhiteSpace(leaderboardName))
         {
-            return BadRequest(ModelState);
+            return BadRequest("Leaderboard name cannot be empty.");
         }
-        
-        await _leaderboardService.CreateLeaderboardAsync(LeaderboardName);
+
+        var existingLeaderboard = await _leaderboardService.GetLeaderboardByNameAsync(leaderboardName);
+        if (existingLeaderboard != null)
+        {
+            return Conflict("A leaderboard with this name already exists.");
+        }
+
+        await _leaderboardService.CreateLeaderboardAsync(leaderboardName);
+
         return Ok();
     }
-    [HttpDelete]
-    public async Task<IActionResult> DeleteLeaderboard(string LeaderboardName)
+    [HttpDelete("{leaderboardName}")]
+    public async Task<IActionResult> DeleteLeaderboard(string leaderboardName)
     {
-        if (!ModelState.IsValid)
+        if (string.IsNullOrWhiteSpace(leaderboardName))
         {
-            return BadRequest(ModelState);
+            return BadRequest("Leaderboard name cannot be empty.");
         }
+
+        var existingLeaderboard = await _leaderboardService.GetLeaderboardByNameAsync(leaderboardName);
+        if (existingLeaderboard == null)
+        {
+            return NotFound("No leaderboard with this name exists.");
+        }
+
+        bool x = await _leaderboardService.DeleteLeaderboardAsync(leaderboardName);
+        if (x)
+        {
+            return Ok();
+        }
+
+        return BadRequest("Something went wrong.");
         
-        await _leaderboardService.DeleteLeaderboardAsync(LeaderboardName);
-        return Ok();
     }
+
 
 }

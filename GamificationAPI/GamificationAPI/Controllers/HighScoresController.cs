@@ -27,16 +27,16 @@ namespace GamificationAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> AddHighScoreToLeaderboard([FromBody] HighScore highScore, string leaderboardName)
         {
-            if (!ModelState.IsValid)
+            if (highScore is null || string.IsNullOrEmpty(leaderboardName) || !ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if(await _leaderboardService.CheckIfStudentHasHighScoreInLeadeboard(highScore.Student, leaderboardName) == true)
+            if (await _leaderboardService.CheckIfStudentHasHighScoreInLeadeboard(highScore.Student, leaderboardName) == true)
             {
                 if(await _highScoreService.CheckIfItsHighScore(highScore, leaderboardName) == true)
                 {
-                    await _leaderboardService.AddHighScoreAsync(highScore, leaderboardName);
+                    await _highScoreService.UpdateHighScoreAsync(highScore, leaderboardName);
                     return Ok();
                 }
                 else
@@ -44,11 +44,29 @@ namespace GamificationAPI.Controllers
                     return BadRequest("This is not High Score");
                 }
             }
-
-            return Ok();
+            else
+            {
+                await _leaderboardService.AddHighScoreAsync(highScore, leaderboardName);
+                return Ok();
+            }
+      
         }
 
-        
+        [HttpDelete]
+        public async Task<IActionResult> DeleteHighScoreById(int highScoreId)
+        {
+            try
+            {
+                await _highScoreService.DeleteHighScoreAsync(highScoreId);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+
     }
     
 
