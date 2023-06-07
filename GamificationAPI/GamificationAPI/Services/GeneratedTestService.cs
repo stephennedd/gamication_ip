@@ -35,7 +35,8 @@ public class GeneratedTestService : IGeneratedTests
 
         if (questions != null && student != null)
         {
-            var existingGeneratedTest = _dbContext.GeneratedTest.FirstOrDefault(gt => gt.StudentId == studentId && gt.TestId == testId);
+            // change it
+            var existingGeneratedTest = _dbContext.GeneratedTest.OrderByDescending(gt => gt.Id).FirstOrDefault(gt => gt.StudentId == studentId && gt.TestId == testId);
             if (existingGeneratedTest != null)
             {
                 var answeredQuestionCount = await _dbContext.StudentQuestions
@@ -129,10 +130,10 @@ public class GeneratedTestService : IGeneratedTests
     public async Task<GeneratedTestDto> GetGeneratedTest(int studentId, int testId)
     {
         var generatedTest = await _dbContext.GeneratedTest
-        .Include(gt => gt.Test)
-        .Include(gt => gt.Test.Questions)
-        .ThenInclude(q => q.Answers)
-        .FirstOrDefaultAsync(gt => gt.StudentId == studentId && gt.TestId == testId); 
+            .Include(gt => gt.Test)
+            .Include(gt => gt.Test.Questions)
+            .ThenInclude(q => q.Answers)
+            .FirstOrDefaultAsync(gt => gt.StudentId == studentId && gt.TestId == testId);
 
         if (generatedTest == null)
         {
@@ -141,9 +142,32 @@ public class GeneratedTestService : IGeneratedTests
 
         var studentQuestions = await _dbContext.StudentQuestions
             .Include(sq => sq.Question)
+            .Include(sq => sq.Question.Answers)
             .Where(sq => sq.GeneratedTestId == generatedTest.Id)
-            .OrderBy(sq => sq.Id)
             .ToListAsync();
+
+        var hasUnansweredQuestions = studentQuestions.Any(sq => sq.AnswerId == null);
+        if (!hasUnansweredQuestions)
+        {
+            // Get the next generated test with unanswered questions
+            generatedTest = await _dbContext.GeneratedTest
+                .Include(gt => gt.Test)
+                .Include(gt => gt.Test.Questions)
+                .ThenInclude(q => q.Answers)
+                .FirstOrDefaultAsync(gt => gt.StudentId == studentId && gt.Id > generatedTest.Id
+                    && _dbContext.StudentQuestions.Any(sq => sq.GeneratedTestId == gt.Id && sq.AnswerId == null));
+
+            if (generatedTest == null)
+            {
+                throw new BadHttpRequestException("No more generated tests with unanswered questions found");
+            }
+
+            studentQuestions = await _dbContext.StudentQuestions
+                .Include(sq => sq.Question)
+                .Include(sq => sq.Question.Answers)
+                .Where(sq => sq.GeneratedTestId == generatedTest.Id)
+                .ToListAsync();
+        }
 
         var generatedTestDto = new GeneratedTestDto
         {

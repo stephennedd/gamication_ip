@@ -26,9 +26,8 @@ mute_btn.onclick = ()=>{
 
 // if startQuiz button clicked
 start_btn.onclick = async ()=>{
-
-    
-  await fetch('https://localhost:7186/api/generatedTests', {
+  
+  let generatedTestId = await fetch('https://localhost:7186/api/generatedTests', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json'
