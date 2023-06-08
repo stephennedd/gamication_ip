@@ -1,15 +1,16 @@
-﻿using BulkyBookWeb.Models;
+﻿
 using GamificationAPI.Interfaces;
 using GamificationAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
+[Authorize(Roles = "Admin, Teacher, Student")]
 [Route("api/[controller]")]
 [ApiController]
-public class LeaderboardController : ControllerBase
+public class LeaderboardsController : ControllerBase
 {
     private readonly ILeaderboards _leaderboardService;
 
-    public LeaderboardController(ILeaderboards leaderboardService)
+    public LeaderboardsController(ILeaderboards leaderboardService)
     {
         _leaderboardService = leaderboardService;
     }
@@ -19,6 +20,11 @@ public class LeaderboardController : ControllerBase
     public async Task<IActionResult> GetAllLeaderboard()
     {
         var leaderboard = await _leaderboardService.GetLeaderboardsAsync();
+        if (!leaderboard.Any())
+        {
+            return NoContent();
+        }
+
         return Ok(leaderboard);
     }
     [HttpGet("{LeaderboardName}")]
@@ -38,6 +44,7 @@ public class LeaderboardController : ControllerBase
 
         return Ok(leaderboard);
     }
+    [Authorize(Roles = "Admin, Teacher")]
     [HttpPost]
     public async Task<IActionResult> CreateNewLeaderboard(string leaderboardName)
     {
@@ -56,6 +63,7 @@ public class LeaderboardController : ControllerBase
 
         return Ok();
     }
+    [Authorize(Roles = "Admin, Teacher")]
     [HttpDelete("{leaderboardName}")]
     public async Task<IActionResult> DeleteLeaderboard(string leaderboardName)
     {

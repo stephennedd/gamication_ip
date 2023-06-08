@@ -1,4 +1,4 @@
-﻿using BulkyBookWeb.Models;
+﻿
 using GamificationAPI.Interfaces;
 using GamificationAPI.Models;
 using GamificationToIP.Context;
@@ -16,7 +16,7 @@ public class HighScoreService : IHighScores
     public async Task<HighScore> GetHighScoreByIdAsync(int id)
     {
         return await _dbContext.Set<HighScore>()
-            .Include(h => h.Student)
+            .Include(h => h.User)
             .FirstOrDefaultAsync(h => h.Id == id);
     }
     public async Task<bool> CheckIfItsHighScore(HighScore newHighScore, string leaderboardName)
@@ -26,7 +26,7 @@ public class HighScoreService : IHighScores
         .FirstOrDefaultAsync(l => l.Name == leaderboardName);
     if (leaderboard != null)
     {
-        HighScore? highScoreInDB = _dbContext.HighScores.FirstOrDefault(x => x.Student.Id == newHighScore.Student.Id);
+        HighScore? highScoreInDB = _dbContext.HighScores.FirstOrDefault(x => x.User.Id == newHighScore.User.Id);
         
         if (highScoreInDB != null)
         {
@@ -43,11 +43,11 @@ public class HighScoreService : IHighScores
     }
 }
 
-    public async Task<List<HighScore>> GetHighScoreByStudentIdAsync(int studentId)
+    public async Task<List<HighScore>> GetHighScoreByStudentIdAsync(string studentId)
     {
         return await _dbContext.Set<HighScore>()
-            .Include(h => h.Student)
-            .Where(h => h.Student.Id == studentId)
+            .Include(h => h.User)
+            .Where(h => h.User.Id == studentId)
             .ToListAsync();
     }
 
@@ -65,7 +65,7 @@ public class HighScoreService : IHighScores
             .FirstOrDefaultAsync(l => l.Name == leaderboardName);
         if (leaderboard != null)
         {
-            HighScore? highScoreInDB = _dbContext.HighScores.FirstOrDefault(x => x.Student.Id == highScore.Student.Id);
+            HighScore? highScoreInDB = _dbContext.HighScores.FirstOrDefault(x => x.User.Id == highScore.User.Id);
             if (highScoreInDB != null)
             {
                 if (highScoreInDB.Score < highScore.Score)
@@ -97,7 +97,7 @@ public class HighScoreService : IHighScores
     public async Task<List<HighScore>> GetHighScoresAsync()
     {
         return await _dbContext.Set<HighScore>()
-            .Include(h => h.Student)
+            .Include(h => h.User)
             .ToListAsync();
     }
 

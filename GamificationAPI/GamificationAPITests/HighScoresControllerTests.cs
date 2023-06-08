@@ -1,140 +1,202 @@
-using Xunit;
-using Moq;
-using Microsoft.AspNetCore.Mvc;
-using BulkyBookWeb.Models;
-using GamificationAPI.Models;
 using GamificationAPI.Controllers;
 using GamificationAPI.Interfaces;
+using GamificationAPI.Models;
+using GamificationToIP.Models;
+using Microsoft.AspNetCore.Mvc;
+using Moq;
 
-namespace GamificationAPITests
+public class HighScoresControllerTests
 {
-    public class HighScoresControllerTests
+    private Mock<ILeaderboards> _leaderboardServiceMock;
+    private Mock<IHighScores> _highScoreServiceMock;
+    private Mock<IUsers> _userServiceMock;
+
+    public HighScoresControllerTests()
     {
-        [Fact]
-        public async Task Post_AddHighScoreToLeaderboard_ReturnsOK_WhenHighScoreIsAdded()
-        {
-            // Arrange
-            var mockLeaderboardsService = new Mock<ILeaderboards>();
-            var mockHighScoresService = new Mock<IHighScores>();
-            var mockStudentsService = new Mock<IStudents>();
+        _leaderboardServiceMock = new Mock<ILeaderboards>();
+        _highScoreServiceMock = new Mock<IHighScores>();
+        _userServiceMock = new Mock<IUsers>();
+    }
 
-            var highScore = new HighScore { Student = new Student { Id = 1 }, Score = 50 };
-            var leaderboardName = "TestLeaderboard";
+    [Fact]
+    public async Task AddHighScoreToLeaderboard_ReturnsBadRequest_WhenHighScoreIsNull()
+    {
+        // Arrange
+        var controller = new HighScoresController(_leaderboardServiceMock.Object, _highScoreServiceMock.Object, _userServiceMock.Object);
 
-            mockLeaderboardsService.Setup(s => s.CheckIfStudentHasHighScoreInLeadeboard(highScore.Student, leaderboardName)).ReturnsAsync(false);
-            mockHighScoresService.Setup(s => s.CheckIfItsHighScore(highScore, leaderboardName)).ReturnsAsync(true);
+        // Act
+        var result = await controller.AddHighScoreToLeaderboard(null, "leaderboardName");
 
-            var controller = new HighScoresController(mockLeaderboardsService.Object, mockHighScoresService.Object, mockStudentsService.Object);
+        // Assert
+        Assert.IsType<BadRequestResult>(result);
 
-            // Act
-            var result = await controller.AddHighScoreToLeaderboard(highScore, leaderboardName);
+    }
+    [Fact]
+    public async Task AddHighScoreToLeaderboard_ReturnsBadRequest_WhenLeaderboardNameIsNull()
+    {
+        // Arrange
+        var controller = new HighScoresController(_leaderboardServiceMock.Object, _highScoreServiceMock.Object, _userServiceMock.Object);
+        var highScore = new HighScore { User = new User { Id = 1.ToString() } };
 
-            // Assert
-            Assert.IsType<OkResult>(result);
-        }
+        // Act
+        var result = await controller.AddHighScoreToLeaderboard(highScore, null);
 
-        [Fact]
-        public async Task Post_AddHighScoreToLeaderboard_ReturnsBadRequest_WhenHighScoreIsNotHighScore()
-        {
-            // Arrange
-            var mockLeaderboardsService = new Mock<ILeaderboards>();
-            var mockHighScoresService = new Mock<IHighScores>();
-            var mockStudentsService = new Mock<IStudents>();
+        // Assert
+        Assert.IsType<BadRequestResult>(result);
+    }
 
-            var highScore = new HighScore { Student = new Student { Id = 1 }, Score = 50 };
-            var leaderboardName = "TestLeaderboard";
+    [Fact]
+    public async Task AddHighScoreToLeaderboard_ReturnsOk_WhenNewHighScoreIsAdded()
+    {
+        // Arrange
+        var controller = new HighScoresController(_leaderboardServiceMock.Object, _highScoreServiceMock.Object, _userServiceMock.Object);
+        var highScore = new HighScore { User = new User { Id = 1.ToString() } };
 
-            mockLeaderboardsService.Setup(s => s.CheckIfStudentHasHighScoreInLeadeboard(highScore.Student, leaderboardName)).ReturnsAsync(true);
-            mockHighScoresService.Setup(s => s.CheckIfItsHighScore(highScore, leaderboardName)).ReturnsAsync(false);
+        _userServiceMock.Setup(x => x.UserExistsAsync(highScore.User.Id)).ReturnsAsync(true);
+        _leaderboardServiceMock.Setup(x => x.CheckIfStudentHasHighScoreInLeadeboard(highScore.User.Id, It.IsAny<string>())).ReturnsAsync(false);
 
-            var controller = new HighScoresController(mockLeaderboardsService.Object, mockHighScoresService.Object, mockStudentsService.Object);
+        // Act
+        var result = await controller.AddHighScoreToLeaderboard(highScore, "leaderboardName");
 
-            // Act
-            var result = await controller.AddHighScoreToLeaderboard(highScore, leaderboardName);
+        // Assert
+        Assert.IsType<OkResult>(result);
+    }
 
-            // Assert
-            Assert.IsType<BadRequestObjectResult>(result);
-            Assert.Equal("This is not High Score", (result as BadRequestObjectResult).Value);
-        }
-        [Fact]
-        public async Task Delete_DeleteHighScoreById_ReturnsOK_WhenHighScoreIsDeleted()
-        {
-            // Arrange
-            var mockLeaderboardsService = new Mock<ILeaderboards>();
-            var mockHighScoresService = new Mock<IHighScores>();
-            var mockStudentsService = new Mock<IStudents>();
+    [Fact]
+    public async Task AddHighScoreToLeaderboard_ReturnsBadRequest_WhenHighScoreIsNotHighEnough()
+    {
+        // Arrange
+        var controller = new HighScoresController(_leaderboardServiceMock.Object, _highScoreServiceMock.Object, _userServiceMock.Object);
+        var highScore = new HighScore { User = new User { Id = 1.ToString() } };
 
-            var highScoreId = 1;
+        _userServiceMock.Setup(x => x.UserExistsAsync(highScore.User.Id)).ReturnsAsync(true);
+        _leaderboardServiceMock.Setup(x => x.CheckIfStudentHasHighScoreInLeadeboard(highScore.User.Id, It.IsAny<string>())).ReturnsAsync(true);
+        _highScoreServiceMock.Setup(x => x.CheckIfItsHighScore(highScore, It.IsAny<string>())).ReturnsAsync(false);
 
-            mockHighScoresService.Setup(s => s.DeleteHighScoreAsync(highScoreId)).Returns(Task.CompletedTask);
+        // Act
+        var result = await controller.AddHighScoreToLeaderboard(highScore, "leaderboardName");
 
-            var controller = new HighScoresController(mockLeaderboardsService.Object, mockHighScoresService.Object, mockStudentsService.Object);
+        // Assert
+        Assert.IsType<BadRequestObjectResult>(result);
+    }
 
-            // Act
-            var result = await controller.DeleteHighScoreById(highScoreId);
+    [Fact]
+    public async Task DeleteHighScoreById_ReturnsOk_WhenHighScoreIsDeleted()
+    {
+        // Arrange
+        var controller = new HighScoresController(_leaderboardServiceMock.Object, _highScoreServiceMock.Object, _userServiceMock.Object);
 
-            // Assert
-            Assert.IsType<OkResult>(result);
-        }
+        // Act
+        var result = await controller.DeleteHighScoreById(1);
 
-        [Fact]
-        public async Task Delete_DeleteHighScoreById_ReturnsBadRequest_WhenExceptionIsThrown()
-        {
-            // Arrange
-            var mockLeaderboardsService = new Mock<ILeaderboards>();
-            var mockHighScoresService = new Mock<IHighScores>();
-            var mockStudentsService = new Mock<IStudents>();
+        // Assert
+        Assert.IsType<OkResult>(result);
+    }
 
-            var highScoreId = 1;
+    [Fact]
+    public async Task DeleteHighScoreById_ReturnsBadRequest_WhenExceptionIsThrown()
+    {
+        // Arrange
+        var controller = new HighScoresController(_leaderboardServiceMock.Object, _highScoreServiceMock.Object, _userServiceMock.Object);
 
-            mockHighScoresService.Setup(s => s.DeleteHighScoreAsync(highScoreId)).ThrowsAsync(new Exception());
+        _highScoreServiceMock.Setup(x => x.DeleteHighScoreAsync(1)).ThrowsAsync(new Exception());
 
-            var controller = new HighScoresController(mockLeaderboardsService.Object, mockHighScoresService.Object, mockStudentsService.Object);
+        // Act
+        var result = await controller.DeleteHighScoreById(1);
 
-            // Act
-            var result = await controller.DeleteHighScoreById(highScoreId);
+        // Assert
+        Assert.IsType<BadRequestObjectResult>(result);
+    }
+    [Fact]
+    public async Task AddHighScoreToLeaderboard_ReturnsBadRequest_WhenModelStateIsInvalid()
+    {
+        // Arrange
+        var controller = new HighScoresController(_leaderboardServiceMock.Object, _highScoreServiceMock.Object, _userServiceMock.Object);
+        controller.ModelState.AddModelError("error", "error");
+        var highScore = new HighScore();
 
-            // Assert
-            Assert.IsType<BadRequestObjectResult>(result);
-        }
-        [Fact]
-        public async Task Post_AddHighScoreToLeaderboard_ReturnsBadRequest_WhenHighScoreIsNull()
-        {
-            // Arrange
-            var mockLeaderboardsService = new Mock<ILeaderboards>();
-            var mockHighScoresService = new Mock<IHighScores>();
-            var mockStudentsService = new Mock<IStudents>();
+        // Act
+        var result = await controller.AddHighScoreToLeaderboard(highScore, "leaderboardName");
 
-            HighScore highScore = null;
-            var leaderboardName = "TestLeaderboard";
+        // Assert
+        Assert.IsType<BadRequestResult>(result);
+    }
 
-            var controller = new HighScoresController(mockLeaderboardsService.Object, mockHighScoresService.Object, mockStudentsService.Object);
+    [Fact]
+    public async Task AddHighScoreToLeaderboard_ReturnsBadRequest_WhenUserDoesNotExist()
+    {
+        // Arrange
+        var controller = new HighScoresController(_leaderboardServiceMock.Object, _highScoreServiceMock.Object, _userServiceMock.Object);
+        var highScore = new HighScore { User = new User { Id = 1.ToString() } };
 
-            // Act
-            var result = await controller.AddHighScoreToLeaderboard(highScore, leaderboardName);
+        _userServiceMock.Setup(x => x.UserExistsAsync(highScore.User.Id)).ReturnsAsync(false);
 
-            // Assert
-            Assert.IsType<BadRequestObjectResult>(result);
-        }
+        // Act
+        var result = await controller.AddHighScoreToLeaderboard(highScore, "leaderboardName");
 
-        [Fact]
-        public async Task Post_AddHighScoreToLeaderboard_ReturnsBadRequest_WhenLeaderboardNameIsEmpty()
-        {
-            // Arrange
-            var mockLeaderboardsService = new Mock<ILeaderboards>();
-            var mockHighScoresService = new Mock<IHighScores>();
-            var mockStudentsService = new Mock<IStudents>();
+        // Assert
+        Assert.IsType<BadRequestResult>(result);
+    }
 
-            var highScore = new HighScore { Student = new Student { Id = 1 }, Score = 50 };
-            string leaderboardName = "";
+    [Fact]
+    public async Task AddHighScoreToLeaderboard_ReturnsOk_WhenHighScoreIsUpdated()
+    {
+        // Arrange
+        var controller = new HighScoresController(_leaderboardServiceMock.Object, _highScoreServiceMock.Object, _userServiceMock.Object);
+        var highScore = new HighScore { User = new User { Id = 1.ToString() } };
 
-            var controller = new HighScoresController(mockLeaderboardsService.Object, mockHighScoresService.Object, mockStudentsService.Object);
+        _userServiceMock.Setup(x => x.UserExistsAsync(highScore.User.Id)).ReturnsAsync(true);
+        _leaderboardServiceMock.Setup(x => x.CheckIfStudentHasHighScoreInLeadeboard(highScore.User.Id, It.IsAny<string>())).ReturnsAsync(true);
+        _highScoreServiceMock.Setup(x => x.CheckIfItsHighScore(highScore, It.IsAny<string>())).ReturnsAsync(true);
 
-            // Act
-            var result = await controller.AddHighScoreToLeaderboard(highScore, leaderboardName);
+        // Act
+        var result = await controller.AddHighScoreToLeaderboard(highScore, "leaderboardName");
 
-            // Assert
-            Assert.IsType<BadRequestObjectResult>(result);
-        }
+        // Assert
+        Assert.IsType<OkResult>(result);
+    }
+
+    [Fact]
+    public async Task DeleteHighScoreById_ReturnsBadRequest_WhenHighScoreIdIsInvalid()
+    {
+        // Arrange
+        var controller = new HighScoresController(_leaderboardServiceMock.Object, _highScoreServiceMock.Object, _userServiceMock.Object);
+
+        _highScoreServiceMock.Setup(x => x.DeleteHighScoreAsync(-1)).ThrowsAsync(new Exception());
+
+        // Act
+        var result = await controller.DeleteHighScoreById(-1);
+
+        // Assert
+        Assert.IsType<BadRequestObjectResult>(result);
+    }
+    [Fact]
+    public async Task AddHighScoreToLeaderboard_ReturnsBadRequest_WhenLeaderboardNameIsEmpty()
+    {
+        // Arrange
+        var controller = new HighScoresController(_leaderboardServiceMock.Object, _highScoreServiceMock.Object, _userServiceMock.Object);
+        var highScore = new HighScore();
+
+        // Act
+        var result = await controller.AddHighScoreToLeaderboard(highScore, "");
+
+        // Assert
+        Assert.IsType<BadRequestResult>(result);
+    }
+
+
+    [Fact]
+    public async Task DeleteHighScoreById_ReturnsOk_WhenDeletionIsSuccessful()
+    {
+        // Arrange
+        var controller = new HighScoresController(_leaderboardServiceMock.Object, _highScoreServiceMock.Object, _userServiceMock.Object);
+
+        _highScoreServiceMock.Setup(x => x.DeleteHighScoreAsync(1)).Returns(Task.CompletedTask);
+
+        // Act
+        var result = await controller.DeleteHighScoreById(1);
+
+        // Assert
+        Assert.IsType<OkResult>(result);
     }
 }
