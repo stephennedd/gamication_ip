@@ -1,4 +1,4 @@
-﻿using BulkyBookWeb.Models;
+﻿
 using GamificationAPI.Models;
 using System.ComponentModel.DataAnnotations;
 
@@ -9,7 +9,7 @@ namespace GamificationToIP.Models
         [Key]
         public int Id { get; set; }
         public int numberOfGivenCorrectAnswers { get; set; }
-        public Student student { get; set; } = null!;
+        public User student { get; set; } = null!;
         public GeneratedTest Test { get; set; } = null!;
     }
 }

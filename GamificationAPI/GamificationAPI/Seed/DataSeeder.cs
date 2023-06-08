@@ -1,4 +1,5 @@
-﻿using BulkyBookWeb.Models;
+﻿
+using GamificationAPI.Models;
 using GamificationToIP.Context;
 using GamificationToIP.Models;
 using Microsoft.EntityFrameworkCore;
@@ -29,19 +30,30 @@ namespace GamificationToIP.Seed
 
                 _logger.LogInformation("This is an information message.");
 
-                foreach (var student in gamificationToIpData.students)
+                foreach (var role in gamificationToIpData.roles)
                 {
-                    var newStudent = new Student
+                    var newRole = new Role
                     {
-                     FirstName = student?.FirstName,
-                     LastName = student?.LastName,
-                     MiddleName = student?.MiddleName,
-                     Email = student?.Email,
-                     Password = student?.Password,
-                     IsBanned = student?.IsBanned,     
+                        Id = role.Id,
+                        Name = role.Name
+                    };
+                    applicationDbContext.Set<Role>().Add(newRole);
+                    await applicationDbContext.SaveChangesAsync();
+                }
+
+                foreach (var user in gamificationToIpData.users)
+                {
+                    int x = user.RoleId;
+                    Role role = applicationDbContext.Set<Role>().Find(x);
+                    var newUser = new User
+                    {
+                        Id = user.Id,
+                        Group = user.Group,
+                        Password = user?.Password,
+                        Role = role
                     };
 
-                    applicationDbContext.Set<Student>().Add(newStudent);
+                    applicationDbContext.Set<User>().Add(newUser);
                     await applicationDbContext.SaveChangesAsync();
                 }
 

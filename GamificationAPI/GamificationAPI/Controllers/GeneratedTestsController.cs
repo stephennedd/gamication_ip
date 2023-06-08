@@ -1,4 +1,4 @@
-﻿using BulkyBookWeb.Models;
+﻿
 using GamificationAPI.Interfaces;
 using GamificationAPI.Models;
 using GamificationToIP.Context;
@@ -40,7 +40,7 @@ public class GeneratedTestController : ControllerBase
         int studentId = requestBody.StudentId;
         int numberOfQuestions = requestBody.NumberOfQuestions;
 
-        var generatedTest = await _generatedTestService.GenerateTest(studentId,testId,numberOfQuestions);
+        var generatedTest = await _generatedTestService.GenerateTest(studentId.ToString(),testId,numberOfQuestions);
         return Ok(generatedTest.Id);
     }
 
@@ -55,7 +55,7 @@ public class GeneratedTestController : ControllerBase
     }
 
     [HttpGet("{studentId}/{testId}")]
-    public async Task<ActionResult<GeneratedTestDto>> GetGeneratedTest(int studentId, int testId)
+    public async Task<ActionResult<GeneratedTestDto>> GetGeneratedTest(string studentId, int testId)
     {
         var generatedTest = await _generatedTestService.GetGeneratedTest(studentId,testId);
 
@@ -70,9 +70,9 @@ public class GeneratedTestController : ControllerBase
     }
 
     [HttpGet("studentResults")]
-    public async Task<ActionResult<Double>> CalculateStudentResult(int studentId, int generatedTestId)
+    public async Task<ActionResult<Double>> CalculateStudentResult(string studentId, int generatedTestId)
     {
-        var student = await _dbContext.Students.FindAsync(studentId);
+        var student = await _dbContext.Users.FindAsync(studentId);
 
         var generatedTest = await _dbContext.GeneratedTest
             .Include(gt => gt.Test)

@@ -84,9 +84,27 @@
                 leaderboardBody.appendChild(row);
             });
         }
+        async function getDataFromAPI() {
+            // Call your API here and populate the leaderboardData array with the response
+            // Then call populateLeaderboard() to update the leaderboard
+            let data = await fetch('https://localhost:7186/api/Leaderboards/test')
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                let x  = data['highScores']
+               console.log(x);
+
+                populateLeaderboard();
+            })
+            .catch(error => {
+                console.log(error);
+            });
+
+        }
 
         // Call the function to populate the leaderboard on page load
-        populateLeaderboard();
+        getDataFromAPI();
+        
     </script>
 
     <script src="./js/starfield.js"></script>

@@ -6,6 +6,7 @@ namespace GamificationAPI.Models
     {
         [Key]
         public string Name { get; set; }
-        public ICollection<HighScore> HighScores { get; set; } = null!;
+        public List<HighScore> HighScores { get; set; } = null!;
+
     }
 }

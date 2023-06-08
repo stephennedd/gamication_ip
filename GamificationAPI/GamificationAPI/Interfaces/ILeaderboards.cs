@@ -1,4 +1,4 @@
-﻿using BulkyBookWeb.Models;
+﻿
 using GamificationAPI.Models;
 
 namespace GamificationAPI.Interfaces
@@ -11,8 +11,7 @@ namespace GamificationAPI.Interfaces
         Task UpdateLeaderboardAsync(Leaderboard leaderboard);
         Task<bool> DeleteLeaderboardAsync(string name);
         Task<bool> CreateLeaderboardAsync(string name);
-        Task UpdateLeaderboardAsync(string name, string newName, string newDescription, string newImageURL);
-        Task<bool> CheckIfStudentHasHighScoreInLeadeboard(Student student, string name);
+        Task<bool> CheckIfStudentHasHighScoreInLeadeboard(string studentId, string name);
         
     }
 }

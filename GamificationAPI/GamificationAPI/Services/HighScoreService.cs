@@ -1,4 +1,4 @@
-﻿using BulkyBookWeb.Models;
+﻿
 using GamificationAPI.Interfaces;
 using GamificationAPI.Models;
 using GamificationToIP.Context;
@@ -43,7 +43,7 @@ public class HighScoreService : IHighScores
     }
 }
 
-    public async Task<List<HighScore>> GetHighScoreByStudentIdAsync(int studentId)
+    public async Task<List<HighScore>> GetHighScoreByStudentIdAsync(string studentId)
     {
         return await _dbContext.Set<HighScore>()
             .Include(h => h.Student)

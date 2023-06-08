@@ -1,4 +1,4 @@
-﻿using BulkyBookWeb.Models;
+﻿
 using GamificationAPI.Interfaces;
 using GamificationAPI.Models;
 using Microsoft.AspNetCore.Http;
@@ -12,9 +12,9 @@ namespace GamificationAPI.Controllers
     {
         private readonly ILeaderboards _leaderboardService;
         private readonly IHighScores _highScoreService;
-        private readonly IStudents _studentService;
+        private readonly IUsers _studentService;
 
-        public HighScoresController(ILeaderboards leaderboardService, IHighScores highScoreService, IStudents studentService)
+        public HighScoresController(ILeaderboards leaderboardService, IHighScores highScoreService, IUsers studentService)
         {
             _leaderboardService = leaderboardService;
             _highScoreService = highScoreService;
@@ -32,7 +32,7 @@ namespace GamificationAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (await _leaderboardService.CheckIfStudentHasHighScoreInLeadeboard(highScore.Student, leaderboardName) == true)
+            if (await _leaderboardService.CheckIfStudentHasHighScoreInLeadeboard(highScore.Student.Id, leaderboardName) == true)
             {
                 if(await _highScoreService.CheckIfItsHighScore(highScore, leaderboardName) == true)
                 {

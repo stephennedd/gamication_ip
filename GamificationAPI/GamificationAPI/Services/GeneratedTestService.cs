@@ -1,4 +1,4 @@
-﻿using BulkyBookWeb.Models;
+﻿
 using GamificationAPI.Interfaces;
 using GamificationAPI.Models;
 using GamificationToIP.Context;
@@ -25,10 +25,10 @@ public class GeneratedTestService : IGeneratedTests
     //    var questions
    // }
 
-    public async Task<GeneratedTest> GenerateTest(int studentId,int testId, int numberOfQuestions)
+    public async Task<GeneratedTest> GenerateTest(string studentId,int testId, int numberOfQuestions)
     {
         var questions = await _testService.GetQuestionsByTestIdAsync(testId); // Retrieve an existing test from the database
-        var student = _dbContext.Students.FirstOrDefault(s => s.Id == studentId);// Retrieve a student from the database
+        var student = _dbContext.Users.FirstOrDefault(s => s.Id == studentId);// Retrieve a student from the database
 
         // Retrieve the answered question IDs for the existing generated test from the StudentAnswers table
         
@@ -127,7 +127,7 @@ public class GeneratedTestService : IGeneratedTests
         return "Answer was saved";
     }
 
-    public async Task<GeneratedTestDto> GetGeneratedTest(int studentId, int testId)
+    public async Task<GeneratedTestDto> GetGeneratedTest(string studentId, int testId)
     {
         var generatedTest = await _dbContext.GeneratedTest
             .Include(gt => gt.Test)

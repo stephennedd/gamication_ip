@@ -1,17 +1,24 @@
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+
 using GamificationToIP.Context;
 using GamificationToIP.Seed;
 using GamificationAPI.Interfaces;
-using Microsoft.Extensions.DependencyInjection;
+
 using System.Text.Json.Serialization;
-using System.Text.Json;
+using Swashbuckle.AspNetCore.Filters;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+
+
 
 builder.Services.AddScoped<DatabaseSeeder>();
 
@@ -25,15 +32,39 @@ builder.Services.AddMvc().AddJsonOptions(options =>
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+    {
+        Description = "Bearer Token (\"bearer {token}\")",
+        In = ParameterLocation.Header,
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey
+    });
+
+    options.OperationFilter<SecurityRequirementsOperationFilter>();
+});
 
 builder.Services.AddTransient<ILeaderboards, LeaderboardService>();
-builder.Services.AddTransient<IStudents, StudentService>();
+builder.Services.AddTransient<IUsers, UserService>();
 builder.Services.AddTransient<IHighScores, HighScoreService>();
 builder.Services.AddTransient<IGeneratedTests, GeneratedTestService>();
 builder.Services.AddTransient<ITests, TestService>();
 builder.Services.AddTransient<IStudentAnswers, StudentAnswerService>();
 builder.Services.AddTransient<IStudentQuestions, StudentQuestionService>();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
+                .GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value)),
+            ValidateIssuer = false,
+            ValidateAudience = false
+        };
+    });
 
 
 builder.Services.AddCors(options =>
@@ -77,7 +108,7 @@ if (app.Environment.IsDevelopment())
 app.UseCors();
 
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

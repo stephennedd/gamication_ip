@@ -1,4 +1,4 @@
-﻿using BulkyBookWeb.Models;
+﻿
 using GamificationAPI.Interfaces;
 using GamificationAPI.Models;
 using GamificationToIP.Context;
@@ -74,14 +74,14 @@ public class LeaderboardService : ILeaderboards
             return true;
         }
     }
-    public async Task<bool> CheckIfStudentHasHighScoreInLeadeboard(Student student, string name)
+    public async Task<bool> CheckIfStudentHasHighScoreInLeadeboard(string studentId, string name)
     {
         var leaderboard = await GetLeaderboardByNameAsync(name);
         if (leaderboard != null)
         {
                  var x =    await _dbContext.Set<HighScore>()
                     .Include(h => h.Student)
-                    .Where(h => h.Student.Id == student.Id)
+                    .Where(h => h.Student.Id == studentId)
                     .ToListAsync();
             if (x != null)
             {
@@ -93,8 +93,5 @@ public class LeaderboardService : ILeaderboards
         return false;
     }
 
-    public Task UpdateLeaderboardAsync(string name, string newName, string newDescription, string newImageURL)
-    {
-        throw new NotImplementedException();
-    }
+    
 }

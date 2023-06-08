@@ -1,15 +1,15 @@
-﻿using BulkyBookWeb.Models;
+﻿
 using GamificationAPI.Interfaces;
 using GamificationAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 
 [Route("api/[controller]")]
 [ApiController]
-public class LeaderboardController : ControllerBase
+public class LeaderboardsController : ControllerBase
 {
     private readonly ILeaderboards _leaderboardService;
 
-    public LeaderboardController(ILeaderboards leaderboardService)
+    public LeaderboardsController(ILeaderboards leaderboardService)
     {
         _leaderboardService = leaderboardService;
     }
