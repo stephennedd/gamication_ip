@@ -99,25 +99,25 @@ namespace GamificationToIP.Controllers
                 return BadRequest("Authorization header is missing.");
             }
             var userId = User.FindFirst(ClaimTypes.Name)?.Value;
+            Console.WriteLine(userId);
             if (string.IsNullOrEmpty(userId))
             {
                 return BadRequest("Invalid token.");
             }
 
-            if (!await _userService.UserExistsAsync(userId))
+            if (await _userService.UserExistsAsync(userId) == false)
             {
                 return BadRequest();
             }
             if (ModelState.IsValid)
             {
-                if (await _userService.UserExistsAsync(token))
-                {
+               
                     if(await _userService.VerifyUser(userId, token))
                     {
                         return Ok();
                     }
                     return BadRequest();
-                }
+                
                 return BadRequest("User with this ID does not exist");
             }
             return BadRequest();
@@ -136,7 +136,7 @@ namespace GamificationToIP.Controllers
             {
                 try
                 {
-                    if (!await _userService.UserExistsAsync(User.Id))
+                    if (await _userService.UserExistsAsync(User.Id) == false)
                     {
                         return NotFound("User with this ID does not exist");
                     }
@@ -156,9 +156,10 @@ namespace GamificationToIP.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(string id)
         {
-            if (_context.Users == null)
+
+            if(await _userService.UserExistsAsync(id) == false)
             {
-                return Problem("Entity set 'ApplicationDbContext.Users' is null.");
+                return NotFound("User with this ID does not exist");
             }
 
             var User = await _userService.GetUserByIdAsync(id);

@@ -267,7 +267,7 @@ namespace GamificationAPI.Data.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("text");
 
-                    b.Property<int>("GroupId")
+                    b.Property<int?>("GroupId")
                         .HasColumnType("integer");
 
                     b.Property<bool>("IsBanned")
@@ -400,9 +400,7 @@ namespace GamificationAPI.Data.Migrations
                 {
                     b.HasOne("GamificationAPI.Models.Group", "Group")
                         .WithMany()
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("GroupId");
 
                     b.HasOne("GamificationAPI.Models.Role", "Role")
                         .WithMany()

@@ -168,7 +168,7 @@ public class HighScoresControllerTests
         var result = await controller.DeleteHighScoreById(-1);
 
         // Assert
-        Assert.IsType<BadRequestResult>(result);
+        Assert.IsType<BadRequestObjectResult>(result);
     }
     [Fact]
     public async Task AddHighScoreToLeaderboard_ReturnsBadRequest_WhenLeaderboardNameIsEmpty()

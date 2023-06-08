@@ -21,6 +21,10 @@ namespace GamificationAPI.Controllers
         [HttpPost]
         public IActionResult AddGroup([FromBody] string groupName)
         {
+            if (string.IsNullOrWhiteSpace(groupName))
+            {
+                return BadRequest();
+            }
             _dbContext.Groups.AddAsync(new Group { Name = groupName, Id = 0 });
             _dbContext.SaveChanges();
             return Ok();
@@ -30,7 +34,7 @@ namespace GamificationAPI.Controllers
         [HttpGet]
         public IActionResult GetGroups()
         {
-            return Ok(_dbContext.Groups);
+            return Ok(_dbContext.Groups.ToList());
         }
 
         [Authorize(Roles = "Admin, Teacher")]

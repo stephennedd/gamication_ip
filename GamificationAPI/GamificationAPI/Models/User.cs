@@ -15,7 +15,7 @@ public class User
     public bool IsVerified { get; set; } = false;
     public bool IsBanned { get; set; } = false;
 
-    public Group Group { get; set; }
+    public Group? Group { get; set; }
 
     public Role Role { get; set; }
 
