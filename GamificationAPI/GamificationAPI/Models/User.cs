@@ -1,5 +1,6 @@
 ﻿
 using GamificationAPI.Models;
+using GamificationAPI.Services;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -11,8 +12,9 @@ public class User
     public string Id { get; set; }
     public string Password { get; set; }
     public string? Group { get; set; } = string.Empty;
-    public bool IsBanned { get; set; } = false;
+    public string VerificationCode { get; set; } = CodeGenerator.RandomString(6);
     public bool IsVerified { get; set; } = false;
+    public bool IsBanned { get; set; } = false;
 
     public Role Role { get; set; }
 

@@ -12,5 +12,6 @@ namespace GamificationAPI.Interfaces
         Task DeleteUserAsync(string id);
         User GetUserById(string id);
         Task<bool> UserExistsAsync(string id);
+        Task<bool> VerifyUser(string id, string code);
     }
 }

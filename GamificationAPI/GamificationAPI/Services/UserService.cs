@@ -58,4 +58,19 @@ public class UserService : IUsers
     {
         return _dbContext.Users.AnyAsync(s => s.Id == id);
     }
+    public Task<bool> VerifyUser(string id, string code)
+    {
+        var user = GetUserById(id);
+        if (user != null)
+        {
+            if (user.VerificationCode == code)
+            {
+                user.IsVerified = true;
+                _dbContext.Users.Update(user);
+                _dbContext.SaveChanges();
+                return Task.FromResult(true);
+            }
+        }
+        return Task.FromResult(false);
+    }
 }

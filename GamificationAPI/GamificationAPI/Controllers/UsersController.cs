@@ -10,6 +10,8 @@ using GamificationToIP.Models;
 using Microsoft.AspNetCore.Authorization;
 using GamificationAPI.Interfaces;
 using GamificationAPI.Models;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace GamificationToIP.Controllers
 {
@@ -88,6 +90,37 @@ namespace GamificationToIP.Controllers
             }
             return BadRequest();
         }
+        [HttpPost("{token}")]
+        public async Task<IActionResult> VerifyUser(string token)
+        {
+            if (!HttpContext.Request.Headers.TryGetValue("Authorization", out var authorizationHeader))
+            {
+                return BadRequest("Authorization header is missing.");
+            }
+            var userId = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return BadRequest("Invalid token.");
+            }
+
+            if (!await _userService.UserExistsAsync(userId))
+            {
+                return BadRequest();
+            }
+            if (ModelState.IsValid)
+            {
+                if (await _userService.UserExistsAsync(token))
+                {
+                    if(await _userService.VerifyUser(userId, token))
+                    {
+                        return Ok();
+                    }
+                    return BadRequest();
+                }
+                return BadRequest("User with this ID does not exist");
+            }
+            return BadRequest();
+        }
 
         // PUT: api/Users/5
         [HttpPut("{id}")]
@@ -147,6 +180,7 @@ namespace GamificationToIP.Controllers
 
             return true;
         }
+        
 
 
     }
