@@ -99,7 +99,6 @@ namespace GamificationToIP.Controllers
                 return BadRequest("Authorization header is missing.");
             }
             var userId = User.FindFirst(ClaimTypes.Name)?.Value;
-            Console.WriteLine(userId);
             if (string.IsNullOrEmpty(userId))
             {
                 return BadRequest("Invalid token.");

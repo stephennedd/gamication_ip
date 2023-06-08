@@ -55,7 +55,7 @@
     
     <script>
         // Sample leaderboard data (you can replace this with your API or data source)
-        const leaderboardData = [
+        let leaderboardData = [
             { playerName: "John", score: 500, badges: ["badge1.png", "badge2.png"] },
             { playerName: "Emma", score: 400 , badges: ["badge3.png"]},
             { playerName: "Michael", score: 300, badges: []  },
@@ -85,22 +85,50 @@
             });
         }
         async function getDataFromAPI() {
-            // Call your API here and populate the leaderboardData array with the response
-            // Then call populateLeaderboard() to update the leaderboard
-            let data = await fetch('https://localhost:7186/api/Leaderboards/test')
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                let x  = data['highScores']
-               console.log(x);
+    let token = 'YourToken'; // replace with your actual token
 
-                populateLeaderboard();
-            })
-            .catch(error => {
-                console.log(error);
-            });
-
+    try {
+        let response = await fetch('https://localhost:7186/api/Leaderboards/main', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
+
+        let data = await response.json();
+        console.log('Received data:', data); // Print the raw data
+
+        // Extract highScores array
+        let highScores = data.highScores.$values;
+
+        console.log('Extracted highScores:', highScores); // Print the extracted highScores
+
+        // Map the highScores array to an array of simplified objects
+        leaderboardData = highScores.reduce((result, scoreEntry) => {
+            console.log('Processing scoreEntry:', scoreEntry); // Print each scoreEntry being processed
+
+            if (scoreEntry.user) {
+                result.push({
+                    playerName: scoreEntry.user.id,
+                    score: scoreEntry.score,
+                    badges: [] // Add badge logic here if available
+                });
+            }
+
+            return result;
+        }, []);
+
+        // Call populateLeaderboard() to update the leaderboard
+        populateLeaderboard();
+    } catch (error) {
+        console.log('Fetch Error: ', error);
+    }
+}
 
         // Call the function to populate the leaderboard on page load
         getDataFromAPI();
