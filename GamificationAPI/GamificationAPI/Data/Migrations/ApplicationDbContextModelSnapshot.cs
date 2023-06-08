@@ -22,6 +22,36 @@ namespace GamificationAPI.Data.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("GamificationAPI.Models.Badge", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("imageUrl")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Badges");
+                });
+
             modelBuilder.Entity("GamificationAPI.Models.GeneratedTest", b =>
                 {
                     b.Property<int>("Id")
@@ -296,6 +326,15 @@ namespace GamificationAPI.Data.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("GamificationAPI.Models.Badge", b =>
+                {
+                    b.HasOne("GamificationToIP.Models.User", "User")
+                        .WithMany("Badges")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("GamificationAPI.Models.GeneratedTest", b =>
                 {
                     b.HasOne("GamificationToIP.Models.User", "Student")
@@ -317,13 +356,15 @@ namespace GamificationAPI.Data.Migrations
 
             modelBuilder.Entity("GamificationAPI.Models.HighScore", b =>
                 {
-                    b.HasOne("GamificationAPI.Models.Leaderboard", null)
+                    b.HasOne("GamificationAPI.Models.Leaderboard", "Leaderboard")
                         .WithMany("HighScores")
                         .HasForeignKey("LeaderboardName");
 
                     b.HasOne("GamificationToIP.Models.User", "User")
                         .WithMany("HighScores")
                         .HasForeignKey("UserId");
+
+                    b.Navigation("Leaderboard");
 
                     b.Navigation("User");
                 });
@@ -432,6 +473,8 @@ namespace GamificationAPI.Data.Migrations
 
             modelBuilder.Entity("GamificationToIP.Models.User", b =>
                 {
+                    b.Navigation("Badges");
+
                     b.Navigation("HighScores");
                 });
 #pragma warning restore 612, 618

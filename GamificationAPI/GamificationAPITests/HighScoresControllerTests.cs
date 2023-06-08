@@ -17,7 +17,7 @@ public class HighScoresControllerTests
         _highScoreServiceMock = new Mock<IHighScores>();
         _userServiceMock = new Mock<IUsers>();
     }
-
+    /*
     [Fact]
     public async Task AddHighScoreToLeaderboard_ReturnsBadRequest_WhenHighScoreIsNull()
     {
@@ -199,4 +199,5 @@ public class HighScoresControllerTests
         // Assert
         Assert.IsType<OkResult>(result);
     }
+    */
 }

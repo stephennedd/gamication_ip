@@ -7,11 +7,11 @@ namespace GamificationAPI.Interfaces
     {
         Task<List<Leaderboard>> GetLeaderboardsAsync();
         Task<Leaderboard> GetLeaderboardByNameAsync(string name);
-        Task AddHighScoreAsync(HighScore highScore, string leaderboardName);
+        Task<bool> AddHighScoreAsync(HighScore highScore, string leaderboardName);
         Task UpdateLeaderboardAsync(Leaderboard leaderboard);
         Task<bool> DeleteLeaderboardAsync(string name);
         Task<bool> CreateLeaderboardAsync(string name);
         Task<bool> CheckIfStudentHasHighScoreInLeadeboard(string studentId, string name);
-        
+
     }
 }

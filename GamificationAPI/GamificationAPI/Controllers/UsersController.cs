@@ -50,7 +50,7 @@ namespace GamificationToIP.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUser(string id)
         {
-            if ( await _userService.UserExistsAsync(id) == false )
+            if (await _userService.UserExistsAsync(id) == false)
             {
                 return NotFound();
             }
@@ -99,7 +99,6 @@ namespace GamificationToIP.Controllers
                 return BadRequest("Authorization header is missing.");
             }
             var userId = User.FindFirst(ClaimTypes.Name)?.Value;
-            Console.WriteLine(userId);
             if (string.IsNullOrEmpty(userId))
             {
                 return BadRequest("Invalid token.");
@@ -111,13 +110,13 @@ namespace GamificationToIP.Controllers
             }
             if (ModelState.IsValid)
             {
-               
-                    if(await _userService.VerifyUser(userId, token))
-                    {
-                        return Ok();
-                    }
-                    return BadRequest();
-                
+
+                if (await _userService.VerifyUser(userId, token))
+                {
+                    return Ok();
+                }
+                return BadRequest();
+
                 return BadRequest("User with this ID does not exist");
             }
             return BadRequest();
@@ -143,8 +142,8 @@ namespace GamificationToIP.Controllers
                     await _userService.UpdateUserAsync(User);
                 }
                 catch (Exception ex)
-                {                                
-                   return BadRequest(ex.Message);                   
+                {
+                    return BadRequest(ex.Message);
                 }
                 return NoContent();
             }
@@ -157,7 +156,7 @@ namespace GamificationToIP.Controllers
         public async Task<IActionResult> DeleteUser(string id)
         {
 
-            if(await _userService.UserExistsAsync(id) == false)
+            if (await _userService.UserExistsAsync(id) == false)
             {
                 return NotFound("User with this ID does not exist");
             }
@@ -182,7 +181,7 @@ namespace GamificationToIP.Controllers
 
             return true;
         }
-        
+
 
 
     }

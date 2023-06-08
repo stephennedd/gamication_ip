@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
+using System.Security.Claims;
 
 namespace GamificationAPI.Controllers
 {
@@ -28,19 +29,46 @@ namespace GamificationAPI.Controllers
         // POST: api/scoreboard
         // checks if it really is an high score than adds it to leaderboard
         [HttpPost]
-        public async Task<IActionResult> AddHighScoreToLeaderboard([FromBody] HighScore highScore, string leaderboardName)
+        public async Task<IActionResult> AddHighScoreToLeaderboard(int score, string leaderboardName)
         {
-            if (highScore is null || string.IsNullOrEmpty(leaderboardName) || !ModelState.IsValid || await _userService.UserExistsAsync(highScore.User.Id) == false)
+            if (!HttpContext.Request.Headers.TryGetValue("Authorization", out var authorizationHeader))
+            {
+                return BadRequest("Authorization header is missing.");
+            }
+            var userId = User.FindFirst(ClaimTypes.Name)?.Value;
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return BadRequest("Invalid token.");
+            }
+
+            if (await _userService.UserExistsAsync(userId) == false)
             {
                 return BadRequest();
             }
 
+            if (score == null || string.IsNullOrEmpty(leaderboardName) || !ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var highScore = new HighScore
+            {
+                Score = score,
+                User = await _userService.GetUserByIdAsync(userId)
+            };
+
+
             if (await _leaderboardService.CheckIfStudentHasHighScoreInLeadeboard(highScore.User.Id, leaderboardName) == true)
             {
-                if(await _highScoreService.CheckIfItsHighScore(highScore, leaderboardName) == true)
+                if (await _highScoreService.CheckIfItsHighScore(highScore, leaderboardName) == true)
                 {
                     await _highScoreService.UpdateHighScoreAsync(highScore, leaderboardName);
-                    return Ok();
+                    
+                    
+                        return Ok();
+                    
+                    
                 }
                 else
                 {
@@ -49,10 +77,16 @@ namespace GamificationAPI.Controllers
             }
             else
             {
-                await _leaderboardService.AddHighScoreAsync(highScore, leaderboardName);
-                return Ok();
+                bool success = await _leaderboardService.AddHighScoreAsync(highScore, leaderboardName);
+                if (success)
+                {
+                    return Ok();
+                }
+                return BadRequest();
             }
-      
+
+
+
         }
         [Authorize(Roles = "Admin, Teacher")]
         [HttpDelete]
@@ -71,7 +105,7 @@ namespace GamificationAPI.Controllers
 
 
     }
-    
+
 
 
 
