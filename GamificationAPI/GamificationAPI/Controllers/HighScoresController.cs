@@ -30,12 +30,12 @@ namespace GamificationAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> AddHighScoreToLeaderboard([FromBody] HighScore highScore, string leaderboardName)
         {
-            if (highScore is null || string.IsNullOrEmpty(leaderboardName) || !ModelState.IsValid)
+            if (highScore is null || string.IsNullOrEmpty(leaderboardName) || !ModelState.IsValid || await _userService.UserExistsAsync(highScore.User.Id) == false)
             {
-                return BadRequest(ModelState);
+                return BadRequest();
             }
 
-            if (await _userService.UserExistsAsync(highScore.User.Id) && await _leaderboardService.CheckIfStudentHasHighScoreInLeadeboard(highScore.User.Id, leaderboardName) == true)
+            if (await _leaderboardService.CheckIfStudentHasHighScoreInLeadeboard(highScore.User.Id, leaderboardName) == true)
             {
                 if(await _highScoreService.CheckIfItsHighScore(highScore, leaderboardName) == true)
                 {
