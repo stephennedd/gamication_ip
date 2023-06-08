@@ -15,7 +15,7 @@ using System.Security.Claims;
 
 namespace GamificationToIP.Controllers
 {
-    [Authorize(Roles = "Regular, Admin")]
+    [Authorize(Roles = "Admin, Teacher, Student")]
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
@@ -30,7 +30,7 @@ namespace GamificationToIP.Controllers
         }
 
         // GET: api/Users
-        [AllowAnonymous]
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> GetAllUsers()
         {
@@ -46,6 +46,7 @@ namespace GamificationToIP.Controllers
         }
 
         // GET: api/Users/5
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUser(string id)
         {

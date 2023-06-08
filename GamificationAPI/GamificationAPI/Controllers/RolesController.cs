@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GamificationAPI.Controllers
 {
-    [Authorize(Roles = "Admin, Regular")]
+    [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class RolesController : ControllerBase
@@ -17,7 +17,7 @@ namespace GamificationAPI.Controllers
             _dbContext = context;
         }
 
-        [Authorize(Roles = "Admin")]
+        
         [HttpPost]
         public IActionResult AddRole([FromBody] string role)
         {
@@ -26,14 +26,14 @@ namespace GamificationAPI.Controllers
             return Ok();
         }
 
-        [Authorize(Roles = "Admin")]
+        
         [HttpGet]
         public IActionResult GetRoles()
         {
             return Ok(_dbContext.Roles);
         }
 
-        [Authorize(Roles = "Admin")]
+       
         [HttpDelete]
         [Route("{id}")]
         public IActionResult DeleteRole(int id)

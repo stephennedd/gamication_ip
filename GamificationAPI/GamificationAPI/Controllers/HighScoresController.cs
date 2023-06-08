@@ -1,29 +1,32 @@
 ﻿
 using GamificationAPI.Interfaces;
 using GamificationAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace GamificationAPI.Controllers
 {
+    [Authorize(Roles = "Admin, Teacher, Student")]
     [Route("api/[controller]")]
     [ApiController]
     public class HighScoresController : ControllerBase
     {
         private readonly ILeaderboards _leaderboardService;
         private readonly IHighScores _highScoreService;
-        private readonly IUsers _studentService;
+        private readonly IUsers _userService;
 
-        public HighScoresController(ILeaderboards leaderboardService, IHighScores highScoreService, IUsers studentService)
+        public HighScoresController(ILeaderboards leaderboardService, IHighScores highScoreService, IUsers userService)
         {
             _leaderboardService = leaderboardService;
             _highScoreService = highScoreService;
-            _studentService = studentService;
+            _userService = userService;
         }
 
 
         // POST: api/scoreboard
-        // checks if its is really an high score than adds it to leaderboard
+        // checks if it really is an high score than adds it to leaderboard
         [HttpPost]
         public async Task<IActionResult> AddHighScoreToLeaderboard([FromBody] HighScore highScore, string leaderboardName)
         {
@@ -32,7 +35,7 @@ namespace GamificationAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (await _leaderboardService.CheckIfStudentHasHighScoreInLeadeboard(highScore.User.Id, leaderboardName) == true)
+            if (await _userService.UserExistsAsync(highScore.User.Id) && await _leaderboardService.CheckIfStudentHasHighScoreInLeadeboard(highScore.User.Id, leaderboardName) == true)
             {
                 if(await _highScoreService.CheckIfItsHighScore(highScore, leaderboardName) == true)
                 {
@@ -51,7 +54,7 @@ namespace GamificationAPI.Controllers
             }
       
         }
-
+        [Authorize(Roles = "Admin, Teacher")]
         [HttpDelete]
         public async Task<IActionResult> DeleteHighScoreById(int highScoreId)
         {
