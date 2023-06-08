@@ -32,7 +32,7 @@ namespace GamificationAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (await _leaderboardService.CheckIfStudentHasHighScoreInLeadeboard(highScore.Student.Id, leaderboardName) == true)
+            if (await _leaderboardService.CheckIfStudentHasHighScoreInLeadeboard(highScore.User.Id, leaderboardName) == true)
             {
                 if(await _highScoreService.CheckIfItsHighScore(highScore, leaderboardName) == true)
                 {

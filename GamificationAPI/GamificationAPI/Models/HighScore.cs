@@ -8,7 +8,7 @@ namespace GamificationAPI.Models
     {
         [Key]
         public int Id { get; set; }
-        public User Student { get; set; }
+        public User User { get; set; }
         public int Score { get; set; }
     }
 }

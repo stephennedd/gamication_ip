@@ -1,8 +1,10 @@
 ﻿
 using GamificationAPI.Interfaces;
+using GamificationAPI.Models;
 using GamificationToIP.Context;
 using GamificationToIP.Models;
 using Microsoft.EntityFrameworkCore;
+using SendGrid.Helpers.Mail;
 
 public class UserService : IUsers
 {
@@ -15,14 +17,14 @@ public class UserService : IUsers
 
     public async Task<User> GetUserByIdAsync(string id)
     {
-        return await _dbContext.Users
-            .FirstOrDefaultAsync(s => s.Id == id);
+        return await _dbContext.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.Id == id);
     }
 
 
-    public async Task AddUserAsync(User User)
+    public async Task AddUserAsync(User user)
     {
-        _dbContext.Users.Add(User);
+
+        _dbContext.Users.Add(user);
         await _dbContext.SaveChangesAsync();
     }
 
@@ -45,12 +47,12 @@ public class UserService : IUsers
 
     public async Task<List<User>> GetUsersAsync()
     {
-        return await _dbContext.Users.ToListAsync();
+        return await _dbContext.Users.Include(u => u.Role).ToListAsync();
     }
 
     public User GetUserById(string id)
     {
-        return _dbContext.Users.FirstOrDefault(s => s.Id == id);
+        return _dbContext.Users.Include(u => u.Role).FirstOrDefault(u => u.Id == id);
     }
     public Task<bool> UserExistsAsync(string id)
     {

@@ -76,12 +76,16 @@ public class LeaderboardService : ILeaderboards
     }
     public async Task<bool> CheckIfStudentHasHighScoreInLeadeboard(string studentId, string name)
     {
+        if(await _dbContext.Users.AnyAsync(s => s.Id == studentId) == false)
+        {
+            throw new Exception("user with this id does not exist");
+        }
         var leaderboard = await GetLeaderboardByNameAsync(name);
         if (leaderboard != null)
         {
                  var x =    await _dbContext.Set<HighScore>()
-                    .Include(h => h.Student)
-                    .Where(h => h.Student.Id == studentId)
+                    .Include(h => h.User)
+                    .Where(h => h.User.Id == studentId)
                     .ToListAsync();
             if (x != null)
             {

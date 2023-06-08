@@ -2,6 +2,7 @@
 using GamificationAPI.Models;
 using GamificationToIP.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata;
 
 namespace GamificationToIP.Context
 {
@@ -23,5 +24,13 @@ namespace GamificationToIP.Context
         public DbSet<StudentQuestion> StudentQuestions { get; set; }
         public DbSet<Role> Roles { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>()
+                .HasMany(e => e.HighScores)
+                .WithOne(e => e.User)            
+                .IsRequired(false);
+            
+        }
     }
 }

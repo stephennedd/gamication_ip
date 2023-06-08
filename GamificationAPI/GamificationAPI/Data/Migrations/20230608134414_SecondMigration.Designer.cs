@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GamificationAPI.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230608131237_SecondMigration")]
+    [Migration("20230608134414_SecondMigration")]
     partial class SecondMigration
     {
         /// <inheritdoc />
@@ -66,14 +66,14 @@ namespace GamificationAPI.Data.Migrations
                     b.Property<int>("Score")
                         .HasColumnType("integer");
 
-                    b.Property<string>("StudentId")
+                    b.Property<string>("UserId")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
                     b.HasIndex("LeaderboardName");
 
-                    b.HasIndex("StudentId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("HighScores");
                 });
@@ -301,11 +301,11 @@ namespace GamificationAPI.Data.Migrations
                         .WithMany("HighScores")
                         .HasForeignKey("LeaderboardName");
 
-                    b.HasOne("GamificationToIP.Models.User", "Student")
+                    b.HasOne("GamificationToIP.Models.User", "User")
                         .WithMany("HighScores")
-                        .HasForeignKey("StudentId");
+                        .HasForeignKey("UserId");
 
-                    b.Navigation("Student");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("GamificationAPI.Models.StudentQuestion", b =>

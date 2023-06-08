@@ -45,10 +45,11 @@ namespace GamificationAPI.Controllers
             }
 
             User user =  _userService.GetUserById(userCredentials.Id);
-            if(user == null || user.Role == null)
+            if(user == null || user.Role == null || user.Password != userCredentials.Password)
             {
                 return BadRequest("Incorrect user data.");
             }
+            
             
 
             List<Claim> claims = new List<Claim>
