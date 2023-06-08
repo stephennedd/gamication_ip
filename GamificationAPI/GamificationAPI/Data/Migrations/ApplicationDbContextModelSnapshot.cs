@@ -49,6 +49,23 @@ namespace GamificationAPI.Data.Migrations
                     b.ToTable("GeneratedTest");
                 });
 
+            modelBuilder.Entity("GamificationAPI.Models.Group", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Groups");
+                });
+
             modelBuilder.Entity("GamificationAPI.Models.HighScore", b =>
                 {
                     b.Property<int>("Id")
@@ -250,8 +267,8 @@ namespace GamificationAPI.Data.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("text");
 
-                    b.Property<string>("Group")
-                        .HasColumnType("text");
+                    b.Property<int>("GroupId")
+                        .HasColumnType("integer");
 
                     b.Property<bool>("IsBanned")
                         .HasColumnType("boolean");
@@ -266,7 +283,13 @@ namespace GamificationAPI.Data.Migrations
                     b.Property<int>("RoleId")
                         .HasColumnType("integer");
 
+                    b.Property<string>("VerificationCode")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("GroupId");
 
                     b.HasIndex("RoleId");
 
@@ -375,11 +398,19 @@ namespace GamificationAPI.Data.Migrations
 
             modelBuilder.Entity("GamificationToIP.Models.User", b =>
                 {
+                    b.HasOne("GamificationAPI.Models.Group", "Group")
+                        .WithMany()
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("GamificationAPI.Models.Role", "Role")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Group");
 
                     b.Navigation("Role");
                 });

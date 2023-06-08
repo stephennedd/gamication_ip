@@ -41,15 +41,29 @@ namespace GamificationToIP.Seed
                     await applicationDbContext.SaveChangesAsync();
                 }
 
+                foreach (var group in gamificationToIpData.groups)
+                {
+                    var newGroup = new Group
+                    {
+                        Id = group.Id,
+                        Name = group.Name
+                    };
+                    applicationDbContext.Set<Group>().Add(newGroup);
+                    await applicationDbContext.SaveChangesAsync();
+                }
+
                 foreach (var user in gamificationToIpData.users)
                 {
-                    int x = user.RoleId;
-                    Role role = applicationDbContext.Set<Role>().Find(x);
+                    int roleId = user.RoleId;
+                    int groupId = user.GroupId;
+                    Role role = applicationDbContext.Set<Role>().Find(roleId);
+                    Group group = applicationDbContext.Set<Group>().Find(groupId);
+
                     var newUser = new User
                     {
                         Id = user.Id,
-                        Group = user.Group,
-                        Password = user?.Password,
+                        Group = group,
+                        Password = user.Password,
                         Role = role
                     };
 

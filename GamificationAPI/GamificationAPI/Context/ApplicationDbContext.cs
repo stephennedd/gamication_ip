@@ -23,6 +23,7 @@ namespace GamificationToIP.Context
         public DbSet<GeneratedTest> GeneratedTest { get; set; }
         public DbSet<StudentQuestion> StudentQuestions { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<Group> Groups { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

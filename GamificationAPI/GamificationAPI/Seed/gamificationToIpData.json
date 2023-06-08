@@ -8,17 +8,40 @@
       "Id": "2",
       "Name": "Teacher"
     },
-{
+    {
       "Id": "3",
       "Name": "Admin"
     }
 
   ],
+  "groups": [
+    {
+      "Id": "1",
+      "Name": "Group 1"
+    },
+    {
+      "Id": "2",
+      "Name": "Group 2"
+    }
+  ],
   "users": [
     {
-      "Id": "12345",
+      "Id": "1111",
       "Password": "password123",
-      "RoleId": "1"
+      "RoleId": "1",
+      "GroupId": "1"
+    },
+    {
+      "Id": "2222",
+      "Password": "password123",
+      "RoleId": "1",
+      "GroupId": "1"
+    },
+    {
+      "Id": "3333",
+      "Password": "password123",
+      "RoleId": "1",
+      "GroupId": "2"
     },
     {
       "Id": "JohnDoe",
