@@ -1,4 +1,4 @@
-﻿
+
 using GamificationAPI.Interfaces;
 using GamificationAPI.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -47,46 +47,46 @@ namespace GamificationAPI.Controllers
                 return BadRequest();
             }
 
-                if (score == null || string.IsNullOrEmpty(leaderboardName) || !ModelState.IsValid)
-                {
-                    return BadRequest();
-                }
+            if (score == null || string.IsNullOrEmpty(leaderboardName) || !ModelState.IsValid)
+            {
+                return BadRequest();
+            }
 
-                var highScore = new HighScore
-                {
-                    Score = score,
-                    User = await _userService.GetUserByIdAsync(userId)
-                };
+            var highScore = new HighScore
+            {
+                Score = score,
+                User = await _userService.GetUserByIdAsync(userId)
+            };
 
 
-                if (await _leaderboardService.CheckIfStudentHasHighScoreInLeadeboard(highScore.User.Id, leaderboardName) == true)
+            if (await _leaderboardService.CheckIfStudentHasHighScoreInLeadeboard(highScore.User.Id, leaderboardName) == true)
+            {
+                if (await _highScoreService.CheckIfItsHighScore(highScore, leaderboardName) == true)
                 {
-                    if (await _highScoreService.CheckIfItsHighScore(highScore, leaderboardName) == true)
-                    {
-                    bool success = await _leaderboardService.AddHighScoreAsync(highScore, leaderboardName);
-                    if (success)
-                    {
+                    await _highScoreService.UpdateHighScoreAsync(highScore, leaderboardName);
+                    
+                    
                         return Ok();
-                    }
-                    return BadRequest();
-                }
-                    else
-                    {
-                        return BadRequest("This is not High Score");
-                    }
+                    
+                    
                 }
                 else
                 {
-                    bool success = await _leaderboardService.AddHighScoreAsync(highScore, leaderboardName);
-                    if (success) 
-                    {
-                         return Ok(); 
-                    }
-                        return  BadRequest();
+                    return BadRequest("This is not High Score");
                 }
-            
-           
-      
+            }
+            else
+            {
+                bool success = await _leaderboardService.AddHighScoreAsync(highScore, leaderboardName);
+                if (success)
+                {
+                    return Ok();
+                }
+                return BadRequest();
+            }
+
+
+
         }
         [Authorize(Roles = "Admin, Teacher")]
         [HttpDelete]
@@ -105,7 +105,7 @@ namespace GamificationAPI.Controllers
 
 
     }
-    
+
 
 
 

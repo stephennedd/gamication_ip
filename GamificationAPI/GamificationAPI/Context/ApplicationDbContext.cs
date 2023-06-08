@@ -24,6 +24,7 @@ namespace GamificationToIP.Context
         public DbSet<StudentQuestion> StudentQuestions { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Group> Groups { get; set; }
+        public DbSet<Badge> Badges { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -31,7 +32,16 @@ namespace GamificationToIP.Context
                 .HasMany(e => e.HighScores)
                 .WithOne(e => e.User)            
                 .IsRequired(false);
+
+            modelBuilder.Entity<Leaderboard>()
+                .HasMany(e => e.HighScores)
+                .WithOne(e => e.Leaderboard)
+                .IsRequired(false);
             
+            modelBuilder.Entity<User>()
+                .HasMany(b => b.Badges)
+                .WithOne(u => u.User)
+                .IsRequired(false);
         }
     }
 }
