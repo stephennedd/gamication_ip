@@ -1,4 +1,4 @@
-﻿
+
 using GamificationAPI.Interfaces;
 using GamificationAPI.Models;
 using Microsoft.AspNetCore.Authorization;
