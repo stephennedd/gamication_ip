@@ -11,5 +11,6 @@ namespace GamificationAPI.Interfaces
         Task<GeneratedTest> GenerateTest(int studentId, int testId, int numberOfQuestions);
         Task<GeneratedTestDto> GetGeneratedTest(int studentId, int testId);
         Task<ActionResult<string>> SaveStudentAnswer(int studentQuestionId, int answerId);
+        Task<ActionResult<Double>> CalculateStudentResult(int studentId, int generatedTestId);
     }
 }

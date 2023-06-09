@@ -72,42 +72,16 @@ public class GeneratedTestController : ControllerBase
     [HttpGet("studentResults")]
     public async Task<ActionResult<Double>> CalculateStudentResult(int studentId, int generatedTestId)
     {
-        var student = await _dbContext.Students.FindAsync(studentId);
+        var resultPrecentage = await _generatedTestService.CalculateStudentResult(studentId, generatedTestId);
 
-        var generatedTest = await _dbContext.GeneratedTest
-            .Include(gt => gt.Test)
-            .FirstOrDefaultAsync(gt => gt.Id == generatedTestId && gt.StudentId == studentId);
-
-        if (student == null || generatedTest == null)
+        var jsonSettings = new JsonSerializerSettings
         {
-            return NotFound();
-        }
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+        };
 
-        var studentQuestions = await _dbContext.StudentQuestions
-            .Include(sq => sq.Question)
-            .Where(sq => sq.GeneratedTestId == generatedTestId)
-            .ToListAsync();
+        var json = JsonConvert.SerializeObject(resultPrecentage, Formatting.None, jsonSettings);
 
-        // Calculate the number of correct answers
-        int numberOfCorrectAnswers = 0;
-        foreach (var studentQuestion in studentQuestions)
-        {
-            var question = studentQuestion.Question;
-            var correctAnswer = await _dbContext.Answers
-                .FirstOrDefaultAsync(a => a.QuestionId == question.Id && a.AnswerText == question.CorrectAnswer);
-
-            if (correctAnswer != null && studentQuestion.AnswerId == correctAnswer.Id)
-            {
-                numberOfCorrectAnswers++;
-            }
-        }
-
-        int totalNumberOfQuestionsPerGeneratedQuiz = studentQuestions.Count;
-
-        // Calculate the result as a percentage
-        double resultPercentage = (double)numberOfCorrectAnswers / totalNumberOfQuestionsPerGeneratedQuiz * 100;
-
-        return resultPercentage;
+        return resultPrecentage;
     }
 
 }
