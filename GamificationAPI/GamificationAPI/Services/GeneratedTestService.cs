@@ -196,11 +196,11 @@ public class GeneratedTestService : IGeneratedTests
 
     public async Task<ActionResult<Double>> CalculateStudentResult(int studentId, int generatedTestId)
     {
-        var student = await _dbContext.Students.FindAsync(studentId);
+        var student = await _dbContext.Users.FindAsync(studentId);
 
         var generatedTest = await _dbContext.GeneratedTest
             .Include(gt => gt.Test)
-            .FirstOrDefaultAsync(gt => gt.Id == generatedTestId && gt.StudentId == studentId);
+            .FirstOrDefaultAsync(gt => gt.Id == generatedTestId && gt.Id == studentId);
 
         if (student == null || generatedTest == null)
         {

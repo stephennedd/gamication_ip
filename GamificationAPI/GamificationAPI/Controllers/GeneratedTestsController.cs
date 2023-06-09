@@ -70,7 +70,7 @@ public class GeneratedTestController : ControllerBase
     }
 
     [HttpGet("studentResults")]
-    public async Task<ActionResult<Double>> CalculateStudentResult(string studentId, int generatedTestId)
+    public async Task<ActionResult<Double>> CalculateStudentResult(int studentId, int generatedTestId)
     {
         var resultPrecentage = await _generatedTestService.CalculateStudentResult(studentId, generatedTestId);
         return resultPrecentage;
