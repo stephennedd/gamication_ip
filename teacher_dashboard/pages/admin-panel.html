@@ -28,6 +28,8 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <input type="checkbox" class="btn-check" id="admin-checkbox" autocomplete="off">
+        <label class="btn btn-outline-light" for="admin-checkbox">Admin</label><br>
         <form class="d-flex ms-auto my-3 my-lg-0" role="search">
           <div class="input-group my-lg-0">
             <input type="search" class="form-control" placeholder="Search student" aria-label="Search student" />
@@ -37,6 +39,7 @@
           </div>
         </form>
         <ul class="navbar-nav">
+
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle ms-2" href="#" role="button" data-bs-toggle="dropdown"
               aria-expanded="false">
@@ -70,7 +73,7 @@
             </div>
           </li>
           <li>
-            <a href="#" class="nav-link px-3 active" id="student-results-link">
+            <a href="#student-results" class="nav-link px-3" id="student-results-link">
               <span class="me-2">
                 <i class="bi bi-graph-up"></i>
               </span>
@@ -98,12 +101,12 @@
             <div class="collapse" id="quiz">
               <ul class="navbar-nav ps-3">
                 <li>
-                  <a href="#" class="nav-link px-3" id="create-quiz-link">
+                  <a href="#create-quiz" class="nav-link px-3" id="create-quiz-link">
                     <span>Create Quiz</span>
                   </a>
                 </li>
                 <li>
-                  <a href="#" class="nav-link px-3" id="edit-quiz-link">
+                  <a href="#edit-quiz" class="nav-link px-3" id="edit-quiz-link">
                     <span>Edit Quiz</span>
                   </a>
                 </li>
@@ -123,12 +126,12 @@
             <div class="collapse" id="student">
               <ul class="navbar-nav ps-3">
                 <li>
-                  <a href="#" class="nav-link px-3" id="edit-student-link">
+                  <a href="#edit-student" class="nav-link px-3" id="edit-student-link">
                     <span>Edit Student</span>
                   </a>
                 </li>
                 <li>
-                  <a href="#" class="nav-link px-3" id="ban-student-link">
+                  <a href="#ban-student" class="nav-link px-3" id="ban-student-link">
                     <span>Ban Student</span>
                   </a>
                 </li>
@@ -148,17 +151,17 @@
             <div class="collapse" id="leaderboard">
               <ul class="navbar-nav ps-3">
                 <li>
-                  <a href="#" class="nav-link px-3" id="add-leaderboard-link">
+                  <a href="#add-leaderboar" class="nav-link px-3" id="add-leaderboard-link">
                     <span>Add leaderboard</span>
                   </a>
                 </li>
                 <li>
-                  <a href="#" class="nav-link px-3" id="remove-leaderboard-link">
+                  <a href="#remove-leaderboard" class="nav-link px-3" id="remove-leaderboard-link">
                     <span>Remove leaderboard</span>
                   </a>
                 </li>
                 <li>
-                  <a href="#" class="nav-link px-3" id="update-leaderboard-link">
+                  <a href="#update-leaderboard" class="nav-link px-3" id="update-leaderboard-link">
                     <span>Update leaderboard</span>
                   </a>
                 </li>
@@ -167,7 +170,7 @@
           </li>
 
           <!-- Admin options-->
-          <li>
+          <li id="admin-section">
             <a class="nav-link px-3 sidebar-link text-white" data-bs-toggle="collapse" href="#admin_options">
               <span class="me-2"><i class="bi bi-braces"></i></span>
               <span>Admin</span>
@@ -180,17 +183,17 @@
             <div class="collapse" id="admin_options">
               <ul class="navbar-nav ps-3">
                 <li>
-                  <a href="#" class="nav-link px-3" id="add-leaderboard-link">
+                  <a href="#add-teacher" class="nav-link px-3" id="add-leaderboard-link">
                     <span>Add teacher</span>
                   </a>
                 </li>
                 <li>
-                  <a href="#" class="nav-link px-3" id="remove-leaderboard-link">
+                  <a href="#add-group" class="nav-link px-3" id="remove-leaderboard-link">
                     <span>Add group</span>
                   </a>
                 </li>
                 <li>
-                  <a href="#" class="nav-link px-3" id="update-leaderboard-link">
+                  <a href="#update-teacher" class="nav-link px-3" id="update-leaderboard-link">
                     <span>Update teacher</span>
                   </a>
                 </li>
@@ -204,14 +207,14 @@
   <!-- Off canvas -->
 
   <!-- Student results -->
-  <main class="pt-3">
-    <div class="container-fluid" id="student-results">
+  <main class="pt-3" id="student-results">
+    <div class="container-fluid">
       <div class="row">
         <div class="col-md-12 fw-bold fs-4">Student Results</div>
       </div>
       <div class="row mt-2">
         <div class="col-md-3">
-          <div class="card text-bg-primary bg-success mb-3" style="max-width: 18rem;">
+          <div class="card text-white bg-success mb-3" style="max-width: 18rem;">
             <div class="card-header">Completion Rate</div>
             <div class="card-body">
               <h5 class="card-title">10%</h5>
@@ -220,7 +223,7 @@
         </div>
 
         <div class="col-md-3">
-          <div class="card text-bg-primary bg-danger mb-3" style="max-width: 18rem;">
+          <div class="card text-white bg-danger mb-3" style="max-width: 18rem;">
             <div class="card-header">Total students</div>
             <div class="card-body">
               <h5 class="card-title">150</h5>
@@ -229,7 +232,7 @@
         </div>
 
         <div class="col-md-3">
-          <div class="card text-bg-primar bg-warning mb-3" style="max-width: 18rem;">
+          <div class="card text-white bg-warning mb-3" style="max-width: 18rem;">
             <div class="card-header">High Score</div>
             <div class="card-body">
               <h5 class="card-title">1000 pts</h5>
@@ -238,7 +241,7 @@
         </div>
 
         <div class="col-md-3">
-          <div class="card text-bg-danger bg-info mb-3" style="max-width: 18rem;">
+          <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
             <div class="card-header">Leagues</div>
             <div class="card-body">
               <h5 class="card-title">5</h5>
@@ -327,8 +330,8 @@
   <!-- Student results -->
 
   <!-- Create Quiz -->
-  <main class="pt-3">
-    <div class="container-fluid" id="create-quiz">
+  <main class="pt-3" id="create-quiz">
+    <div class="container-fluid">
       <div class="row">
         <div class="col-md-12 fw-bold fs-4">Create Quiz</div>
       </div>
@@ -339,38 +342,58 @@
             <div class="card-body">
               <form action="">
                 <div class="row">
-                  <div class="col-md-6">
+                  <div class="col-md-12">
                     <div class="mb-3">
                       <label for="quiz-name" class="form-label">Quiz name</label>
                       <input type="text" class="form-control" id="quiz-name" placeholder="Quiz name">
                     </div>
                   </div>
-                  <div class="col-md-6">
+
+                  <div class="col-md-12">
                     <div class="mb-3">
-                      <label for="quiz-category" class="form-label">Quiz category</label>
-                      <select class="form-select" aria-label="Default select example" id="quiz-category">
-                        <option selected>Open this select menu</option>
-                        <option value="1">Maths</option>
-                        <option value="2">English</option>
-                        <option value="3">Science</option>
-                      </select>
+                      <label for="quiz-assignment" class="form-label">Assignment</label>
+                      <select class="form-select" aria-label="Default select example">
+                        <option selected>Select an assignment</option>
+                        <option value="1">Assignment 1</option>
+                        <option value="2">Assignment 2</option>
+                        <option value="3">Assignment 3</option>
+                    </div>
+                  </div>
+
+                  <div class="col-md-12" id="dynamicFields">
+                    <div class="mb-6">
+                      <label for="quiz-questions" class="form-label">Quiz questions</label>
+                      <input type="text" class="form-control mb-2" id="quiz-question" placeholder="Question 1">
+                      <!-- Dynamically added fields will appear here -->
                     </div>
                   </div>
                 </div>
-                <div class="mb-3">
-                  <label for="quiz-description" class="form-label">Quiz description</label>
-                  <textarea class="form-control" id="quiz-description" rows="3"></textarea>
-                </div>
+                <div class="row mt-1">
+                  <div class="col-md-12 text-start">
+                    <button type="button" class="btn btn-primary" onclick="addFormField()">Add Question</button>
+                    <button type="button" class="btn btn-danger" onclick="removeFormField()">Remove Question</button>
+
+                  </div>
+                  <div class="col-md-12 text-end">
+                    <button type="submit" class="btn btn-success">Create Quiz</button>
+                  </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
 
   </main>
   <!-- Create Quiz -->
+
+
 
   <script src="../js/bootstrap.bundle.min.js"></script>
   <script src="../js/jquery-3.7.0.min.js"></script>
   <script src="../js/jquery.dataTables.min.js"></script>
   <script src="../js/dataTables.bootstrap5.min.js"></script>
   <script src="../js/script.js"></script>
-
 </body>
 
 </html>
