@@ -93,38 +93,38 @@ window.addEventListener('hashchange', handlePageChange);
 // javascript for the quiz creation page
 var fieldCounter = 2;
 
-    function addFormField() {
-      var dynamicFieldsDiv = document.getElementById('dynamicFields');
+function addFormField() {
+    var dynamicFieldsDiv = document.getElementById('dynamicFields');
 
-      // Create a new form group
-      var formGroup = document.createElement('div');
-      formGroup.classList.add('form-group');
+    // Create a new form group
+    var formGroup = document.createElement('div');
+    formGroup.classList.add('form-group');
 
-      // Create a new input element
-      var input = document.createElement('input');
-      input.type = 'text';
-      input.classList.add('form-control');
-      input.classList.add('mb-2');
-      input.name = 'question' + fieldCounter;
-      input.placeholder = 'Question ' + fieldCounter;
+    // Create a new input element
+    var input = document.createElement('input');
+    input.type = 'text';
+    input.classList.add('form-control');
+    input.classList.add('mb-2');
+    input.name = 'question' + fieldCounter;
+    input.placeholder = 'Question ' + fieldCounter;
 
-      // Append the input element to the form group
-      formGroup.appendChild(input);
+    // Append the input element to the form group
+    formGroup.appendChild(input);
 
-      // Append the form group to the dynamicFields div
-      dynamicFieldsDiv.appendChild(formGroup);
+    // Append the form group to the dynamicFields div
+    dynamicFieldsDiv.appendChild(formGroup);
 
-      fieldCounter++;
+    fieldCounter++;
+}
+
+function removeFormField() {
+    var dynamicFieldsDiv = document.getElementById('dynamicFields');
+
+    if (fieldCounter > 2) {
+    // Remove the last form group
+    dynamicFieldsDiv.removeChild(dynamicFieldsDiv.lastChild);
+    
+    fieldCounter--;
     }
 
-    function removeFormField() {
-      var dynamicFieldsDiv = document.getElementById('dynamicFields');
-
-      if (fieldCounter > 2) {
-        // Remove the last form group
-        dynamicFieldsDiv.removeChild(dynamicFieldsDiv.lastChild);
-        
-        fieldCounter--;
-      }
-
-    }
+}

@@ -348,35 +348,48 @@
                       <input type="text" class="form-control" id="quiz-name" placeholder="Quiz name">
                     </div>
                   </div>
+                </div>
 
+                <div class="row">
                   <div class="col-md-12">
                     <div class="mb-3">
-                      <label for="quiz-assignment" class="form-label">Assignment</label>
+                      <label for="quiz-name" class="form-label">Assignment</label>
                       <select class="form-select" aria-label="Default select example">
                         <option selected>Select an assignment</option>
                         <option value="1">Assignment 1</option>
                         <option value="2">Assignment 2</option>
                         <option value="3">Assignment 3</option>
+                        <option value="4">Assignment 4</option>
+                        <option value="5">Assignment 5</option>
+                        <option value="6">Assignment 6</option>
+                      </select>
                     </div>
                   </div>
+                </div>
 
-                  <div class="col-md-12" id="dynamicFields">
-                    <div class="mb-6">
+
+                <div class="row">
+                  <div class="form-group col-md-12" id="dynamicFields">
+                    <div class="mb-3">
                       <label for="quiz-questions" class="form-label">Quiz questions</label>
                       <input type="text" class="form-control mb-2" id="quiz-question" placeholder="Question 1">
                       <!-- Dynamically added fields will appear here -->
                     </div>
                   </div>
                 </div>
-                <div class="row mt-1">
+
+
+                <div class="row mb-1">
                   <div class="col-md-12 text-start">
                     <button type="button" class="btn btn-primary" onclick="addFormField()">Add Question</button>
                     <button type="button" class="btn btn-danger" onclick="removeFormField()">Remove Question</button>
-
                   </div>
+                </div>
+                <div class="row">
                   <div class="col-md-12 text-end">
                     <button type="submit" class="btn btn-success">Create Quiz</button>
                   </div>
+                </div>
               </form>
             </div>
           </div>
