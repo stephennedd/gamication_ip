@@ -1,4 +1,30 @@
 ﻿{
+  "students": [
+    {
+      "FirstName": "John",
+      "MiddleName": "Doe",
+      "LastName": "Smith",
+      "Email": "john@example.com",
+      "Password": "password123",
+      "IsBanned": false
+    },
+    {
+      "FirstName": "Jane",
+      "MiddleName": "",
+      "LastName": "Doe",
+      "Email": "jane@example.com",
+      "Password": "password456",
+      "IsBanned": true
+    },
+    {
+      "FirstName": "Alice",
+      "MiddleName": "L",
+      "LastName": "Johnson",
+      "Email": "alice@example.com",
+      "Password": "password789",
+      "IsBanned": false
+    }
+  ],
   "roles": [
     {
       "Id": "1",

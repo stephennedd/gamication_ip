@@ -1,4 +1,5 @@
 ﻿
+using BulkyBookWeb.Models;
 using GamificationAPI.Models;
 using GamificationToIP.Context;
 using GamificationToIP.Models;
@@ -29,6 +30,22 @@ namespace GamificationToIP.Seed
                 dynamic gamificationToIpData = JsonConvert.DeserializeObject(jsonData);
 
                 _logger.LogInformation("This is an information message.");
+
+                foreach (var student in gamificationToIpData.students)
+                {
+                    var newStudent = new Student
+                    {
+                        FirstName = student?.FirstName,
+                        LastName = student?.LastName,
+                        MiddleName = student?.MiddleName,
+                        Email = student?.Email,
+                        Password = student?.Password,
+                        IsBanned = student?.IsBanned,
+                    };
+
+                    applicationDbContext.Set<Student>().Add(newStudent);
+                    await applicationDbContext.SaveChangesAsync();
+                }
 
                 foreach (var role in gamificationToIpData.roles)
                 {

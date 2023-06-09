@@ -1,4 +1,3 @@
-﻿
 using GamificationAPI.Interfaces;
 using GamificationAPI.Models;
 using GamificationToIP.Context;
@@ -40,7 +39,7 @@ public class GeneratedTestController : ControllerBase
         int studentId = requestBody.StudentId;
         int numberOfQuestions = requestBody.NumberOfQuestions;
 
-        var generatedTest = await _generatedTestService.GenerateTest(studentId.ToString(),testId,numberOfQuestions);
+        var generatedTest = await _generatedTestService.GenerateTest(studentId,testId,numberOfQuestions);
         return Ok(generatedTest.Id);
     }
 
@@ -55,7 +54,7 @@ public class GeneratedTestController : ControllerBase
     }
 
     [HttpGet("{studentId}/{testId}")]
-    public async Task<ActionResult<GeneratedTestDto>> GetGeneratedTest(string studentId, int testId)
+    public async Task<ActionResult<GeneratedTestDto>> GetGeneratedTest(int studentId, int testId)
     {
         var generatedTest = await _generatedTestService.GetGeneratedTest(studentId,testId);
 
@@ -75,7 +74,6 @@ public class GeneratedTestController : ControllerBase
         var resultPrecentage = await _generatedTestService.CalculateStudentResult(studentId, generatedTestId);
         return resultPrecentage;
     }
-
 }
 public class GenerateTestRequest
 {
