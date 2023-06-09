@@ -8,6 +8,7 @@ const quiz_box = document.querySelector(".quiz_box");
 const result_box = document.querySelector(".result_box");
 const option_list = document.querySelector(".option_list"); 
 const mute_btn = document.querySelector(".mute_btn");  
+//import { showGame } from "../../ArcadeMachine/main";
 
 
 let winSound = new Audio("./assets/sounds/win.mp3");
@@ -90,10 +91,16 @@ restart_quiz.onclick = async ()=>{
   clearInterval(counterLine); //clear counterLine
   next_btn.classList.remove("show"); //hide the next button 
 }
+function callShowGame() {
+  if (typeof showGame === "function") {
+    showGame();
+  } else {
+    console.error("showGame is not a function");
+  }
+}
 // if quitQuiz button clicked
 play_game.onclick = ()=>{
-   // window.location.reload(); //reload the current window
-   // TODO show the game
+  callShowGame();
 }
 const next_btn = document.querySelector("footer .next_btn");
 const bottom_ques_counter = document.querySelector("footer .total_que");

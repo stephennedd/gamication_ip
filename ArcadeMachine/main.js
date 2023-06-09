@@ -54,7 +54,7 @@ function showLeaderboard() {
 	}
 }
 
-function showGame() {
+function showGame(){
 	if (arcadeMachine.classList.contains('move-out-machine')) {
 		hideAllScreens();
 		canvas.classList.remove('hide');
