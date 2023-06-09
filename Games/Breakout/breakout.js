@@ -90,6 +90,9 @@ class MainScene extends Phaser.Scene {
 		// TODO: there is a bug where if you click when ball is about to fall it will restart the game
 		// TODO: after restart lives are not decreasing
 
+		this.isPaused = false; // To track if the game is paused
+		this.input.keyboard.on('keydown-P', this.togglePause, this);
+
 		this.bricks = this.physics.add.group();
 		this.bricksDestroyed = 0;
 		this.lifes = 3;
@@ -163,7 +166,48 @@ class MainScene extends Phaser.Scene {
 		this.startTime = this.time.now;
 	}
 
+	togglePause() {
+		this.isPaused = !this.isPaused;
+
+		if (this.isPaused) {
+			// Pause the game
+			this.physics.pause();
+			this.time.paused = true; // pause timers
+
+			// Add a semi-transparent background to darken the scene
+			this.pauseCover = this.add.rectangle(
+				0,
+				0,
+				this.gameWidth,
+				this.gameHeight,
+				0x000000,
+				0.7
+			);
+			this.pauseCover.setOrigin(0, 0);
+
+			// Add paused text
+			this.pausedText = this.add
+				.text(this.gameWidth / 2, this.gameHeight / 2, 'Paused', {
+					fontFamily: 'PressStart2P',
+					fontSize: '64px',
+					fill: '#fff',
+				})
+				.setOrigin(0.5);
+		} else {
+			// Resume the game
+			this.physics.resume();
+			this.time.paused = false; // resume timers
+
+			// Remove the paused text and background
+			this.pausedText.destroy();
+			this.pauseCover.destroy();
+		}
+	}
+
 	update() {
+		if (this.isPaused) {
+			return; // Don't execute the update loop if the game is paused
+		}
 		if (this.gameOver) {
 			this.showGameOverScreen();
 			return;
@@ -185,6 +229,12 @@ class MainScene extends Phaser.Scene {
 			this.gameOver = true;
 			this.showGameOverScreen();
 			return;
+		}
+
+		// Check if the game window is hidden
+		const gameWindow = document.getElementById('game');
+		if (gameWindow.classList.contains('hide')) {
+			this.togglePause();
 		}
 	}
 

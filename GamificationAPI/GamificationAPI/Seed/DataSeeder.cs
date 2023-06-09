@@ -1,4 +1,5 @@
-﻿using BulkyBookWeb.Models;
+﻿
+using GamificationAPI.Models;
 using GamificationToIP.Context;
 using GamificationToIP.Models;
 using Microsoft.EntityFrameworkCore;
@@ -29,19 +30,49 @@ namespace GamificationToIP.Seed
 
                 _logger.LogInformation("This is an information message.");
 
-                foreach (var student in gamificationToIpData.students)
+                foreach (var role in gamificationToIpData.roles)
                 {
-                    var newStudent = new Student
+                    var newRole = new Role
                     {
-                     FirstName = student?.FirstName,
-                     LastName = student?.LastName,
-                     MiddleName = student?.MiddleName,
-                     Email = student?.Email,
-                     Password = student?.Password,
-                     IsBanned = student?.IsBanned,     
+                        Id = role.Id,
+                        Name = role.Name
                     };
+                    applicationDbContext.Set<Role>().Add(newRole);
+                    await applicationDbContext.SaveChangesAsync();
+                }
 
-                    applicationDbContext.Set<Student>().Add(newStudent);
+                foreach (var group in gamificationToIpData.groups)
+                {
+                    var newGroup = new Group
+                    {
+                        Id = group.Id,
+                        Name = group.Name
+                    };
+                    applicationDbContext.Set<Group>().Add(newGroup);
+                    await applicationDbContext.SaveChangesAsync();
+                }
+
+                foreach (var user in gamificationToIpData.users)
+                {
+                    int roleId = user.RoleId;
+                    Role role = applicationDbContext.Set<Role>().Find(roleId);
+                    int? groupId = user.GroupId;
+                    var newUser = new User
+                    {
+                        Id = user.Id,
+                        Password = user.Password,
+                        Role = role
+                    };
+                    if (groupId != null)
+                    { 
+                        Group group = applicationDbContext.Set<Group>().Find(groupId);
+
+                        newUser.Group = group;
+                            
+                    }
+                    
+
+                    applicationDbContext.Set<User>().Add(newUser);
                     await applicationDbContext.SaveChangesAsync();
                 }
 

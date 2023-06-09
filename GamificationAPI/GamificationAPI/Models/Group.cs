@@ -2,11 +2,10 @@
 
 namespace GamificationAPI.Models
 {
-    public class Leaderboard
+    public class Group
     {
         [Key]
+        public int Id { get; set; }
         public string Name { get; set; }
-        public List<HighScore> HighScores { get; set; } = null!;
-
     }
 }

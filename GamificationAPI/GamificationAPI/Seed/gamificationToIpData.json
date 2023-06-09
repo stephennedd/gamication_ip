@@ -1,29 +1,59 @@
 ﻿{
-  "students": [
+  "roles": [
     {
-      "FirstName": "John",
-      "MiddleName": "Doe",
-      "LastName": "Smith",
-      "Email": "john@example.com",
-      "Password": "password123",
-      "IsBanned": false
+      "Id": "1",
+      "Name": "Student"
     },
     {
-      "FirstName": "Jane",
-      "MiddleName": "",
-      "LastName": "Doe",
-      "Email": "jane@example.com",
-      "Password": "password456",
-      "IsBanned": true
+      "Id": "2",
+      "Name": "Teacher"
     },
     {
-      "FirstName": "Alice",
-      "MiddleName": "L",
-      "LastName": "Johnson",
-      "Email": "alice@example.com",
-      "Password": "password789",
-      "IsBanned": false
+      "Id": "3",
+      "Name": "Admin"
     }
+
+  ],
+  "groups": [
+    {
+      "Id": "1",
+      "Name": "Group 1"
+    },
+    {
+      "Id": "2",
+      "Name": "Group 2"
+    }
+  ],
+  "users": [
+    {
+      "Id": "1111",
+      "Password": "password123",
+      "RoleId": "1",
+      "GroupId": "1"
+    },
+    {
+      "Id": "2222",
+      "Password": "password123",
+      "RoleId": "1",
+      "GroupId": "1"
+    },
+    {
+      "Id": "3333",
+      "Password": "password123",
+      "RoleId": "1",
+      "GroupId": "2"
+    },
+    {
+      "Id": "JohnDoe",
+      "Password": "password123",
+      "RoleId": "2"
+    },
+    {
+      "Id": "Admin",
+      "Password": "password123",
+      "RoleId": "3"
+    }
+
   ],
   "tests": [
     {

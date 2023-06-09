@@ -1,4 +1,4 @@
-﻿using BulkyBookWeb.Models;
+﻿
 using GamificationAPI.Interfaces;
 using GamificationAPI.Models;
 using GamificationToIP.Context;
@@ -17,6 +17,8 @@ public class LeaderboardService : ILeaderboards
     {
         return await _dbContext.Set<Leaderboard>()
             .Include(l => l.HighScores)
+            .ThenInclude(h => h.User)
+            .ThenInclude(h => h.Group)
             .ToListAsync();
     }
 
@@ -24,21 +26,24 @@ public class LeaderboardService : ILeaderboards
     {
         return await _dbContext.Set<Leaderboard>()
             .Include(l => l.HighScores)
+            .ThenInclude(h => h.User)
+            .ThenInclude(h => h.Group)
             .FirstOrDefaultAsync(l => l.Name == name);
     }
 
-    public async Task AddHighScoreAsync(HighScore highScore, string leaderboardName)
+    public async Task<bool> AddHighScoreAsync(HighScore highScore, string leaderboardName)
     {
         var leaderboard = await GetLeaderboardByNameAsync(leaderboardName);
 
         if (leaderboard == null)
         {
-            leaderboard = new Leaderboard { Name = leaderboardName };
-            _dbContext.Set<Leaderboard>().Add(leaderboard);
+            return false;
         }
-
+        await _dbContext.Set<HighScore>().AddAsync(highScore);
+        await _dbContext.SaveChangesAsync();
         leaderboard.HighScores.Add(highScore);
         await _dbContext.SaveChangesAsync();
+        return true;
     }
 
     public async Task UpdateLeaderboardAsync(Leaderboard leaderboard)
@@ -66,7 +71,7 @@ public class LeaderboardService : ILeaderboards
         {
             return false;
         }
-        else 
+        else
         {
             leaderboard = new Leaderboard { Name = name };
             _dbContext.Set<Leaderboard>().Add(leaderboard);
@@ -74,27 +79,28 @@ public class LeaderboardService : ILeaderboards
             return true;
         }
     }
-    public async Task<bool> CheckIfStudentHasHighScoreInLeadeboard(Student student, string name)
+    public async Task<bool> CheckIfStudentHasHighScoreInLeadeboard(string studentId, string name)
     {
+        if (await _dbContext.Users.AnyAsync(s => s.Id == studentId) == false)
+        {
+            throw new Exception("user with this id does not exist");
+        }
         var leaderboard = await GetLeaderboardByNameAsync(name);
         if (leaderboard != null)
         {
-                 var x =    await _dbContext.Set<HighScore>()
-                    .Include(h => h.Student)
-                    .Where(h => h.Student.Id == student.Id)
-                    .ToListAsync();
+            var x = await _dbContext.Set<HighScore>()
+               .Include(h => h.User)
+               .Where(h => h.User.Id == studentId)
+               .ToListAsync();
             if (x != null)
             {
                 return true;
             }
-           
-            
+
+
         }
         return false;
     }
 
-    public Task UpdateLeaderboardAsync(string name, string newName, string newDescription, string newImageURL)
-    {
-        throw new NotImplementedException();
-    }
+
 }
