@@ -68,7 +68,9 @@ namespace GamificationAPI.Data.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "text", nullable: false),
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UserId = table.Column<string>(type: "text", nullable: false),
                     Password = table.Column<string>(type: "text", nullable: false),
                     VerificationCode = table.Column<string>(type: "text", nullable: false),
                     IsVerified = table.Column<bool>(type: "boolean", nullable: false),
@@ -123,7 +125,7 @@ namespace GamificationAPI.Data.Migrations
                     Name = table.Column<string>(type: "text", nullable: false),
                     imageUrl = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
-                    UserId = table.Column<string>(type: "text", nullable: true)
+                    UserId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -143,7 +145,8 @@ namespace GamificationAPI.Data.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     StudentId = table.Column<string>(type: "text", nullable: false),
                     TestId = table.Column<int>(type: "integer", nullable: false),
-                    numberOfCorrectAnswers = table.Column<int>(type: "integer", nullable: false)
+                    numberOfCorrectAnswers = table.Column<int>(type: "integer", nullable: false),
+                    StudentId1 = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -155,8 +158,8 @@ namespace GamificationAPI.Data.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_GeneratedTest_Users_StudentId",
-                        column: x => x.StudentId,
+                        name: "FK_GeneratedTest_Users_StudentId1",
+                        column: x => x.StudentId1,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -168,8 +171,8 @@ namespace GamificationAPI.Data.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    UserId = table.Column<string>(type: "text", nullable: true),
-                    LeaderboardName = table.Column<string>(type: "text", nullable: true),
+                    UserId = table.Column<int>(type: "integer", nullable: false),
+                    LeaderboardName = table.Column<string>(type: "text", nullable: false),
                     Score = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -179,7 +182,8 @@ namespace GamificationAPI.Data.Migrations
                         name: "FK_HighScores_Leaderboards_LeaderboardName",
                         column: x => x.LeaderboardName,
                         principalTable: "Leaderboards",
-                        principalColumn: "Name");
+                        principalColumn: "Name",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_HighScores_Users_UserId",
                         column: x => x.UserId,
@@ -215,7 +219,7 @@ namespace GamificationAPI.Data.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     numberOfGivenCorrectAnswers = table.Column<int>(type: "integer", nullable: false),
-                    studentId = table.Column<string>(type: "text", nullable: true),
+                    studentId = table.Column<int>(type: "integer", nullable: false),
                     TestId = table.Column<int>(type: "integer", nullable: false),
                     TestId1 = table.Column<int>(type: "integer", nullable: true)
                 },
@@ -237,7 +241,8 @@ namespace GamificationAPI.Data.Migrations
                         name: "FK_StudentResults_Users_studentId",
                         column: x => x.studentId,
                         principalTable: "Users",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -283,9 +288,9 @@ namespace GamificationAPI.Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_GeneratedTest_StudentId",
+                name: "IX_GeneratedTest_StudentId1",
                 table: "GeneratedTest",
-                column: "StudentId");
+                column: "StudentId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_GeneratedTest_TestId",

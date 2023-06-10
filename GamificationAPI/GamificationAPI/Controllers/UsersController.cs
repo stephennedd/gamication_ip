@@ -47,7 +47,7 @@ namespace GamificationToIP.Controllers
 
         // GET: api/Users/5
 
-        [HttpGet("{id}")]
+        [HttpGet("{UserId}")]
         public async Task<IActionResult> GetUser(string UserId)
         {
             if (await _userService.UserExistsAsync(UserId) == false)

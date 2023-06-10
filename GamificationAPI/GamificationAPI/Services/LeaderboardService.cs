@@ -43,6 +43,7 @@ public class LeaderboardService : ILeaderboards
         await _dbContext.SaveChangesAsync();
         leaderboard.HighScores.Add(highScore);
         await _dbContext.SaveChangesAsync();
+        
         return true;
     }
 

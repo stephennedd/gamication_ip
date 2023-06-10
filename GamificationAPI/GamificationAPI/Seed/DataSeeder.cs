@@ -59,7 +59,7 @@ namespace GamificationToIP.Seed
                     int? groupId = user.GroupId;
                     var newUser = new User
                     {
-                        Id = user.Id,
+                        UserId = user.UserId,
                         Password = user.Password,
                         Role = role
                     };
