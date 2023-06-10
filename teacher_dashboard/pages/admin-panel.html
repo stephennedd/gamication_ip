@@ -110,6 +110,10 @@
                     <span>Edit Quiz</span>
                   </a>
                 </li>
+                <li>
+                  <a href="#delete-quiz" class="nav-link px-3" id="delete-quiz-link">
+                    <span>Delete Quiz</span>
+                  </a>
               </ul>
             </div>
           </li>
@@ -183,18 +187,28 @@
             <div class="collapse" id="admin_options">
               <ul class="navbar-nav ps-3">
                 <li>
-                  <a href="#add-teacher" class="nav-link px-3" id="add-leaderboard-link">
-                    <span>Add teacher</span>
+                  <a href="#add-student" class="nav-link px-3" id="add-student-link">
+                    <span>Add Student</span>
                   </a>
                 </li>
                 <li>
-                  <a href="#add-group" class="nav-link px-3" id="remove-leaderboard-link">
-                    <span>Add group</span>
+                  <a href="#add-teacher" class="nav-link px-3" id="add-teacher-link">
+                    <span>Add Teacher</span>
                   </a>
                 </li>
                 <li>
-                  <a href="#update-teacher" class="nav-link px-3" id="update-leaderboard-link">
-                    <span>Update teacher</span>
+                  <a href="#add-group" class="nav-link px-3" id="remove-group-link">
+                    <span>Add Group</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#edit-student" class="nav-link px-3" id="edit-student-link">
+                    <span>Edit Student</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#edit-teacher" class="nav-link px-3" id="edit-teacher-link">
+                    <span>Edit Teacher</span>
                   </a>
                 </li>
               </ul>
@@ -338,7 +352,7 @@
       <div class="row mt-2">
         <div class="col-md-12">
           <div class="card">
-            <div class="card-header">Create a quiz</div>
+            <div class="card-header">Enter quiz details</div>
             <div class="card-body">
               <form action="">
                 <div class="row">
@@ -369,8 +383,8 @@
 
 
                 <div class="row">
-                  <div class="form-group col-md-12" id="dynamicFields">
-                    <div class="mb-3">
+                  <div class="col-md-12" id="dynamicFields">
+                    <div class="mb-2">
                       <label for="quiz-questions" class="form-label">Quiz questions</label>
                       <input type="text" class="form-control mb-2" id="quiz-question" placeholder="Question 1">
                       <!-- Dynamically added fields will appear here -->
@@ -399,6 +413,107 @@
 
   </main>
   <!-- Create Quiz -->
+
+  <!-- Edit Quiz-->
+  <main class="pt-3" id="edit-quiz">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12 fw-bold fs-4">Edit Quiz</div>
+      </div>
+      <div class="row mt-2">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header">Edit a quiz</div>
+            <div class="card-body">
+              <form action="">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="mb-3">
+                      <label for="quiz-name" class="form-label">Quiz name</label>
+                      <input type="text" class="form-control" id="quiz-name" placeholder="Quiz name">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="mb-3">
+                      <label for="quiz-name" class="form-label">Assignment</label>
+                      <select class="form-select" aria-label="Default select example">
+                        <option selected>Select an assignment</option>
+                        <option value="1">Assignment 1</option>
+                        <option value="2">Assignment 2</option>
+                        <option value="3">Assignment 3</option>
+                        <option value="4">Assignment 4</option>
+                        <option value="5">Assignment 5</option>
+                        <option value="6">Assignment 6</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-12" id="dynamicFields">
+                    <div class="mb-3">
+                      <label for="quiz-questions" class="form-label">Quiz questions</label>
+                      <input type="text" class="form-control mb-2" id="quiz-question" placeholder="Question 1">
+                      <!-- Dynamically added fields will appear here -->
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row mb-1">
+                  <div class="col-md-12 text-start">
+                    <button type="button" class="btn btn-primary" onclick="addFormField()">Add Question</button>
+                    <button type="button" class="btn btn-danger" onclick="removeFormField()">Remove Question</button>
+                  </div>
+              </form>
+            </div>
+
+  </main>
+  <!-- Edit Quiz-->
+
+  <!-- Remove Quiz-->
+  <main class="pt-3" id="delete-quiz">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12 fw-bold fs-4">Remove Quiz</div>
+      </div>
+      <div class="row mt-2">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header">Remove a quiz</div>
+            <div class="card-body">
+              <form action="">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="mb-3">
+                      <label for="quiz-name" class="form-label">Select quiz</label>
+                      <select class="form-select" aria-label="Default select example">
+                        <option selected>Select a quiz</option>
+                        <option value="1">Quiz 1</option>
+                        <option value="2">Quiz 2</option>
+                        <option value="3">Quiz 3</option>
+                        <option value="4">Quiz 4</option>
+                        <option value="5">Quiz 5</option>
+                        <option value="6">Quiz 6</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-12 text-end">
+                    <button type="submit" class="btn btn-danger">Remove Quiz</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+  </main>
+  <!-- Remove Quiz-->
 
 
 

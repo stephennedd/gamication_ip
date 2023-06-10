@@ -69,7 +69,9 @@ function handlePageChange() {
     const sectionMappings = {
       '#create-quiz': { sectionId: 'create-quiz', linkId: 'create-quiz-link' },
       '#edit-quiz': { sectionId: 'edit-quiz', linkId: 'edit-quiz-link' },
-      '#student-results': { sectionId: 'student-results', linkId: 'student-results-link' }
+      '#student-results': { sectionId: 'student-results', linkId: 'student-results-link' },
+      '#delete-quiz': { sectionId: 'delete-quiz', linkId: 'delete-quiz-link' },
+
     };
   
     // Default section and link IDs if the hash doesn't match any mapping
