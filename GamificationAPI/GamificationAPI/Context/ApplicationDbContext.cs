@@ -1,4 +1,5 @@
 ﻿
+using BulkyBookWeb.Models;
 using GamificationAPI.Models;
 using GamificationToIP.Models;
 using Microsoft.EntityFrameworkCore;
@@ -25,6 +26,8 @@ namespace GamificationToIP.Context
         public DbSet<Role> Roles { get; set; }
         public DbSet<Group> Groups { get; set; }
         public DbSet<Badge> Badges { get; set; }
+
+        public DbSet<Student> Students { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

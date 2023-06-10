@@ -3,6 +3,7 @@ using System;
 using GamificationToIP.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GamificationAPI.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230609101354_SecondMigration")]
+    partial class SecondMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -74,8 +77,8 @@ namespace GamificationAPI.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
 
                     b.Property<string>("imageUrl")
                         .IsRequired()
@@ -99,9 +102,6 @@ namespace GamificationAPI.Data.Migrations
                     b.Property<int>("StudentId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("StudentId1")
-                        .HasColumnType("integer");
-
                     b.Property<int>("TestId")
                         .HasColumnType("integer");
 
@@ -110,7 +110,7 @@ namespace GamificationAPI.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("StudentId1");
+                    b.HasIndex("StudentId");
 
                     b.HasIndex("TestId");
 
@@ -143,14 +143,13 @@ namespace GamificationAPI.Data.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("LeaderboardName")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("Score")
                         .HasColumnType("integer");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -289,8 +288,8 @@ namespace GamificationAPI.Data.Migrations
                     b.Property<int>("numberOfGivenCorrectAnswers")
                         .HasColumnType("integer");
 
-                    b.Property<int>("studentId")
-                        .HasColumnType("integer");
+                    b.Property<string>("studentId")
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -333,11 +332,8 @@ namespace GamificationAPI.Data.Migrations
 
             modelBuilder.Entity("GamificationToIP.Models.User", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
 
                     b.Property<int?>("GroupId")
                         .HasColumnType("integer");
@@ -354,10 +350,6 @@ namespace GamificationAPI.Data.Migrations
 
                     b.Property<int>("RoleId")
                         .HasColumnType("integer");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<string>("VerificationCode")
                         .IsRequired()
@@ -385,7 +377,7 @@ namespace GamificationAPI.Data.Migrations
                 {
                     b.HasOne("BulkyBookWeb.Models.Student", "Student")
                         .WithMany()
-                        .HasForeignKey("StudentId1")
+                        .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -404,9 +396,7 @@ namespace GamificationAPI.Data.Migrations
                 {
                     b.HasOne("GamificationAPI.Models.Leaderboard", "Leaderboard")
                         .WithMany("HighScores")
-                        .HasForeignKey("LeaderboardName")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("LeaderboardName");
 
                     b.HasOne("GamificationToIP.Models.User", "User")
                         .WithMany("HighScores")
@@ -478,9 +468,7 @@ namespace GamificationAPI.Data.Migrations
 
                     b.HasOne("GamificationToIP.Models.User", "student")
                         .WithMany()
-                        .HasForeignKey("studentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("studentId");
 
                     b.Navigation("Test");
 

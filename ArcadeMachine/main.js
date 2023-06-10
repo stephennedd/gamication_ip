@@ -9,6 +9,13 @@ const quiz = document.getElementById('quiz');
 const leaderboardButton = document.getElementById('leaderboardButton');
 const leaderboard = document.getElementById('leaderboard');
 const screens = document.querySelectorAll('.screen');
+window.addEventListener('message', function (event) {
+	// Check if the message is what you expect
+	if (event.data.action === 'showGame') {
+		// Call your existing function to show the game screen
+		showGame();
+	}
+});
 
 moveIn.addEventListener('click', moveCorridor);
 moveOut.addEventListener('click', walkBack);
