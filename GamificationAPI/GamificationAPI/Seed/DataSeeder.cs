@@ -1,4 +1,6 @@
-﻿using BulkyBookWeb.Models;
+﻿
+using BulkyBookWeb.Models;
+using GamificationAPI.Models;
 using GamificationToIP.Context;
 using GamificationToIP.Models;
 using Microsoft.EntityFrameworkCore;
@@ -33,15 +35,61 @@ namespace GamificationToIP.Seed
                 {
                     var newStudent = new Student
                     {
-                     FirstName = student?.FirstName,
-                     LastName = student?.LastName,
-                     MiddleName = student?.MiddleName,
-                     Email = student?.Email,
-                     Password = student?.Password,
-                     IsBanned = student?.IsBanned,     
+                        FirstName = student?.FirstName,
+                        LastName = student?.LastName,
+                        MiddleName = student?.MiddleName,
+                        Email = student?.Email,
+                        Password = student?.Password,
+                        IsBanned = student?.IsBanned,
                     };
 
                     applicationDbContext.Set<Student>().Add(newStudent);
+                    await applicationDbContext.SaveChangesAsync();
+                }
+
+                foreach (var role in gamificationToIpData.roles)
+                {
+                    var newRole = new Role
+                    {
+                        Id = role.Id,
+                        Name = role.Name
+                    };
+                    applicationDbContext.Set<Role>().Add(newRole);
+                    await applicationDbContext.SaveChangesAsync();
+                }
+
+                foreach (var group in gamificationToIpData.groups)
+                {
+                    var newGroup = new Group
+                    {
+                        Id = group.Id,
+                        Name = group.Name
+                    };
+                    applicationDbContext.Set<Group>().Add(newGroup);
+                    await applicationDbContext.SaveChangesAsync();
+                }
+
+                foreach (var user in gamificationToIpData.users)
+                {
+                    int roleId = user.RoleId;
+                    Role role = applicationDbContext.Set<Role>().Find(roleId);
+                    int? groupId = user.GroupId;
+                    var newUser = new User
+                    {
+                        Id = user.Id,
+                        Password = user.Password,
+                        Role = role
+                    };
+                    if (groupId != null)
+                    { 
+                        Group group = applicationDbContext.Set<Group>().Find(groupId);
+
+                        newUser.Group = group;
+                            
+                    }
+                    
+
+                    applicationDbContext.Set<User>().Add(newUser);
                     await applicationDbContext.SaveChangesAsync();
                 }
 

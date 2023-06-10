@@ -1,4 +1,4 @@
-﻿using BulkyBookWeb.Models;
+﻿
 using GamificationToIP.Models;
 
 namespace GamificationAPI.Models

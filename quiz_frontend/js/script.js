@@ -2,16 +2,20 @@
 const start_btn = document.querySelector(".start_btn button");
 const info_box = document.querySelector(".info_box");
 const exit_btn = info_box.querySelector(".buttons .quit");
+const play_btn = info_box.querySelector(".buttons .play");
 const continue_btn = info_box.querySelector(".buttons .restart");
 const quiz_box = document.querySelector(".quiz_box");
 const result_box = document.querySelector(".result_box");
 const option_list = document.querySelector(".option_list"); 
 const mute_btn = document.querySelector(".mute_btn");  
+//import { showGame } from "../../ArcadeMachine/main";
 
 
 let winSound = new Audio("./assets/sounds/win.mp3");
 let loseSound = new Audio("./assets/sounds/game-over.mp3");
 let bgSound = new Audio("./assets/sounds/bg.mp3");
+
+let studentResult;
 
 // if mute button clicked
 mute_btn.onclick = ()=>{
@@ -24,34 +28,32 @@ mute_btn.onclick = ()=>{
     }
 }
 
+async function getGeneratedTestForStudent(){
+  try {
+    // Fetch data from the API
+    const response = await fetch('https://localhost:7186/api/generatedTests', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ studentId: 1, testId: 1, numberOfQuestions: 4 })
+    });
+
+    const response2 = await fetch('https://localhost:7186/api/generatedTests/1/1');
+    const data = await response2.json();
+    questions = data['Questions'];
+    generatedTestId = data['Id'];
+    console.log(generatedTestId);
+    console.log(questions);
+   
+  } catch (error) {
+    console.error('Error fetching questions:', error);
+  }
+} 
+
 // if startQuiz button clicked
 start_btn.onclick = async ()=>{
-  
-  let generatedTestId = await fetch('https://localhost:7186/api/generatedTests', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify({ studentId: 1, testId: 1, numberOfQuestions: 4 })
-})
-  .then(response => response.json())
-  .then(data => {
-  //  console.log(data);
-  })
-  .catch(error => {
-    //console.error('Error fetching questions:', error);
-  });
-
-    fetch('https://localhost:7186/api/generatedTests/1/1')
-  .then(response => response.json())
-  .then(data => {
-    // Assuming the response data is an array of questions
-    questions = data['Questions'];
-    console.log(questions);
-  })
-  .catch(error => {
-    console.error('Error fetching questions:', error);
-  });
+  await getGeneratedTestForStudent();
     info_box.classList.add("activeInfo"); //show info box
 }
 // if exitQuiz button clicked
@@ -74,28 +76,36 @@ let counter;
 let counterLine;
 let widthValue = 0;
 const restart_quiz = result_box.querySelector(".buttons .restart");
-const quit_quiz = result_box.querySelector(".buttons .quit");
+const play_game = result_box.querySelector(".buttons .play");
 // if restartQuiz button clicked
-restart_quiz.onclick = ()=>{
-    quiz_box.classList.add("activeQuiz"); //show quiz box
-    result_box.classList.remove("activeResult"); //hide result box
-    que_count = 0;
-    que_numb = 1;
-    userScore = 0;
-    widthValue = 0;
-    showQuestions(que_count); //calling showQestions function
-    clearInterval(counter); //clear counter
-    clearInterval(counterLine); //clear counterLine
-    next_btn.classList.remove("show"); //hide the next button
+restart_quiz.onclick = async ()=>{
+  await getGeneratedTestForStudent();
+  quiz_box.classList.add("activeQuiz"); //show quiz box
+  result_box.classList.remove("activeResult"); //hide result box
+  que_count = 0;
+  que_numb = 1;
+  userScore = 0;
+  widthValue = 0;
+  showQuestions(que_count); //calling showQestions function
+  clearInterval(counter); //clear counter
+  clearInterval(counterLine); //clear counterLine
+  next_btn.classList.remove("show"); //hide the next button 
+}
+function callShowGame() {
+  if (typeof showGame === "function") {
+    showGame();
+  } else {
+    console.error("showGame is not a function");
+  }
 }
 // if quitQuiz button clicked
-quit_quiz.onclick = ()=>{
-    window.location.reload(); //reload the current window
+play_game.onclick = ()=>{
+  callShowGame();
 }
 const next_btn = document.querySelector("footer .next_btn");
 const bottom_ques_counter = document.querySelector("footer .total_que");
 // if Next Que button clicked
-next_btn.onclick = ()=>{
+next_btn.onclick = async ()=>{
     if(que_count < questions.length - 1){ //if question count is less than total question length
         que_count++; //increment the que_count value
         que_numb++; //increment the que_numb value
@@ -103,14 +113,17 @@ next_btn.onclick = ()=>{
         clearInterval(counter); //clear counter
         clearInterval(counterLine); //clear counterLine
         next_btn.classList.remove("show"); //hide the next button
-        queCounter(que_numb); //passing que_numb value to queCounter
+        queCounter(que_numb); //passing que_numbfetch value to queCounter
     }else{
+        await getStudentResult(1);
         clearInterval(counter); //clear counter
         clearInterval(counterLine); //clear counterLine
         showResult(); //calling showResult function
         queCounter(1); //passing que_numb value to queCounter
         bgSound.pause();
         bgSound.currentTime = 0;
+
+        // Call getStudentResult function
     }
 }
 // getting questions and options from array
@@ -134,6 +147,17 @@ function showQuestions(index){
 // creating the new div tags which for icons
 let tickIconTag = '<div class="icon tick"><i class="fas fa-check"></i></div>';
 let crossIconTag = '<div class="icon cross"><i class="fas fa-times"></i></div>';
+
+async function getStudentResult(studentId){
+  try {
+    const response = await fetch(`https://localhost:7186/api/generatedTests/studentResults?studentId=${studentId}&generatedTestId=${generatedTestId}`)
+    const data = await response.json();
+    studentResult = data;
+    console.log(studentResult);
+  }catch (error) {
+    console.error('Error submitting answer:', error);
+  }
+}
 
 // Function to handle the student's answer submission
 async function submitAnswer(answerId, studentQuestionId) {
@@ -193,6 +217,17 @@ function showResult(){
     quiz_box.classList.remove("activeQuiz"); //hide quiz box
     result_box.classList.add("activeResult"); //show result box
     const scoreText = result_box.querySelector(".score_text");
+    const replayBtn = result_box.querySelector(".buttons .restart");
+    const playBtn = result_box.querySelector(".buttons .play");
+
+    console.log("Result is "+studentResult);
+    if (studentResult >= 55) {
+      replayBtn.style.display = "none"; // Display the "Replay Quiz" button
+      playBtn.style.display = "block"; // Display the "Replay Quiz" button
+  } else {
+      replayBtn.style.display = "block"; // Hide the "Replay Quiz" button
+      playBtn.style.display = "none";
+  }
     if (userScore > 3){ // if user scored more than 3
         //creating a new span tag and passing the user score number and total question number
         let scoreTag = '<span>and congrats! You got  <p>'+ userScore +'</p> out of <p>'+ questions.length +'</p></span>';

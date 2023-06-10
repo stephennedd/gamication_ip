@@ -12,6 +12,19 @@ namespace GamificationAPI.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Groups",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Groups", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Leaderboards",
                 columns: table => new
                 {
@@ -20,6 +33,19 @@ namespace GamificationAPI.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Leaderboards", x => x.Name);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Roles",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Roles", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -57,27 +83,29 @@ namespace GamificationAPI.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "HighScores",
+                name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    StudentId = table.Column<int>(type: "integer", nullable: false),
-                    Score = table.Column<int>(type: "integer", nullable: false),
-                    LeaderboardName = table.Column<string>(type: "text", nullable: true)
+                    Id = table.Column<string>(type: "text", nullable: false),
+                    Password = table.Column<string>(type: "text", nullable: false),
+                    VerificationCode = table.Column<string>(type: "text", nullable: false),
+                    IsVerified = table.Column<bool>(type: "boolean", nullable: false),
+                    IsBanned = table.Column<bool>(type: "boolean", nullable: false),
+                    GroupId = table.Column<int>(type: "integer", nullable: true),
+                    RoleId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_HighScores", x => x.Id);
+                    table.PrimaryKey("PK_Users", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_HighScores_Leaderboards_LeaderboardName",
-                        column: x => x.LeaderboardName,
-                        principalTable: "Leaderboards",
-                        principalColumn: "Name");
+                        name: "FK_Users_Groups_GroupId",
+                        column: x => x.GroupId,
+                        principalTable: "Groups",
+                        principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_HighScores_Students_StudentId",
-                        column: x => x.StudentId,
-                        principalTable: "Students",
+                        name: "FK_Users_Roles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "Roles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -132,13 +160,59 @@ namespace GamificationAPI.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Badges",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    imageUrl = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false),
+                    UserId = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Badges", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Badges_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "HighScores",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UserId = table.Column<string>(type: "text", nullable: true),
+                    LeaderboardName = table.Column<string>(type: "text", nullable: true),
+                    Score = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HighScores", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_HighScores_Leaderboards_LeaderboardName",
+                        column: x => x.LeaderboardName,
+                        principalTable: "Leaderboards",
+                        principalColumn: "Name");
+                    table.ForeignKey(
+                        name: "FK_HighScores_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "StudentResults",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     numberOfGivenCorrectAnswers = table.Column<int>(type: "integer", nullable: false),
-                    studentId = table.Column<int>(type: "integer", nullable: false),
+                    studentId = table.Column<string>(type: "text", nullable: true),
                     TestId = table.Column<int>(type: "integer", nullable: false),
                     TestId1 = table.Column<int>(type: "integer", nullable: true)
                 },
@@ -152,15 +226,14 @@ namespace GamificationAPI.Data.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_StudentResults_Students_studentId",
-                        column: x => x.studentId,
-                        principalTable: "Students",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_StudentResults_Tests_TestId1",
                         column: x => x.TestId1,
                         principalTable: "Tests",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_StudentResults_Users_studentId",
+                        column: x => x.studentId,
+                        principalTable: "Users",
                         principalColumn: "Id");
                 });
 
@@ -223,6 +296,11 @@ namespace GamificationAPI.Data.Migrations
                 column: "QuestionId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Badges_UserId",
+                table: "Badges",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_GeneratedTest_StudentId",
                 table: "GeneratedTest",
                 column: "StudentId");
@@ -238,9 +316,9 @@ namespace GamificationAPI.Data.Migrations
                 column: "LeaderboardName");
 
             migrationBuilder.CreateIndex(
-                name: "IX_HighScores_StudentId",
+                name: "IX_HighScores_UserId",
                 table: "HighScores",
-                column: "StudentId");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Questions_TestId",
@@ -276,11 +354,24 @@ namespace GamificationAPI.Data.Migrations
                 name: "IX_StudentResults_TestId1",
                 table: "StudentResults",
                 column: "TestId1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_GroupId",
+                table: "Users",
+                column: "GroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_RoleId",
+                table: "Users",
+                column: "RoleId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Badges");
+
             migrationBuilder.DropTable(
                 name: "HighScores");
 
@@ -300,10 +391,19 @@ namespace GamificationAPI.Data.Migrations
                 name: "GeneratedTest");
 
             migrationBuilder.DropTable(
+                name: "Users");
+
+            migrationBuilder.DropTable(
                 name: "Questions");
 
             migrationBuilder.DropTable(
                 name: "Students");
+
+            migrationBuilder.DropTable(
+                name: "Groups");
+
+            migrationBuilder.DropTable(
+                name: "Roles");
 
             migrationBuilder.DropTable(
                 name: "Tests");

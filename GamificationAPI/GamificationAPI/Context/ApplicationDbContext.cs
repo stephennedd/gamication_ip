@@ -3,6 +3,7 @@ using BulkyBookWeb.Models;
 using GamificationAPI.Models;
 using GamificationToIP.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata;
 
 namespace GamificationToIP.Context
 {
@@ -13,7 +14,7 @@ namespace GamificationToIP.Context
 
         }
 
-        public DbSet<Student> Students { get; set; }
+        public DbSet<User> Users { get; set; }
         public DbSet<Test> Tests { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<Answer> Answers { get; set; }
@@ -22,6 +23,28 @@ namespace GamificationToIP.Context
         public DbSet<Leaderboard> Leaderboards { get; set; }
         public DbSet<GeneratedTest> GeneratedTest { get; set; }
         public DbSet<StudentQuestion> StudentQuestions { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<Group> Groups { get; set; }
+        public DbSet<Badge> Badges { get; set; }
 
+        public DbSet<Student> Students { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>()
+                .HasMany(e => e.HighScores)
+                .WithOne(e => e.User)            
+                .IsRequired(false);
+
+            modelBuilder.Entity<Leaderboard>()
+                .HasMany(e => e.HighScores)
+                .WithOne(e => e.Leaderboard)
+                .IsRequired(false);
+            
+            modelBuilder.Entity<User>()
+                .HasMany(b => b.Badges)
+                .WithOne(u => u.User)
+                .IsRequired(false);
+        }
     }
 }

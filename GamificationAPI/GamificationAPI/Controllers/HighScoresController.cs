@@ -1,43 +1,74 @@
-﻿using BulkyBookWeb.Models;
+
 using GamificationAPI.Interfaces;
 using GamificationAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
+using System.Security.Claims;
 
 namespace GamificationAPI.Controllers
 {
+    [Authorize(Roles = "Admin, Teacher, Student")]
     [Route("api/[controller]")]
     [ApiController]
     public class HighScoresController : ControllerBase
     {
         private readonly ILeaderboards _leaderboardService;
         private readonly IHighScores _highScoreService;
-        private readonly IStudents _studentService;
+        private readonly IUsers _userService;
 
-        public HighScoresController(ILeaderboards leaderboardService, IHighScores highScoreService, IStudents studentService)
+        public HighScoresController(ILeaderboards leaderboardService, IHighScores highScoreService, IUsers userService)
         {
             _leaderboardService = leaderboardService;
             _highScoreService = highScoreService;
-            _studentService = studentService;
+            _userService = userService;
         }
 
 
         // POST: api/scoreboard
-        // checks if its is really an high score than adds it to leaderboard
+        // checks if it really is an high score than adds it to leaderboard
         [HttpPost]
-        public async Task<IActionResult> AddHighScoreToLeaderboard([FromBody] HighScore highScore, string leaderboardName)
+        public async Task<IActionResult> AddHighScoreToLeaderboard(int score, string leaderboardName)
         {
-            if (highScore is null || string.IsNullOrEmpty(leaderboardName) || !ModelState.IsValid)
+            if (!HttpContext.Request.Headers.TryGetValue("Authorization", out var authorizationHeader))
             {
-                return BadRequest(ModelState);
+                return BadRequest("Authorization header is missing.");
+            }
+            var userId = User.FindFirst(ClaimTypes.Name)?.Value;
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return BadRequest("Invalid token.");
             }
 
-            if (await _leaderboardService.CheckIfStudentHasHighScoreInLeadeboard(highScore.Student, leaderboardName) == true)
+            if (await _userService.UserExistsAsync(userId) == false)
             {
-                if(await _highScoreService.CheckIfItsHighScore(highScore, leaderboardName) == true)
+                return BadRequest();
+            }
+
+            if (score == null || string.IsNullOrEmpty(leaderboardName) || !ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var highScore = new HighScore
+            {
+                Score = score,
+                User = await _userService.GetUserByIdAsync(userId)
+            };
+
+
+            if (await _leaderboardService.CheckIfStudentHasHighScoreInLeadeboard(highScore.User.Id, leaderboardName) == true)
+            {
+                if (await _highScoreService.CheckIfItsHighScore(highScore, leaderboardName) == true)
                 {
                     await _highScoreService.UpdateHighScoreAsync(highScore, leaderboardName);
-                    return Ok();
+                    
+                    
+                        return Ok();
+                    
+                    
                 }
                 else
                 {
@@ -46,12 +77,18 @@ namespace GamificationAPI.Controllers
             }
             else
             {
-                await _leaderboardService.AddHighScoreAsync(highScore, leaderboardName);
-                return Ok();
+                bool success = await _leaderboardService.AddHighScoreAsync(highScore, leaderboardName);
+                if (success)
+                {
+                    return Ok();
+                }
+                return BadRequest();
             }
-      
-        }
 
+
+
+        }
+        [Authorize(Roles = "Admin, Teacher")]
         [HttpDelete]
         public async Task<IActionResult> DeleteHighScoreById(int highScoreId)
         {
@@ -68,7 +105,7 @@ namespace GamificationAPI.Controllers
 
 
     }
-    
+
 
 
 

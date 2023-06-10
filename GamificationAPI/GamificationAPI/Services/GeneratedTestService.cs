@@ -1,4 +1,4 @@
-﻿using BulkyBookWeb.Models;
+using BulkyBookWeb.Models;
 using GamificationAPI.Interfaces;
 using GamificationAPI.Models;
 using GamificationToIP.Context;
@@ -127,6 +127,54 @@ public class GeneratedTestService : IGeneratedTests
         return "Answer was saved";
     }
 
+    public async Task<ActionResult<Double>> CalculateStudentResult(int studentId, int generatedTestId)
+    {
+        var student = await _dbContext.Students.FindAsync(studentId);
+
+        var generatedTest = await _dbContext.GeneratedTest
+            .Include(gt => gt.Test)
+            .FirstOrDefaultAsync(gt => gt.Id == generatedTestId && gt.StudentId == studentId);
+
+        if (student == null || generatedTest == null)
+        {
+            throw new NotFoundException();
+        }
+
+        var studentQuestions = await _dbContext.StudentQuestions
+            .Include(sq => sq.Question)
+            .Where(sq => sq.GeneratedTestId == generatedTestId)
+            .ToListAsync();
+
+        // Check if the student has answered all the questions
+        bool allQuestionsAnswered = studentQuestions.All(sq => sq.AnswerId != null);
+        if (!allQuestionsAnswered)
+        {
+            throw new BadHttpRequestException("Not all questions have been answered by the student.");
+        }
+
+
+        // Calculate the number of correct answers
+        int numberOfCorrectAnswers = 0;
+        foreach (var studentQuestion in studentQuestions)
+        {
+            var question = studentQuestion.Question;
+            var correctAnswer = await _dbContext.Answers
+                .FirstOrDefaultAsync(a => a.QuestionId == question.Id && a.AnswerText == question.CorrectAnswer);
+
+            if (correctAnswer != null && studentQuestion.AnswerId == correctAnswer.Id)
+            {
+                numberOfCorrectAnswers++;
+            }
+        }
+
+        int totalNumberOfQuestionsPerGeneratedQuiz = studentQuestions.Count;
+
+        // Calculate the result as a percentage
+        double resultPercentage = (double)numberOfCorrectAnswers / totalNumberOfQuestionsPerGeneratedQuiz * 100;
+
+        return resultPercentage;
+    }
+
     public async Task<GeneratedTestDto> GetGeneratedTest(int studentId, int testId)
     {
         var generatedTest = await _dbContext.GeneratedTest
@@ -230,3 +278,255 @@ public class GeneratedAnswerDto
     public string Identifier { get; set; }
     public string AnswerText { get; set; }
 }
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+    
+    
+   
+
+    
+    
+        
+        
+
+        
+        
+
+        
+        
+            
+            
+            
+            
+                
+        
+                
+
+                
+                
+                    
+                 
+                 
+                     
+                 
+
+            
+			
+
+            
+          
+          
+
+          
+
+          
+            
+                
+                
+           
+
+            
+            
+            
+
+            
+            
+            
+                
+                
+                    
+                    
+         
+
+                
+            
+
+            
+
+            
+        
+        
+            
+        
+    
+
+    
+    
+  
+        
+
+        
+        
+            
+        
+
+        
+        
+
+        
+            
+        
+
+        
+        
+
+        
+        
+            
+        
+
+        
+        
+            
+        
+
+        
+        
+
+        
+
+    
+    
+        
+            
+            
+            
+            
+
+        
+        
+            
+            
+              
+            
+            
+
+        
+        
+                           
+                
+                
+               
+
+            
+            
+                
+            
+
+            
+                
+                
+                
+                
+        
+
+        
+        
+            
+            
+            
+            
+            
+            
+            
+                
+                
+                
+                
+                
+                
+                
+                    
+                    
+                    
+                
+        
+
+        
+    
+
+    
+    
+        
+
+        
+            
+            
+
+        
+        
+            
+        
+
+        
+            
+            
+            
+
+        
+        
+        
+        
+            
+        
+
+
+        
+        
+        
+        
+            
+            
+                
+
+            
+            
+            
+        
+
+
+        
+        
+
+        
+    
+
+    
+    
+        
+    
+
+    
+   
+    
+        
+    
+
+
+
+ 
+
+    
+    
+    
+    
+   
+
+
+
+    
+    
+    
+
+    
