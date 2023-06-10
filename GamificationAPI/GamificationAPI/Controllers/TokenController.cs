@@ -34,7 +34,7 @@ namespace GamificationAPI.Controllers
                 return BadRequest("User credentials are required.");
             }
 
-            if (string.IsNullOrEmpty(userCredentials.Id))
+            if (string.IsNullOrEmpty(userCredentials.UserId))
             {
                 return BadRequest("UserID is required.");
             }
@@ -44,7 +44,7 @@ namespace GamificationAPI.Controllers
                 return BadRequest("Password is required.");
             }
 
-            User user =  _userService.GetUserById(userCredentials.Id);
+            User user =  _userService.GetUserById(userCredentials.UserId);
             if(user == null || user.Role == null || user.Password != userCredentials.Password)
             {
                 return BadRequest("Incorrect user data.");
@@ -54,7 +54,7 @@ namespace GamificationAPI.Controllers
 
             List<Claim> claims = new List<Claim>
         {
-            new Claim(ClaimTypes.Name, user.Id),
+            new Claim(ClaimTypes.Name, user.UserId),
             new Claim(ClaimTypes.Role, user.Role.Name)
         };
 

@@ -19,7 +19,7 @@ public class UserControllerTests
 
         _testUser = new User
         {
-            Id = "testId",
+            UserId = "testId",
             Password = "testPassword",
             IsVerified = false
         };
@@ -29,9 +29,9 @@ public class UserControllerTests
     [Fact]
     public async Task GetUser_ReturnsNotFound_WhenUserDoesNotExist()
     {
-        _userServiceMock.Setup(x => x.UserExistsAsync(_testUser.Id)).ReturnsAsync(false);
+        _userServiceMock.Setup(x => x.UserExistsAsync(_testUser.UserId)).ReturnsAsync(false);
 
-        var result = await _userController.GetUser(_testUser.Id);
+        var result = await _userController.GetUser(_testUser.UserId);
 
         Assert.IsType<NotFoundResult>(result);
     }
@@ -40,10 +40,10 @@ public class UserControllerTests
     [Fact]
     public async Task GetUser_ReturnsNotFound_WhenUserIsNull()
     {
-        _userServiceMock.Setup(x => x.UserExistsAsync(_testUser.Id)).ReturnsAsync(true);
-        _userServiceMock.Setup(x => x.GetUserByIdAsync(_testUser.Id)).ReturnsAsync((User)null);
+        _userServiceMock.Setup(x => x.UserExistsAsync(_testUser.UserId)).ReturnsAsync(true);
+        _userServiceMock.Setup(x => x.GetUserByIdAsync(_testUser.UserId)).ReturnsAsync((User)null);
 
-        var result = await _userController.GetUser(_testUser.Id);
+        var result = await _userController.GetUser(_testUser.UserId);
 
         Assert.IsType<NotFoundResult>(result);
     }
@@ -65,9 +65,9 @@ public class UserControllerTests
     [Fact]
     public async Task DeleteUser_ReturnsNotFound_WhenUserDoesNotExist()
     {
-        _userServiceMock.Setup(x => x.GetUserByIdAsync(_testUser.Id)).ReturnsAsync((User)null);
+        _userServiceMock.Setup(x => x.GetUserByIdAsync(_testUser.UserId)).ReturnsAsync((User)null);
 
-        var result = await _userController.DeleteUser(_testUser.Id);
+        var result = await _userController.DeleteUser(_testUser.UserId);
 
         Assert.IsType<NotFoundObjectResult>(result);
     }
@@ -76,9 +76,9 @@ public class UserControllerTests
     [Fact]
     public async Task CreateUser_ReturnsBadRequest_WhenUserIdExists()
     {
-        UserCredentials userCredentials = new UserCredentials { Id = _testUser.Id, Password = _testUser.Password };
+        UserCredentials userCredentials = new UserCredentials { UserId = _testUser.UserId, Password = _testUser.Password };
 
-        _userServiceMock.Setup(x => x.UserExistsAsync(userCredentials.Id)).ReturnsAsync(true);
+        _userServiceMock.Setup(x => x.UserExistsAsync(userCredentials.UserId)).ReturnsAsync(true);
 
         var result = await _userController.CreateUser(userCredentials);
 

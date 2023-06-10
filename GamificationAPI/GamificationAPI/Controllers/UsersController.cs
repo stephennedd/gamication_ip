@@ -47,15 +47,15 @@ namespace GamificationToIP.Controllers
 
         // GET: api/Users/5
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetUser(string id)
+        [HttpGet("{UserId}")]
+        public async Task<IActionResult> GetUser(string UserId)
         {
-            if (await _userService.UserExistsAsync(id) == false)
+            if (await _userService.UserExistsAsync(UserId) == false)
             {
                 return NotFound();
             }
 
-            var User = await _userService.GetUserByIdAsync(id);
+            var User = await _userService.GetUserByIdAsync(UserId);
             if (User == null)
             {
                 return NotFound();
@@ -71,13 +71,13 @@ namespace GamificationToIP.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (await _userService.UserExistsAsync(userCredentials.Id))
+                if (await _userService.UserExistsAsync(userCredentials.UserId))
                 {
                     return BadRequest("User with this ID already exists");
                 }
 
-                User newUser = new User { Id = userCredentials.Id, Password = userCredentials.Password };
-                if (IsDigitsOnly(userCredentials.Id))
+                User newUser = new User { UserId = userCredentials.UserId, Password = userCredentials.Password };
+                if (IsDigitsOnly(userCredentials.UserId))
                 {
                     newUser.Role = _context.Roles.FirstOrDefault(x => x.Id == 1);
                 }
@@ -87,7 +87,7 @@ namespace GamificationToIP.Controllers
                 }
 
                 await _userService.AddUserAsync(newUser);
-                return CreatedAtAction("GetUser", new { id = newUser.Id }, newUser);
+                return CreatedAtAction("GetUser", new { UserId = newUser.UserId }, newUser);
             }
             return BadRequest();
         }
@@ -124,9 +124,9 @@ namespace GamificationToIP.Controllers
 
         // PUT: api/Users/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUser(string id, User User)
+        public async Task<IActionResult> UpdateUser(string UserId, User User)
         {
-            if (id != User.Id)
+            if (UserId != User.UserId)
             {
                 return BadRequest();
             }
@@ -135,7 +135,7 @@ namespace GamificationToIP.Controllers
             {
                 try
                 {
-                    if (await _userService.UserExistsAsync(User.Id) == false)
+                    if (await _userService.UserExistsAsync(User.UserId) == false)
                     {
                         return NotFound("User with this ID does not exist");
                     }
@@ -153,21 +153,21 @@ namespace GamificationToIP.Controllers
         // DELETE: api/Users/5
         [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(string id)
+        public async Task<IActionResult> DeleteUser(string UserId)
         {
 
-            if (await _userService.UserExistsAsync(id) == false)
+            if (await _userService.UserExistsAsync(UserId) == false)
             {
                 return NotFound("User with this ID does not exist");
             }
 
-            var User = await _userService.GetUserByIdAsync(id);
+            var User = await _userService.GetUserByIdAsync(UserId);
             if (User == null)
             {
                 return NotFound();
             }
 
-            await _userService.DeleteUserAsync(id);
+            await _userService.DeleteUserAsync(UserId);
 
             return Ok();
         }

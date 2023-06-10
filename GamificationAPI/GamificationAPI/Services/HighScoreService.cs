@@ -26,7 +26,7 @@ public class HighScoreService : IHighScores
         .FirstOrDefaultAsync(l => l.Name == leaderboardName);
     if (leaderboard != null)
     {
-        HighScore? highScoreInDB = _dbContext.HighScores.FirstOrDefault(x => x.User.Id == newHighScore.User.Id);
+        HighScore? highScoreInDB = _dbContext.HighScores.FirstOrDefault(x => x.User.UserId == newHighScore.User.UserId);
         
         if (highScoreInDB != null)
         {
@@ -43,11 +43,11 @@ public class HighScoreService : IHighScores
     }
 }
 
-    public async Task<List<HighScore>> GetHighScoreByStudentIdAsync(string studentId)
+    public async Task<List<HighScore>> GetHighScoreByStudentIdAsync(string UserId)
     {
         return await _dbContext.Set<HighScore>()
             .Include(h => h.User)
-            .Where(h => h.User.Id == studentId)
+            .Where(h => h.User.UserId == UserId)
             .ToListAsync();
     }
 
@@ -65,7 +65,7 @@ public class HighScoreService : IHighScores
             .FirstOrDefaultAsync(l => l.Name == leaderboardName);
         if (leaderboard != null)
         {
-            HighScore? highScoreInDB = _dbContext.HighScores.FirstOrDefault(x => x.User.Id == highScore.User.Id);
+            HighScore? highScoreInDB = _dbContext.HighScores.FirstOrDefault(x => x.User.UserId == highScore.User.UserId);
             if (highScoreInDB != null)
             {
                 if (highScoreInDB.Score < highScore.Score)
