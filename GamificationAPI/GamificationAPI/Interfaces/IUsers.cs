@@ -6,12 +6,12 @@ namespace GamificationAPI.Interfaces
     public interface IUsers
     {
         Task<List<User>> GetUsersAsync();
-        Task<User> GetUserByIdAsync(string id);
+        Task<User> GetUserByIdAsync(string UserId);
         Task AddUserAsync(User User);
         Task UpdateUserAsync(User User);
-        Task DeleteUserAsync(string id);
+        Task DeleteUserAsync(string UserId);
         User GetUserById(string id);
-        Task<bool> UserExistsAsync(string id);
-        Task<bool> VerifyUser(string id, string code);
+        Task<bool> UserExistsAsync(string UserId);
+        Task<bool> VerifyUser(string UserId, string code);
     }
 }

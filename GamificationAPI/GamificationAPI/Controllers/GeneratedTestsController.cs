@@ -1,4 +1,4 @@
-﻿
+﻿/*
 using GamificationAPI.Interfaces;
 using GamificationAPI.Models;
 using GamificationToIP.Context;
@@ -122,3 +122,4 @@ public class GenerateUpdateStudentAnswer
 { 
     public int AnswerId { get; set; }
 }
+*/

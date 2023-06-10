@@ -48,7 +48,7 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddTransient<ILeaderboards, LeaderboardService>();
 builder.Services.AddTransient<IUsers, UserService>();
 builder.Services.AddTransient<IHighScores, HighScoreService>();
-builder.Services.AddTransient<IGeneratedTests, GeneratedTestService>();
+//builder.Services.AddTransient<IGeneratedTests, GeneratedTestService>();
 builder.Services.AddTransient<ITests, TestService>();
 builder.Services.AddTransient<IStudentAnswers, StudentAnswerService>();
 builder.Services.AddTransient<IStudentQuestions, StudentQuestionService>();

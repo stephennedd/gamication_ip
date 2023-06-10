@@ -59,7 +59,7 @@ namespace GamificationAPI.Controllers
             };
 
 
-            if (await _leaderboardService.CheckIfStudentHasHighScoreInLeadeboard(highScore.User.Id, leaderboardName) == true)
+            if (await _leaderboardService.CheckIfStudentHasHighScoreInLeadeboard(highScore.User.UserId, leaderboardName) == true)
             {
                 if (await _highScoreService.CheckIfItsHighScore(highScore, leaderboardName) == true)
                 {

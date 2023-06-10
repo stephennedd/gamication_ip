@@ -26,30 +26,30 @@
   ],
   "users": [
     {
-      "Id": "1111",
+      "UserId": "1111",
       "Password": "password123",
       "RoleId": "1",
       "GroupId": "1"
     },
     {
-      "Id": "2222",
+      "UserId": "2222",
       "Password": "password123",
       "RoleId": "1",
       "GroupId": "1"
     },
     {
-      "Id": "3333",
+      "UserId": "3333",
       "Password": "password123",
       "RoleId": "1",
       "GroupId": "2"
     },
     {
-      "Id": "JohnDoe",
+      "UserId": "JohnDoe",
       "Password": "password123",
       "RoleId": "2"
     },
     {
-      "Id": "Admin",
+      "UserId": "Admin",
       "Password": "password123",
       "RoleId": "3"
     }
