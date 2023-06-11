@@ -22,11 +22,14 @@ namespace GamificationToIP.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IUsers _userService;
+        private readonly IEmails _emailService;
 
-        public UsersController(ApplicationDbContext context, IUsers userService)
+        public UsersController(ApplicationDbContext context, IUsers userService, IEmails emailService)
         {
             _context = context;
+            _emailService = emailService;
             _userService = userService;
+            _emailService = emailService;
         }
 
         // GET: api/Users
@@ -87,6 +90,9 @@ namespace GamificationToIP.Controllers
                 }
 
                 await _userService.AddUserAsync(newUser);
+                //TODO: Send email with verification token to UserId + @domain
+                EmailDto Email = new EmailDto { To = "brain13@ethereal.email", Subject = "Verify your account", Body = $"Your verification token is: {newUser.VerificationCode}" };
+                _emailService.SendEmail(Email);
                 return CreatedAtAction("GetUser", new { UserId = newUser.UserId }, newUser);
             }
             return BadRequest();
