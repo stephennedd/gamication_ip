@@ -99,9 +99,6 @@ namespace GamificationAPI.Data.Migrations
                     b.Property<int>("StudentId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("StudentId1")
-                        .HasColumnType("integer");
-
                     b.Property<int>("TestId")
                         .HasColumnType("integer");
 
@@ -110,7 +107,7 @@ namespace GamificationAPI.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("StudentId1");
+                    b.HasIndex("StudentId");
 
                     b.HasIndex("TestId");
 
@@ -385,7 +382,7 @@ namespace GamificationAPI.Data.Migrations
                 {
                     b.HasOne("BulkyBookWeb.Models.Student", "Student")
                         .WithMany()
-                        .HasForeignKey("StudentId1")
+                        .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -476,7 +473,7 @@ namespace GamificationAPI.Data.Migrations
                         .WithMany("UserResults")
                         .HasForeignKey("TestId1");
 
-                    b.HasOne("GamificationToIP.Models.User", "student")
+                    b.HasOne("BulkyBookWeb.Models.Student", "student")
                         .WithMany()
                         .HasForeignKey("studentId")
                         .OnDelete(DeleteBehavior.Cascade)

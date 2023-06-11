@@ -89,17 +89,15 @@ public class LeaderboardService : ILeaderboards
         var leaderboard = await GetLeaderboardByNameAsync(name);
         if (leaderboard != null)
         {
-            var x = await _dbContext.Set<HighScore>()
-               .Include(h => h.User)
-               .Where(h => h.User.UserId == studentId)
-               .ToListAsync();
+            var x = leaderboard.HighScores.FirstOrDefault(h => h.User.UserId == studentId);
             if (x != null)
             {
+                Console.WriteLine(x.Score);
                 return true;
             }
 
-
         }
+        Console.WriteLine("nima");
         return false;
     }
 
