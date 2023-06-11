@@ -14,6 +14,14 @@ button {
     --textColor: #c6c5bf;
 }
 
+.correct {
+    border-color: lightgreen;
+}
+
+.wrong {
+    border-color: lightcoral;
+}
+
 #admin-section {
     display: none;
 }

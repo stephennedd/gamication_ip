@@ -91,42 +91,64 @@ handlePageChange();
 // Handle the URL hash change event
 window.addEventListener('hashchange', handlePageChange);
 
+// Quiz creation form
+$(document).ready(function () {
+    // Counter to keep track of the number of questions
+    let questionCounter = 0;
 
-// javascript for the quiz creation page
-var fieldCounter = 2;
-
-function addFormField() {
-    var dynamicFieldsDiv = document.getElementById('dynamicFields');
-
-    // Create a new form group
-    var formGroup = document.createElement('div');
-    formGroup.classList.add('form-group');
-
-    // Create a new input element
-    var input = document.createElement('input');
-    input.type = 'text';
-    input.classList.add('form-control');
-    input.classList.add('mb-2');
-    input.name = 'question' + fieldCounter;
-    input.placeholder = 'Question ' + fieldCounter;
-
-    // Append the input element to the form group
-    formGroup.appendChild(input);
-
-    // Append the form group to the dynamicFields div
-    dynamicFieldsDiv.appendChild(formGroup);
-
-    fieldCounter++;
-}
-
-function removeFormField() {
-    var dynamicFieldsDiv = document.getElementById('dynamicFields');
-
-    if (fieldCounter > 2) {
-    // Remove the last form group
-    dynamicFieldsDiv.removeChild(dynamicFieldsDiv.lastChild);
-    
-    fieldCounter--;
+    // Function to generate the HTML for a question and its answers
+    function generateQuestionHTML(questionId) {
+        const colors = ['correct', 'wrong'];
+        return `
+            <div class="question mb-3">
+            <input type="text" name="question[${questionId}]" class="form-control" placeholder="Enter a question" required>
+            <div class="mt-2 mb-3 me-3">
+                <input class="form-control mx-3 mb-1 ${colors[0]}" type="text" name="answer[${questionId}][]" placeholder="Correct answer" required>
+                <input class="form-control mx-3 mb-1 ${colors[1]}" type="text" name="answer[${questionId}][]" placeholder="Wrong answer" required>
+                <input class="form-control mx-3 mb-1 ${colors[1]}" type="text" name="answer[${questionId}][]" placeholder="Wrong answer" required>
+                <input class="form-control mx-3 ${colors[1]}" type="text" name="answer[${questionId}][]" placeholder="Wrong answer" required>
+            </div>
+            </div>
+        `;
     }
 
-}
+    // Event handler for the "Add Question" button click
+    $('#add-question-btn').click(function () {
+      questionCounter++;
+      const questionHTML = generateQuestionHTML(questionCounter);
+      $('#questions-container').append(questionHTML);
+    });
+
+    // Event handler for the "Remove Question" button click
+    $('#remove-question-btn').click(function () {
+        if (questionCounter > 0) {
+            $('#questions-container').children().last().remove();
+            questionCounter--;
+        }
+    });
+
+    // Event handler for the form submission
+    $('#quiz-form').submit(function (e) {
+        //get the form data
+        var formData = $(this).serializeArray();
+        // Convert form data to JSON
+        const jsonData = {};
+        $(formData).each(function(index, field) {
+          if (jsonData[field.name] !== undefined) {
+            if (!jsonData[field.name].push) {
+              jsonData[field.name] = [jsonData[field.name]];
+            }
+            jsonData[field.name].push(field.value || '');
+          } else {
+            jsonData[field.name] = field.value || '';
+          }
+        });
+
+        // Log JSON data
+        console.log(JSON.stringify(jsonData));
+
+        console.log('Form submitted');
+      e.preventDefault(); // Prevent the form from submitting for now
+      // TODO: Submit the form using Ajax
+    });
+  });

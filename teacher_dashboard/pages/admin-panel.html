@@ -21,14 +21,14 @@
         <span class="navbar-toggler-icon" data-bs-target="#sidebar"></span>
       </button>
       <a class="navbar-brand" href="#">
-        <img src="../assets/images/lg_saxion_white.png" alt="logo-saxion" height="55px" />
+        <img src="../assets/images/lg_saxion_white.png" alt="logo-saxion" height="55" />
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <input type="checkbox" class="btn-check" id="admin-checkbox" autocomplete="off">
+        <input type="checkbox" class="btn-check" id="admin-checkbox">
         <label class="btn btn-outline-light" for="admin-checkbox">Admin</label><br>
         <form class="d-flex ms-auto my-3 my-lg-0" role="search">
           <div class="input-group my-lg-0">
@@ -101,19 +101,10 @@
             <div class="collapse" id="quiz">
               <ul class="navbar-nav ps-3">
                 <li>
-                  <a href="#create-quiz" class="nav-link px-3" id="create-quiz-link">
-                    <span>Create Quiz</span>
-                  </a>
-                </li>
-                <li>
                   <a href="#edit-quiz" class="nav-link px-3" id="edit-quiz-link">
                     <span>Edit Quiz</span>
                   </a>
                 </li>
-                <li>
-                  <a href="#delete-quiz" class="nav-link px-3" id="delete-quiz-link">
-                    <span>Delete Quiz</span>
-                  </a>
               </ul>
             </div>
           </li>
@@ -187,6 +178,16 @@
             <div class="collapse" id="admin_options">
               <ul class="navbar-nav ps-3">
                 <li>
+                  <a href="#create-quiz" class="nav-link px-3" id="create-quiz-link">
+                    <span>Create Quiz</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#delete-quiz" class="nav-link px-3" id="delete-quiz-link">
+                    <span>Delete Quiz</span>
+                  </a>
+                </li>
+                <li>
                   <a href="#add-student" class="nav-link px-3" id="add-student-link">
                     <span>Add Student</span>
                   </a>
@@ -199,11 +200,6 @@
                 <li>
                   <a href="#add-group" class="nav-link px-3" id="remove-group-link">
                     <span>Add Group</span>
-                  </a>
-                </li>
-                <li>
-                  <a href="#edit-student" class="nav-link px-3" id="edit-student-link">
-                    <span>Edit Student</span>
                   </a>
                 </li>
                 <li>
@@ -354,12 +350,12 @@
           <div class="card">
             <div class="card-header">Enter quiz details</div>
             <div class="card-body">
-              <form action="">
+              <form id="quiz-form">
                 <div class="row">
                   <div class="col-md-12">
                     <div class="mb-3">
                       <label for="quiz-name" class="form-label">Quiz name</label>
-                      <input type="text" class="form-control" id="quiz-name" placeholder="Quiz name">
+                      <input type="text" name="quiz-name" class="form-control" id="quiz-name" placeholder="Quiz name">
                     </div>
                   </div>
                 </div>
@@ -368,42 +364,37 @@
                   <div class="col-md-12">
                     <div class="mb-3">
                       <label for="quiz-name" class="form-label">Assignment</label>
-                      <select class="form-select" aria-label="Default select example">
-                        <option selected>Select an assignment</option>
-                        <option value="1">Assignment 1</option>
-                        <option value="2">Assignment 2</option>
-                        <option value="3">Assignment 3</option>
-                        <option value="4">Assignment 4</option>
-                        <option value="5">Assignment 5</option>
-                        <option value="6">Assignment 6</option>
+                      <select class="form-select" name="quiz-subject" aria-label="Default select example">
+                        <option selected>Select a Subject</option>
+                        <option value="methods_1">Methods 1: Methods with arguments</option>
+                        <option value="variables_1">Variables 1: Primitive variables</option>
+                        <option value="methods_2">Methods 2: Methods with return values</option>
+                        <option value="if_statements_1">IF-statements 1: if-else statements</option>
+                        <option value="loops_1">Loops 1: Basic while loops</option>
+                        <option value="if_statements_2">IF-statements 2: Boolean logic</option>
                       </select>
                     </div>
                   </div>
                 </div>
 
-
                 <div class="row">
-                  <div class="col-md-12" id="dynamicFields">
+                  <div class="col-md-12">
                     <div class="mb-2">
                       <label for="quiz-questions" class="form-label">Quiz questions</label>
-                      <input type="text" class="form-control mb-2" id="quiz-question" placeholder="Question 1">
-                      <!-- Dynamically added fields will appear here -->
+                      <div id="questions-container">
+                        <!-- Questions and answers will be added dynamically here -->
+                      </div>
+                      <button type="button" class="btn btn-primary mt-3" id="add-question-btn">Add Question</button>
+                      <button type="button" class="btn btn-danger mt-3" id="remove-question-btn">Remove
+                        Question</button>
                     </div>
                   </div>
-                </div>
 
-
-                <div class="row mb-1">
-                  <div class="col-md-12 text-start">
-                    <button type="button" class="btn btn-primary" onclick="addFormField()">Add Question</button>
-                    <button type="button" class="btn btn-danger" onclick="removeFormField()">Remove Question</button>
+                  <div class="row">
+                    <div class="col-md-12 text-end">
+                      <button type="submit" class="btn btn-success">Submit Quiz</button>
+                    </div>
                   </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-12 text-end">
-                    <button type="submit" class="btn btn-success">Create Quiz</button>
-                  </div>
-                </div>
               </form>
             </div>
           </div>
@@ -469,6 +460,10 @@
                   </div>
               </form>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
   </main>
   <!-- Edit Quiz-->
@@ -512,11 +507,15 @@
           </div>
         </div>
       </div>
+      <import src="remove_quiz.html">
   </main>
   <!-- Remove Quiz-->
 
 
 
+  <script>
+
+  </script>
   <script src="../js/bootstrap.bundle.min.js"></script>
   <script src="../js/jquery-3.7.0.min.js"></script>
   <script src="../js/jquery.dataTables.min.js"></script>
