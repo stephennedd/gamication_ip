@@ -121,8 +121,18 @@
             <div class="collapse" id="student">
               <ul class="navbar-nav ps-3">
                 <li>
-                  <a href="#edit-student" class="nav-link px-3" id="edit-student-link">
-                    <span>Edit Student</span>
+                  <a href="#add-student" class="nav-link px-3" id="add-student-link">
+                    <span>Add Student</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#update-student" class="nav-link px-3" id="update-student-link">
+                    <span>Update Student</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#delete-student" class="nav-link px-3" id="delete-student-link">
+                    <span>Remove Student</span>
                   </a>
                 </li>
                 <li>
@@ -151,7 +161,7 @@
                   </a>
                 </li>
                 <li>
-                  <a href="#remove-leaderboard" class="nav-link px-3" id="remove-leaderboard-link">
+                  <a href="#delete-leaderboard" class="nav-link px-3" id="remove-leaderboard-link">
                     <span>Remove leaderboard</span>
                   </a>
                 </li>
@@ -185,11 +195,6 @@
                 <li>
                   <a href="#delete-quiz" class="nav-link px-3" id="delete-quiz-link">
                     <span>Delete Quiz</span>
-                  </a>
-                </li>
-                <li>
-                  <a href="#add-student" class="nav-link px-3" id="add-student-link">
-                    <span>Add Student</span>
                   </a>
                 </li>
                 <li>
@@ -479,7 +484,7 @@
           <div class="card">
             <div class="card-header">Remove a quiz</div>
             <div class="card-body">
-              <form action="">
+              <form>
                 <div class="row">
                   <div class="col-md-12">
                     <div class="mb-3">
@@ -511,11 +516,234 @@
   </main>
   <!-- Remove Quiz-->
 
+  <!-- Add Student -->
+  <main class="pt-3" id="add-student">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12 fw-bold fs-4">Add Student</div>
+      </div>
+      <div class="row mt-2">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header">Enter student details</div>
+            <div class="card-body">
+              <form id="student-form">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="mb-3">
+                      <label for="first-name" class="form-label">Student name</label>
+                      <input type="text" name="first-name" class="form-control" id="first-name" placeholder="First name"
+                        required>
+                      <input type="text" name="middle-name" class="form-control mt-2" id="middle-name"
+                        placeholder="Middle name">
+                      <input type="text" name="last-name" class="form-control mt-2" id="last-name"
+                        placeholder="Last name" required>
+                    </div>
+                  </div>
+                </div>
 
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="mb-3">
+                      <label for="student-email" class="form-label">Email</label>
+                      <input type="email" name="email" class="form-control" id="student-email"
+                        placeholder="Student email" required>
+                    </div>
+                  </div>
+                </div>
 
-  <script>
+                <div class="row">
+                  <div class="col-md-12 text-end">
+                    <button type="submit" class="btn btn-success">Add Student</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <!-- Add Student -->
 
-  </script>
+  <!-- Remove Student -->
+  <main class="pt-3" id="delete-student">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12 fw-bold fs-4">Delete student</div>
+      </div>
+
+      <div class="row mt-2">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header">Select student</div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-striped" id="student-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Student ID</th>
+                      <th scope="col">Student name</th>
+                      <th scope="col">Email</th>
+                      <th class="text-center" scope="col">Remove</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row">484629</th>
+                      <td>Stephen Nedd</td>
+                      <td>484629@student.saxion.nl</td>
+                      <td class="text-center"><button type="button" class="btn-sm btn-outline-danger"
+                          onclick="confirmDelete(this)">Remove</button></td>
+                    </tr>
+                    <tr>
+                      <th scope="row">123456</th>
+                      <td>John Doe</td>
+                      <td>123456@student.saxion.nl</td>
+                      <td class="text-center"><button type="button" class="btn-sm btn-outline-danger"
+                          onclick="confirmDelete(this)">Remove</button></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <!-- Remove Student -->
+
+  <!-- Update Student -->
+  <main class="pt-3" id="update-student">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12 fw-bold fs-4">Update student</div>
+      </div>
+
+      <div class="row pt-2">
+        <div class="col-md-12">
+          <div class="mb-3">
+            <div class="card">
+              <div class="card-header">Select a student</div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-striped" id="student-table">
+                    <thead>
+                      <tr>
+                        <th scope="col">Student ID</th>
+                        <th scope="col">Student name</th>
+                        <th scope="col">Email</th>
+                        <th class="text-center" scope="col">Select</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row">484629</th>
+                        <td>Stephen Nedd</td>
+                        <td>484629@student.saxion.nl</td>
+                        <td class="text-center"><button type="button" class="btn-sm btn-outline-primary"
+                            onclick="updateStudent(this)">Update</button></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </main>
+  <!-- Update Student modal-->
+  <div class="modal fade" id="update-student-modal" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Enter the new student information</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="update-student">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="mb-3"><label for="student-name" class="form-label">Student name</label>
+                  <input type="text" name="first-name" class="form-control" id="first-name" placeholder="First name">
+                  <input type="text" name="middle-name" class="form-control mt-2" id="middle-name"
+                    placeholder="Middle name">
+                  <input type="text" name="last-name" class="form-control mt-2" id="last-name" placeholder="Last name">
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="mb-3">
+                  <label for="student-password" class="form-label">Student password</label>
+                  <input type="password" name="password" class="form-control" id="student-password"
+                    placeholder="New password">
+                </div>
+
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="confirmUpdate(this)">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Update Student modal-->
+  <!-- Update Student -->
+
+  <!-- Ban student -->
+  <main class="pt-3" id="ban-student">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12 fw-bold fs-4">Ban student</div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="mb-3">
+            <div class="card">
+              <div class="card-header">
+                Select a student
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-striped" id="student-table">
+                    <thead>
+                      <tr>
+                        <th scope="col">Student ID</th>
+                        <th scope="col">Student name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">isBanned</th>
+                        <th class="text-center" scope="col">Select</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row">484629</th>
+                        <td>Stephen Nedd</td>
+                        <td>484629@student.saxion.nl</td>
+                        <td>No</td>
+                        <td class="text-center"><button type="button" class="btn-sm btn-outline-warning"
+                            onclick="banStudent(this)">Ban</button></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </main>
+  <!-- Ban student -->
+
   <script src="../js/bootstrap.bundle.min.js"></script>
   <script src="../js/jquery-3.7.0.min.js"></script>
   <script src="../js/jquery.dataTables.min.js"></script>

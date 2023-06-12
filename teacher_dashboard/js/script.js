@@ -43,21 +43,21 @@ if (event.target.matches('.nav-link')) {
 
 // Function to show the specified section and update the active link
 function showSection(sectionId, linkId) {
-// Hide all sections
-document.querySelectorAll('main').forEach((section) => {
-    section.style.display = 'none';
-});
+    // Hide all sections
+    document.querySelectorAll('main').forEach((section) => {
+        section.style.display = 'none';
+    });
 
-// Show the selected section
-document.getElementById(sectionId).style.display = 'block';
+    // Show the selected section
+    document.getElementById(sectionId).style.display = 'block';
 
-// Remove the 'active' class from all links
-document.querySelectorAll('.nav-link').forEach((link) => {
-    link.classList.remove('active');
-});
+    // Remove the 'active' class from all links
+    document.querySelectorAll('.nav-link').forEach((link) => {
+        link.classList.remove('active');
+    });
 
-// Add the 'active' class to the selected link
-document.getElementById(linkId).classList.add('active');
+    // Add the 'active' class to the selected link
+    document.getElementById(linkId).classList.add('active');
 }
 
  // Function to handle the page load or URL hash change event
@@ -71,7 +71,10 @@ function handlePageChange() {
       '#edit-quiz': { sectionId: 'edit-quiz', linkId: 'edit-quiz-link' },
       '#student-results': { sectionId: 'student-results', linkId: 'student-results-link' },
       '#delete-quiz': { sectionId: 'delete-quiz', linkId: 'delete-quiz-link' },
-
+      '#add-student': { sectionId: 'add-student', linkId: 'add-student-link' },
+      '#delete-student': { sectionId: 'delete-student', linkId: 'delete-student-link' },
+      '#update-student': { sectionId: 'update-student', linkId: 'update-student-link' },
+      '#ban-student': { sectionId: 'ban-student', linkId: 'ban-student-link' },
     };
   
     // Default section and link IDs if the hash doesn't match any mapping
@@ -152,3 +155,63 @@ $(document).ready(function () {
       // TODO: Submit the form using Ajax
     });
   });
+
+  // Adding a student
+    $(document).ready(function () {
+        // Event handler for the form submission
+        $('#student-form').submit(function (e) {
+            //get the form data
+            var formData = $(this).serializeArray();
+            // Convert form data to JSON
+            const jsonData = {};
+            $(formData).each(function(index, field) {
+            if (jsonData[field.name] !== undefined) {
+                if (!jsonData[field.name].push) {
+                jsonData[field.name] = [jsonData[field.name]];
+                }
+                jsonData[field.name].push(field.value || '');
+            } else {
+                jsonData[field.name] = field.value || '';
+            }
+            });
+
+            // Log JSON data
+            console.log(JSON.stringify(jsonData));
+
+            console.log('Form submitted');
+        e.preventDefault(); // Prevent the form from submitting for now
+        // TODO: Submit the form using Ajax
+        });
+    });
+
+    // Deleting a student
+    function confirmDelete(button) {
+        if (confirm("Are you sure you want to delete this student?")) {          
+          // todo: send a delete request to the server
+
+
+          var row = button.parentNode.parentNode; // Get the parent row
+          row.parentNode.removeChild(row); // Remove the row from the table
+        }
+    }
+
+    // Updating a student
+    function updateStudent(button) {
+        // open the modal
+        $('#update-student-modal').modal('show');
+    }
+
+    function confirmUpdate(button) {
+        // todo: send a put request to the server
+
+        
+        // close the modal
+        $('#update-student-modal').modal('hide');
+    }
+
+    // Banning a student
+    function banStudent(button) {
+        if (confirm("Are you sure you want to ban this student?")) {
+            // todo: send a put request to the server
+        }
+    }
