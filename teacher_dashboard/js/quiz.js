@@ -70,8 +70,7 @@ function editQuiz(button) {
     ];
 
     // Get the quiz ID from the row using the data attribute
-    var row = button.closest("tr"); // Get the closest parent <tr> element
-
+    var row = button.parentNode.parentNode; // Get the parent row
     const quizId = row.dataset.quizId;
     var quizName = row.dataset.quizName;
 

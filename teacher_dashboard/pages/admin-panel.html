@@ -359,7 +359,7 @@
                 <div class="row">
                   <div class="col-md-12">
                     <div class="mb-3">
-                      <label for="quiz-name" class="form-label">Quiz name</label>
+                      <label for="quiz-name" class="form-label fw-bold">Quiz name</label>
                       <input type="text" name="quiz-name" class="form-control" id="quiz-name" placeholder="Quiz name"
                         required>
                     </div>
@@ -369,7 +369,7 @@
                 <div class="row">
                   <div class="col-md-12">
                     <div class="mb-3">
-                      <label for="quiz-name" class="form-label">Assignment</label>
+                      <label for="quiz-name" class="form-label fw-bold">Assignment</label>
                       <select class="form-select" name="quiz-subject" aria-label="Default select example" required>
                         <option selected disabled value="">Select an assignment</option>
                         <option value="methods_1">Methods 1: Methods with arguments</option>
@@ -386,7 +386,7 @@
                 <div class="row">
                   <div class="col-md-12">
                     <div class="mb-2">
-                      <label for="quiz-questions" class="form-label">Quiz questions</label>
+                      <label for="quiz-questions" class="form-label fw-bold">Quiz questions</label>
                       <div id="questions-container">
                         <!-- Questions and answers will be added dynamically here -->
                       </div>
@@ -564,7 +564,7 @@
                 <div class="row">
                   <div class="col-md-12">
                     <div class="mb-3">
-                      <label for="first-name" class="form-label">Student name</label>
+                      <label for="first-name" class="form-label fw-bold">Student name</label>
                       <input type="text" name="first-name" class="form-control" id="first-name" placeholder="First name"
                         required>
                       <input type="text" name="middle-name" class="form-control mt-2" id="middle-name"
@@ -578,7 +578,7 @@
                 <div class="row">
                   <div class="col-md-12">
                     <div class="mb-3">
-                      <label for="student-email" class="form-label">Email</label>
+                      <label for="student-email" class="form-label fw-bold">Email</label>
                       <input type="email" name="email" class="form-control" id="student-email"
                         placeholder="Student email" required>
                     </div>
@@ -665,16 +665,20 @@
                     <thead>
                       <tr>
                         <th scope="col">Student ID</th>
-                        <th scope="col">Student name</th>
+                        <th scope="col">First name</th>
+                        <th scope="col">Middle name</th>
+                        <th scope="col">Last name</th>
                         <th scope="col">Email</th>
                         <th class="text-center" scope="col">Select</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr data-student-id="484629" data-student-name="Stephen Nedd"
+                      <tr data-student-id="484629" data-first-name="Stephen" data-middle-name="" data-last-name="Nedd"
                         data-student-email="48429@student.saxion.nl">
                         <th scope="row">484629</th>
-                        <td>Stephen Nedd</td>
+                        <td>Stephen</td>
+                        <td></td>
+                        <td>Nedd</td>
                         <td>484629@student.saxion.nl</td>
                         <td class="text-center"><button type="button" class="btn-sm btn-outline-primary"
                             onclick="updateStudent(this)">Update</button></td>
@@ -701,7 +705,7 @@
           <form id="update-student">
             <div class="row">
               <div class="col-md-12">
-                <div class="mb-3"><label for="student-name" class="form-label">Student name</label>
+                <div class="mb-3"><label for="student-name" class="form-label fw-bold">Student name</label>
                   <input type="text" name="first-name" class="form-control" id="modal-first-name"
                     placeholder="First name">
                   <input type="text" name="middle-name" class="form-control mt-2" id="modal-middle-name"
@@ -715,7 +719,7 @@
             <div class="row">
               <div class="col-md-12">
                 <div class="mb-3">
-                  <label for="student-password" class="form-label">Student password</label>
+                  <label for="student-password" class="form-label fw-bold">Student password</label>
                   <input type="password" name="password" class="form-control" id="modal-student-password"
                     placeholder="New password">
                 </div>

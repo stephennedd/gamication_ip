@@ -41,11 +41,16 @@ function confirmDelete(button) {
 function updateStudent(button) {
     var row = button.parentNode.parentNode; // Get the parent row
     var studentId = row.dataset.studentId;
-    var studentName = row.dataset.studentName;
+    var firstName = row.dataset.firstName;
+    var middleName = row.dataset.middleName;
+    var lastName = row.dataset.lastName;
 
     // open the modal and show the student name
     $('#update-student-modal').modal('show');
-    $('#edit-student-modal-title').text(`Edit Student: ${studentName}`);
+    $('#edit-student-modal-title').text(`Edit Student: ${firstName} ${lastName}`);
+    $('#modal-first-name').val(firstName);
+    $('#modal-middle-name').val(middleName);
+    $('#modal-last-name').val(lastName);
 }
 
 function confirmStudentUpdate(button) {
