@@ -360,7 +360,8 @@
                   <div class="col-md-12">
                     <div class="mb-3">
                       <label for="quiz-name" class="form-label">Quiz name</label>
-                      <input type="text" name="quiz-name" class="form-control" id="quiz-name" placeholder="Quiz name">
+                      <input type="text" name="quiz-name" class="form-control" id="quiz-name" placeholder="Quiz name"
+                        required>
                     </div>
                   </div>
                 </div>
@@ -369,8 +370,8 @@
                   <div class="col-md-12">
                     <div class="mb-3">
                       <label for="quiz-name" class="form-label">Assignment</label>
-                      <select class="form-select" name="quiz-subject" aria-label="Default select example">
-                        <option selected>Select a Subject</option>
+                      <select class="form-select" name="quiz-subject" aria-label="Default select example" required>
+                        <option selected disabled value="">Select an assignment</option>
                         <option value="methods_1">Methods 1: Methods with arguments</option>
                         <option value="variables_1">Variables 1: Primitive variables</option>
                         <option value="methods_2">Methods 2: Methods with return values</option>
@@ -419,58 +420,90 @@
       <div class="row mt-2">
         <div class="col-md-12">
           <div class="card">
-            <div class="card-header">Edit a quiz</div>
+            <div class="card-header">Select a quiz to edit</div>
             <div class="card-body">
-              <form action="">
-                <div class="row">
-                  <div class="col-md-12">
-                    <div class="mb-3">
-                      <label for="quiz-name" class="form-label">Quiz name</label>
-                      <input type="text" class="form-control" id="quiz-name" placeholder="Quiz name">
-                    </div>
-                  </div>
-                </div>
-
-                <div class="row">
-                  <div class="col-md-12">
-                    <div class="mb-3">
-                      <label for="quiz-name" class="form-label">Assignment</label>
-                      <select class="form-select" aria-label="Default select example">
-                        <option selected>Select an assignment</option>
-                        <option value="1">Assignment 1</option>
-                        <option value="2">Assignment 2</option>
-                        <option value="3">Assignment 3</option>
-                        <option value="4">Assignment 4</option>
-                        <option value="5">Assignment 5</option>
-                        <option value="6">Assignment 6</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="row">
-                  <div class="col-md-12" id="dynamicFields">
-                    <div class="mb-3">
-                      <label for="quiz-questions" class="form-label">Quiz questions</label>
-                      <input type="text" class="form-control mb-2" id="quiz-question" placeholder="Question 1">
-                      <!-- Dynamically added fields will appear here -->
-                    </div>
-                  </div>
-                </div>
-
-                <div class="row mb-1">
-                  <div class="col-md-12 text-start">
-                    <button type="button" class="btn btn-primary" onclick="addFormField()">Add Question</button>
-                    <button type="button" class="btn btn-danger" onclick="removeFormField()">Remove Question</button>
-                  </div>
-              </form>
+              <div class="table-responsive">
+                <table class="table" id="quiz-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Quiz name</th>
+                      <th scope="col">Subject</th>
+                      <th scope="col" class="text-center">Number of Questions</th>
+                      <th scope="col" class="text-center">Edit</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr data-quiz-id="1" data-quiz-name="Quiz 1 - Week 1">
+                      <td scope="row">Quiz 1 - Week 1</td>
+                      <td scope="row">Methods 1: Methods with aruguments</td>
+                      <td class="text-center" scope="row">10</td>
+                      <td class="text-center"><button type="button" class="btn-sm btn-outline-success"
+                          onclick="editQuiz(this)">Edit</button></td>
+                    </tr>
+                    <tr data-quiz-id="2" data-quiz-name="Quiz 2 - Week 1">
+                      <td scope="row">Quiz 2 - Week 1</td>
+                      <td scope="row">Variables 1: Primitive variables</td>
+                      <td class="text-center" scope="row">13</td>
+                      <td class="text-center"><button type="button" class="btn-sm btn-outline-success"
+                          onclick="editQuiz(this)">Edit</button></td>
+                    </tr>
+                    <tr data-quiz-id="3" data-quiz-name="Quiz 3 - Week 2">
+                      <td scope="row">Quiz 3 - Week 2</td>
+                      <td scope="row">Methods 2: Methods with return values</td>
+                      <td class="text-center" scope="row">14</td>
+                      <td class="text-center"><button type="button" class="btn-sm btn-outline-success"
+                          onclick="editQuiz(this)">Edit</button></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-
   </main>
+
+  <!-- Edit Quiz modal-->
+  <div class="modal fade" id="edit-quiz-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="edit-quiz-modal-header">Edit quiz</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="edit-quiz">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="mb-3"><label for="quiz-name" class="form-label">Quiz name</label>
+                  <input type="text" name="quiz-name" class="form-control" id="modal-quiz-name"
+                    placeholder="Enter a name">
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="mb-3">
+                  <label for="quiz-questions" class="form-label fw-bold">Quiz questions</label>
+                  <div class="mb-3" id="modal-questions-container">
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" onclick="addQuestionToModal()">Add Question</button>
+          <button type="button" class="btn btn-danger" onclick="removeQuestionFromModal()">Remove Question</button>
+          <button type="button" class="btn btn-success" onclick="confirmQuizUpdate(this)">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Edit Quiz modal-->
   <!-- Edit Quiz-->
 
   <!-- Remove Quiz-->
@@ -638,7 +671,8 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
+                      <tr data-student-id="484629" data-student-name="Stephen Nedd"
+                        data-student-email="48429@student.saxion.nl">
                         <th scope="row">484629</th>
                         <td>Stephen Nedd</td>
                         <td>484629@student.saxion.nl</td>
@@ -660,7 +694,7 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Enter the new student information</h5>
+          <h5 class="modal-title" id="edit-student-modal-title"></h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -668,10 +702,12 @@
             <div class="row">
               <div class="col-md-12">
                 <div class="mb-3"><label for="student-name" class="form-label">Student name</label>
-                  <input type="text" name="first-name" class="form-control" id="first-name" placeholder="First name">
-                  <input type="text" name="middle-name" class="form-control mt-2" id="middle-name"
+                  <input type="text" name="first-name" class="form-control" id="modal-first-name"
+                    placeholder="First name">
+                  <input type="text" name="middle-name" class="form-control mt-2" id="modal-middle-name"
                     placeholder="Middle name">
-                  <input type="text" name="last-name" class="form-control mt-2" id="last-name" placeholder="Last name">
+                  <input type="text" name="last-name" class="form-control mt-2" id="modal-last-name"
+                    placeholder="Last name">
                 </div>
               </div>
             </div>
@@ -680,7 +716,7 @@
               <div class="col-md-12">
                 <div class="mb-3">
                   <label for="student-password" class="form-label">Student password</label>
-                  <input type="password" name="password" class="form-control" id="student-password"
+                  <input type="password" name="password" class="form-control" id="modal-student-password"
                     placeholder="New password">
                 </div>
 
@@ -690,7 +726,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" onclick="confirmUpdate(this)">Save changes</button>
+          <button type="button" class="btn btn-primary" onclick="confirmStudentUpdate(this)">Save changes</button>
         </div>
       </div>
     </div>
@@ -749,6 +785,8 @@
   <script src="../js/jquery.dataTables.min.js"></script>
   <script src="../js/dataTables.bootstrap5.min.js"></script>
   <script src="../js/script.js"></script>
+  <script src="../js/quiz.js"></script>
+  <script src="../js/student.js"></script>
 </body>
 
 </html>
