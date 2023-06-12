@@ -17,6 +17,11 @@ public class HighScoreService : IHighScores
     {
         return await _dbContext.Set<HighScore>()
             .Include(h => h.User)
+            .ThenInclude(u => u.Group)
+            .Include(h => h.User)
+            .ThenInclude(u => u.Role)
+            .Include(h => h.User)
+            .ThenInclude(u => u.Badges)
             .FirstOrDefaultAsync(h => h.Id == id);
     }
     public async Task<bool> CheckIfItsHighScore(HighScore newHighScore, string leaderboardName)
@@ -47,6 +52,11 @@ public class HighScoreService : IHighScores
     {
         return await _dbContext.Set<HighScore>()
             .Include(h => h.User)
+            .ThenInclude(u => u.Group)
+            .Include(h => h.User)
+            .ThenInclude(u => u.Role)
+            .Include(h => h.User)
+            .ThenInclude(u => u.Badges)
             .Where(h => h.User.UserId == UserId)
             .ToListAsync();
     }
@@ -98,6 +108,11 @@ public class HighScoreService : IHighScores
     {
         return await _dbContext.Set<HighScore>()
             .Include(h => h.User)
+            .ThenInclude(u => u.Group)
+            .Include(h => h.User)
+            .ThenInclude(u => u.Role)
+            .Include(h => h.User)
+            .ThenInclude(u => u.Badges)
             .ToListAsync();
     }
 

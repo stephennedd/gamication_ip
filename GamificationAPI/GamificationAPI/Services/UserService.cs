@@ -17,7 +17,7 @@ public class UserService : IUsers
 
     public async Task<User> GetUserByIdAsync(string UserId)
     {
-        return await _dbContext.Users.Include(u => u.Role).Include(u => u.Group).FirstOrDefaultAsync(u => u.UserId == UserId);
+        return await _dbContext.Users.Include(u => u.Role).Include(u => u.Group).Include(u => u.Badges).FirstOrDefaultAsync(u => u.UserId == UserId);
     }
 
 
@@ -47,12 +47,12 @@ public class UserService : IUsers
 
     public async Task<List<User>> GetUsersAsync()
     {
-        return await _dbContext.Users.Include(u => u.Role).Include(u => u.Group).ToListAsync();
+        return await _dbContext.Users.Include(u => u.Role).Include(u => u.Group).Include(u => u.Badges).ToListAsync();
     }
 
     public User GetUserById(string UserId)
     {
-        return _dbContext.Users.Include(u => u.Role).Include(u => u.Group).FirstOrDefault(u => u.UserId == UserId);
+        return _dbContext.Users.Include(u => u.Role).Include(u => u.Group).Include(u => u.Badges).FirstOrDefault(u => u.UserId == UserId);
     }
     public Task<bool> UserExistsAsync(string UserId)
     {
