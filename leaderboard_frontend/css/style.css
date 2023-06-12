@@ -156,6 +156,10 @@ font-size: 24px;
     border-bottom: 2px dashed #00bd1f;
 }
 
+.leaderboard-table th:nth-child(1),
+.leaderboard-table td:nth-child(1) {
+    text-align: center;
+}
 
 .leaderboard-table th:nth-child(2),
 .leaderboard-table td:nth-child(2) {
