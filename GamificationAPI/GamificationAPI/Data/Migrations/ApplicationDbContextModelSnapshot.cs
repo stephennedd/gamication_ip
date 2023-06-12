@@ -74,8 +74,8 @@ namespace GamificationAPI.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("text");
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("imageUrl")
                         .IsRequired()
@@ -140,13 +140,14 @@ namespace GamificationAPI.Data.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("LeaderboardName")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("Score")
                         .HasColumnType("integer");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("text");
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -285,8 +286,8 @@ namespace GamificationAPI.Data.Migrations
                     b.Property<int>("numberOfGivenCorrectAnswers")
                         .HasColumnType("integer");
 
-                    b.Property<string>("studentId")
-                        .HasColumnType("text");
+                    b.Property<int>("studentId")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -329,8 +330,11 @@ namespace GamificationAPI.Data.Migrations
 
             modelBuilder.Entity("GamificationToIP.Models.User", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("text");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("GroupId")
                         .HasColumnType("integer");
@@ -347,6 +351,10 @@ namespace GamificationAPI.Data.Migrations
 
                     b.Property<int>("RoleId")
                         .HasColumnType("integer");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("VerificationCode")
                         .IsRequired()
@@ -393,7 +401,9 @@ namespace GamificationAPI.Data.Migrations
                 {
                     b.HasOne("GamificationAPI.Models.Leaderboard", "Leaderboard")
                         .WithMany("HighScores")
-                        .HasForeignKey("LeaderboardName");
+                        .HasForeignKey("LeaderboardName")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("GamificationToIP.Models.User", "User")
                         .WithMany("HighScores")
@@ -463,9 +473,11 @@ namespace GamificationAPI.Data.Migrations
                         .WithMany("UserResults")
                         .HasForeignKey("TestId1");
 
-                    b.HasOne("GamificationToIP.Models.User", "student")
+                    b.HasOne("BulkyBookWeb.Models.Student", "student")
                         .WithMany()
-                        .HasForeignKey("studentId");
+                        .HasForeignKey("studentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Test");
 

@@ -108,6 +108,11 @@ body {
 	height: 600px;
 }
 
+#game {
+	width: 800px;
+	height: 600px;
+}
+
 /* Animations */
 .move-out {
 	transform: translate3d(0px, 0px, 1000px);
