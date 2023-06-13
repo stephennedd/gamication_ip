@@ -17,5 +17,9 @@ $('#create-leaderboard-form').submit(function (e) {
     console.log('Form submitted');
     e.preventDefault(); // Prevent the form from submitting for now
     
-    
+    //TODO Send the form data to the server
+
 });
+
+// update the leaderboard
+
