@@ -18,7 +18,6 @@ namespace GamificationToIP.Context
         public DbSet<Test> Tests { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<Answer> Answers { get; set; }
-        public DbSet<StudentResult> StudentResults { get; set; }
         public DbSet<HighScore> HighScores { get; set; }
         public DbSet<Leaderboard> Leaderboards { get; set; }
         public DbSet<GeneratedTest> GeneratedTest { get; set; }
@@ -28,6 +27,8 @@ namespace GamificationToIP.Context
         public DbSet<Badge> Badges { get; set; }
 
         public DbSet<Student> Students { get; set; }
+
+        public DbSet<Subject> Subjects { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

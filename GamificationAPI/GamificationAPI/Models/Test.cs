@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using GamificationAPI.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace GamificationToIP.Models
 {
@@ -11,6 +12,6 @@ namespace GamificationToIP.Models
         public string Description { get; set; } = null!;
         public int TimeSeconds { get; set; }
         public List<Question> Questions { get; set; } = null!;
-        public List<StudentResult> UserResults { get; set; } = null!;
+        public virtual Subject Subject { get; set; }
     }
 }
