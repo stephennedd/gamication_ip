@@ -1,0 +1,100 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+#startScreen {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	z-index: 1;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+/* semi transparent background behind startscreen */
+#startScreen::before {
+	content: '';
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	z-index: -1;
+}
+
+#startScreen h1 {
+	color: white;
+	margin-bottom: 55px;
+	font-size: 3rem;
+	font-family: 'Press Start 2P', cursive;
+}
+
+#startScreen p {
+	color: white;
+	font-size: 1rem;
+	font-family: 'Press Start 2P', cursive;
+}
+
+#gameOverScreen {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	z-index: 1;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+/* semi transparent background behind gameoverscreen */
+#gameOverScreen::before {
+	content: '';
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	z-index: -1;
+}
+
+#gameOverScreen h1 {
+	color: white;
+	margin-bottom: 55px;
+	font-size: 5rem;
+	font-family: 'Press Start 2P', cursive;
+}
+
+#gameOverScreen p {
+	color: white;
+	font-size: 2rem;
+	font-family: 'Press Start 2P', cursive;
+}
+
+#pauseScreen {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	z-index: 1;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+/* semi transparent background behind pausescreen */
+#pauseScreen::before {
+	content: '';
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	z-index: -1;
+}
+
+#pauseScreen h1 {
+	color: white;
+	margin-bottom: 55px;
+	font-size: 5rem;
+	font-family: 'Press Start 2P', cursive;
+}
