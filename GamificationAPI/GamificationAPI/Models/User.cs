@@ -9,7 +9,8 @@ namespace GamificationToIP.Models;
 public class User
 {
     [Key]
-    public string Id { get; set; }
+    public int Id { get; set; } = 0;
+    public string UserId { get; set; } 
     public string Password { get; set; }  
     public string VerificationCode { get; set; } = CodeGenerator.RandomString(6);
     public bool IsVerified { get; set; } = false;

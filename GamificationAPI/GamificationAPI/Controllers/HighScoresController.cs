@@ -54,13 +54,15 @@ namespace GamificationAPI.Controllers
 
             var highScore = new HighScore
             {
+                Leaderboard = await _leaderboardService.GetLeaderboardByNameAsync(leaderboardName),
                 Score = score,
                 User = await _userService.GetUserByIdAsync(userId)
             };
 
 
-            if (await _leaderboardService.CheckIfStudentHasHighScoreInLeadeboard(highScore.User.Id, leaderboardName) == true)
+            if (await _leaderboardService.CheckIfStudentHasHighScoreInLeadeboard(highScore.User.UserId, leaderboardName) == true)
             {
+                Console.WriteLine("user has high score in this leaderboard");
                 if (await _highScoreService.CheckIfItsHighScore(highScore, leaderboardName) == true)
                 {
                     await _highScoreService.UpdateHighScoreAsync(highScore, leaderboardName);
@@ -77,6 +79,7 @@ namespace GamificationAPI.Controllers
             }
             else
             {
+                Console.WriteLine("user doesnt have high score in this leaderboard");
                 bool success = await _leaderboardService.AddHighScoreAsync(highScore, leaderboardName);
                 if (success)
                 {

@@ -35,16 +35,16 @@ namespace GamificationToIP.Context
                 .HasMany(e => e.HighScores)
                 .WithOne(e => e.User)            
                 .IsRequired(false);
-
-            modelBuilder.Entity<Leaderboard>()
-                .HasMany(e => e.HighScores)
-                .WithOne(e => e.Leaderboard)
-                .IsRequired(false);
             
             modelBuilder.Entity<User>()
                 .HasMany(b => b.Badges)
                 .WithOne(u => u.User)
                 .IsRequired(false);
+            
+            modelBuilder.Entity<Leaderboard>()
+                .HasMany(e => e.HighScores)
+                .WithOne(e => e.Leaderboard)
+                .IsRequired(true);
         }
     }
 }

@@ -15,9 +15,9 @@ public class UserService : IUsers
         _dbContext = dbContext;
     }
 
-    public async Task<User> GetUserByIdAsync(string id)
+    public async Task<User> GetUserByIdAsync(string UserId)
     {
-        return await _dbContext.Users.Include(u => u.Role).Include(u => u.Group).FirstOrDefaultAsync(u => u.Id == id);
+        return await _dbContext.Users.Include(u => u.Role).Include(u => u.Group).FirstOrDefaultAsync(u => u.UserId == UserId);
     }
 
 
@@ -34,9 +34,9 @@ public class UserService : IUsers
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task DeleteUserAsync(string id)
+    public async Task DeleteUserAsync(string UserId)
     {
-        var User = await GetUserByIdAsync(id);
+        var User = await GetUserByIdAsync(UserId);
 
         if (User != null)
         {
@@ -50,17 +50,17 @@ public class UserService : IUsers
         return await _dbContext.Users.Include(u => u.Role).Include(u => u.Group).ToListAsync();
     }
 
-    public User GetUserById(string id)
+    public User GetUserById(string UserId)
     {
-        return _dbContext.Users.Include(u => u.Role).Include(u => u.Group).FirstOrDefault(u => u.Id == id);
+        return _dbContext.Users.Include(u => u.Role).Include(u => u.Group).FirstOrDefault(u => u.UserId == UserId);
     }
-    public Task<bool> UserExistsAsync(string id)
+    public Task<bool> UserExistsAsync(string UserId)
     {
-        return _dbContext.Users.AnyAsync(s => s.Id == id);
+        return _dbContext.Users.AnyAsync(s => s.UserId == UserId);
     }
-    public Task<bool> VerifyUser(string id, string code)
+    public Task<bool> VerifyUser(string UserId, string code)
     {
-        var user = GetUserById(id);
+        var user = GetUserById(UserId);
         if (user != null)
         {
             if (user.VerificationCode == code)
