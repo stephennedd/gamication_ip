@@ -34,6 +34,20 @@ public class UserService : IUsers
         await _dbContext.SaveChangesAsync();
     }
 
+    public async Task<bool> ChangePasswordAsync(string UserId, string newPassword)
+    {
+        var user = await GetUserByIdAsync(UserId);
+
+        if (user == null)
+        {
+            return false;
+        }
+        user.Password = newPassword;
+        await UpdateUserAsync(user);
+        await _dbContext.SaveChangesAsync();
+        return true;
+    }
+
     public async Task DeleteUserAsync(string UserId)
     {
         var User = await GetUserByIdAsync(UserId);
@@ -72,5 +86,19 @@ public class UserService : IUsers
             }
         }
         return Task.FromResult(false);
+    }
+    public async Task<bool> AddBadgeAsync(Badge badge, string userId)
+    {
+        var user = await GetUserByIdAsync(userId);
+
+        if (user == null)
+        {
+            return false;
+        }
+        var newbadge = await _dbContext.Set<Badge>().FirstOrDefaultAsync(u => u.Id == badge.Id);
+        user.Badges.Add(newbadge);
+        await _dbContext.SaveChangesAsync();
+
+        return true;
     }
 }
