@@ -169,7 +169,31 @@ function removeQuiz(button) {
         // TODO send the delete request to the server
 
         // if response == OK: remove the quiz from the page
-        var row = button.parentNode.parentNode; // Get the parent row
-        row.remove();
+        var serverResponse = "OK";
+        if (serverResponse == "OK") {
+            var row = button.parentNode.parentNode; // Get the parent row
+            row.remove();
+        }
+        // else: show an error message
+        else {alert("Error deleting quiz");} // TODO: show an error message
+        
     }
 }
+
+// adding a subject to the database
+$('#add-subject-form').submit(function (e) {
+    // get the form data
+    var formData = $(this).serializeArray();
+
+    // convert form data to JSON
+    const jsonData = {};
+    for (let i = 0; i < formData.length; i++) {
+        jsonData[formData[i].name] = formData[i].value;
+    }
+
+    // Log JSON data
+    console.log(JSON.stringify(jsonData));
+
+    e.preventDefault(); // Prevent the form from submitting for now
+    // TODO send the form data to the server
+});
