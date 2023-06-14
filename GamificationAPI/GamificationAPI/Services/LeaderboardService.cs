@@ -17,8 +17,14 @@ public class LeaderboardService : ILeaderboards
     {
         return await _dbContext.Set<Leaderboard>()
             .Include(l => l.HighScores)
-            .ThenInclude(h => h.User)
-            .ThenInclude(h => h.Group)
+        .ThenInclude(h => h.User)
+        .ThenInclude(u => u.Group)
+        .Include(l => l.HighScores)
+        .ThenInclude(h => h.User)
+        .ThenInclude(u => u.Role)
+        .Include(l => l.HighScores)
+        .ThenInclude(h => h.User)
+        .ThenInclude(u => u.Badges)
             .ToListAsync();
     }
 
@@ -26,9 +32,15 @@ public class LeaderboardService : ILeaderboards
     {
         return await _dbContext.Set<Leaderboard>()
             .Include(l => l.HighScores)
-            .ThenInclude(h => h.User)
-            .ThenInclude(h => h.Group)
-            .FirstOrDefaultAsync(l => l.Name == name);
+        .ThenInclude(h => h.User)
+        .ThenInclude(u => u.Group)
+        .Include(l => l.HighScores)
+        .ThenInclude(h => h.User)
+        .ThenInclude(u => u.Role)
+        .Include(l => l.HighScores)
+        .ThenInclude(h => h.User)
+        .ThenInclude(u => u.Badges)
+        .FirstOrDefaultAsync(l => l.Name == name);
     }
 
     public async Task<bool> AddHighScoreAsync(HighScore highScore, string leaderboardName)

@@ -1,4 +1,5 @@
 ﻿
+using GamificationAPI.Models;
 using GamificationToIP.Models;
 
 namespace GamificationAPI.Interfaces
@@ -13,5 +14,7 @@ namespace GamificationAPI.Interfaces
         User GetUserById(string id);
         Task<bool> UserExistsAsync(string UserId);
         Task<bool> VerifyUser(string UserId, string code);
+        Task<bool> ChangePasswordAsync(string UserId, string newPassword);
+        Task<bool> AddBadgeAsync(Badge badge, string userId);
     }
 }

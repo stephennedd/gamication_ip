@@ -12,6 +12,7 @@ using GamificationAPI.Interfaces;
 using GamificationAPI.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using NuGet.Common;
 
 namespace GamificationToIP.Controllers
 {
@@ -23,13 +24,20 @@ namespace GamificationToIP.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IUsers _userService;
         private readonly IEmails _emailService;
+        private readonly IBadges _badgeService;
 
-        public UsersController(ApplicationDbContext context, IUsers userService, IEmails emailService)
+
+       
+
+        public UsersController(ApplicationDbContext context, IUsers userService, IEmails emailService, IBadges badgeService)
+
         {
             _context = context;
             _emailService = emailService;
             _userService = userService;
+            _badgeService = badgeService;
             _emailService = emailService;
+
         }
 
         // GET: api/Users
@@ -121,7 +129,6 @@ namespace GamificationToIP.Controllers
                 {
                     return Ok();
                 }
-                return BadRequest();
 
                 return BadRequest("User with this ID does not exist");
             }
@@ -155,25 +162,79 @@ namespace GamificationToIP.Controllers
             }
             return Ok(User);
         }
+        [HttpPatch]
+        public async Task<IActionResult> ChangePassword(string newPassword)
+        {
+            if (!HttpContext.Request.Headers.TryGetValue("Authorization", out var authorizationHeader))
+            {
+                return BadRequest("Authorization header is missing.");
+            }
+            var userId = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return BadRequest("Invalid token.");
+            }
+            if (await _userService.UserExistsAsync(userId) == false)
+            {
+                return BadRequest();
+            }
+
+            if (ModelState.IsValid)
+            {
+                bool success = await _userService.ChangePasswordAsync(userId, newPassword);
+
+                if (success)
+                {
+                    return Ok();
+                }
+
+                return BadRequest("User with this ID does not exist");
+            }
+            return BadRequest();
+        }
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> AddBadgeToUser (string id, int badgeId)
+        {
+            if (await _userService.UserExistsAsync(id) == false)
+            {
+                return NotFound("User with this ID does not exist");
+            }
+            if(await _badgeService.BadgeExistsAsync(badgeId) == false)
+            {
+                return BadRequest("Badge with this ID does not exist");
+            }
+            var badge = await _badgeService.GetBadgeAsync(badgeId);
+            if (badge == null)
+            {
+                return BadRequest();
+            }
+            bool success = await _userService.AddBadgeAsync(badge, id);
+            if (!success)
+            {
+                return BadRequest();
+            }
+            return BadRequest();
+
+        }
 
         // DELETE: api/Users/5
         [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(string UserId)
+        public async Task<IActionResult> DeleteUser(string id)
         {
 
-            if (await _userService.UserExistsAsync(UserId) == false)
+            if (await _userService.UserExistsAsync(id) == false)
             {
                 return NotFound("User with this ID does not exist");
             }
 
-            var User = await _userService.GetUserByIdAsync(UserId);
+            var User = await _userService.GetUserByIdAsync(id);
             if (User == null)
             {
                 return NotFound();
             }
 
-            await _userService.DeleteUserAsync(UserId);
+            await _userService.DeleteUserAsync(id);
 
             return Ok();
         }

@@ -17,7 +17,7 @@ public class UserService : IUsers
 
     public async Task<User> GetUserByIdAsync(string UserId)
     {
-        return await _dbContext.Users.Include(u => u.Role).Include(u => u.Group).FirstOrDefaultAsync(u => u.UserId == UserId);
+        return await _dbContext.Users.Include(u => u.Role).Include(u => u.Group).Include(u => u.Badges).FirstOrDefaultAsync(u => u.UserId == UserId);
     }
 
 
@@ -34,6 +34,20 @@ public class UserService : IUsers
         await _dbContext.SaveChangesAsync();
     }
 
+    public async Task<bool> ChangePasswordAsync(string UserId, string newPassword)
+    {
+        var user = await GetUserByIdAsync(UserId);
+
+        if (user == null)
+        {
+            return false;
+        }
+        user.Password = newPassword;
+        await UpdateUserAsync(user);
+        await _dbContext.SaveChangesAsync();
+        return true;
+    }
+
     public async Task DeleteUserAsync(string UserId)
     {
         var User = await GetUserByIdAsync(UserId);
@@ -47,12 +61,12 @@ public class UserService : IUsers
 
     public async Task<List<User>> GetUsersAsync()
     {
-        return await _dbContext.Users.Include(u => u.Role).Include(u => u.Group).ToListAsync();
+        return await _dbContext.Users.Include(u => u.Role).Include(u => u.Group).Include(u => u.Badges).ToListAsync();
     }
 
     public User GetUserById(string UserId)
     {
-        return _dbContext.Users.Include(u => u.Role).Include(u => u.Group).FirstOrDefault(u => u.UserId == UserId);
+        return _dbContext.Users.Include(u => u.Role).Include(u => u.Group).Include(u => u.Badges).FirstOrDefault(u => u.UserId == UserId);
     }
     public Task<bool> UserExistsAsync(string UserId)
     {
@@ -72,5 +86,19 @@ public class UserService : IUsers
             }
         }
         return Task.FromResult(false);
+    }
+    public async Task<bool> AddBadgeAsync(Badge badge, string userId)
+    {
+        var user = await GetUserByIdAsync(userId);
+
+        if (user == null)
+        {
+            return false;
+        }
+        var newbadge = await _dbContext.Set<Badge>().FirstOrDefaultAsync(u => u.Id == badge.Id);
+        user.Badges.Add(newbadge);
+        await _dbContext.SaveChangesAsync();
+
+        return true;
     }
 }
