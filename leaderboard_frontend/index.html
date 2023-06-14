@@ -53,8 +53,10 @@
     
     <script>
         let currentLeaderboard = 'main'; // Default leaderboard name
-        let token = 'eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTUxMiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiQWRtaW4iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsImV4cCI6MTY4NjQ4MjUwMX0.2GJpd8rj3KmfQ4gtGWgntRZ1-U9RJdyy-LmqC8KpKeesQgprk-oCDz-eWX5_vkFPDL4I2fi144JKk5MzmV1ftw'; // replace with your actual token
-        // Sample leaderboard data (you can replace this with your API or data source)
+        var token = document.cookie
+  .split('; ')
+  .find(row => row.startsWith('jwt='))
+  .split('=')[1];
         let leaderboardData = [
             { playerName: "John", score: 500, badges: ["badge1.png", "badge2.png"] },
             { playerName: "Emma", score: 400 , badges: ["badge3.png"]},

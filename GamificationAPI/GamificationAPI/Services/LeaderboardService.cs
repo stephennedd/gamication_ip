@@ -79,14 +79,14 @@ public class LeaderboardService : ILeaderboards
     }
     public async Task<bool> CreateLeaderboardAsync(string name)
     {
-        var leaderboard = await GetLeaderboardByNameAsync(name);
-        if (leaderboard != null || string.IsNullOrWhiteSpace(name))
+        var leaderboard = await GetLeaderboardByNameAsync(name.ToLower());
+        if (leaderboard != null || string.IsNullOrWhiteSpace(name.ToLower()))
         {
             return false;
         }
         else
         {
-            leaderboard = new Leaderboard { Name = name };
+            leaderboard = new Leaderboard { Name = name.ToLower() };
             _dbContext.Set<Leaderboard>().Add(leaderboard);
             await _dbContext.SaveChangesAsync();
             return true;
