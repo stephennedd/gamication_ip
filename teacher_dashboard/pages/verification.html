@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify email</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<style>
+    html {
+        background-color: var(--backgroundColor);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        text-align: center;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    input {
+        width: 32px;
+        height: 32px;
+        text-align: center;
+        border: none;
+        border-bottom: 1.5px solid #d2d2d2;
+        margin: 0 10px;
+    }
+
+    input:focus {
+        border-bottom: 1.5px solid var(--backgroundColor);
+        outline: none;
+    }
+</style>
+
+<body>
+
+    <form id="verification-form">
+        <div class="title">Verification Code</div>
+        <p class="form-paragraph">We have sent a verification code
+            to your email address</p>
+        <div id='inputs'>
+            <input id='input1' type='text' maxLength="1" required />
+            <input id='input2' type='text' maxLength="1" required />
+            <input id='input3' type='text' maxLength="1" required />
+            <input id='input4' type='text' maxLength="1" required />
+            <input id='input5' type='text' maxLength="1" required />
+            <input id='input6' type='text' maxLength="1" required />
+        </div>
+        <button class="form-submit" type="submit" form="verification-form">Submit</button>
+        <div id="response-message"></div>
+    </form>
+
+</body>
+
+<script src="../js/jquery-3.7.0.min.js"></script>
+<script src="../js/verification.js"></script>
+
+</html>
