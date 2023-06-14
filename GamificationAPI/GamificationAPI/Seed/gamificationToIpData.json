@@ -1,4 +1,16 @@
 ﻿{
+  "subjects": [
+    {
+      "SubjectTitle": "Programming fundamentals",
+      "WeekNumber": 1,
+      "TestId": 1
+    },
+    {
+      "SubjectTitle": "Blockchain fundamentals",
+      "WeekNumber": 2,
+      "TestId": 2
+    }
+  ],
   "students": [
     {
       "FirstName": "John",
@@ -204,6 +216,106 @@
       ],
       "time_seconds": 300,
       "title": "HTML Basics Test"
+    },
+    {
+      "title": "Blockchain Fundamentals",
+      "image_url": "https://example.com/blockchain.jpg",
+      "description": "This course provides an introduction to blockchain technology and its applications.",
+      "time_seconds": 3600,
+      "questions": [
+        {
+          "question": "What is a blockchain?",
+          "correct_answer": "A decentralized and distributed digital ledger.",
+          "selected_answer": "",
+          "answers": [
+            {
+              "identifier": "A",
+              "answer": "A decentralized and distributed digital ledger."
+            },
+            {
+              "identifier": "B",
+              "answer": "A type of cryptocurrency."
+            },
+            {
+              "identifier": "C",
+              "answer": "A centralized database managed by a single authority."
+            },
+            {
+              "identifier": "D",
+              "answer": "A technology used for cloud storage."
+            }
+          ]
+        },
+        {
+          "question": "Which of the following is a characteristic of blockchain?",
+          "correct_answer": "Immutability",
+          "selected_answer": "",
+          "answers": [
+            {
+              "identifier": "A",
+              "answer": "High scalability"
+            },
+            {
+              "identifier": "B",
+              "answer": "Low security"
+            },
+            {
+              "identifier": "C",
+              "answer": "Immutability"
+            },
+            {
+              "identifier": "D",
+              "answer": "Centralized control"
+            }
+          ]
+        },
+        {
+          "question": "What is a smart contract?",
+          "correct_answer": "Self-executing contract with predefined rules.",
+          "selected_answer": "",
+          "answers": [
+            {
+              "identifier": "A",
+              "answer": "A contract that can only be executed by a lawyer."
+            },
+            {
+              "identifier": "B",
+              "answer": "A contract that requires physical signatures."
+            },
+            {
+              "identifier": "C",
+              "answer": "A contract used for real estate transactions."
+            },
+            {
+              "identifier": "D",
+              "answer": "Self-executing contract with predefined rules."
+            }
+          ]
+        },
+        {
+          "question": "What is the role of miners in a blockchain network?",
+          "correct_answer": "To validate and add new transactions to the blockchain.",
+          "selected_answer": "",
+          "answers": [
+            {
+              "identifier": "A",
+              "answer": "To encrypt data stored in the blockchain."
+            },
+            {
+              "identifier": "B",
+              "answer": "To manage user wallets."
+            },
+            {
+              "identifier": "C",
+              "answer": "To create new cryptocurrencies."
+            },
+            {
+              "identifier": "D",
+              "answer": "To validate and add new transactions to the blockchain."
+            }
+          ]
+        }
+      ]
     }
   ]
 }

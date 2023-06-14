@@ -1,5 +1,7 @@
 // draw settings
 const context = c.getContext('2d'); // canvas 2d context
+const startScreen = document.getElementById('startScreen'); // start screen
+const gameOverScreen = document.getElementById('gameOverScreen'); // game over screen
 const drawDistance = 800; // how many road segments to draw in front of player
 const cameraDepth = 0.9; // FOV of camera (1 / Math.tan((fieldOfView/2) * Math.PI/180))
 const roadSegmentLength = 100; // length of each road segment
@@ -11,12 +13,11 @@ const mountainCount = 50; // how many mountains are there
 const timeDelta = 1 / 60; // inverse frame rate
 
 // player settings
-const playerHeight = 250; // how high is player above ground
+const playerHeight = 200; // how high is player above ground
 const playerMaxSpeed = 300; // limit max player speed
 const playerAccel = 1; // player acceleration
 const playerBrake = -3; // player acceleration when breaking
 const playerTurnControl = 0.2; // player turning rate
-const playerJumpSpeed = 25; // z speed added for jump
 const playerSpringConstant = 0.01; // spring players pitch
 const playerCollisionSlow = 0.1; // slow down from collisions
 const pitchLerp = 0.1; // speed that camera pitch changes
@@ -43,7 +44,6 @@ let playerVelocity; // player velocity 3d vector
 let playerPitchSpring; // spring for player pitch bounce
 let playerPitchSpringVelocity; // velocity of pitch spring
 let playerPitchRoad; // pitch of road, or 0 if player is in air
-let playerAirFrame; // how many frames player has been in air
 let worldHeading; // heading to turn skybox
 let randomSeed; // random seed for level
 let startRandomSeed; // save the starting seed for active use
@@ -56,6 +56,7 @@ let timeBuffer = 0; // frame rate adjustment
 
 let gameStarted = false;
 let isPaused = false;
+let isGameOver = false;
 
 function StartLevel() {
 	// build the road with procedural generation
@@ -182,7 +183,7 @@ function Update() {
 
 	const playerTurnAmount = Lerp(
 		playerVelocity.z / playerMaxSpeed,
-		mouseX * playerTurnControl,
+		axisX * playerTurnControl,
 		0
 	); // turning
 
@@ -205,11 +206,7 @@ function Update() {
 
 		playerVelocity.z += isBraking
 			? playerBrake // apply brake
-			: Lerp(
-					playerVelocity.z / playerMaxSpeed,
-					mouseWasPressed * playerAccel,
-					0
-			  ); // apply accel
+			: Lerp(playerVelocity.z / playerMaxSpeed, startPressed * playerAccel, 0); // apply accel
 
 		if (Math.abs(playerPos.x) > road[playerRoadSegment].w) {
 			// check if off road
@@ -494,20 +491,18 @@ function Update() {
 			}
 		}
 	}
-
 	// draw and update time
-	if (mouseWasPressed) {
+	if (startPressed) {
 		DrawText(Math.ceil((time = Clamp(time - timeDelta, 0, maxTime))), 9); // show and update time
 		context.textAlign = 'right'; // set right alignment for distance
 		DrawText(0 | (playerPos.z / 1e3), c.width - 9); // show distance
 	}
 
-	// requestAnimationFrame(Update); // kick off next frame
-
 	if (!isPaused) {
 		requestAnimationFrame(Update);
+		hidePauseScreen();
 	} else {
-		drawPauseScreen();
+		createPauseScreen();
 	}
 }
 
@@ -557,30 +552,19 @@ function DrawText(text, posX) {
 	context.strokeText(text, posX, 129); // outline text
 }
 
-function drawPauseScreen() {
-	context.fillStyle = 'rgba(0, 0, 0, 0.5)';
-	context.fillRect(0, 0, c.width, c.height);
-	context.font = '9em Impact';
-	context.fillStyle = LSHA(99, 0, 0, 0.5);
-	const text = 'PAUSED';
-	const textWidth = context.measureText(text).width;
-	context.fillText(text, c.width / 1.5, c.height / 2);
-	context.lineWidth = 3;
-	context.strokeText(text, c.width / 1.5, c.height / 2);
-}
+// Restart game when 'R' is pressed
+window.addEventListener('keydown', function (e) {
+	if (e.key === 'r' || e.key === 'R') {
+		StartLevel();
+	}
+});
 
-// mouse input
-let mouseWasPressed = 0;
-let mouseX = 0;
-let mouseLockX = 0;
-let touchMode = 0;
-let keyDirection = 0; // Variable to keep track of the arrow key being pressed
-let isBraking = false; // Variable to keep track of the brake key being pressed
-
+//start game and pause when 'p' is pressed
 document.addEventListener('keydown', function (event) {
-	if (event.key === 'ArrowUp' && !gameStarted) {
+	if (!gameStarted) {
 		gameStarted = true;
-		mouseWasPressed = 1;
+		startPressed = 1;
+		removeStartScreen();
 		requestAnimationFrame(Update);
 	} else if (event.key === 'p' || event.key === 'P') {
 		isPaused = !isPaused;
@@ -590,7 +574,136 @@ document.addEventListener('keydown', function (event) {
 	}
 });
 
-// Keyboard control
+// listen to message from parent frame to pause
+window.addEventListener('message', function (event) {
+	if (event.data.action === 'pauseGame') {
+		gameStarted = true;
+		startPressed = 1;
+		isPaused = !isPaused;
+		requestAnimationFrame(Update);
+	}
+});
+
+function createStartScreen() {
+	// Create the main container div
+	const startScreen = document.createElement('div');
+	startScreen.id = 'startScreen';
+
+	// Create the heading element
+	const heading = document.createElement('h1');
+	heading.textContent = 'Polygon Run';
+	startScreen.appendChild(heading);
+
+	// Create the paragraph element
+	const paragraph = document.createElement('p');
+	paragraph.textContent = 'Press any button to start';
+	startScreen.appendChild(paragraph);
+
+	// Append the start screen to the document body
+	document.body.appendChild(startScreen);
+}
+
+// Function to remove the start screen element
+function removeStartScreen() {
+	const startScreen = document.getElementById('startScreen');
+	if (startScreen) {
+		startScreen.parentNode.removeChild(startScreen);
+	}
+}
+
+function drawPauseScreen() {
+	context.fillStyle = 'rgba(0, 0, 0, 0.5)';
+	context.fillRect(0, 0, c.width, c.height);
+	context.font = '9em Impact';
+	context.fillStyle = LSHA(99, 0, 0, 0.5);
+	const text = 'PAUSED';
+	context.fillText(text, c.width / 1.25, c.height / 1.75);
+	context.lineWidth = 3;
+	context.strokeText(text, c.width / 1.25, c.height / 1.75);
+}
+
+// Function to create the pause screen element
+function createPauseScreen() {
+	// Create the main container div
+	const pauseScreen = document.createElement('div');
+	pauseScreen.id = 'pauseScreen';
+	pauseScreen.classList.add('hide');
+
+	// Create the heading element
+	const heading = document.createElement('h1');
+	heading.textContent = 'Paused';
+	pauseScreen.appendChild(heading);
+
+	// Append the pause screen to the document body
+	document.body.appendChild(pauseScreen);
+}
+
+// Function to hide the pause screen
+function hidePauseScreen() {
+	const pauseScreen = document.getElementById('pauseScreen');
+	if (pauseScreen) {
+		pauseScreen.parentNode.removeChild(pauseScreen);
+	}
+}
+
+// Function to create the game over screen element
+function createGameOverScreen() {
+	// Create the main container div
+	const gameOverScreen = document.createElement('div');
+	gameOverScreen.id = 'gameOverScreen';
+	gameOverScreen.classList.add('hide');
+
+	// Create the heading element
+	const heading = document.createElement('h1');
+	heading.textContent = 'Game Over';
+	gameOverScreen.appendChild(heading);
+
+	// Create the paragraph elements
+	const timeParagraph = document.createElement('p');
+	timeParagraph.innerHTML = 'Time: <span id="gameOverTime"></span>';
+	gameOverScreen.appendChild(timeParagraph);
+
+	const scoreParagraph = document.createElement('p');
+	scoreParagraph.innerHTML = 'Score: <span id="gameOverScore"></span>';
+	gameOverScreen.appendChild(scoreParagraph);
+
+	const restartParagraph = document.createElement('p');
+	restartParagraph.textContent = 'Press R to restart the game';
+	gameOverScreen.appendChild(restartParagraph);
+
+	// Append the game over screen to the document body
+	document.body.appendChild(gameOverScreen);
+}
+
+// Function to show the game over screen with the provided time and score
+function showGameOverScreen(time, score) {
+	const gameOverScreen = document.getElementById('gameOverScreen');
+	if (gameOverScreen) {
+		const timeElement = document.getElementById('gameOverTime');
+		const scoreElement = document.getElementById('gameOverScore');
+		if (timeElement && scoreElement) {
+			timeElement.textContent = time;
+			scoreElement.textContent = score;
+			gameOverScreen.classList.remove('hide');
+		}
+	}
+}
+
+// Function to hide the game over screen
+function hideGameOverScreen() {
+	const gameOverScreen = document.getElementById('gameOverScreen');
+	if (gameOverScreen) {
+		gameOverScreen.classList.add('hide');
+	}
+}
+
+// steering input
+let startPressed = 0;
+let axisX = 0;
+let mouseLockX = 0;
+let keyDirection = 0; // Variable to keep track of the arrow key being pressed
+let isBraking = false; // Variable to keep track of the brake key being pressed
+
 document.addEventListener('keydown', function (event) {
 	switch (event.key) {
 		case 'ArrowLeft':
@@ -621,13 +734,14 @@ document.addEventListener('keyup', function (event) {
 
 function updateSteering() {
 	if (keyDirection !== 0) {
-		mouseX += keyDirection * 0.03; // Change the value 0.1 to control the rate of turning
-		mouseX = Math.max(-1, Math.min(1, mouseX)); // Clamp the value of mouseX between -1 and 1
+		axisX += keyDirection * 0.03; // Change the value 0.1 to control the rate of turning
+		axisX = Math.max(-1, Math.min(1, axisX)); // Clamp the value of axisX between -1 and 1
 
 		requestAnimationFrame(updateSteering);
 	}
 }
 
 // startup and kick off update loop
+createStartScreen();
 StartLevel();
 Update();

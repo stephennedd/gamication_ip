@@ -54,6 +54,8 @@ builder.Services.AddTransient<ITests, TestService>();
 builder.Services.AddTransient<IBadges, BadgeService>();
 builder.Services.AddTransient<IStudentAnswers, StudentAnswerService>();
 builder.Services.AddTransient<IStudentQuestions, StudentQuestionService>();
+builder.Services.AddTransient<IEmails, EmailService>();
+builder.Services.AddTransient<ISubjects, SubjectService>(); 
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

@@ -1,8 +1,3 @@
-@font-face {
-	font-family: 'PressStart2P';
-	src: url('Media/Fonts/Press_Start_2P/PressStart2P-Regular.ttf');
-}
-
 * {
 	margin: 0;
 	padding: 0;
@@ -10,52 +5,51 @@
 
 body {
 	background-color: #00222f;
-	font-family: 'Press Start 2P', cursive;
 }
 
 #animate {
-	position: absolute;
-	bottom: 3%;
-	left: 35%;
-	transform: translate(-50%, -10%);
 	width: 70px;
 	height: 70px;
 }
 
 #back {
-	position: absolute;
-	bottom: 3%;
-	left: 65%;
-	transform: translate(-50%, -10%);
 	width: 70px;
 	height: 70px;
 }
 
 #leaderboardButton {
-	position: absolute;
-	bottom: 3%;
-	left: 43%;
-	transform: translate(-50%, -0%);
 	width: 90px;
 	height: 90px;
 }
 
 #showQuiz {
-	position: absolute;
-	bottom: 3%;
-	left: 57%;
-	transform: translate(-50%, -0%);
 	width: 90px;
 	height: 90px;
 }
 
 #showGame {
-	position: absolute;
-	bottom: 3%;
-	left: 50%;
-	transform: translate(-50%, -0%);
 	width: 90px;
 	height: 90px;
+}
+
+#buttonsPanel {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 30px;
+	flex-wrap: nowrap;
+
+	position: absolute;
+	bottom: 0%;
+	left: 50%;
+	transform: translate(-50%, -0%);
+
+	width: 250px;
+	height: 150px;
+	background-image: url('Media/Images/buttonsPanel.png');
+	background-size: 100% 100%;
+
+	transition: width 0.1s;
 }
 
 #corridor {
