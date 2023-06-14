@@ -156,9 +156,20 @@ function removeQuestionFromModal() {
 
 function confirmQuizUpdate() {
     if (confirm("Are you sure you want to update this quiz?")) {
-        // TODO: submit the form using Ajax
+        // TODO: submit the form using to server
         console.log('Quiz updated');
         // dismiss the modal
         $('#edit-quiz-modal').modal('hide');
+    }
+}
+
+// delete a quiz
+function removeQuiz(button) {
+    if (confirm("Are you sure you want to delete this quiz?")) {
+        // TODO send the delete request to the server
+
+        // if response == OK: remove the quiz from the page
+        var row = button.parentNode.parentNode; // Get the parent row
+        row.remove();
     }
 }

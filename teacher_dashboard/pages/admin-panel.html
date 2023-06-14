@@ -161,7 +161,7 @@
                   </a>
                 </li>
                 <li>
-                  <a href="#delete-leaderboard" class="nav-link px-3" id="remove-leaderboard-link">
+                  <a href="#delete-leaderboard" class="nav-link px-3" id="delete-leaderboard-link">
                     <span>Remove leaderboard</span>
                   </a>
                 </li>
@@ -219,7 +219,6 @@
       </nav>
     </div>
   </div>
-  <!-- Off canvas -->
 
   <!-- Student results -->
   <main class="pt-3" id="student-results">
@@ -342,7 +341,6 @@
 
     </div>
   </main>
-  <!-- Student results -->
 
   <!-- Create Quiz -->
   <main class="pt-3" id="create-quiz">
@@ -407,7 +405,6 @@
 
 
   </main>
-  <!-- Create Quiz -->
 
   <!-- Edit Quiz-->
   <main class="pt-3" id="edit-quiz">
@@ -435,21 +432,21 @@
                       <td scope="row">Quiz 1 - Week 1</td>
                       <td scope="row">Methods 1: Methods with aruguments</td>
                       <td class="text-center" scope="row">10</td>
-                      <td class="text-center"><button type="button" class="btn-sm btn-outline-success"
+                      <td class="text-center"><button type="button" class="btn btn-sm btn-outline-success"
                           onclick="editQuiz(this)">Edit</button></td>
                     </tr>
                     <tr data-quiz-id="2" data-quiz-name="Quiz 2 - Week 1">
                       <td scope="row">Quiz 2 - Week 1</td>
                       <td scope="row">Variables 1: Primitive variables</td>
                       <td class="text-center" scope="row">13</td>
-                      <td class="text-center"><button type="button" class="btn-sm btn-outline-success"
+                      <td class="text-center"><button type="button" class="btn btn-sm btn-outline-success"
                           onclick="editQuiz(this)">Edit</button></td>
                     </tr>
                     <tr data-quiz-id="3" data-quiz-name="Quiz 3 - Week 2">
                       <td scope="row">Quiz 3 - Week 2</td>
                       <td scope="row">Methods 2: Methods with return values</td>
                       <td class="text-center" scope="row">14</td>
-                      <td class="text-center"><button type="button" class="btn-sm btn-outline-success"
+                      <td class="text-center"><button type="button" class="btn btn-sm btn-outline-success"
                           onclick="editQuiz(this)">Edit</button></td>
                     </tr>
                   </tbody>
@@ -501,8 +498,6 @@
       </div>
     </div>
   </div>
-  <!-- Edit Quiz modal-->
-  <!-- Edit Quiz-->
 
   <!-- Remove Quiz-->
   <main class="pt-3" id="delete-quiz">
@@ -515,37 +510,46 @@
           <div class="card">
             <div class="card-header">Remove a quiz</div>
             <div class="card-body">
-              <form>
-                <div class="row">
-                  <div class="col-md-12">
-                    <div class="mb-3">
-                      <label for="quiz-name" class="form-label">Select quiz</label>
-                      <select class="form-select" aria-label="Default select example">
-                        <option selected>Select a quiz</option>
-                        <option value="1">Quiz 1</option>
-                        <option value="2">Quiz 2</option>
-                        <option value="3">Quiz 3</option>
-                        <option value="4">Quiz 4</option>
-                        <option value="5">Quiz 5</option>
-                        <option value="6">Quiz 6</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="row">
-                  <div class="col-md-12 text-end">
-                    <button type="submit" class="btn btn-danger">Remove Quiz</button>
-                  </div>
-                </div>
-              </form>
+              <table class="table table-responsive">
+                <thead>
+                  <tr>
+                    <th scope="col">Quiz name</th>
+                    <th scope="col">Subject</th>
+                    <th scope="col" class="text-center">Number of Questions</th>
+                    <th scope="col" class="text-center">Remove</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr data-quiz-id="1" data-quiz-name="Quiz 1 - Week 1">
+                    <td scope="row">Quiz 1 - Week 1</td>
+                    <td scope="row">Methods 1: Methods with aruguments</td>
+                    <td class="text-center" scope="row">10</td>
+                    <td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger"
+                        onclick="removeQuiz(this)">Remove</button></td>
+                  </tr>
+                  <tr data-quiz-id="2" data-quiz-name="Quiz 2 - Week 1">
+                    <td scope="row">Quiz 2 - Week 1</td>
+                    <td scope="row">Variables 1: Primitive variables</td>
+                    <td class="text-center" scope="row">13</td>
+                    <td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger"
+                        onclick="removeQuiz(this)">Remove</button></td>
+                  </tr>
+                  <tr data-quiz-id="3" data-quiz-name="Quiz 3 - Week 2">
+                    <td scope="row">Quiz 3 - Week 2</td>
+                    <td scope="row">Methods 2: Methods with return values</td>
+                    <td class="text-center" scope="row">14</td>
+                    <td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger"
+                        onclick="removeQuiz(this)">Remove</button></td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
       </div>
-      <import src="remove_quiz.html">
+    </div>
+
   </main>
-  <!-- Remove Quiz-->
 
   <!-- Add Student -->
   <main class="pt-3" id="add-student">
@@ -595,7 +599,6 @@
       </div>
     </div>
   </main>
-  <!-- Add Student -->
 
   <!-- Remove Student -->
   <main class="pt-3" id="delete-student">
@@ -624,14 +627,14 @@
                       <th scope="row">484629</th>
                       <td>Stephen Nedd</td>
                       <td>484629@student.saxion.nl</td>
-                      <td class="text-center"><button type="button" class="btn-sm btn-outline-danger"
+                      <td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger"
                           onclick="confirmDelete(this)">Remove</button></td>
                     </tr>
                     <tr>
                       <th scope="row">123456</th>
                       <td>John Doe</td>
                       <td>123456@student.saxion.nl</td>
-                      <td class="text-center"><button type="button" class="btn-sm btn-outline-danger"
+                      <td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger"
                           onclick="confirmDelete(this)">Remove</button></td>
                     </tr>
                   </tbody>
@@ -643,7 +646,6 @@
       </div>
     </div>
   </main>
-  <!-- Remove Student -->
 
   <!-- Update Student -->
   <main class="pt-3" id="update-student">
@@ -678,7 +680,7 @@
                         <td></td>
                         <td>Nedd</td>
                         <td>484629@student.saxion.nl</td>
-                        <td class="text-center"><button type="button" class="btn-sm btn-outline-primary"
+                        <td class="text-center"><button type="button" class="btn btn-sm btn-outline-primary"
                             onclick="updateStudent(this)">Update</button></td>
                       </tr>
                     </tbody>
@@ -733,8 +735,6 @@
       </div>
     </div>
   </div>
-  <!-- Update Student modal-->
-  <!-- Update Student -->
 
   <!-- Ban student -->
   <main class="pt-3" id="ban-student">
@@ -768,7 +768,7 @@
                         <td>Stephen Nedd</td>
                         <td>484629@student.saxion.nl</td>
                         <td>No</td>
-                        <td class="text-center"><button type="button" class="btn-sm btn-outline-warning"
+                        <td class="text-center"><button type="button" class="btn btn-sm btn-outline-warning"
                             onclick="banStudent(this)">Ban</button></td>
                       </tr>
                     </tbody>
@@ -780,7 +780,6 @@
         </div>
       </div>
   </main>
-  <!-- Ban student -->
 
   <!-- Add leaderboard -->
   <main class="pt-3" id="add-leaderboard">
@@ -826,13 +825,14 @@
       </div>
     </div>
   </main>
-  <!-- Add leaderboard -->
 
   <!-- Update leaderboard -->
   <main class="pt-3" id="update-leaderboard">
     <div class="container-fluid">
       <div class="row">
-        <div class="col-md-12 fw-bold fs-4">Update leaderboard</div>
+        <div class="col-md-12">
+          <div class="form-label fw-bold fs-4">Update leaderboard</div>
+        </div>
       </div>
 
       <div class="row">
@@ -842,10 +842,20 @@
               <div class="card-header">Select a leaderboard</div>
               <div class="card-body">
                 <div class="table-responsive">
-                  <table class="table data-table" id="update-leaderboard-table">
+                  <table class="table table-responsive" id="update-leaderboard-table">
                     <thead>
-                      <tr></tr>
+                      <th scope="col">Leaderboard Name</th>
+                      <th scope="col">Game</th>
+                      <th class="text-center" scope="col">Update</th>
                     </thead>
+                    <tbody>
+                      <tr>
+                        <td>Flappy-Bird leaderboard</td>
+                        <td>Flappy-Bird</td>
+                        <td class="text-center"><button type="button" class="btn btn-outline-primary btn-sm"
+                            data-bs-toggle="modal" data-bs-target="#update-leaderboard-modal">Update</button></td>
+                      </tr>
+                    </tbody>
                   </table>
                 </div>
               </div>
@@ -855,7 +865,77 @@
       </div>
     </div>
   </main>
-  <!-- Update leaderboard -->
+
+  <!-- Update leaderboard modal -->
+  <div class="modal fade" id="update-leaderboard-modal" tabindex="-1" aria-labelledby="updateLeaderboardModal"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="edit-student-modal-title"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="update-leaderboard-form">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="mb-3"><label for="leaderboard-name" class="form-label fw-bold">Leaderboard name</label>
+                  <input type="text" name="leaderboard-name" class="form-control" id="modal-leaderboard-name"
+                    placeholder="Leaderboard name" required>
+                </div>
+              </div>
+            </div>
+
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" form="update-leaderboard-form">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete leaderboard -->
+  <main class="pt-3" id="delete-leaderboard">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <label for="delete-leaderboard" class="form-label fw-bold fs-4">Delete leaderboard</label>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="mb-3">
+            <div class="card">
+              <div class="card-header">Select a leaderboard</div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-responsive" id="delete-leaderboard-table">
+                    <thead>
+                      <th scope="col">Leaderboard Name</th>
+                      <th scope="col">Game</th>
+                      <th class="text-center" scope="col">Delete</th>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Flappy-Bird leaderboard</td>
+                        <td>Flappy-Bird</td>
+                        <td class="text-center"><button type="button" class="btn btn-outline-danger btn-sm"
+                            onclick="deleteLeaderboard(this)">Delete</button></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
 
   <script src="../js/bootstrap.bundle.min.js"></script>
   <script src="../js/jquery-3.7.0.min.js"></script>
