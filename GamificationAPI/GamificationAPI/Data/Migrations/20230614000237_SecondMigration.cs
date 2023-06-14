@@ -12,6 +12,21 @@ namespace GamificationAPI.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Badges",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    ImageUrl = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Badges", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Groups",
                 columns: table => new
                 {
@@ -183,24 +198,27 @@ namespace GamificationAPI.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Badges",
+                name: "BadgeUser",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    imageUrl = table.Column<string>(type: "text", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: false),
-                    UserId = table.Column<int>(type: "integer", nullable: false)
+                    BadgesId = table.Column<int>(type: "integer", nullable: false),
+                    UsersId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Badges", x => x.Id);
+                    table.PrimaryKey("PK_BadgeUser", x => new { x.BadgesId, x.UsersId });
                     table.ForeignKey(
-                        name: "FK_Badges_Users_UserId",
-                        column: x => x.UserId,
+                        name: "FK_BadgeUser_Badges_BadgesId",
+                        column: x => x.BadgesId,
+                        principalTable: "Badges",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BadgeUser_Users_UsersId",
+                        column: x => x.UsersId,
                         principalTable: "Users",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -288,9 +306,9 @@ namespace GamificationAPI.Data.Migrations
                 column: "QuestionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Badges_UserId",
-                table: "Badges",
-                column: "UserId");
+                name: "IX_BadgeUser_UsersId",
+                table: "BadgeUser",
+                column: "UsersId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_GeneratedTest_StudentId",
@@ -353,7 +371,7 @@ namespace GamificationAPI.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Badges");
+                name: "BadgeUser");
 
             migrationBuilder.DropTable(
                 name: "HighScores");
@@ -363,6 +381,9 @@ namespace GamificationAPI.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Subjects");
+
+            migrationBuilder.DropTable(
+                name: "Badges");
 
             migrationBuilder.DropTable(
                 name: "Leaderboards");
