@@ -444,28 +444,32 @@
                   <thead>
                     <tr>
                       <th scope="col">Quiz name</th>
+                      <th scope="col">Week</th>
                       <th scope="col">Subject</th>
                       <th scope="col" class="text-center">Number of Questions</th>
                       <th scope="col" class="text-center">Edit</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr data-quiz-id="1" data-quiz-name="Quiz 1 - Week 1">
+                    <tr data-quiz-id="1" data-quiz-name="Quiz 1 - Week 1" data-quiz-week="1">
                       <td scope="row">Quiz 1 - Week 1</td>
+                      <td scope="row">Week 1</td>
                       <td scope="row">Methods 1: Methods with aruguments</td>
                       <td class="text-center" scope="row">10</td>
                       <td class="text-center"><button type="button" class="btn btn-sm btn-outline-success"
                           onclick="editQuiz(this)">Edit</button></td>
                     </tr>
-                    <tr data-quiz-id="2" data-quiz-name="Quiz 2 - Week 1">
+                    <tr data-quiz-id="2" data-quiz-name="Quiz 2 - Week 1" data-quiz-week="1">
                       <td scope="row">Quiz 2 - Week 1</td>
+                      <td scope="row">Week 1</td>
                       <td scope="row">Variables 1: Primitive variables</td>
                       <td class="text-center" scope="row">13</td>
                       <td class="text-center"><button type="button" class="btn btn-sm btn-outline-success"
                           onclick="editQuiz(this)">Edit</button></td>
                     </tr>
-                    <tr data-quiz-id="3" data-quiz-name="Quiz 3 - Week 2">
+                    <tr data-quiz-id="3" data-quiz-name="Quiz 3 - Week 2" data-quiz-week="2">
                       <td scope="row">Quiz 3 - Week 2</td>
+                      <td scope="row">Week 2</td>
                       <td scope="row">Methods 2: Methods with return values</td>
                       <td class="text-center" scope="row">14</td>
                       <td class="text-center"><button type="button" class="btn btn-sm btn-outline-success"
@@ -635,7 +639,7 @@
             <div class="card-header">Select student</div>
             <div class="card-body">
               <div class="table-responsive">
-                <table class="table table-striped" id="student-table">
+                <table class="table table-striped data-table" id="student-table">
                   <thead>
                     <tr>
                       <th scope="col">Student ID</th>
@@ -683,7 +687,7 @@
               <div class="card-header">Select a student</div>
               <div class="card-body">
                 <div class="table-responsive">
-                  <table class="table table-striped" id="student-table">
+                  <table class="table table-striped data-table" id="student-table">
                     <thead>
                       <tr>
                         <th scope="col">Student ID</th>
@@ -774,7 +778,7 @@
               </div>
               <div class="card-body">
                 <div class="table-responsive">
-                  <table class="table table-striped" id="student-table">
+                  <table class="table table-striped data-table" id="student-table">
                     <thead>
                       <tr>
                         <th scope="col">Student ID</th>
@@ -975,8 +979,36 @@
               <div class="card-header">Enter subject details</div>
               <div class="card-body">
                 <form id="add-subject-form">
-
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="mb-3">
+                        <label for="subject-name" class="form-label">Subject name</label>
+                        <input type="text" name="subject-title" class="form-control" id="subject-name"
+                          placeholder="Enter a name" required>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="mb-3">
+                        <label for="subject-week" class="form-label">Subject Week</label>
+                        <select name="week-number" class="form-select" required>
+                          <option value="" selected disabled>Select a week</option>
+                          <option value="1">Week 1</option>
+                          <option value="2">Week 2</option>
+                          <option value="3">Week 3</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
                 </form>
+              </div>
+              <div class="card-footer">
+                <div class="row">
+                  <div class="col-md-12 text-end">
+                    <button type="submit" class="btn btn-primary" form="add-subject-form">Add subject</button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
