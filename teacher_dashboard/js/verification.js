@@ -44,7 +44,7 @@ $(document).ready(function(){
     // alert user if code is correct
     if (serverResponse) {
       var html = `<p class="text-success">Code is correct</p>
-                  <a href="login.html" class="btn btn-primary">Go to login</a>`;
+                  <a href="login.html" class="btn btn-primary">Login</a>`;
       $('#response-message').append(html);
     } else {
       var html = `<p class="text-danger">Code is incorrect</p>`;

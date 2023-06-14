@@ -77,6 +77,7 @@ function handlePageChange() {
         '#add-leaderboard': { sectionId: 'add-leaderboard', linkId: 'add-leaderboard-link' },
         '#delete-leaderboard': { sectionId: 'delete-leaderboard', linkId: 'delete-leaderboard-link' },
         '#update-leaderboard': { sectionId: 'update-leaderboard', linkId: 'update-leaderboard-link' },
+        '#add-subject': { sectionId: 'add-subject', linkId: 'add-subject-link' },
     };
   
     // Default section and link IDs if the hash doesn't match any mapping

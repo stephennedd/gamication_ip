@@ -212,6 +212,11 @@
                     <span>Edit Teacher</span>
                   </a>
                 </li>
+                <li>
+                  <a href="#add-subject" class="nav-link px-3" id="add-subject-link">
+                    <span>Add Subject</span>
+                  </a>
+                </li>
               </ul>
             </div>
           </li>
@@ -376,6 +381,23 @@
                         <option value="if_statements_1">IF-statements 1: if-else statements</option>
                         <option value="loops_1">Loops 1: Basic while loops</option>
                         <option value="if_statements_2">IF-statements 2: Boolean logic</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="mb-3">
+                      <label for="quiz-week" class="form-label fw-bold">Week</label>
+                      <select class="form-select" name="quiz-week" required>
+                        <option selected disabled value="">Select a week</option>
+                        <option value="1">Week 1</option>
+                        <option value="2">Week 2</option>
+                        <option value="3">Week 3</option>
+                        <option value="4">Week 4</option>
+                        <option value="5">Week 5</option>
+                        <option value="6">Week 6</option>
                       </select>
                     </div>
                   </div>
@@ -930,6 +952,32 @@
                 </div>
               </div>
 
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Add subject-->
+  <main class="pt-3" id="add-subject">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <label class="form-label fw-bold fs-4" for="add-subject">Add subject</label>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="mb-3">
+            <div class="card">
+              <div class="card-header">Enter subject details</div>
+              <div class="card-body">
+                <form id="add-subject-form">
+
+                </form>
+              </div>
             </div>
           </div>
         </div>

@@ -163,9 +163,11 @@ main {
 }
 
 .text-danger {
-    color: red;
+    font-size: 14px ;
+    color: lightcoral;
 }
 
 .text-success {
+    font-size: 14px ;
     color: green;
 }
