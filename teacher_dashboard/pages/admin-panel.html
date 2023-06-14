@@ -156,7 +156,7 @@
             <div class="collapse" id="leaderboard">
               <ul class="navbar-nav ps-3">
                 <li>
-                  <a href="#add-leaderboar" class="nav-link px-3" id="add-leaderboard-link">
+                  <a href="#add-leaderboard" class="nav-link px-3" id="add-leaderboard-link">
                     <span>Add leaderboard</span>
                   </a>
                 </li>
@@ -369,9 +369,9 @@
                 <div class="row">
                   <div class="col-md-12">
                     <div class="mb-3">
-                      <label for="quiz-name" class="form-label fw-bold">Assignment</label>
+                      <label for="quiz-name" class="form-label fw-bold">Subject</label>
                       <select class="form-select" name="quiz-subject" aria-label="Default select example" required>
-                        <option selected disabled value="">Select an assignment</option>
+                        <option selected disabled value="">Select a subject</option>
                         <option value="methods_1">Methods 1: Methods with arguments</option>
                         <option value="variables_1">Variables 1: Primitive variables</option>
                         <option value="methods_2">Methods 2: Methods with return values</option>
@@ -390,14 +390,12 @@
                       <div id="questions-container">
                         <!-- Questions and answers will be added dynamically here -->
                       </div>
-                      <button type="button" class="btn btn-primary mt-3" id="add-question-btn">Add Question</button>
-                      <button type="button" class="btn btn-danger mt-3" id="remove-question-btn">Remove
-                        Question</button>
                     </div>
                   </div>
 
                   <div class="row">
-                    <div class="col-md-12 text-end">
+                    <div class="col text-end">
+                      <button type="button" class="btn btn-primary" id="add-question-btn">Add Question</button>
                       <button type="submit" class="btn btn-success">Submit Quiz</button>
                     </div>
                   </div>
@@ -465,8 +463,8 @@
   </main>
 
   <!-- Edit Quiz modal-->
-  <div class="modal fade" id="edit-quiz-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable">
+  <div class="modal fade" id="edit-quiz-modal" tabindex="-1" aria-hidden=" true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="edit-quiz-modal-header">Edit quiz</h5>
@@ -784,6 +782,81 @@
   </main>
   <!-- Ban student -->
 
+  <!-- Add leaderboard -->
+  <main class="pt-3" id="add-leaderboard">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12 fw-bold fs-4">Add leaderboard</div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="mb-3">
+            <div class="card">
+              <div class="card-header">Leaderboard details</div>
+              <div class="card-body">
+                <form id="create-leaderboard-form">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="mb-3">
+                        <label for="leaderboard-name" class="form-label fw-bold">Leaderboard name</label>
+                        <input type="text" name="leaderboard-name" class="form-control" id="leaderboard-name"
+                          placeholder="enter a name" required>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-12 text-end">
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <div class="card-footer">
+                <div class="row">
+                  <div class="col-md-12 text-end">
+                    <button type="submit" form="create-leaderboard-form" class="btn btn-primary">Create
+                      leaderboard</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <!-- Add leaderboard -->
+
+  <!-- Update leaderboard -->
+  <main class="pt-3" id="update-leaderboard">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12 fw-bold fs-4">Update leaderboard</div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="mb-3">
+            <div class="card">
+              <div class="card-header">Select a leaderboard</div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table data-table" id="update-leaderboard-table">
+                    <thead>
+                      <tr></tr>
+                    </thead>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <!-- Update leaderboard -->
+
   <script src="../js/bootstrap.bundle.min.js"></script>
   <script src="../js/jquery-3.7.0.min.js"></script>
   <script src="../js/jquery.dataTables.min.js"></script>
@@ -791,6 +864,7 @@
   <script src="../js/script.js"></script>
   <script src="../js/quiz.js"></script>
   <script src="../js/student.js"></script>
+  <script src="../js/leaderboard.js"></script>
 </body>
 
 </html>

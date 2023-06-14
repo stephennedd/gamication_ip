@@ -134,6 +134,19 @@ namespace GamificationToIP.Seed
                         }
                     }
                 }
+
+                foreach (var subject in gamificationToIpData.subjects)
+                {
+                    var newSubject = new Subject
+                    {
+                        SubjectTitle= subject.SubjectTitle,
+                        WeekNumber= subject.WeekNumber,
+                        TestId= subject.TestId,
+                    };
+
+                    applicationDbContext.Set<Subject>().Add(newSubject);
+                    await applicationDbContext.SaveChangesAsync();
+                }
             }
         }
 

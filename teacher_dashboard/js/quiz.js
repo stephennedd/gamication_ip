@@ -1,14 +1,20 @@
 // Quiz creation form
 $(document).ready(function () {
-    // Counter to keep track of the number of questions
-    let questionCounter = 0;
-
     // Function to generate the HTML for a question and its answers
     function generateQuestionHTML(questionId) {
         const colors = ['correct', 'wrong'];
         return `
-            <div class="question mb-3">
-            <label for="question[${questionId}]" class="form-label">Question ${questionId + 1}</label>
+            <div class="created-question mb-3">
+            <div class="col-md-12">
+                <div class="row align-items-center">
+                    <div class="col me-2">
+                        <label for="question[${questionId}]" class="form-label">Question ${questionId + 1}</label>
+                    </div>
+                    <div class="col mb-2 text-end">
+                        <button id="remove-question" type="button" class="btn btn-danger btn-sm" onclick="removeQuestion(this)">Remove</button>
+                    </div>
+                </div>
+            </div>
             <input type="text" name="question[${questionId}]" class="form-control" placeholder="Enter a question" required>
             <div class="mt-2 mb-3 me-3">
                 <input class="form-control mx-3 mb-1 ${colors[0]}" type="text" name="answer[${questionId}][]" placeholder="Correct answer" required>
@@ -22,18 +28,14 @@ $(document).ready(function () {
 
     // Event handler for the "Add Question" button click
     $('#add-question-btn').click(function () {
-      const questionHTML = generateQuestionHTML(questionCounter);
-      questionCounter++;
+        // count number of questions
+        var questions = document.getElementsByClassName('created-question');
+        questionCounter = questions.length; 
+        const questionHTML = generateQuestionHTML(questionCounter);
+        // Add the question to the page
       $('#questions-container').append(questionHTML);
     });
 
-    // Event handler for the "Remove Question" button click
-    $('#remove-question-btn').click(function () {
-        if (questionCounter > 0) {
-            $('#questions-container').children().last().remove();
-            questionCounter--;
-        }
-    });
 
     // Event handler for the form submission
     $('#quiz-form').submit(function (e) {
@@ -61,6 +63,21 @@ $(document).ready(function () {
     });
 });
 
+// Event handler for the "Remove Question" button click
+function removeQuestion(button) {
+    // Get the question container
+    const questionContainer = button.parentNode.parentNode.parentNode.parentNode;
+    // Remove the question container
+    questionContainer.remove();
+
+    // renumber the questions
+    var questions = document.getElementsByClassName('created-question');
+    for (var i = 0; i < questions.length; i++) {
+        var question = questions[i];
+        question.querySelector('label').innerText = `Question ${i + 1}`;
+    }
+}
+
 // update a quiz
 function editQuiz(button) {
     var exampleQuestions = [
@@ -68,6 +85,8 @@ function editQuiz(button) {
         {questionText: "What is the capital of Spain?", correctAnswer: "Madrid" ,answers: ["Madrid", "London", "Berlin", "Paris"]},
         {questionText: "What is the capital of Germany?", correctAnswer: "Berlin" ,answers: ["Berlin", "London", "Paris", "Madrid"]},
     ];
+
+
 
     // Get the quiz ID from the row using the data attribute
     var row = button.parentNode.parentNode; // Get the parent row

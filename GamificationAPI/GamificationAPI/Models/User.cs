@@ -4,6 +4,7 @@ using GamificationAPI.Services;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace GamificationToIP.Models;
 public class User
@@ -19,6 +20,6 @@ public class User
     public Group? Group { get; set; }
     public Role Role { get; set; }
 
-    public List<Badge> Badges { get; set; } = new List<Badge>();
+    public ICollection<Badge> Badges { get; } = new List<Badge>();
     public List<HighScore> HighScores { get; set; } = new List<HighScore>();
 }

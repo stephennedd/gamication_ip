@@ -1,4 +1,3 @@
-
 const checkbox = document.getElementById('admin-checkbox');
 const adminSection = document.getElementById('admin-section');
 
@@ -67,14 +66,17 @@ function handlePageChange() {
   
     // Define a mapping of hash values to section IDs and link IDs
     const sectionMappings = {
-      '#create-quiz': { sectionId: 'create-quiz', linkId: 'create-quiz-link' },
-      '#edit-quiz': { sectionId: 'edit-quiz', linkId: 'edit-quiz-link' },
-      '#student-results': { sectionId: 'student-results', linkId: 'student-results-link' },
-      '#delete-quiz': { sectionId: 'delete-quiz', linkId: 'delete-quiz-link' },
-      '#add-student': { sectionId: 'add-student', linkId: 'add-student-link' },
-      '#delete-student': { sectionId: 'delete-student', linkId: 'delete-student-link' },
-      '#update-student': { sectionId: 'update-student', linkId: 'update-student-link' },
-      '#ban-student': { sectionId: 'ban-student', linkId: 'ban-student-link' },
+        '#create-quiz': { sectionId: 'create-quiz', linkId: 'create-quiz-link' },
+        '#edit-quiz': { sectionId: 'edit-quiz', linkId: 'edit-quiz-link' },
+        '#student-results': { sectionId: 'student-results', linkId: 'student-results-link' },
+        '#delete-quiz': { sectionId: 'delete-quiz', linkId: 'delete-quiz-link' },
+        '#add-student': { sectionId: 'add-student', linkId: 'add-student-link' },
+        '#delete-student': { sectionId: 'delete-student', linkId: 'delete-student-link' },
+        '#update-student': { sectionId: 'update-student', linkId: 'update-student-link' },
+        '#ban-student': { sectionId: 'ban-student', linkId: 'ban-student-link' },
+        '#add-leaderboard': { sectionId: 'add-leaderboard', linkId: 'add-leaderboard-link' },
+        '#delete-leaderboard': { sectionId: 'delete-leaderboard', linkId: 'delete-leaderboard-link' },
+        '#update-leaderboard': { sectionId: 'update-leaderboard', linkId: 'update-leaderboard-link' },
     };
   
     // Default section and link IDs if the hash doesn't match any mapping

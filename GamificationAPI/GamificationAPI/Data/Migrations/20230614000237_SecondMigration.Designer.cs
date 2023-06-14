@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GamificationAPI.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230611102603_SecondMigration")]
+    [Migration("20230614000237_SecondMigration")]
     partial class SecondMigration
     {
         /// <inheritdoc />
@@ -24,6 +24,21 @@ namespace GamificationAPI.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("BadgeUser", b =>
+                {
+                    b.Property<int>("BadgesId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UsersId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("BadgesId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("BadgeUser");
+                });
 
             modelBuilder.Entity("BulkyBookWeb.Models.Student", b =>
                 {
@@ -73,20 +88,15 @@ namespace GamificationAPI.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("imageUrl")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Badges");
                 });
@@ -272,37 +282,6 @@ namespace GamificationAPI.Data.Migrations
                     b.ToTable("Questions");
                 });
 
-            modelBuilder.Entity("GamificationToIP.Models.StudentResult", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("TestId")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("TestId1")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("numberOfGivenCorrectAnswers")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("studentId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TestId");
-
-                    b.HasIndex("TestId1");
-
-                    b.HasIndex("studentId");
-
-                    b.ToTable("StudentResults");
-                });
-
             modelBuilder.Entity("GamificationToIP.Models.Test", b =>
                 {
                     b.Property<int>("Id")
@@ -372,13 +351,45 @@ namespace GamificationAPI.Data.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("GamificationAPI.Models.Badge", b =>
+            modelBuilder.Entity("Subject", b =>
                 {
-                    b.HasOne("GamificationToIP.Models.User", "User")
-                        .WithMany("Badges")
-                        .HasForeignKey("UserId");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
 
-                    b.Navigation("User");
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("SubjectTitle")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("TestId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("WeekNumber")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TestId")
+                        .IsUnique();
+
+                    b.ToTable("Subjects");
+                });
+
+            modelBuilder.Entity("BadgeUser", b =>
+                {
+                    b.HasOne("GamificationAPI.Models.Badge", null)
+                        .WithMany()
+                        .HasForeignKey("BadgesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GamificationToIP.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("GamificationAPI.Models.GeneratedTest", b =>
@@ -464,29 +475,6 @@ namespace GamificationAPI.Data.Migrations
                     b.Navigation("Test");
                 });
 
-            modelBuilder.Entity("GamificationToIP.Models.StudentResult", b =>
-                {
-                    b.HasOne("GamificationAPI.Models.GeneratedTest", "Test")
-                        .WithMany()
-                        .HasForeignKey("TestId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("GamificationToIP.Models.Test", null)
-                        .WithMany("UserResults")
-                        .HasForeignKey("TestId1");
-
-                    b.HasOne("BulkyBookWeb.Models.Student", "student")
-                        .WithMany()
-                        .HasForeignKey("studentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Test");
-
-                    b.Navigation("student");
-                });
-
             modelBuilder.Entity("GamificationToIP.Models.User", b =>
                 {
                     b.HasOne("GamificationAPI.Models.Group", "Group")
@@ -504,6 +492,17 @@ namespace GamificationAPI.Data.Migrations
                     b.Navigation("Role");
                 });
 
+            modelBuilder.Entity("Subject", b =>
+                {
+                    b.HasOne("GamificationToIP.Models.Test", "Test")
+                        .WithOne("Subject")
+                        .HasForeignKey("Subject", "TestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Test");
+                });
+
             modelBuilder.Entity("GamificationAPI.Models.Leaderboard", b =>
                 {
                     b.Navigation("HighScores");
@@ -518,13 +517,12 @@ namespace GamificationAPI.Data.Migrations
                 {
                     b.Navigation("Questions");
 
-                    b.Navigation("UserResults");
+                    b.Navigation("Subject")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("GamificationToIP.Models.User", b =>
                 {
-                    b.Navigation("Badges");
-
                     b.Navigation("HighScores");
                 });
 #pragma warning restore 612, 618

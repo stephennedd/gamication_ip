@@ -21,12 +21,12 @@ window.addEventListener("DOMContentLoaded", function() {
           // User is authenticated
           authenticationCheckComplete = true;
           console.log("User is authenticated");
-          redirectTo("pages/admin-panel.html");
+          redirectTo("/pages/admin-panel.html");
         } else {
           // User is not authenticated
           authenticationCheckComplete = true;
           console.log("User is not authenticated");
-          //redirectTo("login.html");
+          //redirectTo("/pages/login.html");
           redirectTo("pages/admin-panel.html");
         }
       })

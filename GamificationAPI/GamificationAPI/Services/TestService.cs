@@ -15,7 +15,6 @@ public class TestService : ITests
     {
         _dbContext = dbContext;
     }
-
     public async Task<TestDto> GetTestByIdAsync(int id)
     {
         var test = await _dbContext.Tests

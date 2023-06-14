@@ -18,7 +18,6 @@ namespace GamificationToIP.Context
         public DbSet<Test> Tests { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<Answer> Answers { get; set; }
-        public DbSet<StudentResult> StudentResults { get; set; }
         public DbSet<HighScore> HighScores { get; set; }
         public DbSet<Leaderboard> Leaderboards { get; set; }
         public DbSet<GeneratedTest> GeneratedTest { get; set; }
@@ -29,17 +28,18 @@ namespace GamificationToIP.Context
 
         public DbSet<Student> Students { get; set; }
 
+        public DbSet<Subject> Subjects { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>()
                 .HasMany(e => e.HighScores)
                 .WithOne(e => e.User)            
                 .IsRequired(false);
-            
+
             modelBuilder.Entity<User>()
                 .HasMany(b => b.Badges)
-                .WithOne(u => u.User)
-                .IsRequired(false);
+                .WithMany(u => u.Users);
             
             modelBuilder.Entity<Leaderboard>()
                 .HasMany(e => e.HighScores)
