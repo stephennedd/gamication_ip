@@ -576,7 +576,12 @@ document.addEventListener('keydown', function (event) {
 
 // listen to message from parent frame to pause
 window.addEventListener('message', function (event) {
-	if (event.data.action === 'pauseGame') {
+	if (!gameStarted) {
+		gameStarted = true;
+		startPressed = 1;
+		removeStartScreen();
+		requestAnimationFrame(Update);
+	} else if (event.data.action === 'pauseGame') {
 		gameStarted = true;
 		startPressed = 1;
 		isPaused = !isPaused;
@@ -598,6 +603,12 @@ function createStartScreen() {
 	const paragraph = document.createElement('p');
 	paragraph.textContent = 'Press any button to start';
 	startScreen.appendChild(paragraph);
+
+	// add quick instruction that says press 'p' to pause and 'r' to restart
+	const instruction = document.createElement('p');
+	instruction.id = 'instruction';
+	instruction.textContent = "Press 'p' to pause and 'r' to restart";
+	startScreen.appendChild(instruction);
 
 	// Append the start screen to the document body
 	document.body.appendChild(startScreen);

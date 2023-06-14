@@ -37,6 +37,16 @@
 	font-family: 'Press Start 2P', cursive;
 }
 
+#instruction {
+	color: white;
+	font-size: 0.5rem;
+	font-family: 'Press Start 2P', cursive;
+	/* show on the bottom */
+	position: absolute;
+	bottom: 0;
+	margin-bottom: 50px;
+}
+
 #gameOverScreen {
 	width: 100%;
 	height: 100%;

@@ -103,8 +103,7 @@ window.addEventListener('DOMContentLoaded', function () {
 		}, 1200);
 
 		setTimeout(() => {
-			canvas.classList.remove('hide');
-			canvasWindow = canvas.contentWindow;
+			quiz.classList.remove('hide');
 
 			document.getElementById('buttonsPanel').style.width = '650px';
 
@@ -153,6 +152,7 @@ window.addEventListener('DOMContentLoaded', function () {
 		if (arcadeMachine.classList.contains('move-out-machine')) {
 			hideAllScreens();
 			canvas.classList.remove('hide');
+			canvasWindow = canvas.contentWindow;
 		}
 	}
 
