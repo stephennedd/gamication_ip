@@ -93,6 +93,28 @@ namespace GamificationToIP.Seed
                     await applicationDbContext.SaveChangesAsync();
                 }
 
+                foreach (var leaderboard in gamificationToIpData.leaderboards)
+                {
+                    Leaderboard leaderboard1 = new Leaderboard { Name = leaderboard.Name };
+                    applicationDbContext.Set<Leaderboard>().Add(leaderboard1);
+                    await applicationDbContext.SaveChangesAsync();
+                };
+
+
+                foreach (var highscore in gamificationToIpData.highscores)
+                {
+                    string userId = highscore.UserId;
+                    string leaderboardName = highscore.LeaderboardName;
+                    User user = await applicationDbContext.Set<User>().FirstOrDefaultAsync(u => u.UserId == userId);;
+                    var leaderboard = applicationDbContext.Set<Leaderboard>().Find(leaderboardName);
+                    if (user != null && leaderboard != null)
+                    {
+                        HighScore newHighScore = new HighScore { Leaderboard = leaderboard, Score = highscore.Score, User = user };
+                        applicationDbContext.Set<HighScore>().Add(newHighScore);
+                        await applicationDbContext.SaveChangesAsync();
+                    }
+                }
+
                     foreach (var test in gamificationToIpData.tests)
                 {
                     var newTest = new Test
