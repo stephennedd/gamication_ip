@@ -123,7 +123,7 @@ $(document).ready(function () {
     });
 
 
-    // Event handler for the form submission
+    // Event handler for the create-quiz form submission
     $('#quiz-form').submit(function (e) {
         //get the form data
         var formData = $(this).serializeArray();
@@ -147,9 +147,10 @@ $(document).ready(function () {
       e.preventDefault(); // Prevent the form from submitting for now
       // TODO: Submit the form using Ajax
     });
+
 });
 
-// Event handler for the "Remove Question" button click
+// Event handler for the "Remove Question" button click for the create quiz page
 function removeQuestion(button) {
     // Get the question container
     const questionContainer = button.parentNode.parentNode.parentNode.parentNode;
@@ -164,7 +165,7 @@ function removeQuestion(button) {
     }
 }
 
-// update a quiz
+// opens the edit quiz modal and populates it with the quiz data
 function editQuiz(button,subjects) {
 
     var row = button.parentNode.parentNode;
@@ -210,7 +211,17 @@ function editQuiz(button,subjects) {
         var question = subjectQuestions[i];
         var questionHTML = `
             <div class="question mb-3">
-            <label type="text" class="form-label">Question ${i+1}</label>
+            <div class="col-md-12">
+                <div class="row align-items-center">
+                    <div class="col me-2">
+                        <label for="question[${i}]" class="form-label">Question ${i+1}</label>
+                    </div>
+                    <div class="col mb-2 text-end">
+                        <button id="remove-question" type="button" class="btn btn-danger btn-sm" onclick="removeEditModalQuestion(this)">Remove</button>
+                    </div>
+                </div>
+            </div>
+  
             <input type="text" name="question[${i}]" class="form-control" placeholder="Enter a question" required value="${question.QuestionText}">
             <div class="mt-2 mb-3 me-3">
                 <input class="form-control mx-3 mb-1 correct" type="text" name="answer[${i}][]" placeholder="Correct answer" required value="${question.Answers[0].AnswerText}">
@@ -225,7 +236,7 @@ function editQuiz(button,subjects) {
     }
 }
 
-// add a question to the edit quiz modal
+// add a question to the edit-quiz modal
 function addQuestionToModal() {
     // get the number of questions currently in the modal
     var numQuestions = $('#modal-questions-container').children().length;
@@ -233,7 +244,17 @@ function addQuestionToModal() {
     // add a new question to the modal
     var questionHTML = `
         <div class="question mb-3">
-        <label type="text" class="form-label">Question ${numQuestions+1}</label>
+        <div class="col-md-12">
+                <div class="row align-items-center">
+                    <div class="col me-2">
+                        <label for="question[${numQuestions+1}]" class="form-label">Question ${numQuestions+1}</label>
+                    </div>
+                    <div class="col mb-2 text-end">
+                        <button id="remove-question" type="button" class="btn btn-danger btn-sm" onclick="removeEditModalQuestion(this)">Remove</button>
+                    </div>
+                </div>
+            </div>
+
         <input type="text" name="question[${numQuestions}]" class="form-control" placeholder="Enter a question" required>
         <div class="mt-2 mb-3 me-3">
             <input class="form-control mx-3 mb-1 correct" type="text" name="answer[${numQuestions}][]" placeholder="Correct answer" required>
@@ -246,27 +267,42 @@ function addQuestionToModal() {
     $('#modal-questions-container').append(questionHTML);
 }
 
-// remove a question from the edit quiz modal
-function removeQuestionFromModal() {
-    // get the number of questions currently in the modal
-    var numQuestions = $('#modal-questions-container').children().length;
+// remove a question from the edit-quiz modal
+function removeEditModalQuestion(button) {
+    // Get the question container
+    const questionContainer = button.parentNode.parentNode.parentNode.parentNode;
+    // Remove the question container
+    questionContainer.remove();
 
-    // remove the last question from the modal
-    if (numQuestions > 0) {
-        $('#modal-questions-container').children().last().remove();
+    // renumber the questions
+    var questions = document.getElementsByClassName('question');
+    for (var i = 0; i < questions.length; i++) {
+        var question = questions[i];
+        question.querySelector('label').innerText = `Question ${i + 1}`;
     }
 }
 
-function confirmQuizUpdate() {
-    if (confirm("Are you sure you want to update this quiz?")) {
-        // TODO: submit the form using to server
-        console.log('Quiz updated');
-        // dismiss the modal
-        $('#edit-quiz-modal').modal('hide');
+// submit the edit-quiz form
+$('#edit-quiz-form').submit(function (e) {
+    // get the form data
+    var formData = $(this).serializeArray();
+   
+    // convert form data to JSON
+    const jsonData = {};
+    for (let i = 0; i < formData.length; i++) {
+        jsonData[formData[i].name] = formData[i].value;
     }
-}
+    console.log(jsonData);
 
-// delete a quiz
+    e.preventDefault();
+
+    // close the modal
+    $('#edit-quiz-modal').modal('hide');
+  });
+
+
+
+// delete a quiz from the database and remove it from the page
 function removeQuiz(button) {
     if (confirm("Are you sure you want to delete this quiz?")) {
         // TODO send the delete request to the server
