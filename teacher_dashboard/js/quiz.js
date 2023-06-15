@@ -63,7 +63,7 @@ function populateTable(subjects) {
   const td5 = document.createElement('td');
   const button = document.createElement('button');
   button.type = 'button';
-  button.className = 'btn-sm btn-outline-success';
+  button.className = 'btn btn-sm btn-outline-success';
   button.textContent = 'Edit';
   button.addEventListener('click', function () {
     editQuiz(this, subjects);
@@ -166,11 +166,6 @@ function removeQuestion(button) {
 
 // update a quiz
 function editQuiz(button,subjects) {
-    // var exampleQuestions = [
-    //     {questionText: "What is the capital of France?", correctAnswer: "Paris" ,answers: ["Paris", "London", "Berlin", "Madrid"]},
-    //     {questionText: "What is the capital of Spain?", correctAnswer: "Madrid" ,answers: ["Madrid", "London", "Berlin", "Paris"]},
-    //     {questionText: "What is the capital of Germany?", correctAnswer: "Berlin" ,answers: ["Berlin", "London", "Paris", "Madrid"]},
-    // ];
 
     var row = button.parentNode.parentNode;
     const subjectId = row.dataset.quizId;
