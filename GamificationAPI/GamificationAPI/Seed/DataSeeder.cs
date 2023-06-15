@@ -24,7 +24,7 @@ namespace GamificationToIP.Seed
         {
             await ClearData(); // Clear existing data before seeding
 
-            using (StreamReader reader = new StreamReader("Seed\\gamificationToIpData.json"))
+            using (StreamReader reader = new StreamReader("Seed//gamificationToIpData.json"))
             {
                 string jsonData = await reader.ReadToEndAsync();
                 dynamic gamificationToIpData = JsonConvert.DeserializeObject(jsonData);
