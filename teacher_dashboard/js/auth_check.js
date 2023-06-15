@@ -10,7 +10,7 @@ window.addEventListener("DOMContentLoaded", function() {
         setTimeout(function() {
           console.log("Redirecting to " + destination);
           redirectTo(destination);
-        }, 500 * 4);
+        }, 500 * 6);
       }
     }
   
