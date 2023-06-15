@@ -1,3 +1,7 @@
+let subjects;
+let chosenSubject;
+let numberOfExistingQuestions;
+
 const editQuizLink = document.getElementById('edit-quiz-link');
 
 editQuizLink.addEventListener('click', async function (event) {
@@ -6,9 +10,7 @@ editQuizLink.addEventListener('click', async function (event) {
   try {
     const response = await fetch('https://localhost:7186/api/subjects');
     const data = await response.json();
-    const subjects = data;
-    console.log(subjects);
-
+    subjects = data;
     // Store the subjects data in localStorage
     localStorage.setItem('subjectsData', JSON.stringify(subjects));
 
@@ -66,7 +68,9 @@ function populateTable(subjects) {
   button.className = 'btn-sm btn-outline-success';
   button.textContent = 'Edit';
   button.addEventListener('click', function () {
-    editQuiz(this, subjects);
+    chosenSubject = subject;
+    numberOfExistingQuestions = subject.Test.Questions.length;
+    editQuiz(this, subjects,subject);
   });
   td5.appendChild(button);
   tr.appendChild(td5);
@@ -165,7 +169,7 @@ function removeQuestion(button) {
 }
 
 // update a quiz
-function editQuiz(button,subjects) {
+function editQuiz(button,subjects,subject) {
     // var exampleQuestions = [
     //     {questionText: "What is the capital of France?", correctAnswer: "Paris" ,answers: ["Paris", "London", "Berlin", "Madrid"]},
     //     {questionText: "What is the capital of Spain?", correctAnswer: "Madrid" ,answers: ["Madrid", "London", "Berlin", "Paris"]},
@@ -231,8 +235,7 @@ function editQuiz(button,subjects) {
 }
 
 // add a question to the edit quiz modal
-function addQuestionToModal() {
-    // get the number of questions currently in the modal
+function addQuestionToModal(subjects) {
     var numQuestions = $('#modal-questions-container').children().length;
 
     // add a new question to the modal
@@ -262,8 +265,76 @@ function removeQuestionFromModal() {
     }
 }
 
-function confirmQuizUpdate() {
+async function confirmQuizUpdate(button,subjects) {
     if (confirm("Are you sure you want to update this quiz?")) {
+      // Get the questions and answers entered by the user
+    var questions = $('#modal-questions-container').find('.question');
+  
+    // Iterate over each question and extract the values
+    questions.each(function (index) {
+      var questionText = $(this).find('input[name^="question"]').val();
+  var correctAnswer = $(this).find('input[name^="answer"]:first').val();
+  var secondAnswer = $(this).find('input[name^="answer"]:eq(1)').val();
+  var thirdAnswer = $(this).find('input[name^="answer"]:eq(2)').val();
+  var fourthAnswer = $(this).find('input[name^="answer"]:eq(3)').val();
+ 
+  if (numberOfExistingQuestions >= index + 1) {
+    chosenSubject.Test.Questions[index].QuestionText = questionText;
+    chosenSubject.Test.Questions[index].CorrectAnswer = correctAnswer;
+    chosenSubject.Test.Questions[index].Answers[0].AnswerText = correctAnswer;
+    chosenSubject.Test.Questions[index].Answers[1].AnswerText = secondAnswer;
+    chosenSubject.Test.Questions[index].Answers[2].AnswerText = thirdAnswer;
+    chosenSubject.Test.Questions[index].Answers[3].AnswerText = fourthAnswer;
+  } else {
+    chosenSubject.Test.Questions.push({
+      Answers: [
+        { Identifier: 'A', AnswerText: correctAnswer },
+        { Identifier: 'B', AnswerText: secondAnswer },
+        { Identifier: 'C', AnswerText: thirdAnswer },
+        { Identifier: 'D', AnswerText: fourthAnswer }
+      ],
+      CorrectAnswer: correctAnswer,
+      QuestionText: questionText,
+      SelectedAnswer: '',
+      TestId: chosenSubject.Test.Id
+    });
+  }
+    });
+
+    
+    // Send chosenSubject via API using fetch
+   await fetch('https://localhost:7186/api/subjects', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(chosenSubject)
+    })
+      .then(response => {
+        if (response.ok) {
+          console.log('Quiz updated successfully');
+          // dismiss the modal
+          $('#edit-quiz-modal').modal('hide');
+        } else {
+          throw new Error('Failed to update quiz');
+        }
+      })
+      .catch(error => {
+        console.error(error);
+      });
+
+      try {
+        const response = await fetch('https://localhost:7186/api/subjects');
+        const data = await response.json();
+        subjects = data;
+        // Store the subjects data in localStorage
+        localStorage.setItem('subjectsData', JSON.stringify(subjects));
+      } catch (error) {
+        console.error(error);
+      }
+
+      populateTable(subjects);
+
         // TODO: submit the form using to server
         console.log('Quiz updated');
         // dismiss the modal
