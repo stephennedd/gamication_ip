@@ -133,7 +133,7 @@ window.addEventListener('DOMContentLoaded', function () {
 	}
 
 	function showQuiz() {
-		pressPause();
+		// pressPause();
 		if (arcadeMachine.classList.contains('move-out-machine')) {
 			hideAllScreens();
 			quiz.classList.remove('hide');
@@ -141,7 +141,7 @@ window.addEventListener('DOMContentLoaded', function () {
 	}
 
 	function showLeaderboard() {
-		pressPause();
+		// pressPause();
 		if (arcadeMachine.classList.contains('move-out-machine')) {
 			hideAllScreens();
 			leaderboard.classList.remove('hide');
