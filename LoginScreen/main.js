@@ -33,22 +33,52 @@ document.addEventListener('DOMContentLoaded', function () {
 	}, 50 * spans.length);
 });
 
-document
-	.getElementById('loginForm')
-	.addEventListener('submit', function (event) {
-		var email = document.getElementById('email').value;
-		var password = document.getElementById('password').value;
-		var loginButton = document.getElementById('login');
+document.getElementById('loginForm').addEventListener('submit', function(event) {
+	event.preventDefault(); // Prevent the form from submitting normally
 
-		// Check if either field is empty
-		if (email === '' || password === '') {
-			// Prevent form from submitting
-			event.preventDefault();
+	var email = document.getElementById('email').value;
+	var password = document.getElementById('password').value;
+	var loginButton = document.getElementById('login');
 
-			// Show error message on the button and change its background to red
-			loginButton.textContent = '[ EMPTY INPUT! ]';
-			// loginButton.classList.add('error');
-		} else {
-			// You can add additional logic here for successful submission
-		}
-	});
+	if (email === '' || password === '') {
+		loginButton.textContent = '[ EMPTY INPUT! ]';
+	} else {
+		// Prepare the request payload
+		var data = {
+			userId: email,
+			password: password
+		};
+
+		// Send a POST request to the login endpoint
+		fetch("https://localhost:7186/api/Tokens", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify(data)
+		})
+		.then(function(response) {
+			if (!response.ok) {
+				// Invalid credentials, display an error message
+				throw new Error("Invalid username or password");
+			}
+			// Successful login, handle the response (e.g., store token/session, redirect)
+			return response.json();
+		})
+		.then(function(data) {
+			// Store the JWT in a cookie
+			document.cookie = 'jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+
+			document.cookie = `jwt=${data.token}; path=/`;
+
+			// Redirect to the admin panel or perform other necessary actions
+			window.location.href = "index.html"; //TODO: change to whatever.html
+		})
+		.catch(function(error) {
+			// Handle any error that occurred during the login process
+			console.error(error);
+			// Display an error message to the user
+			loginButton.textContent = '[ LOGIN FAILED! ]';
+		});
+	}
+});

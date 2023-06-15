@@ -29,6 +29,7 @@ document.getElementById("loginForm").addEventListener("submit", function(event) 
     .then(function(data) {
       // Here we assume your server response includes a property "token" containing the JWT
       // Store the JWT in a cookie
+      document.cookie = 'jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
       document.cookie = `jwt=${data.token}; path=/`;
 
       // Redirect to the admin panel or perform other necessary actions
