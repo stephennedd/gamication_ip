@@ -11,5 +11,6 @@ namespace GamificationAPI.Interfaces
         Task AddHighScoreAsync(HighScore highScore);
         Task UpdateHighScoreAsync(HighScore highScore, string leaderboardName);
         Task DeleteHighScoreAsync(int id);
+        Task<bool> UpdateMainLeaderboard(string userId);
     }
 }

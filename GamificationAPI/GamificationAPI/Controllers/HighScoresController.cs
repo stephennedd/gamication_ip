@@ -52,6 +52,11 @@ namespace GamificationAPI.Controllers
                 return BadRequest();
             }
 
+            if (leaderboardName == "main")
+            {
+                return BadRequest("Cant post highscores to main leaderboard");
+            }
+
             var highScore = new HighScore
             {
                 Leaderboard = await _leaderboardService.GetLeaderboardByNameAsync(leaderboardName),
@@ -66,10 +71,14 @@ namespace GamificationAPI.Controllers
                 if (await _highScoreService.CheckIfItsHighScore(highScore, leaderboardName) == true)
                 {
                     await _highScoreService.UpdateHighScoreAsync(highScore, leaderboardName);
-                    
-                    
+
+                    bool success = await _highScoreService.UpdateMainLeaderboard(userId);
+                    if (!success) 
+                    {
+                        Console.WriteLine("we failed updating main");
+                        return BadRequest(); 
+                    }
                         return Ok();
-                    
                     
                 }
                 else
@@ -81,11 +90,16 @@ namespace GamificationAPI.Controllers
             {
                 Console.WriteLine("user doesnt have high score in this leaderboard");
                 bool success = await _leaderboardService.AddHighScoreAsync(highScore, leaderboardName);
-                if (success)
-                {
-                    return Ok();
+                if (!success)
+                { 
+                    return BadRequest();
                 }
-                return BadRequest();
+                bool success2 = await _highScoreService.UpdateMainLeaderboard(userId);
+                if (!success2)
+                {
+                    return BadRequest();
+                }
+                return Ok();
             }
 
 
