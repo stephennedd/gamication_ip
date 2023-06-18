@@ -53,11 +53,10 @@
     
     <script>
         let currentLeaderboard = 'main'; // Default leaderboard name
-        let myGroup = false; // Default myGroup value
         var token = document.cookie
-        .split('; ')
-        .find(row => row.startsWith('jwt='))
-        .split('=')[1];
+  .split('; ')
+  .find(row => row.startsWith('jwt='))
+  .split('=')[1];
         let leaderboardData = [
             { playerName: "John", score: 500, badges: ["badge1.png", "badge2.png"] },
             { playerName: "Emma", score: 400 , badges: ["badge3.png"]},
@@ -122,7 +121,6 @@
                     <td>${position}</td>
                     <td>${entry.playerName}</td>
                     <td>${entry.score}</td>
-                    
                 `;
                 leaderboardBody.appendChild(row);
             });
@@ -131,15 +129,13 @@
     
 
     try {
-          
-        let response = await fetch('https://localhost:7186/api/Leaderboards/' + currentLeaderboard + `?mygroup=${myGroup}`, {
+        let response = await fetch('https://localhost:7186/api/Leaderboards/' + currentLeaderboard, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
             }
         });
-        
         
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);

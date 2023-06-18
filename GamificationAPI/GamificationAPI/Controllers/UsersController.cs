@@ -209,9 +209,9 @@ namespace GamificationToIP.Controllers
                 return BadRequest();
             }
             bool success = await _userService.AddBadgeAsync(badge, id);
-            if (!success)
+            if (success)
             {
-                return BadRequest();
+                return Ok();
             }
             return BadRequest();
 
