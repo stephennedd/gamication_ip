@@ -115,14 +115,16 @@ public class HighScoreService : IHighScores
             {
                 HighScore? highScoreInDB = userHS.FirstOrDefault(item => item.Leaderboard.Name == "main");
                 int overallScore = 0;
-                highScoreInDB.Score = 0;
-                foreach (var item in user.HighScores)
+                if (highScoreInDB != null)
+                {
+                    highScoreInDB.Score = 0;
+                }
+                    foreach (var item in user.HighScores)
                 {
                     overallScore += item.Score;
                 }
                 if (highScoreInDB != null)
                 {
-
                     highScoreInDB.Score = overallScore;
                     _dbContext.Set<HighScore>().Update(highScoreInDB);
                     await _dbContext.SaveChangesAsync();

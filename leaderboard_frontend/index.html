@@ -121,6 +121,8 @@
                     <td>${position}</td>
                     <td>${entry.playerName}</td>
                     <td>${entry.score}</td>
+                    <td>${entry.badges.map(badge => `<img src="./assets/images/${badge}" height="25px" alt="Badge">`).join('')}</td>
+                
                 `;
                 leaderboardBody.appendChild(row);
             });

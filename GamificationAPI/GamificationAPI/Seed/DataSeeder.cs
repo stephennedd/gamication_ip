@@ -100,7 +100,7 @@ namespace GamificationToIP.Seed
                     await applicationDbContext.SaveChangesAsync();
                 };
 
-
+                /*
                 foreach (var highscore in gamificationToIpData.highscores)
                 {
                     string userId = highscore.UserId;
@@ -114,7 +114,7 @@ namespace GamificationToIP.Seed
                         await applicationDbContext.SaveChangesAsync();
                     }
                 }
-
+                */
                     foreach (var test in gamificationToIpData.tests)
                 {
                     var newTest = new Test
