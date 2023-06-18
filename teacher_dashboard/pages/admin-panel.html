@@ -532,8 +532,11 @@
           <div class="col text-end">
             <button type="button" class="btn btn-primary" onclick="addQuestionToModal()">Add Question</button>
             <!-- <button type="button" class="btn btn-success" onclick="submitEditQuizForm()">Save changes</button> -->
-            <button type="submit" form="edit-quiz-form" class="btn btn-success" ">Save changes</button>
+            <button type="submit" form="edit-quiz-form" class="btn btn-success" onclick="confirmQuizUpdate(this,subjects)">Save changes</button>
           </div>
+          <!-- <button type="button" class="btn btn-primary" onclick="addQuestionToModal(chosenSubject)">Add Question</button>
+          <button type="button" class="btn btn-danger" onclick="removeQuestionFromModal()">Remove Question</button>
+          <button type="button" class="btn btn-success" onclick="confirmQuizUpdate(this,subjects)">Save changes</button> -->
         </div>
       </div>
     </div>

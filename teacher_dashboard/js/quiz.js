@@ -1,3 +1,7 @@
+let subjects;
+let chosenSubject;
+let numberOfExistingQuestions;
+
 const editQuizLink = document.getElementById('edit-quiz-link');
 
 editQuizLink.addEventListener('click', async function (event) {
@@ -6,9 +10,7 @@ editQuizLink.addEventListener('click', async function (event) {
   try {
     const response = await fetch('https://localhost:7186/api/subjects');
     const data = await response.json();
-    const subjects = data;
-    console.log(subjects);
-
+    subjects = data;
     // Store the subjects data in localStorage
     localStorage.setItem('subjectsData', JSON.stringify(subjects));
 
@@ -66,7 +68,9 @@ function populateTable(subjects) {
   button.className = 'btn btn-sm btn-outline-success';
   button.textContent = 'Edit';
   button.addEventListener('click', function () {
-    editQuiz(this, subjects);
+    chosenSubject = subject;
+    numberOfExistingQuestions = subject.Test.Questions.length;
+    editQuiz(this, subjects,subject);
   });
   td5.appendChild(button);
   tr.appendChild(td5);
@@ -152,7 +156,11 @@ $(document).ready(function () {
 
 // Event handler for the "Remove Question" button click for the create quiz page
 function removeQuestion(button) {
+  console.log("Liza")
     // Get the question container
+    var row = button.parentNode.parentNode;
+    const subjectId = row.dataset.quizId;
+    console.log(subjectId);
     const questionContainer = button.parentNode.parentNode.parentNode.parentNode;
     // Remove the question container
     questionContainer.remove();
@@ -165,8 +173,13 @@ function removeQuestion(button) {
     }
 }
 
-// opens the edit quiz modal and populates it with the quiz data
-function editQuiz(button,subjects) {
+// update a quiz
+function editQuiz(button,subjects,subject) {
+    // var exampleQuestions = [
+    //     {questionText: "What is the capital of France?", correctAnswer: "Paris" ,answers: ["Paris", "London", "Berlin", "Madrid"]},
+    //     {questionText: "What is the capital of Spain?", correctAnswer: "Madrid" ,answers: ["Madrid", "London", "Berlin", "Paris"]},
+    //     {questionText: "What is the capital of Germany?", correctAnswer: "Berlin" ,answers: ["Berlin", "London", "Paris", "Madrid"]},
+    // ];
 
     var row = button.parentNode.parentNode;
     const subjectId = row.dataset.quizId;
@@ -202,6 +215,9 @@ function editQuiz(button,subjects) {
     $('#edit-quiz-modal-header').text(`Edit Quiz ${quizName}`);
     $('#modal-quiz-name').val(quizName);
 
+   // document.getElementById('modal-quiz-subject').value = "methods_1";
+    document.getElementById('modal-quiz-week').value = chosenSubject.WeekNumber;
+
     // load questions into the modal
     var questionsContainer = $('#modal-questions-container');
     questionsContainer.empty();
@@ -217,7 +233,7 @@ function editQuiz(button,subjects) {
                         <label for="question[${i}]" class="form-label">Question ${i+1}</label>
                     </div>
                     <div class="col mb-2 text-end">
-                        <button id="remove-question" type="button" class="btn btn-danger btn-sm" onclick="removeEditModalQuestion(this)">Remove</button>
+                        <button id="remove-question" type="button" class="btn btn-danger btn-sm" onclick="removeEditModalQuestion(this,'${quizId}','${subjectQuestions[i].Id}')">Remove</button>
                     </div>
                 </div>
             </div>
@@ -236,9 +252,8 @@ function editQuiz(button,subjects) {
     }
 }
 
-// add a question to the edit-quiz modal
-function addQuestionToModal() {
-    // get the number of questions currently in the modal
+// add a question to the edit quiz modal
+function addQuestionToModal(subjects) {
     var numQuestions = $('#modal-questions-container').children().length;
 
     // add a new question to the modal
@@ -268,7 +283,39 @@ function addQuestionToModal() {
 }
 
 // remove a question from the edit-quiz modal
-function removeEditModalQuestion(button) {
+async function removeEditModalQuestion(button,quizId,questionId) {
+  for(let i = 0; i<chosenSubject.Test.Questions.length; i++){
+    if(chosenSubject.Test.Questions[i].Id==questionId){
+      chosenSubject.Test.Questions.splice(i, 1);
+      break; 
+    }
+  }
+   // Send chosenSubject via API using fetch
+ await fetch('https://localhost:7186/api/subjects', {
+  method: 'PUT',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(chosenSubject)
+})
+  .then(response => {
+    if (response.ok) {
+      console.log('Quiz updated successfully');
+      // dismiss the modal
+     // $('#edit-quiz-modal').modal('hide');
+    } else {
+      throw new Error('Failed to update quiz');
+    }
+  })
+  .catch(error => {
+    console.error(error);
+  });
+
+    // TODO: submit the form using to server
+   // console.log('Quiz updated');
+    // dismiss the modal
+    //$('#edit-quiz-modal').modal('hide');
+
     // Get the question container
     const questionContainer = button.parentNode.parentNode.parentNode.parentNode;
     // Remove the question container
@@ -280,6 +327,18 @@ function removeEditModalQuestion(button) {
         var question = questions[i];
         question.querySelector('label').innerText = `Question ${i + 1}`;
     }
+    
+    try {
+      const response = await fetch('https://localhost:7186/api/subjects');
+      const data = await response.json();
+      subjects = data;
+      // Store the subjects data in localStorage
+      localStorage.setItem('subjectsData', JSON.stringify(subjects));
+    } catch (error) {
+      console.error(error);
+    }
+  
+    populateTable(subjects);
 }
 
 // submit the edit-quiz form
@@ -291,14 +350,92 @@ $('#edit-quiz-form').submit(function (e) {
     const jsonData = {};
     for (let i = 0; i < formData.length; i++) {
         jsonData[formData[i].name] = formData[i].value;
-    }
+ 
     console.log(jsonData);
 
     e.preventDefault();
 
     // close the modal
     $('#edit-quiz-modal').modal('hide');
+}});
+
+async function confirmQuizUpdate(button,subjects) {
+  if (confirm("Are you sure you want to update this quiz?")) {
+    // Get the questions and answers entered by the userchosenSubject
+  var questions = $('#modal-questions-container').find('.question');
+
+  // Iterate over each question and extract the values
+  questions.each(function (index) {
+    var questionText = $(this).find('input[name^="question"]').val();
+var correctAnswer = $(this).find('input[name^="answer"]:first').val();
+var secondAnswer = $(this).find('input[name^="answer"]:eq(1)').val();
+var thirdAnswer = $(this).find('input[name^="answer"]:eq(2)').val();
+var fourthAnswer = $(this).find('input[name^="answer"]:eq(3)').val();
+
+if (numberOfExistingQuestions >= index + 1) {
+  chosenSubject.Test.Questions[index].QuestionText = questionText;
+  chosenSubject.Test.Questions[index].CorrectAnswer = correctAnswer;
+  chosenSubject.Test.Questions[index].Answers[0].AnswerText = correctAnswer;
+  chosenSubject.Test.Questions[index].Answers[1].AnswerText = secondAnswer;
+  chosenSubject.Test.Questions[index].Answers[2].AnswerText = thirdAnswer;
+  chosenSubject.Test.Questions[index].Answers[3].AnswerText = fourthAnswer;
+} else {
+  chosenSubject.Test.Questions.push({
+    Answers: [
+      { Identifier: 'A', AnswerText: correctAnswer },
+      { Identifier: 'B', AnswerText: secondAnswer },
+      { Identifier: 'C', AnswerText: thirdAnswer },
+      { Identifier: 'D', AnswerText: fourthAnswer }
+    ],
+    CorrectAnswer: correctAnswer,
+    QuestionText: questionText,
+    SelectedAnswer: '',
+    TestId: chosenSubject.Test.Id
   });
+}
+  });
+  
+  chosenSubject.WeekNumber = document.getElementById('modal-quiz-week').value;
+  chosenSubject.Test.Title = document.getElementById('modal-quiz-name').value;
+  //console.log(document.getElementById('modal-quiz-week').value);
+  // Send chosenSubject via API using fetch
+ await fetch('https://localhost:7186/api/subjects', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(chosenSubject)
+  })
+    .then(response => {
+      if (response.ok) {
+        console.log('Quiz updated successfully');
+        // dismiss the modal
+        $('#edit-quiz-modal').modal('hide');
+      } else {
+        throw new Error('Failed to update quiz');
+      }
+    })
+    .catch(error => {
+      console.error(error);
+    });
+
+    try {
+      const response = await fetch('https://localhost:7186/api/subjects');
+      const data = await response.json();
+      subjects = data;
+      // Store the subjects data in localStorage
+      localStorage.setItem('subjectsData', JSON.stringify(subjects));
+    } catch (error) {
+      console.error(error);
+    }
+
+    populateTable(subjects);
+
+      // TODO: submit the form using to server
+      console.log('Quiz updated');
+      // dismiss the modal
+      $('#edit-quiz-modal').modal('hide');
+  }
 
 
 
@@ -335,4 +472,4 @@ $('#add-subject-form').submit(function (e) {
 
     e.preventDefault(); // Prevent the form from submitting for now
     // TODO send the form data to the server
-});
+})}
