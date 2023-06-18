@@ -657,6 +657,7 @@ function hidePauseScreen() {
 	}
 }
 
+// Function to create the game over screen element
 function createGameOverScreen() {
 	// Create the main container div
 	const gameOverScreen = document.createElement('div');
@@ -668,30 +669,42 @@ function createGameOverScreen() {
 	heading.textContent = 'Game Over';
 	gameOverScreen.appendChild(heading);
 
-	// Create the time element
-	const timeElement = document.createElement('p');
-	timeElement.innerHTML = 'Time: <span id="gameOverTime"></span>';
-	gameOverScreen.appendChild(timeElement);
+	// Create the paragraph elements
+	const timeParagraph = document.createElement('p');
+	timeParagraph.innerHTML = 'Time: <span id="gameOverTime"></span>';
+	gameOverScreen.appendChild(timeParagraph);
 
-	// Create the score element
-	const scoreElement = document.createElement('p');
-	scoreElement.innerHTML = 'Score: <span id="gameOverScore"></span>';
-	gameOverScreen.appendChild(scoreElement);
+	const scoreParagraph = document.createElement('p');
+	scoreParagraph.innerHTML = 'Score: <span id="gameOverScore"></span>';
+	gameOverScreen.appendChild(scoreParagraph);
 
-	// Create the restart message
-	const restartMessage = document.createElement('p');
-	restartMessage.textContent = 'Press R to restart the game';
-	gameOverScreen.appendChild(restartMessage);
+	const restartParagraph = document.createElement('p');
+	restartParagraph.textContent = 'Press R to restart the game';
+	gameOverScreen.appendChild(restartParagraph);
 
 	// Append the game over screen to the document body
 	document.body.appendChild(gameOverScreen);
+}
+
+// Function to show the game over screen with the provided time and score
+function showGameOverScreen(time, score) {
+	const gameOverScreen = document.getElementById('gameOverScreen');
+	if (gameOverScreen) {
+		const timeElement = document.getElementById('gameOverTime');
+		const scoreElement = document.getElementById('gameOverScore');
+		if (timeElement && scoreElement) {
+			timeElement.textContent = time;
+			scoreElement.textContent = score;
+			gameOverScreen.classList.remove('hide');
+		}
+	}
 }
 
 // Function to hide the game over screen
 function hideGameOverScreen() {
 	const gameOverScreen = document.getElementById('gameOverScreen');
 	if (gameOverScreen) {
-		gameOverScreen.parentNode.removeChild(gameOverScreen);
+		gameOverScreen.classList.add('hide');
 	}
 }
 

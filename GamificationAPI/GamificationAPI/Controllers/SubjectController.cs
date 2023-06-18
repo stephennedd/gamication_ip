@@ -40,21 +40,6 @@ public class SubjectController : ControllerBase
 
         return Content(json, "application/json");
     }
-
-    [HttpPut]
-    public async Task<ActionResult<RootObject>> UpdateTables(RootObject data)
-    {
-        var updatedRootObject = await _subjectService.UpdateTables(data);
-        
-        var jsonSettings = new JsonSerializerSettings
-        {
-            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-        };
-
-        var json = JsonConvert.SerializeObject(updatedRootObject, Formatting.None, jsonSettings);
-
-        return Content(json, "application/json");
-    }
 }
 
 public class Subject
@@ -64,41 +49,4 @@ public class Subject
     public int WeekNumber { get; set; }
     public int TestId { get; set; }
     public Test Test { get; set; }
-}
-
-public class RootObject
-{
-    public int Id { get; set; }
-    public string SubjectTitle { get; set; }
-    public int WeekNumber { get; set; }
-    public int TestId { get; set; }
-    public SubjectTest Test { get; set; }
-}
-
-public class SubjectTest
-{
-    public int Id { get; set; }
-    public string Title { get; set; }
-    public string ImageUrl { get; set; }
-    public string Description { get; set; }
-    public int TimeSeconds { get; set; }
-    public List<SubjectQuestion> Questions { get; set; }
-}
-
-public class SubjectQuestion
-{
-    public int? Id { get; set; }
-    public string QuestionText { get; set; }
-    public string CorrectAnswer { get; set; }
-    public string SelectedAnswer { get; set; }
-    public int TestId { get; set; }
-    public List<SubjectAnswer> Answers { get; set; }
-}
-
-public class SubjectAnswer
-{
-    public int?  Id { get; set; }
-    public string Identifier { get; set; }
-    public string AnswerText { get; set; }
-    public int QuestionId { get; set; }
 }

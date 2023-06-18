@@ -55,7 +55,6 @@
 
     <script>
         let currentLeaderboard = 'main'; // Default leaderboard name
-        let myGroup = false; // Default myGroup value
         var token = document.cookie
             .split('; ')
             .find(row => row.startsWith('jwt='))
@@ -124,7 +123,8 @@
                     <td>${position}</td>
                     <td>${entry.playerName}</td>
                     <td>${entry.score}</td>
-                    
+                    <td>${entry.badges.map(badge => `<img src="./assets/images/${badge}" height="25px" alt="Badge">`).join('')}</td>
+                
                 `;
                 leaderboardBody.appendChild(row);
             });
@@ -133,24 +133,13 @@
 
 
             try {
-                if (myGroup == true) {
-                    let response = await fetch('https://localhost:7186/api/Leaderboards/' + currentLeaderboard + "?mygroup=true", {
-                        method: 'GET',
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Content-Type': 'application/json'
-                        }
-                    });
-                }
-                else {
-                    let response = await fetch('https://localhost:7186/api/Leaderboards/' + currentLeaderboard, {
-                        method: 'GET',
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Content-Type': 'application/json'
-                        }
-                    });
-                }
+                let response = await fetch('https://localhost:7186/api/Leaderboards/' + currentLeaderboard, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
 
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);

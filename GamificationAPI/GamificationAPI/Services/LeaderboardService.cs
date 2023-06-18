@@ -92,6 +92,7 @@ public class LeaderboardService : ILeaderboards
             return true;
         }
     }
+   
     public async Task<bool> CheckIfStudentHasHighScoreInLeadeboard(string studentId, string name)
     {
         if (await _dbContext.Users.AnyAsync(s => s.UserId == studentId) == false)

@@ -25,28 +25,35 @@ public class HighScoreService : IHighScores
             .FirstOrDefaultAsync(h => h.Id == id);
     }
     public async Task<bool> CheckIfItsHighScore(HighScore newHighScore, string leaderboardName)
-{
-    var leaderboard = await _dbContext.Set<Leaderboard>()
-        .Include(l => l.HighScores)
-        .FirstOrDefaultAsync(l => l.Name == leaderboardName);
-    if (leaderboard != null)
     {
-        HighScore? highScoreInDB = _dbContext.HighScores.FirstOrDefault(x => x.User.UserId == newHighScore.User.UserId);
-        
-        if (highScoreInDB != null)
+        var leaderboard = await _dbContext.Set<Leaderboard>()
+            .Include(l => l.HighScores)
+            .FirstOrDefaultAsync(l => l.Name == leaderboardName);
+        if (leaderboard == null)
         {
-            if(highScoreInDB.Score >= newHighScore.Score)
-            {
-                return false;
-            }
+            throw new Exception($"Leaderboard {leaderboardName} not found.");
         }
-        return true;
+            List<HighScore> userHS = _dbContext.HighScores.Include(l => l.Leaderboard).Where(item => item.User.UserId == newHighScore.User.UserId).ToList();
+        if (userHS.Count == 0)
+        {
+            return true;
+        }
+                HighScore? highScoreInDB = userHS.FirstOrDefault(item => item.Leaderboard.Name == leaderboardName);
+                if (highScoreInDB != null)
+                {
+                    if (highScoreInDB.Score >= newHighScore.Score)
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            
+            
+        
+        
     }
-    else
-    {
-        throw new Exception($"Leaderboard {leaderboardName} not found.");
-    }
-}
+
+
 
     public async Task<List<HighScore>> GetHighScoreByStudentIdAsync(string UserId)
     {
@@ -75,9 +82,10 @@ public class HighScoreService : IHighScores
             .FirstOrDefaultAsync(l => l.Name == leaderboardName);
         if (leaderboard != null)
         {
-            HighScore? highScoreInDB = _dbContext.HighScores.FirstOrDefault(x => x.User.UserId == highScore.User.UserId);
-            if (highScoreInDB != null)
+            List<HighScore> userHS = _dbContext.HighScores.Include(l => l.Leaderboard).Where(item => item.User.UserId == highScore.User.UserId).ToList();
+            if (userHS.Count != 0)
             {
+                HighScore? highScoreInDB = userHS.FirstOrDefault(item => item.Leaderboard.Name == leaderboardName);
                 if (highScoreInDB.Score < highScore.Score)
                 {
                     highScoreInDB.Score = highScore.Score;
@@ -92,7 +100,57 @@ public class HighScoreService : IHighScores
             }
         }   
     }
+    public async Task<bool> UpdateMainLeaderboard(string userId)
+    {
+        try
+        {
+            var user = _dbContext.Users.Include(l => l.HighScores).FirstOrDefault(u => u.UserId == userId);
+            if (user == null)
+            {
+                return false;
+            }
+            List<HighScore> userHS = _dbContext.HighScores.Include(l => l.Leaderboard).Where(item => item.User.UserId == userId).ToList();
 
+            if (userHS.Count != 0)
+            {
+                HighScore? highScoreInDB = userHS.FirstOrDefault(item => item.Leaderboard.Name == "main");
+                int overallScore = 0;
+                if (highScoreInDB != null)
+                {
+                    highScoreInDB.Score = 0;
+                }
+                    foreach (var item in user.HighScores)
+                {
+                    overallScore += item.Score;
+                }
+                if (highScoreInDB != null)
+                {
+                    highScoreInDB.Score = overallScore;
+                    _dbContext.Set<HighScore>().Update(highScoreInDB);
+                    await _dbContext.SaveChangesAsync();
+
+                }
+                else
+                {
+                    var highScore = new HighScore
+                    {
+                        Leaderboard = await _dbContext.Leaderboards.FirstOrDefaultAsync(l => l.Name == "main"),
+                        Score = overallScore,
+                        User = user
+                    };
+                    _dbContext.Set<HighScore>().Add(highScore);
+                    await _dbContext.SaveChangesAsync();
+                }
+            }
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            return false;
+        }
+    }
     public async Task DeleteHighScoreAsync(int id)
     {
         var highScore = await GetHighScoreByIdAsync(id);

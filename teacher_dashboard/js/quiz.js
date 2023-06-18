@@ -1,7 +1,3 @@
-let subjects;
-let chosenSubject;
-let numberOfExistingQuestions;
-
 const editQuizLink = document.getElementById('edit-quiz-link');
 
 editQuizLink.addEventListener('click', async function (event) {
@@ -10,7 +6,9 @@ editQuizLink.addEventListener('click', async function (event) {
   try {
     const response = await fetch('https://localhost:7186/api/subjects');
     const data = await response.json();
-    subjects = data;
+    const subjects = data;
+    console.log(subjects);
+
     // Store the subjects data in localStorage
     localStorage.setItem('subjectsData', JSON.stringify(subjects));
 
@@ -65,12 +63,10 @@ function populateTable(subjects) {
   const td5 = document.createElement('td');
   const button = document.createElement('button');
   button.type = 'button';
-  button.className = 'btn btn-sm btn-outline-success';
+  button.className = 'btn-sm btn-outline-success';
   button.textContent = 'Edit';
   button.addEventListener('click', function () {
-    chosenSubject = subject;
-    numberOfExistingQuestions = subject.Test.Questions.length;
-    editQuiz(this, subjects,subject);
+    editQuiz(this, subjects);
   });
   td5.appendChild(button);
   tr.appendChild(td5);
@@ -127,7 +123,7 @@ $(document).ready(function () {
     });
 
 
-    // Event handler for the create-quiz form submission
+    // Event handler for the form submission
     $('#quiz-form').submit(function (e) {
         //get the form data
         var formData = $(this).serializeArray();
@@ -151,16 +147,11 @@ $(document).ready(function () {
       e.preventDefault(); // Prevent the form from submitting for now
       // TODO: Submit the form using Ajax
     });
-
 });
 
-// Event handler for the "Remove Question" button click for the create quiz page
+// Event handler for the "Remove Question" button click
 function removeQuestion(button) {
-  console.log("Liza")
     // Get the question container
-    var row = button.parentNode.parentNode;
-    const subjectId = row.dataset.quizId;
-    console.log(subjectId);
     const questionContainer = button.parentNode.parentNode.parentNode.parentNode;
     // Remove the question container
     questionContainer.remove();
@@ -174,7 +165,7 @@ function removeQuestion(button) {
 }
 
 // update a quiz
-function editQuiz(button,subjects,subject) {
+function editQuiz(button,subjects) {
     // var exampleQuestions = [
     //     {questionText: "What is the capital of France?", correctAnswer: "Paris" ,answers: ["Paris", "London", "Berlin", "Madrid"]},
     //     {questionText: "What is the capital of Spain?", correctAnswer: "Madrid" ,answers: ["Madrid", "London", "Berlin", "Paris"]},
@@ -215,9 +206,6 @@ function editQuiz(button,subjects,subject) {
     $('#edit-quiz-modal-header').text(`Edit Quiz ${quizName}`);
     $('#modal-quiz-name').val(quizName);
 
-   // document.getElementById('modal-quiz-subject').value = "methods_1";
-   // document.getElementById('modal-quiz-week').value = chosenSubject.WeekNumber;
-
     // load questions into the modal
     var questionsContainer = $('#modal-questions-container');
     questionsContainer.empty();
@@ -227,17 +215,7 @@ function editQuiz(button,subjects,subject) {
         var question = subjectQuestions[i];
         var questionHTML = `
             <div class="question mb-3">
-            <div class="col-md-12">
-                <div class="row align-items-center">
-                    <div class="col me-2">
-                        <label for="question[${i}]" class="form-label">Question ${i+1}</label>
-                    </div>
-                    <div class="col mb-2 text-end">
-                        <button id="remove-question" type="button" class="btn btn-danger btn-sm" onclick="removeEditModalQuestion(this,'${quizId}','${subjectQuestions[i].Id}')">Remove</button>
-                    </div>
-                </div>
-            </div>
-  
+            <label type="text" class="form-label">Question ${i+1}</label>
             <input type="text" name="question[${i}]" class="form-control" placeholder="Enter a question" required value="${question.QuestionText}">
             <div class="mt-2 mb-3 me-3">
                 <input class="form-control mx-3 mb-1 correct" type="text" name="answer[${i}][]" placeholder="Correct answer" required value="${question.Answers[0].AnswerText}">
@@ -253,23 +231,14 @@ function editQuiz(button,subjects,subject) {
 }
 
 // add a question to the edit quiz modal
-function addQuestionToModal(subjects) {
+function addQuestionToModal() {
+    // get the number of questions currently in the modal
     var numQuestions = $('#modal-questions-container').children().length;
 
     // add a new question to the modal
     var questionHTML = `
         <div class="question mb-3">
-        <div class="col-md-12">
-                <div class="row align-items-center">
-                    <div class="col me-2">
-                        <label for="question[${numQuestions+1}]" class="form-label">Question ${numQuestions+1}</label>
-                    </div>
-                    <div class="col mb-2 text-end">
-                        <button id="remove-question" type="button" class="btn btn-danger btn-sm" onclick="removeEditModalQuestion(this)">Remove</button>
-                    </div>
-                </div>
-            </div>
-
+        <label type="text" class="form-label">Question ${numQuestions+1}</label>
         <input type="text" name="question[${numQuestions}]" class="form-control" placeholder="Enter a question" required>
         <div class="mt-2 mb-3 me-3">
             <input class="form-control mx-3 mb-1 correct" type="text" name="answer[${numQuestions}][]" placeholder="Correct answer" required>
@@ -282,164 +251,27 @@ function addQuestionToModal(subjects) {
     $('#modal-questions-container').append(questionHTML);
 }
 
-// remove a question from the edit-quiz modal
-async function removeEditModalQuestion(button,quizId,questionId) {
-  for(let i = 0; i<chosenSubject.Test.Questions.length; i++){
-    if(chosenSubject.Test.Questions[i].Id==questionId){
-      chosenSubject.Test.Questions.splice(i, 1);
-      break; 
-    }
-  }
-   // Send chosenSubject via API using fetch
- await fetch('https://localhost:7186/api/subjects', {
-  method: 'PUT',
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify(chosenSubject)
-})
-  .then(response => {
-    if (response.ok) {
-      console.log('Quiz updated successfully');
-      // dismiss the modal
-     // $('#edit-quiz-modal').modal('hide');
-    } else {
-      throw new Error('Failed to update quiz');
-    }
-  })
-  .catch(error => {
-    console.error(error);
-  });
+// remove a question from the edit quiz modal
+function removeQuestionFromModal() {
+    // get the number of questions currently in the modal
+    var numQuestions = $('#modal-questions-container').children().length;
 
-    // TODO: submit the form using to server
-   // console.log('Quiz updated');
-    // dismiss the modal
-    //$('#edit-quiz-modal').modal('hide');
-
-    // Get the question container
-    const questionContainer = button.parentNode.parentNode.parentNode.parentNode;
-    // Remove the question container
-    questionContainer.remove();
-
-    // renumber the questions
-    var questions = document.getElementsByClassName('question');
-    for (var i = 0; i < questions.length; i++) {
-        var question = questions[i];
-        question.querySelector('label').innerText = `Question ${i + 1}`;
+    // remove the last question from the modal
+    if (numQuestions > 0) {
+        $('#modal-questions-container').children().last().remove();
     }
-    
-    try {
-      const response = await fetch('https://localhost:7186/api/subjects');
-      const data = await response.json();
-      subjects = data;
-      // Store the subjects data in localStorage
-      localStorage.setItem('subjectsData', JSON.stringify(subjects));
-    } catch (error) {
-      console.error(error);
-    }
-  
-    populateTable(subjects);
 }
 
-// submit the edit-quiz form
-$('#edit-quiz-form').submit(function (e) {
-    // get the form data
-    var formData = $(this).serializeArray();
-   
-    // convert form data to JSON
-    const jsonData = {};
-    for (let i = 0; i < formData.length; i++) {
-        jsonData[formData[i].name] = formData[i].value;
- 
-    console.log(jsonData);
-
-    e.preventDefault();
-
-    // close the modal
-    $('#edit-quiz-modal').modal('hide');
-}});
-
-async function confirmQuizUpdate(button,subjects) {
-  if (confirm("Are you sure you want to update this quiz?")) {
-    // Get the questions and answers entered by the userchosenSubject
-  var questions = $('#modal-questions-container').find('.question');
-
-  // Iterate over each question and extract the values
-  questions.each(function (index) {
-    var questionText = $(this).find('input[name^="question"]').val();
-var correctAnswer = $(this).find('input[name^="answer"]:first').val();
-var secondAnswer = $(this).find('input[name^="answer"]:eq(1)').val();
-var thirdAnswer = $(this).find('input[name^="answer"]:eq(2)').val();
-var fourthAnswer = $(this).find('input[name^="answer"]:eq(3)').val();
-
-if (numberOfExistingQuestions >= index + 1) {
-  chosenSubject.Test.Questions[index].QuestionText = questionText;
-  chosenSubject.Test.Questions[index].CorrectAnswer = correctAnswer;
-  chosenSubject.Test.Questions[index].Answers[0].AnswerText = correctAnswer;
-  chosenSubject.Test.Questions[index].Answers[1].AnswerText = secondAnswer;
-  chosenSubject.Test.Questions[index].Answers[2].AnswerText = thirdAnswer;
-  chosenSubject.Test.Questions[index].Answers[3].AnswerText = fourthAnswer;
-} else {
-  chosenSubject.Test.Questions.push({
-    Answers: [
-      { Identifier: 'A', AnswerText: correctAnswer },
-      { Identifier: 'B', AnswerText: secondAnswer },
-      { Identifier: 'C', AnswerText: thirdAnswer },
-      { Identifier: 'D', AnswerText: fourthAnswer }
-    ],
-    CorrectAnswer: correctAnswer,
-    QuestionText: questionText,
-    SelectedAnswer: '',
-    TestId: chosenSubject.Test.Id
-  });
-}
-  });
-  
-  //chosenSubject.WeekNumber = document.getElementById('modal-quiz-week').value;
- // chosenSubject.Test.Title = document.getElementById('modal-quiz-name').value;
-  //console.log(document.getElementById('modal-quiz-week').value);
-  // Send chosenSubject via API using fetch
- await fetch('https://localhost:7186/api/subjects', {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(chosenSubject)
-  })
-    .then(response => {
-      if (response.ok) {
-        console.log('Quiz updated successfully');
+function confirmQuizUpdate() {
+    if (confirm("Are you sure you want to update this quiz?")) {
+        // TODO: submit the form using to server
+        console.log('Quiz updated');
         // dismiss the modal
         $('#edit-quiz-modal').modal('hide');
-      } else {
-        throw new Error('Failed to update quiz');
-      }
-    })
-    .catch(error => {
-      console.error(error);
-    });
-
-    try {
-      const response = await fetch('https://localhost:7186/api/subjects');
-      const data = await response.json();
-      subjects = data;
-      // Store the subjects data in localStorage
-      localStorage.setItem('subjectsData', JSON.stringify(subjects));
-    } catch (error) {
-      console.error(error);
     }
+}
 
-    populateTable(subjects);
-
-      // TODO: submit the form using to server
-      console.log('Quiz updated');
-      // dismiss the modal
-      $('#edit-quiz-modal').modal('hide');
-  }
-
-
-
-// delete a quiz from the database and remove it from the page
+// delete a quiz
 function removeQuiz(button) {
     if (confirm("Are you sure you want to delete this quiz?")) {
         // TODO send the delete request to the server
@@ -472,4 +304,4 @@ $('#add-subject-form').submit(function (e) {
 
     e.preventDefault(); // Prevent the form from submitting for now
     // TODO send the form data to the server
-})}
+});
