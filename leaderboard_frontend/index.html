@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,6 +8,7 @@
     <title>Leaderboard</title>
     <link rel="stylesheet" href="./css/style.css">
 </head>
+
 <body>
     <!-- background -->
     <div id="container">
@@ -25,11 +27,11 @@
     </div>
 
     <!-- buttons -->
-    <div class="buttons">
+    <!-- <div class="buttons">
         <button class="start_btn">Start Game</button>
         <button class="quit_btn">Quit</button>
-    </div>
-    
+    </div> -->
+
 
     <!-- leaderboard -->
     <div class="leaderboard">
@@ -49,62 +51,62 @@
             </table>
         </div>
     </div>
-    
-    
+
+
     <script>
         let currentLeaderboard = 'main'; // Default leaderboard name
         let myGroup = false; // Default myGroup value
         var token = document.cookie
-        .split('; ')
-        .find(row => row.startsWith('jwt='))
-        .split('=')[1];
+            .split('; ')
+            .find(row => row.startsWith('jwt='))
+            .split('=')[1];
         let leaderboardData = [
             { playerName: "John", score: 500, badges: ["badge1.png", "badge2.png"] },
-            { playerName: "Emma", score: 400 , badges: ["badge3.png"]},
-            { playerName: "Michael", score: 300, badges: []  },
-            { playerName: "Sophia", score: 200 , badges: ["badge4.png"]},
+            { playerName: "Emma", score: 400, badges: ["badge3.png"] },
+            { playerName: "Michael", score: 300, badges: [] },
+            { playerName: "Sophia", score: 200, badges: ["badge4.png"] },
             { playerName: "William", score: 100, badges: ["badge5.png", "badge6.png"] },
         ];
         async function getLeaderboards() {
-    try {
-        let response = await fetch('https://localhost:7186/api/Leaderboards', {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
+            try {
+                let response = await fetch('https://localhost:7186/api/Leaderboards', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                let data = await response.json();
+                console.log('Received leaderboard data:', data); // Print the raw data
+
+                let leaderboardNames = data.$values.map(lb => lb.name);
+                console.log('Extracted leaderboard names:', leaderboardNames); // Print the leaderboard names
+
+                const dropdownContent = document.getElementById('dropdown-content');
+                dropdownContent.innerHTML = ''; // Clear existing leaderboard options
+
+                leaderboardNames.forEach((name) => {
+                    const a = document.createElement('a');
+                    a.href = '#';
+                    a.className = 'dropdown-link';
+                    a.innerText = name;
+                    a.addEventListener('click', function (e) {
+                        e.preventDefault(); // Prevent the default click action
+                        currentLeaderboard = name; // Set the current leaderboard
+                        getDataFromAPI(); // Update the leaderboard
+                    });
+                    dropdownContent.appendChild(a);
+                });
+
+            } catch (error) {
+                console.log('Fetch Error: ', error);
             }
-        });
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
         }
-
-        let data = await response.json();
-        console.log('Received leaderboard data:', data); // Print the raw data
-
-        let leaderboardNames = data.$values.map(lb => lb.name);
-        console.log('Extracted leaderboard names:', leaderboardNames); // Print the leaderboard names
-
-        const dropdownContent = document.getElementById('dropdown-content');
-        dropdownContent.innerHTML = ''; // Clear existing leaderboard options
-
-        leaderboardNames.forEach((name) => {
-            const a = document.createElement('a');
-            a.href = '#';
-            a.className = 'dropdown-link';
-            a.innerText = name;
-            a.addEventListener('click', function(e) {
-                e.preventDefault(); // Prevent the default click action
-                currentLeaderboard = name; // Set the current leaderboard
-                getDataFromAPI(); // Update the leaderboard
-            });
-            dropdownContent.appendChild(a);
-        });
-
-    } catch (error) {
-        console.log('Fetch Error: ', error);
-    }
-}
 
         // Function to populate the leaderboard table
         function populateLeaderboard() {
@@ -128,67 +130,67 @@
             });
         }
         async function getDataFromAPI() {
-    
 
-    try {
-        if(myGroup == true){
-        let response = await fetch('https://localhost:7186/api/Leaderboards/' + currentLeaderboard + "?mygroup=true", {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
+
+            try {
+                if (myGroup == true) {
+                    let response = await fetch('https://localhost:7186/api/Leaderboards/' + currentLeaderboard + "?mygroup=true", {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                }
+                else {
+                    let response = await fetch('https://localhost:7186/api/Leaderboards/' + currentLeaderboard, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                }
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                let data = await response.json();
+                console.log('Received data:', data); // Print the raw data
+
+                // Extract highScores array
+                let highScores = data.highScores.$values;
+
+                console.log('Extracted highScores:', highScores); // Print the extracted highScores
+
+                // Map the highScores array to an array of simplified objects
+                leaderboardData = highScores.reduce((result, scoreEntry) => {
+                    console.log('Processing scoreEntry:', scoreEntry); // Print each scoreEntry being processed
+
+                    if (scoreEntry.user) {
+                        result.push({
+                            playerName: scoreEntry.user.userId,
+                            score: scoreEntry.score,
+                            badges: [] // Add badge logic here if available
+                        });
+                    }
+
+                    return result;
+                }, []);
+
+                // Call populateLeaderboard() to update the leaderboard
+                populateLeaderboard();
+            } catch (error) {
+                console.log('Fetch Error: ', error);
             }
-        });
         }
-        else{
-            let response = await fetch('https://localhost:7186/api/Leaderboards/' + currentLeaderboard, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }
-        });
-        }
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        let data = await response.json();
-        console.log('Received data:', data); // Print the raw data
-
-        // Extract highScores array
-        let highScores = data.highScores.$values;
-
-        console.log('Extracted highScores:', highScores); // Print the extracted highScores
-
-        // Map the highScores array to an array of simplified objects
-        leaderboardData = highScores.reduce((result, scoreEntry) => {
-            console.log('Processing scoreEntry:', scoreEntry); // Print each scoreEntry being processed
-
-            if (scoreEntry.user) {
-                result.push({
-                    playerName: scoreEntry.user.userId,
-                    score: scoreEntry.score,
-                    badges: [] // Add badge logic here if available
-                });
-            }
-
-            return result;
-        }, []);
-
-        // Call populateLeaderboard() to update the leaderboard
-        populateLeaderboard();
-    } catch (error) {
-        console.log('Fetch Error: ', error);
-    }
-}
 
         // Call the function to populate the leaderboard on page load
         getDataFromAPI();
         // Call the function to populate the leaderboard names on page load
-getLeaderboards();
-        
+        getLeaderboards();
+
     </script>
 
     <script src="./js/starfield.js"></script>
@@ -200,4 +202,5 @@ getLeaderboards();
         starfield.start();
     </script>
 </body>
+
 </html>

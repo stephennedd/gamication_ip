@@ -1,19 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz</title>
     <link rel="stylesheet" href="./css/style.css">
     <!-- FontAweome CDN Link for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/><!-- FontAweome CDN Link for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- FontAweome CDN Link for Icons -->
 
 
 </head>
+
 <body>
     <!-- mute button -->
     <div class="mute_btn">
-        <i class="fas fa-volume-mute"></i>
+        <i class="fa-sharp fa-solid fa-volume-high"></i>
     </div>
 
     <!-- start Quiz button -->
@@ -75,6 +78,23 @@
         </div>
     </div>
 
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div id="progress-indicator">
+            <div id="progress-bar"></div>
+            <div class="milestone milestone-50"><i class="fa-solid fa-gamepad"></i></div>
+            <div class="milestone milestone-75"><i class="fa-solid fa-heart"></i></div>
+            <div class="milestone milestone-100"><i class="fa-solid fa-rocket"></i></i></div>
+        </div>
+    </div>
+
+    <div class="achievement">
+        <div class="achievement-title">Achievement Unlocked!</div>
+        <div class="achievement-text">You've unlocked a new achievement!</div>
+        <div class="achievement-icon"><i class="fa-sharp fa-solid fa-trophy"></i></div>
+    </div>
+
+
     <!-- Inside this JavaScript file I've inserted Questions and Options only -->
     <script src="js/questions.js"></script>
     <script src="../ArcadeMachine/main.js"></script>
@@ -83,4 +103,5 @@
     <script src="js/script.js"></script>
 
 </body>
+
 </html>

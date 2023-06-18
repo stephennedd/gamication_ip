@@ -7,6 +7,10 @@
     font-family: 'Press Start 2P', cursive;
 }
 
+:root {
+    --achievement-not-earned: #ddd;
+    --achievement-color: gold;
+}
 
 body{
     background-image: url(../assets/images/background.png);
@@ -29,8 +33,8 @@ body{
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 
-                0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 
+                0 6px 20px 0 rgba(0, 0, 0, 0.19); */
 }
 
 .info_box.activeInfo,
@@ -363,3 +367,105 @@ footer button.show{
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),;
     transition: all 0.3s ease;
 } 
+
+/* Progress Bar */
+
+.progress-container {
+    display: flex;
+    justify-content: center;
+}
+
+#progress-indicator {
+    width: 500px;
+    height: 20px;
+    background-color: white;
+    margin: 20px;
+    position: relative;
+  }
+  
+  #progress-bar {
+    width: 0%;
+    height: 100%;
+    background-color: lightgreen;
+    transition: width 0.5s ease-in-out;
+  }
+  
+  .milestone {
+    position: absolute;
+    top: 50%;
+    right: 0%;
+    transform: translate(50%, -50%);
+    height: 35px;
+    width: 35px;
+    background-color: #ddd;
+    z-index: 1;
+    text-align: center;
+    line-height: 30px;
+    transition: all 0.3s ease;
+  }
+
+  .milestone-done {
+    height: 50px;
+        width: 50px;
+        & i {
+            font-size: 25px;
+            line-height: 50px;
+        }
+  }
+
+  .milestone i {
+    color: #fff;
+  }
+
+  /* Unlock Game */
+  .milestone-50 {
+    right: 45%; /* if you want to change the position of the 50% milestone */
+  }
+
+  /* Extra Life */
+  .milestone-75 {
+    right: 25%; /* if you want to change the position of the 75% milestone */
+  }
+
+  /* Score multiplier */
+  .milestone-100 {
+    right: 0; /* if you want to change the position of the 100% milestone */ 
+  }
+  
+  /* achievement */
+  .achievement {
+    visibility: hidden;
+    position: absolute;
+    bottom: 0%;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 100px;
+    width: 450px;
+    background-color: #ddd;
+    z-index: 10;
+    text-align: center;
+    line-height: 30px;   
+    transition: visibility 0.5s ease; 
+  }
+
+  .show-achievement {
+    visibility: visible;
+    transition: visibility 0.5s ease; 
+
+  }
+
+  .achievement-title {
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 10px;
+  }
+  
+  .achievement-text {
+    font-size: 12px;
+    font-weight: 400;
+    margin-top: 5px;
+  }
+  
+  
+
+  

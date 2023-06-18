@@ -8,11 +8,17 @@ const quiz_box = document.querySelector('.quiz_box');
 const result_box = document.querySelector('.result_box');
 const option_list = document.querySelector('.option_list');
 const mute_btn = document.querySelector('.mute_btn');
+const progressBar = document.querySelector('.progress_container');
+const achievement = document.querySelector('.achievement');
+const achievementText = document.querySelector(".achievement-text");
+const achievementIcon = document.querySelector(".achievement-icon");
+
 //import { showGame } from "../../ArcadeMachine/main";
 
 let winSound = new Audio('./assets/sounds/win.mp3');
 let loseSound = new Audio('./assets/sounds/game-over.mp3');
 let bgSound = new Audio('./assets/sounds/bg.mp3');
+let achievementSound = new Audio('./assets/sounds/achievement.mp3');
 
 let studentResult;
 
@@ -20,10 +26,10 @@ let studentResult;
 mute_btn.onclick = () => {
 	if (bgSound.muted) {
 		bgSound.muted = false;
-		mute_btn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+		mute_btn.innerHTML = '<i class="fa-sharp fa-solid fa-volume-high"></i>';
 	} else {
 		bgSound.muted = true;
-		mute_btn.innerHTML = '<i class="fas fa-volume-up"></i>';
+		mute_btn.innerHTML = '<i class="fa-sharp fa-solid fa-volume-xmark"></i>';
 	}
 };
 
@@ -89,6 +95,7 @@ restart_quiz.onclick = async () => {
 	clearInterval(counter); //clear counter
 	clearInterval(counterLine); //clear counterLine
 	next_btn.classList.remove('show'); //hide the next button
+	resetProgress();
 };
 // function callShowGame() {
 //   if (typeof showGame === "function") {
@@ -224,6 +231,7 @@ async function optionSelected(answer) {
 		answer.insertAdjacentHTML('beforeend', tickIconTag); //adding tick icon to correct selected option
 		console.log('Correct Answer');
 		console.log('Your correct answers = ' + userScore);
+		updateProgress(userScore, allOptions);
 	} else {
 		answer.classList.add('incorrect'); //adding red color to correct selected option
 		answer.insertAdjacentHTML('beforeend', crossIconTag); //adding cross icon to correct selected option
@@ -254,9 +262,12 @@ function showResult() {
 	if (studentResult >= 55) {
 		replayBtn.style.display = 'none'; // Display the "Replay Quiz" button
 		playBtn.style.display = 'block'; // Display the "Replay Quiz" button
+		winSound.play(); // play win sound
+
 	} else {
 		replayBtn.style.display = 'block'; // Hide the "Replay Quiz" button
 		playBtn.style.display = 'none';
+		loseSound.play(); // play lose sound
 	}
 	if (userScore > 3) {
 		// if user scored more than 3
@@ -268,7 +279,6 @@ function showResult() {
 			questions.length +
 			'</p></span>';
 		scoreText.innerHTML = scoreTag; //adding new span tag inside score_Text
-		winSound.play(); // play win sound
 	} else if (userScore > 1) {
 		// if user scored more than 1
 		let scoreTag =
@@ -278,7 +288,6 @@ function showResult() {
 			questions.length +
 			'</p></span>';
 		scoreText.innerHTML = scoreTag;
-		winSound.play(); // play win sound
 	} else {
 		// if user scored less than 1
 		let scoreTag =
@@ -288,7 +297,6 @@ function showResult() {
 			questions.length +
 			'</p></span>';
 		scoreText.innerHTML = scoreTag;
-		loseSound.play(); // play lose sound
 	}
 }
 
@@ -302,3 +310,65 @@ function queCounter(index) {
 		'</p> Questions</span>';
 	bottom_ques_counter.innerHTML = totalQueCounTag; //adding new span tag inside bottom_ques_counter
 }
+
+// Update the progress bar and milestones based on the number of correct answers
+async function updateProgress(correctAnswers, totalQuestions) {
+	var progressBar = document.getElementById("progress-bar");
+	var milestone50 = document.querySelector(".milestone-50");
+	var milestone75 = document.querySelector(".milestone-75");
+	var milestone100 = document.querySelector(".milestone-100");
+	var progress = (correctAnswers / totalQuestions) * 100;
+	progressBar.style.width = progress + "%";
+	
+	// Activate the milestone at 100% progress
+	if (progress >= 55) {
+		milestone50.classList.add("milestone-done");
+		milestone50.style.backgroundColor = "green";
+		achievementSound.play(); // play achievement sound
+		await showAchievement(`You've unlocked the game!`, `<i class="fa-sharp fa-solid fa-gamepad"></i>`); // show achievement popup
+	}
+
+	if (progress >= 75) {	
+		milestone75.classList.add("milestone-done");
+		milestone75.style.backgroundColor = "red";
+		achievementSound.play(); // play achievement sound
+		await showAchievement(`You've unlocked +1 life`, `<i class="fa-sharp fa-solid fa-heart" style="color: red"></i>`); // show achievement popup
+	} 
+	
+	if (progress === 100) {
+		milestone100.classList.add("milestone-done");
+		milestone100.style.backgroundColor = "var(--achievement-color)";
+		achievementSound.play(); // play achievement sound
+		await showAchievement(`You've unlocked 2x score multiplier`,`<i class="fa-sharp fa-solid fa-trophy" style="color: green"></i>`); // show achievement popup
+	}  
+
+  }
+
+  async function showAchievement(text, icon) {
+	// clear the achievement text and icon
+	achievementText.innerHTML = "";
+	achievementIcon.innerHTML = "";
+
+	achievementText.innerHTML = text;
+	achievementIcon.innerHTML = icon;
+	console.log("Achievement unlocked: " + text);
+	achievement.classList.add("show-achievement");
+
+	setTimeout(function () {
+	  achievement.classList.remove("show-achievement");
+	}, 3000);
+	}
+
+	function resetProgress() {
+		var progressBar = document.getElementById("progress-bar");
+		var milestone50 = document.querySelector(".milestone-50");
+		var milestone75 = document.querySelector(".milestone-75");
+		var milestone100 = document.querySelector(".milestone-100");
+		progressBar.style.width = 0 + "%";
+		milestone50.classList.remove("milestone-done");
+		milestone75.classList.remove("milestone-done");
+		milestone100.classList.remove("milestone-done");
+		milestone50.style.backgroundColor = "#ddd";
+		milestone75.style.backgroundColor = "#ddd";
+		milestone100.style.backgroundColor = "#ddd";
+	}
