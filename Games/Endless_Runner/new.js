@@ -58,64 +58,55 @@ let gameStarted = false;
 let isPaused = false;
 let isGameOver = false;
 
-function StartLevel() {
-	// build the road with procedural generation
-	let roadGenSectionDistanceMax = 0; // init end of section distance
-	let roadGenWidth = roadWidth; // starting road width
-	let roadGenSectionDistance = 0; // distance left for this section
-	let roadGenTaper = 0; // length of taper
-	let roadGenWaveFrequencyX = 0; // X wave frequency
-	let roadGenWaveFrequencyY = 0; // Y wave frequency
-	let roadGenWaveScaleX = 0; // X wave amplitude (turn size)
-	let roadGenWaveScaleY = 0; // Y wave amplitude (hill size)
-	startRandomSeed = randomSeed = Date.now(); // set random seed
-	road = []; // clear list of road segments
+function generateRoad() {
+	let roadGenSectionDistanceMax = 0;
+	let roadGenWidth = roadWidth;
+	let roadGenSectionDistance = 0;
+	let roadGenTaper = 0;
+	let roadGenWaveFrequencyX = 0;
+	let roadGenWaveFrequencyY = 0;
+	let roadGenWaveScaleX = 0;
+	let roadGenWaveScaleY = 0;
+	startRandomSeed = randomSeed = Date.now();
+	road = [];
 
-	// generate the road
-	for (
-		let i = 0;
-		i < roadEnd * 2;
-		++i // build road past end
-	) {
+	for (let i = 0; i < roadEnd * 2; ++i) {
 		if (roadGenSectionDistance++ > roadGenSectionDistanceMax) {
-			// check for end of section
-			// calculate difficulty percent
 			const difficulty = Math.min(
 				1,
 				(i * roadSegmentLength) / checkPointDistance / checkpointMaxDifficulty
-			); // difficulty
+			);
 
-			// randomize road settings
 			roadGenWidth =
-				roadWidth * Random(1 - difficulty * 0.7, 3 - 2 * difficulty); // road width
-			roadGenWaveFrequencyX = Random(Lerp(difficulty, 0.01, 0.02)); // X frequency
-			roadGenWaveFrequencyY = Random(Lerp(difficulty, 0.01, 0.03)); // Y frequency
-			roadGenWaveScaleX = i > roadEnd ? 0 : Random(Lerp(difficulty, 0.2, 0.6)); // X scale
-			roadGenWaveScaleY = Random(Lerp(difficulty, 1e3, 2e3)); // Y scale
+				roadWidth * Random(1 - difficulty * 0.7, 3 - 2 * difficulty);
+			roadGenWaveFrequencyX = Random(Lerp(difficulty, 0.01, 0.02));
+			roadGenWaveFrequencyY = Random(Lerp(difficulty, 0.01, 0.03));
+			roadGenWaveScaleX = i > roadEnd ? 0 : Random(Lerp(difficulty, 0.2, 0.6));
+			roadGenWaveScaleY = Random(Lerp(difficulty, 1e3, 2e3));
 
-			// apply taper and move back
-			roadGenTaper = Random(99, 1e3) | 0; // randomize taper
-			roadGenSectionDistanceMax = roadGenTaper + Random(99, 1e3); // randomize segment distance
-			roadGenSectionDistance = 0; // reset section distance
-			i -= roadGenTaper; // subtract taper
+			roadGenTaper = Random(99, 1e3) | 0;
+			roadGenSectionDistanceMax = roadGenTaper + Random(99, 1e3);
+			roadGenSectionDistance = 0;
+			i -= roadGenTaper;
 		}
 
-		// make a wavy road
-		const x = Math.sin(i * roadGenWaveFrequencyX) * roadGenWaveScaleX; // road X
-		const y = Math.sin(i * roadGenWaveFrequencyY) * roadGenWaveScaleY; // road Y
-		road[i] = road[i] ? road[i] : { x: x, y: y, w: roadGenWidth }; // get or make road segment
+		const x = Math.sin(i * roadGenWaveFrequencyX) * roadGenWaveScaleX;
+		const y = Math.sin(i * roadGenWaveFrequencyY) * roadGenWaveScaleY;
+		road[i] = road[i] ? road[i] : { x: x, y: y, w: roadGenWidth };
 
-		// apply taper from last section
-		const p = Clamp(roadGenSectionDistance / roadGenTaper, 0, 1); // get taper percent
-		road[i].x = Lerp(p, road[i].x, x); // X pos and taper
-		road[i].y = Lerp(p, road[i].y, y); // Y pos and taper
-		road[i].w = i > roadEnd ? 0 : Lerp(p, road[i].w, roadGenWidth); // check for road end, width and taper
+		const p = Clamp(roadGenSectionDistance / roadGenTaper, 0, 1);
+		road[i].x = Lerp(p, road[i].x, x);
+		road[i].y = Lerp(p, road[i].y, y);
+		road[i].w = i > roadEnd ? 0 : Lerp(p, road[i].w, roadGenWidth);
 		road[i].a = road[i - 1]
 			? Math.atan2(road[i - 1].y - road[i].y, roadSegmentLength)
-			: 0; // road pitch angle
+			: 0;
 	}
-	// init game
-	// reset everything
+
+	return road;
+}
+
+function initializeGame() {
 	playerVelocity = new Vector3(
 		(playerPitchSpring =
 			playerPitchSpringVelocity =
@@ -123,10 +114,15 @@ function StartLevel() {
 			hueShift =
 				0)
 	);
-	playerPos = new Vector3(0, playerHeight); // set player pos
-	worldHeading = randomSeed; // randomize world heading
-	nextCheckPoint = checkPointDistance; // init next checkpoint
-	time = maxTime; // set the starting time
+	playerPos = new Vector3(0, playerHeight);
+	worldHeading = randomSeed;
+	nextCheckPoint = checkPointDistance;
+	time = maxTime;
+}
+
+function StartLevel() {
+	road = generateRoad();
+	initializeGame();
 }
 
 function Update() {
