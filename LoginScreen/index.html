@@ -3,22 +3,45 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Login</title>
+		<title>Login2</title>
 		<link rel="stylesheet" href="style.css" />
 		<script defer src="main.js"></script>
 	</head>
 	<body>
-		<form id="loginForm" action="path/to/your/page.html" method="post">
-			<p class="welcome"></p>
-			<label for="email" class="hidden">
-				Email:
-				<input type="text" id="email" name="email" />
-			</label>
-			<label for="password" class="hidden">
-				Password:
-				<input type="password" id="password" name="password" />
-			</label>
-			<button id="login" class="hidden" type="submit">[ login ]</button>
+		<p class="welcome"></p>
+		<form id="loginForm" class="hidden signin">
+			<div class="radio-container">
+				<input checked id="signin" name="action" type="radio" value="signin" />
+				<label for="signin">Sign in</label>
+
+				<input id="signup" name="action" type="radio" value="signup" />
+				<label for="signup">Sign up</label>
+
+				<input id="reset" name="action" type="radio" value="reset" />
+				<label for="reset">Reset</label>
+
+				<div id="line"></div>
+			</div>
+			<div id="input-container">
+				<div id="wrapper">
+					<div id="arrow"></div>
+					<input id="email" placeholder="ID" type="text" />
+					<input id="password" placeholder="Password" type="password" />
+					<input
+						id="repassword"
+						placeholder="Repeat password"
+						type="password" />
+				</div>
+				<button type="submit">
+					<span>
+						[ Reset password ]
+						<br />
+						[ Sign in ]
+						<br />
+						[ Sign up ]
+					</span>
+				</button>
+			</div>
 		</form>
 	</body>
 </html>
