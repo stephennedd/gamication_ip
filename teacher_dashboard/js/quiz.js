@@ -216,7 +216,7 @@ function editQuiz(button,subjects,subject) {
     $('#modal-quiz-name').val(quizName);
 
    // document.getElementById('modal-quiz-subject').value = "methods_1";
-    document.getElementById('modal-quiz-week').value = chosenSubject.WeekNumber;
+   // document.getElementById('modal-quiz-week').value = chosenSubject.WeekNumber;
 
     // load questions into the modal
     var questionsContainer = $('#modal-questions-container');
@@ -395,8 +395,8 @@ if (numberOfExistingQuestions >= index + 1) {
 }
   });
   
-  chosenSubject.WeekNumber = document.getElementById('modal-quiz-week').value;
-  chosenSubject.Test.Title = document.getElementById('modal-quiz-name').value;
+  //chosenSubject.WeekNumber = document.getElementById('modal-quiz-week').value;
+ // chosenSubject.Test.Title = document.getElementById('modal-quiz-name').value;
   //console.log(document.getElementById('modal-quiz-week').value);
   // Send chosenSubject via API using fetch
  await fetch('https://localhost:7186/api/subjects', {
