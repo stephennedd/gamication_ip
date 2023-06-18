@@ -62,6 +62,26 @@
       "Name": "Group 2"
     }
   ],
+  "leaderboards": [
+    {
+      "Name": "main"
+    },
+    {
+      "Name": "game1"
+    }
+  ],
+  "highscores": [
+    {
+      "LeaderboardName": "main",
+      "Score": "260",
+      "UserId": "1111"
+    },
+    {
+      "LeaderboardName": "main",
+      "Score": "200",
+      "UserId": "2222"
+    }
+  ],
   "users": [
     {
       "UserId": "1111",

@@ -227,6 +227,7 @@ class MainScene extends Phaser.Scene {
 
 		if (gameOver) {
 			this.gameOver = true;
+
 			this.showGameOverScreen();
 			return;
 		}
@@ -335,12 +336,49 @@ class MainScene extends Phaser.Scene {
 	}
 
 	showGameOverScreen() {
-		this.scene.start('GameOverScene', {
-			score: this.score,
-			bricksDestroyed: this.bricksDestroyed, // assuming you count this somewhere in your code
-			time: Math.floor((this.time.now - this.startTime) / 1000),
-		});
-	}
+    // ...existing code...
+
+    const score = this.score;
+    const leaderboardName = 'main';
+
+    // Get JWT from cookies (replace 'jwtCookieName' with the actual name of the JWT cookie)
+    var token = document.cookie
+  .split('; ')
+  .find(row => row.startsWith('jwt='))
+  .split('=')[1];
+
+    // Send POST request to the endpoint
+    if (token) {
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ score, leaderboardName }),
+        };
+
+        fetch('https://localhost:7186/api/HighScores', requestOptions)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to send the high score.');
+                }
+                // Handle the response if needed
+            })
+            .catch(error => {
+                console.error(error);
+                // Handle the error if needed
+            });
+    } else {
+        console.warn('JWT not found in cookies. High score not submitted.');
+    }
+
+    this.scene.start('GameOverScene', {
+        score: this.score,
+        bricksDestroyed: this.bricksDestroyed,
+        time: Math.floor((this.time.now - this.startTime) / 1000),
+    });
+}
 }
 
 class GameOverScene extends Phaser.Scene {
