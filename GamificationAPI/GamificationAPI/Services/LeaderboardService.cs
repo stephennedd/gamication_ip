@@ -27,6 +27,11 @@ public class LeaderboardService : ILeaderboards
         .ThenInclude(u => u.Badges)
             .ToListAsync();
     }
+    public async Task<List<Leaderboard>> GetLeaderboardsSimpleAsync()
+    {
+        return await _dbContext.Set<Leaderboard>()
+            .ToListAsync();
+    }
 
     public async Task<Leaderboard> GetLeaderboardByNameAsync(string name)
     {

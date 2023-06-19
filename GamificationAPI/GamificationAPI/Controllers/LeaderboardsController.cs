@@ -23,7 +23,7 @@ public class LeaderboardsController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAllLeaderboard()
     {
-        var leaderboard = await _leaderboardService.GetLeaderboardsAsync();
+        var leaderboard = await _leaderboardService.GetLeaderboardsSimpleAsync();
         if (!leaderboard.Any())
         {
             return NoContent();
