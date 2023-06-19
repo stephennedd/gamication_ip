@@ -18,7 +18,7 @@ namespace GamificationAPI.Services
         public void SendEmail(EmailDto request)
         {
             var email = new MimeMessage();
-            email.From.Add(MailboxAddress.Parse("makenzie.tillman@ethereal.email"));
+            email.From.Add(MailboxAddress.Parse("t6666349@gmail.com"));
             email.To.Add(MailboxAddress.Parse(request.To));
             email.Subject = request.Subject;
             email.Body = new TextPart(TextFormat.Html) { Text = request.Body };
