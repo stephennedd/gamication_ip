@@ -55,7 +55,8 @@ namespace GamificationAPI.Controllers
             List<Claim> claims = new List<Claim>
         {
             new Claim(ClaimTypes.Name, user.UserId),
-            new Claim(ClaimTypes.Role, user.Role.Name)
+            new Claim(ClaimTypes.Role, user.Role.Name),
+            //my custom claim for user.verified
         };
 
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
