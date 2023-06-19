@@ -57,7 +57,7 @@ namespace GamificationToIP.Controllers
         }
 
         // GET: api/Users/5
-
+        [Authorize(Policy = "IsVerified")]
         [HttpGet("{UserId}")]
         public async Task<IActionResult> GetUser(string UserId)
         {
@@ -136,6 +136,7 @@ namespace GamificationToIP.Controllers
         }
 
         // PUT: api/Users/5
+        [Authorize(Policy = "IsVerified")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(string UserId, User User)
         {
@@ -162,6 +163,7 @@ namespace GamificationToIP.Controllers
             }
             return Ok(User);
         }
+        [Authorize(Policy = "IsVerified")]
         [HttpPatch]
         public async Task<IActionResult> ChangePassword(string newPassword)
         {
@@ -192,6 +194,7 @@ namespace GamificationToIP.Controllers
             }
             return BadRequest();
         }
+        [Authorize(Policy = "IsVerified")]
         [HttpPatch("{id}")]
         public async Task<IActionResult> AddBadgeToUser (string id, int badgeId)
         {
