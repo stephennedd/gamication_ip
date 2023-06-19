@@ -56,8 +56,9 @@ namespace GamificationAPI.Controllers
         {
             new Claim(ClaimTypes.Name, user.UserId),
             new Claim(ClaimTypes.Role, user.Role.Name),
-            //my custom claim for user.verified
+            new Claim("IsVerified", user.IsVerified.ToString())
         };
+            
 
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);

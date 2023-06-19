@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
-[Authorize(Roles = "Admin, Teacher, Student")]
+[Authorize(Roles = "Admin, Teacher, Student", Policy = "IsVerified")]
 [Route("api/[controller]")]
 [ApiController]
 public class LeaderboardsController : ControllerBase
