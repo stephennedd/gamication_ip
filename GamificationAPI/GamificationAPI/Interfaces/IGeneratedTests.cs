@@ -1,5 +1,3 @@
-using BulkyBookWeb.Models;
-
 using GamificationAPI.Models;
 
 using Microsoft.AspNetCore.Mvc;

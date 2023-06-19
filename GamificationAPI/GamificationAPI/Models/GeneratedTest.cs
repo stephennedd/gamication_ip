@@ -1,5 +1,3 @@
-using BulkyBookWeb.Models;
-
 using GamificationToIP.Models;
 
 namespace GamificationAPI.Models
@@ -18,7 +16,7 @@ namespace GamificationAPI.Models
 
         public int numberOfCorrectAnswers { get; set; } = 0;
 
-        public Student Student { get; set; }
+        public User student { get; set; }
 
         public Test Test { get; set; }
 

@@ -1,9 +1,6 @@
-using BulkyBookWeb.Models;
 using GamificationAPI.Interfaces;
 using GamificationAPI.Models;
 using GamificationToIP.Context;
-using GamificationToIP.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SendGrid.Helpers.Errors.Model;
@@ -18,17 +15,10 @@ public class GeneratedTestService : IGeneratedTests
         _dbContext = dbContext;
         _testService = testService;
     }
-
-    //public async Task<Question> getQuestionsOfGeneratedTest(int studentId, int testId)
-    //{
-    
-    //    var questions
-   // }
-
     public async Task<GeneratedTest> GenerateTest(int studentId,int testId, int numberOfQuestions)
     {
         var questions = await _testService.GetQuestionsByTestIdAsync(testId); // Retrieve an existing test from the database
-        var student = _dbContext.Students.FirstOrDefault(s => s.Id == studentId);// Retrieve a student from the database
+        var student = _dbContext.Users.FirstOrDefault(s => s.Id == studentId);// Retrieve a student from the database
 
         // Retrieve the answered question IDs for the existing generated test from the StudentAnswers table
         
@@ -129,7 +119,7 @@ public class GeneratedTestService : IGeneratedTests
 
     public async Task<ActionResult<Double>> CalculateStudentResult(int studentId, int generatedTestId)
     {
-        var student = await _dbContext.Students.FindAsync(studentId);
+        var student = await _dbContext.Users.FindAsync(studentId);
 
         var generatedTest = await _dbContext.GeneratedTest
             .Include(gt => gt.Test)
