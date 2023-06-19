@@ -9,7 +9,7 @@ using System.Security.Claims;
 
 namespace GamificationAPI.Controllers
 {
-    [Authorize(Roles = "Admin, Teacher, Student")]
+    [Authorize(Roles = "Admin, Teacher, Student", Policy = "IsVerified")]
     [Route("api/[controller]")]
     [ApiController]
     public class HighScoresController : ControllerBase

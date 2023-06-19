@@ -36,7 +36,45 @@ $(document).ready(function(){
     console.log(code);
 
     // TODO submit form to server
+    var token = document.cookie
+    .split('; ')
+    .find(row => row.startsWith('jwt='))
+    .split('=')[1];
 
+fetch('https://localhost:7186/api/Users/' + code, {
+  method: 'POST', // or 'PUT'
+  headers: {
+    'Content-Type': 'application/json',
+    // Include the token in the Authorization header
+    'Authorization': `Bearer ${token}`
+  },
+  // Convert the code to JSON before sending
+  body: JSON.stringify({code: code})
+})
+.then((response) => {
+  // Check if request was successful
+  if(response.ok) {
+    return response.json();
+  } else {
+    throw new Error('Server response wasn\'t OK');
+  }
+})
+.then((data) => {
+  console.log(data);
+  // Do something with the data
+  $('#response-message').empty();
+  if (data.success) { // Assuming the API returns { success: true } for correct codes
+    var html = `<p class="text-success">Code is correct</p>
+                <a href="login.html" class="btn btn-primary">Login</a>`;
+    $('#response-message').append(html);
+  } else {
+    var html = `<p class="text-danger">Code is incorrect</p>`;
+    $('#response-message').append(html);
+  }
+})
+.catch((error) => {
+  console.error('Error:', error);
+});
     // simulate server response
     var serverResponse = true;
     // clear previous response message
