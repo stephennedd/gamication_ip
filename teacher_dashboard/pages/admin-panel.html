@@ -425,7 +425,6 @@
         </div>
       </div>
 
-
   </main>
 
   <!-- Edit Quiz-->
@@ -791,82 +790,84 @@
     </div>
   </main>
 
+
   <!-- Update Student -->
   <main class="pt-3" id="update-student">
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-12 fw-bold fs-4">Update student</div>
       </div>
-      <!-- Update Student -->
-      <main class="pt-3" id="update-student">
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col-md-12 fw-bold fs-4">Update student</div>
-          </div>
 
-          <div class="row pt-2">
-            <div class="col-md-12">
-              <div class="mb-3">
-                <div class="card">
-                  <div class="card-header">Select a student</div>
-                  <div class="card-body">
-                    <div class="table-responsive">
-                      <table class="table table-striped data-table" id="student-table">
-                        <thead>
-                          <tr>
-                            <th scope="col">Student ID</th>
-                            <th scope="col">First name</th>
-                            <th scope="col">Middle name</th>
-                            <th scope="col">Last name</th>
-                            <th scope="col">Email</th>
-                            <th class="text-center" scope="col">Select</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr data-student-id="484629" data-first-name="Stephen" data-middle-name=""
-                            data-last-name="Nedd" data-student-email="48429@student.saxion.nl">
-                            <th scope="row">484629</th>
-                            <td>Stephen</td>
-                            <td></td>
-                            <td>Nedd</td>
-                            <td>484629@student.saxion.nl</td>
-                            <td class="text-center"><button type="button" class="btn btn-sm btn-outline-primary"
-                                onclick="updateStudent(this)">Update</button></td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
+      <div class="row pt-2">
+        <div class="col-md-12">
+          <div class="mb-3">
+            <div class="card">
+              <div class="card-header">Select a student</div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-striped data-table" id="student-table">
+                    <thead>
+                      <tr>
+                        <th scope="col">Student ID</th>
+                        <th scope="col">First name</th>
+                        <th scope="col">Middle name</th>
+                        <th scope="col">Last name</th>
+                        <th scope="col">Email</th>
+                        <th class="text-center" scope="col">Select</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr data-student-id="484629" data-first-name="Stephen" data-middle-name="" data-last-name="Nedd"
+                        data-student-email="48429@student.saxion.nl">
+                        <th scope="row">484629</th>
+                        <td>Stephen</td>
+                        <td></td>
+                        <td>Nedd</td>
+                        <td>484629@student.saxion.nl</td>
+                        <td class="text-center"><button type="button" class="btn btn-sm btn-outline-primary"
+                            onclick="updateStudent(this)">Update</button></td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
           </div>
-      </main>
-      <!-- Update Student modal-->
-      <div class="modal fade" id="update-student-modal" tabindex="-1" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="edit-student-modal-title"></h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <form id="update-student">
-                <div class="row">
-                  <div class="col-md-12">
-                    <div class="mb-3"><label for="student-name" class="form-label fw-bold">Student
-                        name</label>
-                      <input type="text" name="first-name" class="form-control" id="modal-first-name"
-                        placeholder="First name">
-                      <input type="text" name="middle-name" class="form-control mt-2" id="modal-middle-name"
-                        placeholder="Middle name">
-                      <input type="text" name="last-name" class="form-control mt-2" id="modal-last-name"
-                        placeholder="Last name">
-                    </div>
-                  </div>
+        </div>
+      </div>
+  </main>
+  <!-- Update Student modal-->
+  <div class="modal fade" id="update-student-modal" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="edit-student-modal-title"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="update-student">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="mb-3"><label for="student-name" class="form-label fw-bold">Student
+                    name</label>
+                  <input type="text" name="first-name" class="form-control" id="modal-first-name"
+                    placeholder="First name">
+                  <input type="text" name="middle-name" class="form-control mt-2" id="modal-middle-name"
+                    placeholder="Middle name">
+                  <input type="text" name="last-name" class="form-control mt-2" id="modal-last-name"
+                    placeholder="Last name">
                 </div>
+              </div>
+            </div>
 
+            <div class="row">
+              <div class="col-md-12">
+                <div class="mb-3">
+                  <label for="student-password" class="form-label fw-bold">Student password</label>
+                  <input type="password" name="password" class="form-control" id="modal-student-password"
+                    placeholder="New password">
+                </div>
                 <div class="row">
                   <div class="col-md-12">
                     <div class="mb-3">
@@ -874,184 +875,109 @@
                       <input type="password" name="password" class="form-control" id="modal-student-password"
                         placeholder="New password">
                     </div>
-                    <div class="row">
-                      <div class="col-md-12">
-                        <div class="mb-3">
-                          <label for="student-password" class="form-label fw-bold">Student password</label>
-                          <input type="password" name="password" class="form-control" id="modal-student-password"
-                            placeholder="New password">
-                        </div>
 
-                      </div>
-                    </div>
-              </form>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary" onclick="confirmStudentUpdate(this)">Save
-                changes</button>
+                  </div>
+                </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="confirmStudentUpdate(this)">Save
+            changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ban student -->
+  <main class="pt-3" id="ban-student">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12 fw-bold fs-4">Ban student</div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="mb-3">
+            <div class="card">
+              <div class="card-header">
+                Select a student
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-striped data-table" id="student-table">
+                    <thead>
+                      <tr>
+                        <th scope="col">Student ID</th>
+                        <th scope="col">Student name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">isBanned</th>
+                        <th class="text-center" scope="col">Select</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row">484629</th>
+                        <td>Stephen Nedd</td>
+                        <td>484629@student.saxion.nl</td>
+                        <td>No</td>
+                        <td class="text-center"><button type="button" class="btn btn-sm btn-outline-warning"
+                            onclick="banStudent(this)">Ban</button></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
+  </main>
 
-      <!-- Ban student -->
-      <main class="pt-3" id="ban-student">
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col-md-12 fw-bold fs-4">Ban student</div>
-          </div>
-          <!-- Ban student -->
-          <main class="pt-3" id="ban-student">
-            <div class="container-fluid">
-              <div class="row">
-                <div class="col-md-12 fw-bold fs-4">Ban student</div>
-              </div>
 
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="mb-3">
-                    <div class="card">
-                      <div class="card-header">
-                        Select a student
-                      </div>
-                      <div class="card-body">
-                        <div class="table-responsive">
-                          <table class="table table-striped data-table" id="student-table">
-                            <thead>
-                              <tr>
-                                <th scope="col">Student ID</th>
-                                <th scope="col">Student name</th>
-                                <th scope="col">Email</th>
-                                <th scope="col">isBanned</th>
-                                <th class="text-center" scope="col">Select</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <th scope="row">484629</th>
-                                <td>Stephen Nedd</td>
-                                <td>484629@student.saxion.nl</td>
-                                <td>No</td>
-                                <td class="text-center"><button type="button" class="btn btn-sm btn-outline-warning"
-                                    onclick="banStudent(this)">Ban</button></td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </div>
+  <!-- Add leaderboard -->
+  <main class="pt-3" id="add-leaderboard">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12 fw-bold fs-4">Add leaderboard</div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="mb-3">
+            <div class="card">
+              <div class="card-header">Leaderboard details</div>
+              <div class="card-body">
+                <form id="create-leaderboard-form">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="mb-3">
+                        <label for="leaderboard-name" class="form-label fw-bold">Leaderboard
+                          name</label>
+                        <input type="text" name="leaderboard-name" class="form-control" id="leaderboard-name"
+                          placeholder="enter a name" required>
                       </div>
                     </div>
                   </div>
-                </div>
-              </div>
-          </main>
-          <div class="row">
-            <div class="col-md-12">
-              <div class="mb-3">
-                <div class="card">
-                  <div class="card-header">
-                    Select a student
-                  </div>
-                  <div class="card-body">
-                    <div class="table-responsive">
-                      <table class="table table-striped data-table" id="student-table">
-                        <thead>
-                          <tr>
-                            <th scope="col">Student ID</th>
-                            <th scope="col">Student name</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">isBanned</th>
-                            <th class="text-center" scope="col">Select</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <th scope="row">484629</th>
-                            <td>Stephen Nedd</td>
-                            <td>484629@student.saxion.nl</td>
-                            <td>No</td>
-                            <td class="text-center"><button type="button" class="btn btn-sm btn-outline-warning"
-                                onclick="banStudent(this)">Ban</button></td>
-                          </tr>
-                        </tbody>
-                      </table>
+
+                  <div class="row">
+                    <div class="col-md-12 text-end">
                     </div>
                   </div>
-                </div>
+                </form>
               </div>
-            </div>
-          </div>
-      </main>
-
-      <!-- Add leaderboard -->
-      <main class="pt-3" id="add-leaderboard">
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col-md-12 fw-bold fs-4">Add leaderboard</div>
-          </div>
-          <!-- Add leaderboard -->
-          <main class="pt-3" id="add-leaderboard">
-            <div class="container-fluid">
-              <div class="row">
-                <div class="col-md-12 fw-bold fs-4">Add leaderboard</div>
-              </div>
-
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="mb-3">
-                    <div class="card">
-                      <div class="card-header">Leaderboard details</div>
-                      <div class="card-body">
-                        <form id="create-leaderboard-form">
-                          <div class="row">
-                            <div class="col-md-12">
-                              <div class="mb-3">
-                                <label for="leaderboard-name" class="form-label fw-bold">Leaderboard
-                                  name</label>
-                                <input type="text" name="leaderboard-name" class="form-control" id="leaderboard-name"
-                                  placeholder="enter a name" required>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div class="row">
-                            <div class="col-md-12 text-end">
-                            </div>
-                          </div>
-                        </form>
-                      </div>
-                      <div class="card-footer">
-                        <div class="row">
-                          <div class="col-md-12 text-end">
-                            <button type="submit" form="create-leaderboard-form" class="btn btn-primary">Create
-                              leaderboard</button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+              <div class="card-footer">
+                <div class="row">
+                  <div class="col-md-12 text-end">
+                    <button type="submit" form="create-leaderboard-form" class="btn btn-primary">Create
+                      leaderboard</button>
                   </div>
                 </div>
               </div>
-            </div>
-          </main>
-          <div class="row">
-            <div class="col-md-12 text-end">
-            </div>
-          </div>
-          </form>
-        </div>
-        <div class="card-footer">
-          <div class="row">
-            <div class="col-md-12 text-end">
-              <button type="submit" form="create-leaderboard-form" class="btn btn-primary">Create
-                leaderboard</button>
             </div>
           </div>
         </div>
-    </div>
-    </div>
-    </div>
-    </div>
+      </div>
     </div>
   </main>
 
@@ -1094,36 +1020,6 @@
       </div>
     </div>
   </main>
-  <div class="row">
-    <div class="col-md-12">
-      <div class="mb-3">
-        <div class="card">
-          <div class="card-header">Select a leaderboard</div>
-          <div class="card-body">
-            <div class="table-responsive">
-              <table class="table table-responsive" id="update-leaderboard-table">
-                <thead>
-                  <th scope="col">Leaderboard Name</th>
-                  <th scope="col">Game</th>
-                  <th class="text-center" scope="col">Update</th>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Flappy-Bird leaderboard</td>
-                    <td>Flappy-Bird</td>
-                    <td class="text-center"><button type="button" class="btn btn-outline-primary btn-sm"
-                        data-bs-toggle="modal" data-bs-target="#update-leaderboard-modal">Update</button></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  </div>
-  </main>
 
   <!-- Update leaderboard modal -->
   <div class="modal fade" id="update-leaderboard-modal" tabindex="-1" aria-labelledby="updateLeaderboardModal"
@@ -1157,6 +1053,7 @@
     </div>
   </div>
 
+
   <!-- Delete leaderboard -->
   <main class="pt-3" id="delete-leaderboard">
     <div class="container-fluid">
@@ -1165,76 +1062,63 @@
           <label for="delete-leaderboard" class="form-label fw-bold fs-4">Delete leaderboard</label>
         </div>
       </div>
-      <!-- Delete leaderboard -->
-      <main class="pt-3" id="delete-leaderboard">
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col-md-12">
-              <label for="delete-leaderboard" class="form-label fw-bold fs-4">Delete leaderboard</label>
-            </div>
-          </div>
 
-          <div class="row">
-            <div class="col-md-12">
-              <div class="mb-3">
-                <div class="card">
-                  <div class="card-header">Select a leaderboard</div>
-                  <div class="card-body">
-                    <div class="table-responsive">
-                      <table class="table table-responsive" id="delete-leaderboard-table">
-                        <thead>
-                          <th scope="col">Leaderboard Name</th>
-                          <th scope="col">Game</th>
-                          <th class="text-center" scope="col">Delete</th>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td>Flappy-Bird leaderboard</td>
-                            <td>Flappy-Bird</td>
-                            <td class="text-center"><button type="button" class="btn btn-outline-danger btn-sm"
-                                onclick="deleteLeaderboard(this)">Delete</button></td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-12">
-                      <div class="mb-3">
-                        <div class="card">
-                          <div class="card-header">Select a leaderboard</div>
-                          <div class="card-body">
-                            <div class="table-responsive">
-                              <table class="table table-responsive" id="delete-leaderboard-table">
-                                <thead>
-                                  <th scope="col">Leaderboard Name</th>
-                                  <th scope="col">Game</th>
-                                  <th class="text-center" scope="col">Delete</th>
-                                </thead>
-                                <tbody>
-                                  <tr>
-                                    <td>Flappy-Bird leaderboard</td>
-                                    <td>Flappy-Bird</td>
-                                    <td class="text-center"><button type="button" class="btn btn-outline-danger btn-sm"
-                                        onclick="deleteLeaderboard(this)">Delete</button></td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                            </div>
-                          </div>
-
+      <div class="row">
+        <div class="col-md-12">
+          <div class="mb-3">
+            <div class="card">
+              <div class="card-header">Select a leaderboard</div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-responsive" id="delete-leaderboard-table">
+                    <thead>
+                      <th scope="col">Leaderboard Name</th>
+                      <th scope="col">Game</th>
+                      <th class="text-center" scope="col">Delete</th>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Flappy-Bird leaderboard</td>
+                        <td>Flappy-Bird</td>
+                        <td class="text-center"><button type="button" class="btn btn-outline-danger btn-sm"
+                            onclick="deleteLeaderboard(this)">Delete</button></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="mb-3">
+                    <div class="card">
+                      <div class="card-header">Select a leaderboard</div>
+                      <div class="card-body">
+                        <div class="table-responsive">
+                          <table class="table table-responsive" id="delete-leaderboard-table">
+                            <thead>
+                              <th scope="col">Leaderboard Name</th>
+                              <th scope="col">Game</th>
+                              <th class="text-center" scope="col">Delete</th>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td>Flappy-Bird leaderboard</td>
+                                <td>Flappy-Bird</td>
+                                <td class="text-center"><button type="button" class="btn btn-outline-danger btn-sm"
+                                    onclick="deleteLeaderboard(this)">Delete</button></td>
+                              </tr>
+                            </tbody>
+                          </table>
                         </div>
                       </div>
+
                     </div>
                   </div>
                 </div>
-      </main>
-    </div>
-    </div>
-    </div>
-    </div>
-    </div>
+              </div>
+            </div>
   </main>
+
 
   <!-- Add subject-->
   <main class="pt-3" id="add-subject">
@@ -1244,77 +1128,69 @@
           <label class="form-label fw-bold fs-4" for="add-subject">Add subject</label>
         </div>
       </div>
-      <!-- Add subject-->
-      <main class="pt-3" id="add-subject">
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col-md-12">
-              <label class="form-label fw-bold fs-4" for="add-subject">Add subject</label>
-            </div>
-          </div>
 
-          <div class="row">
-            <div class="col-md-12">
-              <div class="mb-3">
-                <div class="card">
-                  <div class="card-header">Enter subject details</div>
-                  <div class="card-body">
-                    <form id="add-subject-form">
-                      <div class="row">
-                        <div class="col-md-12">
-                          <div class="mb-3">
-                            <label for="subject-name" class="form-label">Subject name</label>
-                            <input type="text" name="subject-title" class="form-control" id="subject-name"
-                              placeholder="Enter a name" required>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-12">
-                          <div class="mb-3">
-                            <label for="subject-week" class="form-label">Subject Week</label>
-                            <select name="week-number" class="form-select" required>
-                              <option value="" selected disabled>Select a week</option>
-                              <option value="1">Week 1</option>
-                              <option value="2">Week 2</option>
-                              <option value="3">Week 3</option>
-                            </select>
-                          </div>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-                  <div class="card-footer">
-                    <div class="row">
-                      <div class="col-md-12 text-end">
-                        <button type="submit" class="btn btn-primary" form="add-subject-form">Add
-                          subject</button>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="mb-3">
+            <div class="card">
+              <div class="card-header">Enter subject details</div>
+              <div class="card-body">
+                <form id="add-subject-form">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="mb-3">
+                        <label for="subject-name" class="form-label">Subject name</label>
+                        <input type="text" name="subject-title" class="form-control" id="subject-name"
+                          placeholder="Enter a name" required>
                       </div>
                     </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="mb-3">
+                        <label for="subject-week" class="form-label">Subject Week</label>
+                        <select name="week-number" class="form-select" required>
+                          <option value="" selected disabled>Select a week</option>
+                          <option value="1">Week 1</option>
+                          <option value="2">Week 2</option>
+                          <option value="3">Week 3</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <div class="card-footer">
+                <div class="row">
+                  <div class="col-md-12 text-end">
+                    <button type="submit" class="btn btn-primary" form="add-subject-form">Add
+                      subject</button>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </main>
+      </div>
+    </div>
+  </main>
 
-      <script src="../js/bootstrap.bundle.min.js"></script>
-      <script src="../js/jquery-3.7.0.min.js"></script>
-      <script src="../js/jquery.dataTables.min.js"></script>
-      <script src="../js/dataTables.bootstrap5.min.js"></script>
-      <script src="../js/script.js"></script>
-      <script src="../js/quiz.js"></script>
-      <script src="../js/student.js"></script>
-      <script src="../js/leaderboard.js"></script>
-      <script src="../js/bootstrap.bundle.min.js"></script>
-      <script src="../js/jquery-3.7.0.min.js"></script>
-      <script src="../js/jquery.dataTables.min.js"></script>
-      <script src="../js/dataTables.bootstrap5.min.js"></script>
-      <script src="../js/script.js"></script>
-      <script src="../js/quiz.js"></script>
-      <script src="../js/student.js"></script>
-      <script src="../js/leaderboard.js"></script>
+  <script src="../js/bootstrap.bundle.min.js"></script>
+  <script src="../js/jquery-3.7.0.min.js"></script>
+  <script src="../js/jquery.dataTables.min.js"></script>
+  <script src="../js/dataTables.bootstrap5.min.js"></script>
+  <script src="../js/script.js"></script>
+  <script src="../js/quiz.js"></script>
+  <script src="../js/student.js"></script>
+  <script src="../js/leaderboard.js"></script>
+  <script src="../js/bootstrap.bundle.min.js"></script>
+  <script src="../js/jquery-3.7.0.min.js"></script>
+  <script src="../js/jquery.dataTables.min.js"></script>
+  <script src="../js/dataTables.bootstrap5.min.js"></script>
+  <script src="../js/script.js"></script>
+  <script src="../js/quiz.js"></script>
+  <script src="../js/student.js"></script>
+  <script src="../js/leaderboard.js"></script>
 </body>
 
 </html>

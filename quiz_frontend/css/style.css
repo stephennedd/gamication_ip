@@ -12,10 +12,13 @@
     --achievement-color: gold;
 }
 
+html{
+    overflow: hidden;
+}
+
 body{
     background-image: url(../assets/images/background.png);
     background-repeat: no-repeat;
-
     background-color: #000000;
 }
 
@@ -439,7 +442,7 @@ footer button.show{
     bottom: 0%;
     left: 50%;
     transform: translateX(-50%);
-    height: 100px;
+    height: 110px;
     width: 450px;
     background-color: #ddd;
     z-index: 10;
