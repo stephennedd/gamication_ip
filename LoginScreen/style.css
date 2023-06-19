@@ -44,6 +44,10 @@ button span {
 	height: 255px;
 }
 
+#loginForm.verify #wrapper {
+	height: 339px;
+}
+
 #loginForm.reset #wrapper {
 	height: 85px;
 }
@@ -54,6 +58,10 @@ button span {
 
 #loginForm.signup button span {
 	transform: translate3d(0, -144px, 0);
+}
+
+#loginForm.verify button span {
+	transform: translate3d(0, -216px, 0);
 }
 
 #loginForm.reset button span {
