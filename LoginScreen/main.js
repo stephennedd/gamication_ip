@@ -1,8 +1,10 @@
 let token;
 
 document.addEventListener('DOMContentLoaded', function () {
-	const welcomeText =
+	const mainText =
 		'WELCOME TO PROJECT G.A.M.I.F.I.C.A.T.I.O.N PLEASE ENTER YOUR CREDENTIALS...';
+	const verificationText =
+		'PLEASE ENTER THE VERIFICATION CODE SENT TO YOUR EMAIL...';
 	const welcomeElement = document.querySelector('.welcome');
 	const loginForm = document.getElementById('loginForm');
 	const radioButtons = document.querySelectorAll('input[type="radio"]');
@@ -38,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		});
 	};
 
-	displayTextOneCharacterAtATime(welcomeElement, welcomeText);
+	displayTextOneCharacterAtATime(welcomeElement, mainText);
 
 	// Change which inputs are visible and set the indicator line position
 	radioButtons.forEach((radio, index) => {
@@ -58,10 +60,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	setIndicatorPosition(0);
 
 	// Show login input fields and login button
-	setTimeout(
-		() => loginForm.classList.remove('hidden'),
-		40 * welcomeText.length
-	);
+	setTimeout(() => loginForm.classList.remove('hidden'), 40 * mainText.length);
 
 	// Error element for displaying messages
 	const errorElement = document.createElement('div');
@@ -81,9 +80,12 @@ document.addEventListener('DOMContentLoaded', function () {
 		const email = document.getElementById('email').value;
 		const password = document.getElementById('password').value;
 		const repassword = document.getElementById('repassword').value;
+		const verificationCode = document.getElementById('verificationCode').value;
 		const loginButton = document.querySelector('button span');
+		const emailInput = document.getElementById('email');
 		const passwordInput = document.getElementById('password');
 		const repasswordInput = document.getElementById('repassword');
+		const verificationCodeInput = document.getElementById('verificationCode');
 
 		const signInRadio = document.getElementById('signin');
 		const signUpRadio = document.getElementById('signup');
@@ -167,6 +169,9 @@ document.addEventListener('DOMContentLoaded', function () {
 				password: password,
 			};
 
+			displayTextOneCharacterAtATime(welcomeElement, verificationText);
+			loginForm.classList.replace('signup', 'verify');
+
 			fetch('https://localhost:7186/api/Users', {
 				method: 'POST',
 				headers: {
@@ -176,6 +181,8 @@ document.addEventListener('DOMContentLoaded', function () {
 			})
 				.then(function (response) {
 					console.log(response);
+					displayTextOneCharacterAtATime(welcomeElement, verificationText);
+					loginForm.classList.replace('signup', 'verify');
 					if (!response.ok) {
 						throw new Error('Failed to create user');
 					}
@@ -183,7 +190,10 @@ document.addEventListener('DOMContentLoaded', function () {
 				})
 				.catch(function (error) {
 					console.error(error);
-					loginButton.textContent = '[ Failed to create user! ]';
+					displayTextOneCharacterAtATime(
+						errorElement,
+						'Failed to create user.'
+					);
 				});
 			// TODO: Send a POST request to the Sign Up endpoint
 		} else if (resetRadio.checked) {
@@ -198,6 +208,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			// TODO: Send a POST request to the Password Reset endpoint
 		}
 	});
+
 	function parseJwt(token) {
 		var base64Url = token.split('.')[1];
 		var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -363,58 +374,3 @@ document.addEventListener('DOMContentLoaded', function () {
 // 			}
 // 		});
 // });
-
-////////////////////////////////////////////////////////////////////////////////////////////
-
-// document
-// 	.getElementById('loginForm')
-// 	.addEventListener('submit', function (event) {
-// 		event.preventDefault(); // Prevent the form from submitting normally
-
-// 		var email = document.getElementById('email').value;
-// 		var password = document.getElementById('password').value;
-// 		var loginButton = document.getElementById('login');
-
-// 		if (email === '' || password === '') {
-// 			loginButton.textContent = '[ EMPTY INPUT! ]';
-// 		} else {
-// 			// Prepare the request payload
-// 			var data = {
-// 				userId: email,
-// 				password: password,
-// 			};
-
-// 			// Send a POST request to the login endpoint
-// 			fetch('https://localhost:7186/api/Tokens', {
-// 				method: 'POST',
-// 				headers: {
-// 					'Content-Type': 'application/json',
-// 				},
-// 				body: JSON.stringify(data),
-// 			})
-// 				.then(function (response) {
-// 					if (!response.ok) {
-// 						// Invalid credentials, display an error message
-// 						throw new Error('Invalid username or password');
-// 					}
-// 					// Successful login, handle the response (e.g., store token/session, redirect)
-// 					return response.json();
-// 				})
-// 				.then(function (data) {
-// 					// Store the JWT in a cookie
-// 					document.cookie =
-// 						'jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-
-// 					document.cookie = `jwt=${data.token}; path=/`;
-
-// 					// Redirect to the admin panel or perform other necessary actions
-// 					window.location.href = 'index.html'; //TODO: change to whatever.html
-// 				})
-// 				.catch(function (error) {
-// 					// Handle any error that occurred during the login process
-// 					console.error(error);
-// 					// Display an error message to the user
-// 					loginButton.textContent = '[ LOGIN FAILED! ]';
-// 				});
-// 		}
-// 	});
