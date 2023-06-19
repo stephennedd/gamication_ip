@@ -175,7 +175,6 @@ namespace GamificationToIP.Seed
                         SubjectTitle= subject.SubjectTitle,
                         WeekNumber= subject.WeekNumber,
                         TestId= subject.TestId,
-                        GameId=subject.GameId,
                     };
 
                     applicationDbContext.Set<Subject>().Add(newSubject);
