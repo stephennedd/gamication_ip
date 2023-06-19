@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Login2</title>
+		<title>Login</title>
 		<link rel="stylesheet" href="style.css" />
 		<script defer src="main.js"></script>
 	</head>
@@ -14,27 +14,41 @@
 				<input checked id="signin" name="action" type="radio" value="signin" />
 				<label for="signin">Sign in</label>
 
+				<input
+					id="verify"
+					class="hidden"
+					name="action"
+					type="radio"
+					value="reset" />
+				<label for="verify" class="hidden">Verification Code</label>
+
 				<input id="signup" name="action" type="radio" value="signup" />
 				<label for="signup">Sign up</label>
 
-				<input id="reset" name="action" type="radio" value="reset" />
-				<label for="reset">Reset</label>
+				<input
+					id="reset"
+					class="hidden"
+					name="action"
+					type="radio"
+					value="reset" />
+				<label for="reset" class="hidden">Reset</label>
 
 				<div id="line"></div>
 			</div>
 			<div id="input-container">
 				<div id="wrapper">
 					<div id="arrow"></div>
+					<input
+						id="verificationCode"
+						class="hidden"
+						placeholder="Verification Code"
+						type="text" />
 					<input id="email" placeholder="ID" type="text" />
 					<input id="password" placeholder="Password" type="password" />
 					<input
 						id="repassword"
 						placeholder="Repeat password"
 						type="password" />
-					<input
-						id="verificationCode"
-						placeholder="Verification Code"
-						type="text" />
 				</div>
 				<button type="submit">
 					<span>
