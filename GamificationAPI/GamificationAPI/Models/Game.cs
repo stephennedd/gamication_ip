@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using GamificationAPI.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace GamificationToIP.Models
 {

@@ -40,6 +40,18 @@ public class SubjectController : ControllerBase
 
         return Content(json, "application/json");
     }
+    
+    [HttpPost]
+    public async Task<ActionResult<Subject>> AddSubject([FromBody] NewSubject newSubject)
+    {
+        var subject = await _subjectService.AddSubject(newSubject);
+        var jsonSettings = new JsonSerializerSettings
+        {
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+        };
+        var json = JsonConvert.SerializeObject(subject, Formatting.None, jsonSettings);
+        return Content(json, "application/json");
+    }
 
     [HttpPut]
     public async Task<ActionResult<RootObject>> UpdateTables(RootObject data)
@@ -57,6 +69,12 @@ public class SubjectController : ControllerBase
     }
 }
 
+public class NewSubject
+{
+    public string SubjectTitle { get; set; }
+    public int WeekNumber { get; set; }
+    public int GameId { get; set; }
+}
 public class Subject
 {
     public int Id { get; set; }
@@ -64,6 +82,9 @@ public class Subject
     public int WeekNumber { get; set; }
     public int TestId { get; set; }
     public Test Test { get; set; }
+
+    public int GameId { get; set; }
+    public Game Game { get; set; }
 }
 
 public class RootObject

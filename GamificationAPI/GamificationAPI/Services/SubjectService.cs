@@ -35,7 +35,38 @@ public class SubjectService : ISubjects
         return subjects;
     }
 
-    [HttpPut]
+    public async Task<Subject> AddSubject(NewSubject newSubject)
+    {
+        var newTest = new Test
+        {
+            Title = newSubject.SubjectTitle,
+            ImageUrl = "",
+            Description = "",
+            TimeSeconds = 0
+        };
+
+        _dbContext.Set<Test>().Add(newTest);
+        await _dbContext.SaveChangesAsync();
+
+        int newTestId = newTest.Id;
+
+        var subject = new Subject
+        {
+            SubjectTitle = newSubject.SubjectTitle,
+            WeekNumber = newSubject.WeekNumber,
+            TestId = newTestId,
+            GameId = newSubject.GameId
+        };
+
+        // Add the subject to the context
+        _dbContext.Subjects.Add(subject);
+
+
+        await _dbContext.SaveChangesAsync();
+
+
+        return subject;
+    }
     public async Task<RootObject> UpdateTables(RootObject data)
     {
 

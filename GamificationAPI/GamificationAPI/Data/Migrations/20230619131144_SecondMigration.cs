@@ -198,7 +198,7 @@ namespace GamificationAPI.Data.Migrations
                     SubjectTitle = table.Column<string>(type: "text", nullable: false),
                     WeekNumber = table.Column<int>(type: "integer", nullable: false),
                     TestId = table.Column<int>(type: "integer", nullable: false),
-                    GameId = table.Column<int>(type: "integer", nullable: true)
+                    GameId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -207,7 +207,8 @@ namespace GamificationAPI.Data.Migrations
                         name: "FK_Subjects_Games_GameId",
                         column: x => x.GameId,
                         principalTable: "Games",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Subjects_Tests_TestId",
                         column: x => x.TestId,

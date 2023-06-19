@@ -1,5 +1,4 @@
-﻿
-using BulkyBookWeb.Models;
+﻿using BulkyBookWeb.Models;
 using GamificationAPI.Models;
 using GamificationToIP.Context;
 using GamificationToIP.Models;
@@ -92,13 +91,13 @@ namespace GamificationToIP.Seed
                         Role = role
                     };
                     if (groupId != null)
-                    { 
+                    {
                         Group group = applicationDbContext.Set<Group>().Find(groupId);
 
                         newUser.Group = group;
-                            
+
                     }
-                    
+                    newUser.IsVerified = true;
 
                     applicationDbContext.Set<User>().Add(newUser);
                     await applicationDbContext.SaveChangesAsync();
@@ -126,7 +125,7 @@ namespace GamificationToIP.Seed
                     }
                 }
                 */
-                    foreach (var test in gamificationToIpData.tests)
+                foreach (var test in gamificationToIpData.tests)
                 {
                     var newTest = new Test
                     {
@@ -145,7 +144,7 @@ namespace GamificationToIP.Seed
                         {
                             QuestionText = question.question,
                             CorrectAnswer = question.correct_answer,
-                            SelectedAnswer= question.selected_answer,
+                            SelectedAnswer = question.selected_answer,
                             TestId = newTest.Id
                         };
 
@@ -159,7 +158,7 @@ namespace GamificationToIP.Seed
                                 Identifier = answer.identifier,
                                 AnswerText = answer.answer,
                                 QuestionId = newQuestion.Id
-                     
+
                             };
 
                             applicationDbContext.Set<Answer>().Add(newAnswer);
@@ -172,9 +171,10 @@ namespace GamificationToIP.Seed
                 {
                     var newSubject = new Subject
                     {
-                        SubjectTitle= subject.SubjectTitle,
-                        WeekNumber= subject.WeekNumber,
-                        TestId= subject.TestId,
+                        SubjectTitle = subject.SubjectTitle,
+                        WeekNumber = subject.WeekNumber,
+                        TestId = subject.TestId,
+                        GameId= subject.GameId, 
                     };
 
                     applicationDbContext.Set<Subject>().Add(newSubject);

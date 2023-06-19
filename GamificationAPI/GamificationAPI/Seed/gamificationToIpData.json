@@ -34,25 +34,25 @@
       "GameId": 2
     },
     {
-      "SubjectTitle": "Blockchain fundamentals",
+      "SubjectTitle": "Python fundamentals",
       "WeekNumber": 3,
       "TestId": 3,
       "GameId": 3
     },
     {
-      "SubjectTitle": "Blockchain fundamentals",
+      "SubjectTitle": "Javascript fundamentals",
       "WeekNumber": 4,
       "TestId": 4,
       "GameId": 4
     },
     {
-      "SubjectTitle": "Blockchain fundamentals",
+      "SubjectTitle": "Data structures fundamentals",
       "WeekNumber": 5,
       "TestId": 5,
       "GameId": 5
     },
     {
-      "SubjectTitle": "Blockchain fundamentals",
+      "SubjectTitle": "Object-Oriented Programming Concepts",
       "WeekNumber": 6,
       "TestId": 6,
       "GameId": 6

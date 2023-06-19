@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GamificationAPI.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230619115409_SecondMigration")]
+    [Migration("20230619131144_SecondMigration")]
     partial class SecondMigration
     {
         /// <inheritdoc />
@@ -376,7 +376,7 @@ namespace GamificationAPI.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("GameId")
+                    b.Property<int>("GameId")
                         .HasColumnType("integer");
 
                     b.Property<string>("SubjectTitle")
@@ -516,15 +516,19 @@ namespace GamificationAPI.Data.Migrations
 
             modelBuilder.Entity("Subject", b =>
                 {
-                    b.HasOne("GamificationToIP.Models.Game", null)
+                    b.HasOne("GamificationToIP.Models.Game", "Game")
                         .WithMany("Subjects")
-                        .HasForeignKey("GameId");
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("GamificationToIP.Models.Test", "Test")
                         .WithOne("Subject")
                         .HasForeignKey("Subject", "TestId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Game");
 
                     b.Navigation("Test");
                 });
