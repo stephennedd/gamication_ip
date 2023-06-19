@@ -28,7 +28,7 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <input type="checkbox" class="btn-check" id="admin-checkbox">
+        <input type="checkbox" class="btn-check" id="admin-checkbox" />
         <label class="btn btn-outline-light" for="admin-checkbox">Admin</label><br>
         <form class="d-flex ms-auto my-3 my-lg-0" role="search">
           <div class="input-group my-lg-0">
@@ -412,19 +412,20 @@
                       </div>
                     </div>
                   </div>
+                </div>
 
-                  <div class="row">
-                    <div class="col text-end">
-                      <button type="button" class="btn btn-primary" id="add-question-btn">Add Question</button>
-                      <button type="submit" class="btn btn-success">Submit Quiz</button>
-                    </div>
+                <div class="row">
+                  <div class="col text-end">
+                    <button type="button" class="btn btn-primary" id="add-question-btn">Add Question</button>
+                    <button type="submit" class="btn btn-success">Submit Quiz</button>
                   </div>
+                </div>
               </form>
             </div>
           </div>
         </div>
       </div>
-
+    </div>
   </main>
 
   <!-- Edit Quiz-->
@@ -468,7 +469,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form id="edit-quiz">
+          <form id="edit-quiz-form">
             <div class="row">
               <div class="col-md-12">
                 <div class="mb-3"><label for="quiz-name" class="form-label">Quiz name</label>
@@ -494,7 +495,8 @@
           <div class="col text-end">
             <button type="button" class="btn btn-primary" onclick="addQuestionToModal()">Add Question</button>
             <!-- <button type="button" class="btn btn-success" onclick="submitEditQuizForm()">Save changes</button> -->
-            <button type="submit" form="edit-quiz-form" class="btn btn-success" onclick="confirmQuizUpdate(this)">Save
+            <button type="button" form="edit-quiz-form" class="btn btn-success"
+              onclick="confirmQuizUpdate(this, subjects)">Save
               changes</button>
           </div>
         </div>
