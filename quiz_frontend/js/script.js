@@ -325,32 +325,35 @@ async function updateProgress(correctAnswers, totalQuestions) {
 		milestone50.classList.add("milestone-done");
 		milestone50.style.backgroundColor = "green";
 		achievementSound.play(); // play achievement sound
-		await showAchievement(`You've unlocked the game!`, `<i class="fa-sharp fa-solid fa-gamepad"></i>`); // show achievement popup
+		 showAchievement('Game Unlocked',`You've unlocked the game!`, `<i class="fa-sharp fa-solid fa-gamepad"></i>`); // show achievement popup
 	}
 
 	if (progress >= 75) {	
 		milestone75.classList.add("milestone-done");
 		milestone75.style.backgroundColor = "red";
 		achievementSound.play(); // play achievement sound
-		await showAchievement(`You've unlocked +1 life`, `<i class="fa-sharp fa-solid fa-heart" style="color: red"></i>`); // show achievement popup
+		 showAchievement('Bonus Life',`You've unlocked +1 life`, `<i class="fa-sharp fa-solid fa-heart" style="color: red"></i>`); // show achievement popup
 	} 
 	
 	if (progress === 100) {
 		milestone100.classList.add("milestone-done");
 		milestone100.style.backgroundColor = "var(--achievement-color)";
 		achievementSound.play(); // play achievement sound
-		await showAchievement(`You've unlocked 2x score multiplier`,`<i class="fa-sharp fa-solid fa-trophy" style="color: green"></i>`); // show achievement popup
+		showAchievement('Score Multiplier',`You've unlocked 2x score multiplier`,`<i class="fa-sharp fa-solid fa-trophy" style="color: green"></i>`); // show achievement popup
 	}  
 
   }
 
-  async function showAchievement(text, icon) {
-	// clear the achievement text and icon
+  function showAchievement(title, text, icon) {
+	var achievmentTitle = document.querySelector(".achievement-title");
+	// clear the achievement text and icon and title
 	achievementText.innerHTML = "";
 	achievementIcon.innerHTML = "";
+	achievmentTitle.innerHTML = "";
 
 	achievementText.innerHTML = text;
 	achievementIcon.innerHTML = icon;
+	achievmentTitle.innerHTML = title;
 	console.log("Achievement unlocked: " + text);
 	achievement.classList.add("show-achievement");
 

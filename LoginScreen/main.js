@@ -156,10 +156,28 @@ document.addEventListener('DOMContentLoaded', function () {
 
 			// Prepare the request payload
 			var data = {
-				email: email,
+				userId: email,
 				password: password,
 			};
 
+			fetch('https://localhost:7186/api/Users', {
+ 					method: 'POST',
+				headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify(data),
+				})
+					.then(function (response) {
+						console.log(response);
+						if (!response.ok) {
+							throw new Error('Failed to create user');
+						}
+						return;
+					})					
+					.catch(function (error) {
+						console.error(error);
+						loginButton.textContent = '[ Failed to create user! ]';
+					});
 			// TODO: Send a POST request to the Sign Up endpoint
 		} else if (resetRadio.checked) {
 			// Handle Reset
@@ -171,6 +189,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			}
 
 			// TODO: Send a POST request to the Password Reset endpoint
+			
 		}
 	});
 });
