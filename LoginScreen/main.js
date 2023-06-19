@@ -90,6 +90,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		const signInRadio = document.getElementById('signin');
 		const signUpRadio = document.getElementById('signup');
 		const resetRadio = document.getElementById('reset');
+		const verificationRadio = document.getElementById('verify');
 
 		// Reset styles and hide error message
 		passwordInput.style.border = '';
@@ -121,7 +122,14 @@ document.addEventListener('DOMContentLoaded', function () {
 			})
 				.then(function (response) {
 					if (!response.ok) {
-						throw new Error('Invalid username or password');
+						throw (
+							(new Error('Invalid username or password'),
+							displayTextOneCharacterAtATime(
+								errorElement,
+								'Invalid username or password'
+							),
+							(errorElement.style.display = 'block'))
+						);
 					}
 					return response.json();
 				})
@@ -131,10 +139,15 @@ document.addEventListener('DOMContentLoaded', function () {
 					document.cookie = `jwt=${data.token}; path=/`;
 					token = data.token;
 					var decodedToken = parseJwt(token);
-					if (decodedToken.IsVerified == false) {
-						window.location.href = '../AracadeMachine/verify.html'; //TODO VERIFY PAGE
-					} else
-						window.location.href = '../AracadeMachine/index.html'; //TODO ARCADE PAGE
+					console.log(decodedToken.IsVerified);
+					if (decodedToken.IsVerified == "False") {
+						displayTextOneCharacterAtATime(welcomeElement, verificationText);
+						verificationRadio.classList.remove('hidden');
+						verificationRadio.checked = true;
+						verificationCodeInput.classList.remove('hidden');
+						
+						 //TODO VERIFY PAGE
+					} else window.location.href = '../AracadeMachine/index.html'; //TODO ARCADE PAGE
 				})
 				.catch(function (error) {
 					console.error(error);
@@ -169,8 +182,7 @@ document.addEventListener('DOMContentLoaded', function () {
 				password: password,
 			};
 
-			displayTextOneCharacterAtATime(welcomeElement, verificationText);
-			loginForm.classList.replace('signup', 'verify');
+			displayTextOneCharacterAtATime(welcomeElement, 'Creating user...');
 
 			fetch('https://localhost:7186/api/Users', {
 				method: 'POST',
@@ -181,8 +193,14 @@ document.addEventListener('DOMContentLoaded', function () {
 			})
 				.then(function (response) {
 					console.log(response);
-					displayTextOneCharacterAtATime(welcomeElement, verificationText);
-					loginForm.classList.replace('signup', 'verify');
+					displayTextOneCharacterAtATime(welcomeElement, 'Account created!');
+					setTimeout(() => {
+						displayTextOneCharacterAtATime(
+							welcomeElement,
+							'Login to continue.'
+						);
+						//signInRadio.checked = true;
+					}, 2000);
 					if (!response.ok) {
 						throw new Error('Failed to create user');
 					}
@@ -206,6 +224,20 @@ document.addEventListener('DOMContentLoaded', function () {
 			}
 
 			// TODO: Send a POST request to the Password Reset endpoint
+		} else if (verificationRadio.checked) {
+			// Handle Verification
+
+			if (verificationCode === '') {
+				displayTextOneCharacterAtATime(
+					errorElement,
+					'Please enter your verification code.'
+				);
+				errorElement.style.display = 'block';
+				return;
+			}
+
+			verifyCode(verificationCode);
+			refreshJWT();
 		}
 	});
 
@@ -222,6 +254,104 @@ document.addEventListener('DOMContentLoaded', function () {
 		);
 
 		return JSON.parse(jsonPayload);
+	}
+function refreshJWT() {
+	var token = document.cookie
+	fetch('https://localhost:7186/api/Tokens', {
+				method: 'GET',
+				headers: {
+					'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+				},
+				
+			})
+				.then(function (response) {
+					if (!response.ok) {
+						throw (
+							(new Error('Invalid username or password'),
+							displayTextOneCharacterAtATime(
+								errorElement,
+								'Invalid username or password'
+							),
+							(errorElement.style.display = 'block'))
+						);
+					}
+					return response.json();
+				})
+				.then(function (data) {
+					document.cookie =
+						'jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+					document.cookie = `jwt=${data.token}; path=/`;
+					token = data.token;
+					var decodedToken = parseJwt(token);
+					if (decodedToken.IsVerified == false) {
+						displayTextOneCharacterAtATime(welcomeElement, verificationText);
+						verificationRadio.classList.remove('hidden');
+						verificationRadio.checked = true;
+						verificationCodeInput.classList.remove('hidden'); 
+						emailInput.classList.add('hidden');
+						emailInput.classList.add('hidden');//TODO VERIFY PAGE
+					} else {
+						console.log("verified");
+						window.location.href = '../AracadeMachine/index.html'; //TODO ARCADE PAGE
+					}
+				})
+				.catch(function (error) {
+					console.error(error);
+					displayTextOneCharacterAtATime(errorElement, 'Login failed.');
+					errorElement.style.display = 'block';
+				});
+			}
+
+	function verifyCode(code) {
+		var token = document.cookie
+			.split('; ')
+			.find((row) => row.startsWith('jwt='))
+			.split('=')[1];
+
+		fetch('https://localhost:7186/api/Users/' + code, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${token}`,
+			},
+			body: JSON.stringify({ code: code }),
+		})
+			.then((response) => {
+				if (response.ok) {
+					return response.json();
+				} else {
+					throw new Error("Server response wasn't OK");
+				}
+			})
+			.then((data) => {
+				$('#response-message').empty();
+				if (data.success) {
+					// var html = `<p class="text-success">Code is correct</p>
+					//     <a href="login.html" class="btn btn-primary">Login</a>`;
+					// $('#response-message').append(html);
+					displayTextOneCharacterAtATime(
+						welcomeElement,
+						'Verification sucessfull!'
+					);
+					setTimeout(() => {
+						displayTextOneCharacterAtATime(
+							welcomeElement,
+							'Login to continue.'
+						);
+						signInRadio.checked = true;
+					}, 2000);
+				} else {
+					displayTextOneCharacterAtATime(
+						errorElement,
+						'Verification code incorrect.'
+					);
+					errorElement.style.display = 'block';
+				}
+			})
+			.catch((error) => {
+				console.error('Error:', error);
+			});
 	}
 });
 

@@ -10,7 +10,7 @@ using System.Security.Claims;
 
 namespace GamificationAPI.Controllers
 {
-    [AllowAnonymous]
+    
     [Route("api/[controller]")]
     [ApiController]
     public class TokensController : ControllerBase
@@ -25,7 +25,7 @@ namespace GamificationAPI.Controllers
             _userService = userService;
             _dbContext = dbContext;
         }
-
+        [AllowAnonymous]
         [HttpPost]
         public IActionResult CreateToken([FromBody] UserCredentials userCredentials)
         {
@@ -60,6 +60,43 @@ namespace GamificationAPI.Controllers
         };
             Console.WriteLine(user.IsVerified.ToString());
            
+            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+            var token = new JwtSecurityToken(
+                claims: claims,
+                expires: DateTime.Now.AddMinutes(45),
+                signingCredentials: creds);
+            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+
+            return Ok(new { token = jwt });
+        }
+        [Authorize(Roles = "Admin, Teacher, Student")]
+        [HttpGet]      
+        public async Task<IActionResult> RefreshTokenAsync()
+        {
+            if (!HttpContext.Request.Headers.TryGetValue("Authorization", out var authorizationHeader))
+            {
+                return BadRequest("Authorization header is missing.");
+            }
+            var userId = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return BadRequest("Invalid token.");
+            }
+            var user = await _userService.GetUserByIdAsync(userId);
+            if (user is null)
+            {
+                return BadRequest($"Could not find user {userId}");
+            }           
+
+            List<Claim> claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.Name, user.UserId),
+            new Claim(ClaimTypes.Role, user.Role.Name),
+            new Claim("IsVerified", user.IsVerified.ToString())
+        };
+            Console.WriteLine(user.IsVerified.ToString());
+
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
             var token = new JwtSecurityToken(
