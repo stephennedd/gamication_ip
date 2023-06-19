@@ -28,6 +28,13 @@ public class LeaderboardService : ILeaderboards
             .ToListAsync();
     }
 
+    public async Task<List<Leaderboard>> GetLeaderboardsSimpleAsync()
+    {
+        return await _dbContext.Set<Leaderboard>()
+            .Include(l => l.HighScores)
+            .ToListAsync();
+    }
+
     public async Task<Leaderboard> GetLeaderboardByNameAsync(string name)
     {
         return await _dbContext.Set<Leaderboard>()

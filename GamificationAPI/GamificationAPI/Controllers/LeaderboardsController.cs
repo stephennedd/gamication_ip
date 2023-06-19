@@ -23,13 +23,13 @@ public class LeaderboardsController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAllLeaderboard()
     {
-        var leaderboard = await _leaderboardService.GetLeaderboardsAsync();
-        if (!leaderboard.Any())
+        List<Leaderboard> leaderboards = await _leaderboardService.GetLeaderboardsSimpleAsync();
+        if (!leaderboards.Any())
         {
             return NoContent();
         }
 
-        return Ok(leaderboard);
+        return Ok(leaderboards);
     }
     [HttpGet("{LeaderboardName}")]
     public async Task<IActionResult> GetLeaderboardById(string LeaderboardName, bool? mygroup)
