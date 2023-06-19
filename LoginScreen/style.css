@@ -61,7 +61,7 @@ button span {
 }
 
 #loginForm.verify button span {
-	transform: translate3d(0, 0, 0);
+	transform: translate3d(0,-72px, 0);
 }
 
 #loginForm.reset button span {

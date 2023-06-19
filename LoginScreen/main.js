@@ -139,11 +139,14 @@ document.addEventListener('DOMContentLoaded', function () {
 					document.cookie = `jwt=${data.token}; path=/`;
 					token = data.token;
 					var decodedToken = parseJwt(token);
-					if (decodedToken.IsVerified == false) {
+					console.log(decodedToken.IsVerified);
+					if (decodedToken.IsVerified == "False") {
 						displayTextOneCharacterAtATime(welcomeElement, verificationText);
 						verificationRadio.classList.remove('hidden');
 						verificationRadio.checked = true;
-						verificationCodeInput.classList.remove('hidden'); //TODO VERIFY PAGE
+						verificationCodeInput.classList.remove('hidden');
+						
+						 //TODO VERIFY PAGE
 					} else window.location.href = '../AracadeMachine/index.html'; //TODO ARCADE PAGE
 				})
 				.catch(function (error) {
@@ -196,7 +199,7 @@ document.addEventListener('DOMContentLoaded', function () {
 							welcomeElement,
 							'Login to continue.'
 						);
-						signInRadio.checked = true;
+						//signInRadio.checked = true;
 					}, 2000);
 					if (!response.ok) {
 						throw new Error('Failed to create user');
@@ -234,6 +237,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			}
 
 			verifyCode(verificationCode);
+			refreshJWT();
 		}
 	});
 
@@ -251,6 +255,53 @@ document.addEventListener('DOMContentLoaded', function () {
 
 		return JSON.parse(jsonPayload);
 	}
+function refreshJWT() {
+	var token = document.cookie
+	fetch('https://localhost:7186/api/Tokens', {
+				method: 'GET',
+				headers: {
+					'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+				},
+				
+			})
+				.then(function (response) {
+					if (!response.ok) {
+						throw (
+							(new Error('Invalid username or password'),
+							displayTextOneCharacterAtATime(
+								errorElement,
+								'Invalid username or password'
+							),
+							(errorElement.style.display = 'block'))
+						);
+					}
+					return response.json();
+				})
+				.then(function (data) {
+					document.cookie =
+						'jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+					document.cookie = `jwt=${data.token}; path=/`;
+					token = data.token;
+					var decodedToken = parseJwt(token);
+					if (decodedToken.IsVerified == false) {
+						displayTextOneCharacterAtATime(welcomeElement, verificationText);
+						verificationRadio.classList.remove('hidden');
+						verificationRadio.checked = true;
+						verificationCodeInput.classList.remove('hidden'); 
+						emailInput.classList.add('hidden');
+						emailInput.classList.add('hidden');//TODO VERIFY PAGE
+					} else {
+						console.log("verified");
+						window.location.href = '../AracadeMachine/index.html'; //TODO ARCADE PAGE
+					}
+				})
+				.catch(function (error) {
+					console.error(error);
+					displayTextOneCharacterAtATime(errorElement, 'Login failed.');
+					errorElement.style.display = 'block';
+				});
+			}
 
 	function verifyCode(code) {
 		var token = document.cookie
