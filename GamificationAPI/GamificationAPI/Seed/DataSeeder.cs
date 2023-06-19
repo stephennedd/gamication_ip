@@ -87,7 +87,7 @@ namespace GamificationToIP.Seed
                         newUser.Group = group;
                             
                     }
-                    
+                    newUser.IsVerified = true;
 
                     applicationDbContext.Set<User>().Add(newUser);
                     await applicationDbContext.SaveChangesAsync();

@@ -99,7 +99,7 @@ namespace GamificationToIP.Controllers
 
                 await _userService.AddUserAsync(newUser);
                 //TODO: Send email with verification token to UserId + @domain
-                EmailDto Email = new EmailDto { To = "brain13@ethereal.email", Subject = "Verify your account", Body = $"Your verification token is: {newUser.VerificationCode}" };
+                EmailDto Email = new EmailDto { To = "t6666349@gmail.com", Subject = "Verify your account", Body = $"Your verification token is: {newUser.VerificationCode}" }; //To = $"{newUser.UserId}@student.saxion.nl",
                 _emailService.SendEmail(Email);
                 return CreatedAtAction("GetUser", new { UserId = newUser.UserId }, newUser);
             }
