@@ -27,6 +27,19 @@ namespace GamificationAPI.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Games",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    GameName = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Games", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Groups",
                 columns: table => new
                 {
@@ -184,11 +197,17 @@ namespace GamificationAPI.Data.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     SubjectTitle = table.Column<string>(type: "text", nullable: false),
                     WeekNumber = table.Column<int>(type: "integer", nullable: false),
-                    TestId = table.Column<int>(type: "integer", nullable: false)
+                    TestId = table.Column<int>(type: "integer", nullable: false),
+                    GameId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Subjects", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Subjects_Games_GameId",
+                        column: x => x.GameId,
+                        principalTable: "Games",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Subjects_Tests_TestId",
                         column: x => x.TestId,
@@ -351,6 +370,11 @@ namespace GamificationAPI.Data.Migrations
                 column: "QuestionId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Subjects_GameId",
+                table: "Subjects",
+                column: "GameId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Subjects_TestId",
                 table: "Subjects",
                 column: "TestId",
@@ -396,6 +420,9 @@ namespace GamificationAPI.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "GeneratedTest");
+
+            migrationBuilder.DropTable(
+                name: "Games");
 
             migrationBuilder.DropTable(
                 name: "Groups");

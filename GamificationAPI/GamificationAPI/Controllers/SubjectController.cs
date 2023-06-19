@@ -48,5 +48,8 @@ public class Subject
     public string SubjectTitle { get; set; }
     public int WeekNumber { get; set; }
     public int TestId { get; set; }
+
+    public int GameId { get; set; }
     public Test Test { get; set; }
+    public Game Game { get; set; }
 }

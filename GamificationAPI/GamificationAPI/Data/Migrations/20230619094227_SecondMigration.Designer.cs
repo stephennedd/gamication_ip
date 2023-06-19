@@ -12,11 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GamificationAPI.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-<<<<<<<< HEAD:GamificationAPI/GamificationAPI/Data/Migrations/20230618110758_SecondMigration.Designer.cs
-    [Migration("20230618110758_SecondMigration")]
-========
-    [Migration("20230618144943_SecondMigration")]
->>>>>>>> d72b4d92626ee6234a629738492a22fe99d1d48f:GamificationAPI/GamificationAPI/Data/Migrations/20230618144943_SecondMigration.Designer.cs
+    [Migration("20230619094227_SecondMigration")]
     partial class SecondMigration
     {
         /// <inheritdoc />
@@ -256,6 +252,23 @@ namespace GamificationAPI.Data.Migrations
                     b.ToTable("Answers");
                 });
 
+            modelBuilder.Entity("GamificationToIP.Models.Game", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("GameName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Games");
+                });
+
             modelBuilder.Entity("GamificationToIP.Models.Question", b =>
                 {
                     b.Property<int>("Id")
@@ -363,6 +376,9 @@ namespace GamificationAPI.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("GameId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("SubjectTitle")
                         .IsRequired()
                         .HasColumnType("text");
@@ -374,6 +390,8 @@ namespace GamificationAPI.Data.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("GameId");
 
                     b.HasIndex("TestId")
                         .IsUnique();
@@ -498,6 +516,10 @@ namespace GamificationAPI.Data.Migrations
 
             modelBuilder.Entity("Subject", b =>
                 {
+                    b.HasOne("GamificationToIP.Models.Game", null)
+                        .WithMany("Subjects")
+                        .HasForeignKey("GameId");
+
                     b.HasOne("GamificationToIP.Models.Test", "Test")
                         .WithOne("Subject")
                         .HasForeignKey("Subject", "TestId")
@@ -510,6 +532,11 @@ namespace GamificationAPI.Data.Migrations
             modelBuilder.Entity("GamificationAPI.Models.Leaderboard", b =>
                 {
                     b.Navigation("HighScores");
+                });
+
+            modelBuilder.Entity("GamificationToIP.Models.Game", b =>
+                {
+                    b.Navigation("Subjects");
                 });
 
             modelBuilder.Entity("GamificationToIP.Models.Question", b =>

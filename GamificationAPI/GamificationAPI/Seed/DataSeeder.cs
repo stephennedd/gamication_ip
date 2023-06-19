@@ -31,6 +31,17 @@ namespace GamificationToIP.Seed
 
                 _logger.LogInformation("This is an information message.");
 
+                foreach (var game in gamificationToIpData.games)
+                {
+                    var newGame = new Game
+                    {
+                        GameName = game?.GameName
+                    };
+
+                    applicationDbContext.Set<Game>().Add(newGame);
+                    await applicationDbContext.SaveChangesAsync();
+                }
+
                 foreach (var student in gamificationToIpData.students)
                 {
                     var newStudent = new Student
@@ -164,6 +175,7 @@ namespace GamificationToIP.Seed
                         SubjectTitle= subject.SubjectTitle,
                         WeekNumber= subject.WeekNumber,
                         TestId= subject.TestId,
+                        GameId=subject.GameId,
                     };
 
                     applicationDbContext.Set<Subject>().Add(newSubject);

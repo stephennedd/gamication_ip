@@ -13,7 +13,8 @@ namespace GamificationAPI.Models
 
         [ForeignKey("Test")]
         public int TestId { get; set; } 
-
-        public virtual Test Test { get; set; } 
+        public virtual Test Test { get; set; }
+        public int GameId { get; set; }
+        public Game Game { get; set; }
     }
 }

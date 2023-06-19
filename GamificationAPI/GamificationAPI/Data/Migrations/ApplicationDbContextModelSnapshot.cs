@@ -249,6 +249,23 @@ namespace GamificationAPI.Data.Migrations
                     b.ToTable("Answers");
                 });
 
+            modelBuilder.Entity("GamificationToIP.Models.Game", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("GameName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Games");
+                });
+
             modelBuilder.Entity("GamificationToIP.Models.Question", b =>
                 {
                     b.Property<int>("Id")
@@ -356,6 +373,9 @@ namespace GamificationAPI.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("GameId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("SubjectTitle")
                         .IsRequired()
                         .HasColumnType("text");
@@ -367,6 +387,8 @@ namespace GamificationAPI.Data.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("GameId");
 
                     b.HasIndex("TestId")
                         .IsUnique();
@@ -491,6 +513,10 @@ namespace GamificationAPI.Data.Migrations
 
             modelBuilder.Entity("Subject", b =>
                 {
+                    b.HasOne("GamificationToIP.Models.Game", null)
+                        .WithMany("Subjects")
+                        .HasForeignKey("GameId");
+
                     b.HasOne("GamificationToIP.Models.Test", "Test")
                         .WithOne("Subject")
                         .HasForeignKey("Subject", "TestId")
@@ -503,6 +529,11 @@ namespace GamificationAPI.Data.Migrations
             modelBuilder.Entity("GamificationAPI.Models.Leaderboard", b =>
                 {
                     b.Navigation("HighScores");
+                });
+
+            modelBuilder.Entity("GamificationToIP.Models.Game", b =>
+                {
+                    b.Navigation("Subjects");
                 });
 
             modelBuilder.Entity("GamificationToIP.Models.Question", b =>
