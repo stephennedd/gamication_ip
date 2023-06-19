@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GamificationAPI.Controllers
 {
-    [Authorize(Roles = "Admin, Teacher, Student")]
+    [Authorize(Roles = "Admin, Teacher, Student", Policy = "IsVerified")]
     [Route("api/[controller]")]
     [ApiController]
     public class GroupsController : ControllerBase

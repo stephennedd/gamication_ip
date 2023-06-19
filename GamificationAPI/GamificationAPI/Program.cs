@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using GamificationToIP.Context;
 using GamificationToIP.Seed;
 using GamificationAPI.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 using System.Text.Json.Serialization;
 using Swashbuckle.AspNetCore.Filters;
@@ -55,7 +56,15 @@ builder.Services.AddTransient<IBadges, BadgeService>();
 builder.Services.AddTransient<IStudentAnswers, StudentAnswerService>();
 builder.Services.AddTransient<IStudentQuestions, StudentQuestionService>();
 builder.Services.AddTransient<IEmails, EmailService>();
-builder.Services.AddTransient<ISubjects, SubjectService>(); 
+builder.Services.AddTransient<ISubjects, SubjectService>();
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("IsVerified", policy =>
+    {
+        policy.RequireClaim("IsVerified", "True");
+    });
+});
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -68,6 +77,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuer = false,
             ValidateAudience = false
         };
+
     });
 
 

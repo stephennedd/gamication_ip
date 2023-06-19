@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace GamificationAPI.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin", Policy = "IsVerified")]
     [Route("api/[controller]")]
     [ApiController]
     public class RolesController : ControllerBase
