@@ -14,12 +14,13 @@ form.addEventListener('submit', (e) => {
   // Get the subject name and week values
   const subjectName = document.getElementById('subject-name').value;
   const subjectWeek = document.getElementById('subject-week').value;
+  const gameId = document.getElementById("subject-game").value;
 
   // Create an API request object
   const apiRequest = {
     "subjectTitle": subjectName,
     "weekNumber": subjectWeek,
-    "gameId": 1
+    "gameId": gameId
   }
 
   console.log(apiRequest);
