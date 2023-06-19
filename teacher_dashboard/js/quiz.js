@@ -1,6 +1,5 @@
-const editQuizLink = document.getElementById('edit-quiz-link');
-
-editQuizLink.addEventListener('click', async function (event) {
+//const editQuizLink = document.getElementById('edit-quiz-link');
+$('#edit-quiz-link').click(async function (event) {
   event.preventDefault();
 
   try {
@@ -19,7 +18,29 @@ editQuizLink.addEventListener('click', async function (event) {
   } catch (error) {
     console.error(error);
   }
-});
+
+}); 
+
+// editQuizLink.addEventListener('click', async function (event) {
+//   event.preventDefault();
+
+//   try {
+//     const response = await fetch('https://localhost:7186/api/subjects');
+//     const data = await response.json();
+//     const subjects = data;
+//     console.log(subjects);
+
+//     // Store the subjects data in localStorage
+//     localStorage.setItem('subjectsData', JSON.stringify(subjects));
+
+//     populateTable(subjects);
+
+//     // Perform any further actions based on the response
+//     window.location.href = '#edit-quiz';
+//   } catch (error) {
+//     console.error(error);
+//   }
+// });
 
 // Check if subjects data exists in localStorage on page load
 window.addEventListener('DOMContentLoaded', function () {
