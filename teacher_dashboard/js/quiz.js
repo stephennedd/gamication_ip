@@ -4,6 +4,49 @@ let numberOfExistingQuestions;
 
 const editQuizLink = document.getElementById('edit-quiz-link');
 
+// Get the form element
+const form = document.getElementById('add-subject-form');
+
+// Add submit event listener to the form
+form.addEventListener('submit', (e) => {
+  e.preventDefault(); // Prevent form submission
+
+  // Get the subject name and week values
+  const subjectName = document.getElementById('subject-name').value;
+  const subjectWeek = document.getElementById('subject-week').value;
+  const gameId = document.getElementById("subject-game").value;
+
+  // Create an API request object
+  const apiRequest = {
+    "subjectTitle": subjectName,
+    "weekNumber": subjectWeek,
+    "gameId": gameId
+  }
+
+  console.log(apiRequest);
+
+  fetch('https://localhost:7186/api/subjects', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(apiRequest)
+  })
+    .then(response => {
+      if (response.ok) {
+        console.log('API request successful');
+        // Perform any further actions on successful response
+      } else {
+        console.log('API request failed');
+        // Handle the error case
+      }
+    })
+    .catch(error => {
+      console.log('API request failed:', error);
+      // Handle any network or other errors
+    });
+});
+
 editQuizLink.addEventListener('click', async function (event) {
   event.preventDefault();
 
@@ -458,6 +501,7 @@ function removeQuiz(button) {
 
 // adding a subject to the database
 $('#add-subject-form').submit(function (e) {
+  console.log("Liza");
     // get the form data
     var formData = $(this).serializeArray();
 
