@@ -1,3 +1,5 @@
+let token;
+
 document.addEventListener('DOMContentLoaded', function () {
 	const welcomeText =
 		'WELCOME TO PROJECT G.A.M.I.F.I.C.A.T.I.O.N PLEASE ENTER YOUR CREDENTIALS...';
@@ -86,7 +88,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		const signInRadio = document.getElementById('signin');
 		const signUpRadio = document.getElementById('signup');
 		const resetRadio = document.getElementById('reset');
-
+		
 		// Reset styles and hide error message
 		passwordInput.style.border = '';
 		passwordInput.style.boxShadow = '';
@@ -125,7 +127,16 @@ document.addEventListener('DOMContentLoaded', function () {
 					document.cookie =
 						'jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
 					document.cookie = `jwt=${data.token}; path=/`;
-					window.location.href = '../AracadeMachine/index.html';
+					token = data.token;
+					var decodedToken = parseJwt(token);
+					if(decodedToken.IsVerified == false)
+					{
+						window.location.href = '../AracadeMachine/verify.html'; //TODO VERIFY PAGE
+					}
+					else 
+					(
+						window.location.href = '../AracadeMachine/index.html' //TODO ARCADE PAGE
+					)
 				})
 				.catch(function (error) {
 					console.error(error);
@@ -192,6 +203,16 @@ document.addEventListener('DOMContentLoaded', function () {
 			
 		}
 	});
+	function parseJwt(token) {
+		var base64Url = token.split('.')[1];
+		var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+		var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+			return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+		}).join(''));
+	
+		return JSON.parse(jsonPayload);
+	};
+	
 });
 
 ////////////////////////////////////////// OLD CODE IN CASE SOMETHING BREAKS //////////////////////////////////////////////
