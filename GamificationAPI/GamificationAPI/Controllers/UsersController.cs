@@ -12,6 +12,7 @@ using Microsoft.VisualStudio.Web.CodeGeneration;
 using GamificationAPI.Services;
 using Newtonsoft.Json;
 using BCrypt.Net;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace GamificationToIP.Controllers
@@ -41,7 +42,7 @@ namespace GamificationToIP.Controllers
         }
 
         // GET: api/Users
-       // [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> GetAllUsers()
         {
@@ -113,11 +114,7 @@ namespace GamificationToIP.Controllers
 
 
                 string hashedPassword = BCrypt.Net.BCrypt.HashPassword(userCredentials.Password);
-                User newUser = new User { UserId = userCredentials.UserId, Password = userCredentials.hashedPassword, Username = userCredentials.Name, Surname = userCredentials.Surname };
-
-                // Hash the password
-                string hashedPassword = BCrypt.Net.BCrypt.HashPassword(userCredentials.Password);
-
+                User newUser = new User { UserId = userCredentials.UserId, Password = hashedPassword, Username = userCredentials.Name, Surname = userCredentials.Surname };
 
                 if (IsDigitsOnly(userCredentials.UserId))
                 {
@@ -136,6 +133,7 @@ namespace GamificationToIP.Controllers
             }
             return BadRequest();
         }
+
         // POST: api/Users
         [Authorize(Roles = "Admin, Teacher", Policy = "IsVerified")]
         [HttpPost]
@@ -219,7 +217,7 @@ namespace GamificationToIP.Controllers
         }
 
         // PUT: api/Users/5
-      //  [Authorize(Policy = "IsVerified")]
+        [Authorize(Policy = "IsVerified")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(string UserId, User User)
         {
@@ -321,7 +319,7 @@ namespace GamificationToIP.Controllers
         }
 
         // DELETE: api/Users/5
-        //   [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(string id)
         {
@@ -341,7 +339,18 @@ namespace GamificationToIP.Controllers
 
             return Ok();
         }
-        bool IsDigitsOnly(string str)
+
+        [Authorize(Roles = "Admin, Teacher", Policy = "IsVerified")]
+        [HttpPut("students/{id}")]
+        public async Task<IActionResult> UpdateStudent(int id, [FromBody] UserUpdateDto userDto)
+        {
+            await _userService.UpdateStudentAsync(id,userDto);
+
+            return Ok();
+        }
+    
+
+    bool IsDigitsOnly(string str)
         {
             foreach (char c in str)
             {
@@ -355,4 +364,12 @@ namespace GamificationToIP.Controllers
 
 
     }
+
+    public class UserUpdateDto
+    {
+        public string Name { get; set; }
+        public string Surname { get; set; }
+        public string Password { get; set; }
+    }
+
 }

@@ -1,6 +1,8 @@
 ﻿
 using GamificationAPI.Models;
+using GamificationToIP.Controllers;
 using GamificationToIP.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace GamificationAPI.Interfaces
 {
@@ -17,6 +19,7 @@ namespace GamificationAPI.Interfaces
         Task<bool> VerifyUser(string UserId, string code);
         Task<bool> ChangePasswordAsync(string UserId, string newPassword);
         Task<bool> AddBadgeAsync(Badge badge, string userId);
+        Task UpdateStudentAsync(int id, [FromBody] UserUpdateDto userDto);
 
 
     }
