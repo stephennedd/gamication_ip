@@ -2,9 +2,12 @@
 using GamificationAPI.Interfaces;
 using GamificationAPI.Models;
 using GamificationToIP.Context;
+using GamificationToIP.Controllers;
 using GamificationToIP.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SendGrid.Helpers.Mail;
+using BCrypt.Net;
 
 public class UserService : IUsers
 {
@@ -58,10 +61,34 @@ public class UserService : IUsers
             await _dbContext.SaveChangesAsync();
         }
     }
+    public async Task UpdateStudentAsync(int id, [FromBody] UserUpdateDto userDto)
+    {
+        var user = _dbContext.Users.Find(id);
+
+        // Update the user fields
+        user.Name = userDto.Name;
+        user.Surname = userDto.Surname;
+        if (userDto.Password != "")
+        {
+            user.Password = BCrypt.Net.BCrypt.HashPassword(userDto.Password);
+        }
+
+        _dbContext.SaveChanges();
+    }
 
     public async Task<List<User>> GetUsersAsync()
     {
         return await _dbContext.Users.Include(u => u.Role).Include(u => u.Group).Include(u => u.Badges).ToListAsync();
+    }
+
+    public async Task<List<User>> GetStudentsAsync()
+    {
+        return await _dbContext.Users
+        .Include(u => u.Role)
+        .Include(u => u.Group)
+        .Include(u => u.Badges)
+        .Where(u => u.Role.Name == "Student")
+        .ToListAsync();
     }
 
     public User GetUserById(string UserId)
@@ -72,6 +99,7 @@ public class UserService : IUsers
     {
         return _dbContext.Users.AnyAsync(s => s.UserId == UserId);
     }
+
     public Task<bool> VerifyUser(string UserId, string code)
     {
         var user = GetUserById(UserId);

@@ -1,22 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using GamificationToIP.Context;
 using GamificationToIP.Models;
 using Microsoft.AspNetCore.Authorization;
 using GamificationAPI.Interfaces;
 using GamificationAPI.Models;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+
 using NuGet.Common;
+using Microsoft.VisualStudio.Web.CodeGeneration;
+using GamificationAPI.Services;
+using Newtonsoft.Json;
+using BCrypt.Net;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace GamificationToIP.Controllers
 {
-    [Authorize(Roles = "Admin, Teacher, Student")]
+  //  [Authorize(Roles = "Admin, Teacher, Student")]
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
@@ -24,7 +25,7 @@ namespace GamificationToIP.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IUsers _userService;
         private readonly IEmails _emailService;
-        private readonly IBadges _badgeService;
+        private readonly IBadges _badgeService;    
 
 
        
@@ -48,7 +49,31 @@ namespace GamificationToIP.Controllers
             try
             {
                 var users = await _userService.GetUsersAsync();
-                return Ok(users);
+                var jsonSettings = new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                };
+                var json = JsonConvert.SerializeObject(users, Formatting.None, jsonSettings);
+                return Content(json, "application/json");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error: {ex.Message}");
+            }
+        }
+     
+        [HttpGet("role/students")]
+        public async Task<IActionResult> GetAllStudents()
+        {
+            try
+            {
+                var students = await _userService.GetStudentsAsync();
+                var jsonSettings = new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                };
+                var json = JsonConvert.SerializeObject(students, Formatting.None, jsonSettings);
+                return Content(json, "application/json");
             }
             catch (Exception ex)
             {
@@ -78,7 +103,7 @@ namespace GamificationToIP.Controllers
         // POST: api/Users
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> CreateUser(UserCredentials userCredentials)
+        public async Task<IActionResult> CreateStudent(UserRegister userCredentials)
         {
             if (ModelState.IsValid)
             {
@@ -87,16 +112,19 @@ namespace GamificationToIP.Controllers
                     return BadRequest("User with this ID already exists");
                 }
 
-                User newUser = new User { UserId = userCredentials.UserId, Password = userCredentials.Password };
+
+                string hashedPassword = BCrypt.Net.BCrypt.HashPassword(userCredentials.Password);
+                User newUser = new User { UserId = userCredentials.UserId, Password = hashedPassword, Username = userCredentials.Name, Surname = userCredentials.Surname };
+
                 if (IsDigitsOnly(userCredentials.UserId))
                 {
                     newUser.Role = _context.Roles.FirstOrDefault(x => x.Id == 1);
                 }
                 else
                 {
-                    newUser.Role = _context.Roles.FirstOrDefault(x => x.Id == 2);
+                    return BadRequest("Only other teacher can create teacher account");
                 }
-
+                
                 await _userService.AddUserAsync(newUser);
                 //TODO: Send email with verification token to UserId + @domain
                 EmailDto Email = new EmailDto { To = "t6666349@gmail.com", Subject = "Verify your account", Body = $"Your verification token is: {newUser.VerificationCode}" };
@@ -105,6 +133,59 @@ namespace GamificationToIP.Controllers
             }
             return BadRequest();
         }
+
+        // POST: api/Users
+        [Authorize(Roles = "Admin, Teacher", Policy = "IsVerified")]
+        [HttpPost]
+        [Route("Admin")]
+        public async Task<IActionResult> CreateTeacher(TeacherRegister teacherRegister, bool admin)
+        {
+            if (ModelState.IsValid)
+            {
+                if (!HttpContext.Request.Headers.TryGetValue("Authorization", out var authorizationHeader))
+                {
+                    return BadRequest("Authorization header is missing.");
+                }
+                var userRole = User.FindFirst(ClaimTypes.Role)?.Value;
+                if (string.IsNullOrEmpty(userRole))
+                {
+                    return BadRequest("Invalid token.");
+                }
+                if(userRole == "Student")
+                {
+                    return BadRequest("Student cannot access this method");
+                }
+                if (await _userService.UserExistsAsync(teacherRegister.UserId))
+                {
+                    return BadRequest("User with this ID already exists");
+                }
+
+                User newUser = new User { UserId = teacherRegister.UserId, Password = CodeGenerator.RandomString(8), Name = teacherRegister.Name, Surname = teacherRegister.Surname };
+                if (IsDigitsOnly(teacherRegister.UserId))
+                {
+                    BadRequest("Student account cant be created by teacher");
+                }
+                else
+                {
+                    if (admin && userRole == "Admin")
+                    {
+                        newUser.Role = _context.Roles.FirstOrDefault(x => x.Id == 3);
+                    }
+                    else
+                    {
+                        newUser.Role = _context.Roles.FirstOrDefault(x => x.Id == 2);
+                    }
+                }
+                newUser.IsVerified = true;
+                await _userService.AddUserAsync(newUser);
+                //TODO: Send email with password to UserId + @domain
+                EmailDto Email = new EmailDto { To = "t6666349@gmail.com", Subject = "Your Gamification Password", Body = $"Your new Password is: {newUser.VerificationCode} You can change it any time" };
+                _emailService.SendEmail(Email);
+                return CreatedAtAction("GetUser", new { UserId = newUser.UserId }, newUser);
+            }
+            return BadRequest();
+        }
+
         [HttpPost("{token}")]
         public async Task<IActionResult> VerifyUser(string token)
         {
@@ -220,6 +301,23 @@ namespace GamificationToIP.Controllers
 
         }
 
+        // PUT: api/users/ban/{id}
+        [HttpPut("ban/{id}")]
+        public IActionResult BanUser(int id, [FromBody] bool isBanned)
+        {
+            var user = _context.Users.FirstOrDefault(u => u.Id == id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            user.IsBanned = isBanned;
+            _context.SaveChanges();
+
+            return Ok();
+        }
+
         // DELETE: api/Users/5
         [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
@@ -241,7 +339,18 @@ namespace GamificationToIP.Controllers
 
             return Ok();
         }
-        bool IsDigitsOnly(string str)
+
+        [Authorize(Roles = "Admin, Teacher", Policy = "IsVerified")]
+        [HttpPut("students/{id}")]
+        public async Task<IActionResult> UpdateStudent(int id, [FromBody] UserUpdateDto userDto)
+        {
+            await _userService.UpdateStudentAsync(id,userDto);
+
+            return Ok();
+        }
+    
+
+    bool IsDigitsOnly(string str)
         {
             foreach (char c in str)
             {
@@ -255,4 +364,12 @@ namespace GamificationToIP.Controllers
 
 
     }
+
+    public class UserUpdateDto
+    {
+        public string Name { get; set; }
+        public string Surname { get; set; }
+        public string Password { get; set; }
+    }
+
 }

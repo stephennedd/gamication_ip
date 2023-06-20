@@ -132,30 +132,30 @@
   "users": [
     {
       "UserId": "1111",
-      "Password": "password123",
+      "Password": "$2a$12$zFMGB9ktpEaIHqYb67/Dbuu04gPMDg8VdpdXzd.AirurAa4.M4AMy",
       "RoleId": "1",
       "GroupId": "1"
     },
     {
       "UserId": "2222",
-      "Password": "password123",
+      "Password": "$2a$12$zFMGB9ktpEaIHqYb67/Dbuu04gPMDg8VdpdXzd.AirurAa4.M4AMy",
       "RoleId": "1",
       "GroupId": "1"
     },
     {
       "UserId": "3333",
-      "Password": "password123",
+      "Password": "$2a$12$zFMGB9ktpEaIHqYb67/Dbuu04gPMDg8VdpdXzd.AirurAa4.M4AMy",
       "RoleId": "1",
       "GroupId": "2"
     },
     {
       "UserId": "JohnDoe",
-      "Password": "password123",
+      "Password": "$2a$12$zFMGB9ktpEaIHqYb67/Dbuu04gPMDg8VdpdXzd.AirurAa4.M4AMy",
       "RoleId": "2"
     },
     {
       "UserId": "Admin",
-      "Password": "password123",
+      "Password": "$2a$12$zFMGB9ktpEaIHqYb67/Dbuu04gPMDg8VdpdXzd.AirurAa4.M4AMy",
       "RoleId": "3"
     }
 

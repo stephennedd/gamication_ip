@@ -1,8 +1,10 @@
 ﻿
 using GamificationAPI.Interfaces;
 using GamificationAPI.Models;
+using GamificationToIP.Context;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 [Authorize(Roles = "Admin, Teacher, Student", Policy = "IsVerified")]
@@ -12,11 +14,13 @@ public class LeaderboardsController : ControllerBase
 {
     private readonly ILeaderboards _leaderboardService;
     private readonly IUsers _userService;
+    private readonly ApplicationDbContext _context;
 
-    public LeaderboardsController(ILeaderboards leaderboardService, IUsers userService)
+    public LeaderboardsController(ILeaderboards leaderboardService, IUsers userService, ApplicationDbContext context)
     {
         _leaderboardService = leaderboardService;
         _userService = userService;
+        _context = context;
     }
 
     // GET: api/scoreboard
@@ -32,7 +36,7 @@ public class LeaderboardsController : ControllerBase
         return Ok(leaderboard);
     }
     [HttpGet("{LeaderboardName}")]
-    public async Task<IActionResult> GetLeaderboardById(string LeaderboardName, bool? mygroup)
+    public async Task<IActionResult> GetLeaderboardById(string LeaderboardName, string? group)
     {
         if (string.IsNullOrEmpty(LeaderboardName))
         {
@@ -45,41 +49,69 @@ public class LeaderboardsController : ControllerBase
         {
             return NotFound();
         }
-        if(mygroup == true)
+        if (group != null)
         {
-            if (!HttpContext.Request.Headers.TryGetValue("Authorization", out var authorizationHeader))
+            
+            if (group == "mygroup")
             {
-                return BadRequest("Authorization header is missing.");
-            }
-            var userId = User.FindFirst(ClaimTypes.Name)?.Value;
-            if (string.IsNullOrEmpty(userId))
-            {
-                return BadRequest("Invalid token.");
-            }
-            var user = await _userService.GetUserByIdAsync(userId);
-            if(user is null)
-            {
-                return BadRequest($"Could not find user {userId}");
-            }
-            var group = user.Group;
-            if (group is null)
-            {
-                return BadRequest("User is not part of any group");
-            }
-            List<HighScore> highScores = new List<HighScore>();
-            foreach (var item in leaderboard.HighScores) 
-            {
-                if(item.User.Group == group)
+                if (!HttpContext.Request.Headers.TryGetValue("Authorization", out var authorizationHeader))
                 {
-                    highScores.Add(item);
-                    
+                    return BadRequest("Authorization header is missing.");
                 }
-                
+                var userId = User.FindFirst(ClaimTypes.Name)?.Value;
+                if (string.IsNullOrEmpty(userId))
+                {
+                    return BadRequest("Invalid token.");
+                }
+                var user = await _userService.GetUserByIdAsync(userId);
+                if (user is null)
+                {
+                    return BadRequest($"Could not find user {userId}");
+                }
+                var thisgroup = user.Group;
+                if (thisgroup is null)
+                {
+                    return BadRequest("User is not part of any group");
+                }
+                List<HighScore> highScores = new List<HighScore>();
+                foreach (var item in leaderboard.HighScores)
+                {
+                    if (item.User.Group == thisgroup)
+                    {
+                        highScores.Add(item);
+
+                    }
+
+                }
+                leaderboard.HighScores.Clear();
+                leaderboard.HighScores = highScores;
+
+                return Ok(leaderboard);
             }
-            leaderboard.HighScores.Clear();
-            leaderboard.HighScores = highScores;
-            Console.WriteLine(leaderboard.HighScores.Count);
-            return Ok(leaderboard);
+            else
+            {
+                if(await _context.Groups.AnyAsync(s => s.Name == group) == false)
+                {
+                    return BadRequest("Group with this name does not exist");
+                }
+                var thisgroup = await _context.Groups.FirstOrDefaultAsync(s => s.Name == group);
+                if (thisgroup is null)
+                {
+                    return BadRequest("Something went wrong");
+                }
+                List<HighScore> highScores = new List<HighScore>();
+                foreach (var item in leaderboard.HighScores)
+                {
+                    if (item.User.Group == thisgroup)
+                    {
+                        highScores.Add(item);
+                    }
+
+                }
+                leaderboard.HighScores.Clear();
+                leaderboard.HighScores = highScores;
+                return Ok(leaderboard);
+            }
         }
 
         return Ok(leaderboard);
