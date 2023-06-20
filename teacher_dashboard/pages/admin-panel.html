@@ -529,19 +529,21 @@
       <div class="row mt-2">
         <div class="col-md-12">
           <div class="card">
-            <div class="card-header">Select student</div>
+            <div class="card-header">Select a student</div>
             <div class="card-body">
               <div class="table-responsive">
                 <table class="table table-striped data-table" id="student-table">
                   <thead>
                     <tr>
                       <th scope="col">Student ID</th>
-                      <th scope="col">Student name</th>
+                      <th scope="col">Username</th>
+                      <th scope="col">First Name</th>
+                      <th scope="col">Last Name</th>
                       <th scope="col">Email</th>
                       <th class="text-center" scope="col">Remove</th>
                     </tr>
                   </thead>
-                  <tbody id="studentTableBodyForRemoveStudent">      
+                  <tbody id="studentTableBodyForRemoveStudent">
                   </tbody>
                 </table>
               </div>
@@ -570,15 +572,15 @@
                     <thead>
                       <tr>
                         <th scope="col">Student ID</th>
+                        <th scope="col">Username</th>
                         <th scope="col">First name</th>
-                        <th scope="col">Middle name</th>
                         <th scope="col">Last name</th>
                         <th scope="col">Email</th>
                         <th class="text-center" scope="col">Select</th>
                       </tr>
                     </thead>
                     <tbody id="studentTableBody">
-                      
+
                     </tbody>
                   </table>
                 </div>
@@ -605,8 +607,6 @@
                     name</label>
                   <input type="text" name="first-name" class="form-control" id="modal-first-name"
                     placeholder="First name">
-                  <input type="text" name="middle-name" class="form-control mt-2" id="modal-middle-name"
-                    placeholder="Middle name">
                   <input type="text" name="last-name" class="form-control mt-2" id="modal-last-name"
                     placeholder="Last name">
                 </div>
@@ -661,7 +661,7 @@
                       </tr>
                     </thead>
                     <tbody id="studentTableBodyForBanStudent">
-                      
+
                     </tbody>
                   </table>
                 </div>
