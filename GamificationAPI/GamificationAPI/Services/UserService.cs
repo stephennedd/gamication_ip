@@ -68,6 +68,7 @@ public class UserService : IUsers
         // Update the user fields
         user.Name = userDto.Name;
         user.Surname = userDto.Surname;
+        user.Username = userDto.Username;
         if (userDto.Password != "")
         {
             user.Password = BCrypt.Net.BCrypt.HashPassword(userDto.Password);
