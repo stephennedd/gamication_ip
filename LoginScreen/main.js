@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	const mainText =
 		'WELCOME TO PROJECT G.A.M.I.F.I.C.A.T.I.O.N PLEASE ENTER YOUR CREDENTIALS...';
 	const verificationText =
-		'PLEASE ENTER THE VERIFICATION CODE SENT TO YOUR studentID...';
+		'PLEASE ENTER THE VERIFICATION CODE SENT TO YOUR EMAIL...';
 	const welcomeElement = document.querySelector('.welcome');
 	const loginForm = document.getElementById('loginForm');
 	const radioButtons = document.querySelectorAll('input[type="radio"]');
@@ -95,7 +95,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		const verificationRadio = document.getElementById('verify');
 
 		// get label for verification radio button
-		const verifyLabel = labels[3];
+		const verifyLabel = labels[1];
 
 		// Reset styles and hide error message
 		passwordInput.style.border = '';
@@ -105,7 +105,6 @@ document.addEventListener('DOMContentLoaded', function () {
 		errorElement.style.display = 'none';
 
 		if (signInRadio.checked) {
-			// Handle Sign In
 			if (studentID === '' || password === '') {
 				displayTextOneCharacterAtATime(
 					errorElement,
@@ -148,14 +147,13 @@ document.addEventListener('DOMContentLoaded', function () {
 					if (decodedToken.IsVerified == 'False') {
 						displayTextOneCharacterAtATime(welcomeElement, verificationText);
 						studentIDInput.classList.add('hidden');
-						verificationRadio.classList.remove('hidden');
-						verifyLabel.classList.remove('hidden');
+						verificationRadio.classList.remove('hide');
+						verifyLabel.classList.remove('hide');
 						verificationCodeInput.classList.remove('hidden');
 
-						verificationRadio.checked = true;
-
-						//TODO VERIFY PAGE
-					} else window.location.href = './../AracadeMachine/index.html'; //TODO ARCADE PAGE
+						loginForm.classList.replace('signin', 'verify');
+						setIndicatorPosition(1);
+					} else window.location.href = '../ArcadeMachine';
 				})
 				.catch(function (error) {
 					console.error(error);
@@ -163,8 +161,6 @@ document.addEventListener('DOMContentLoaded', function () {
 					errorElement.style.display = 'block';
 				});
 		} else if (signUpRadio.checked) {
-			// Handle Sign Up
-
 			if (studentID === '' || password === '' || repassword === '') {
 				displayTextOneCharacterAtATime(
 					errorElement,
@@ -207,8 +203,10 @@ document.addEventListener('DOMContentLoaded', function () {
 							welcomeElement,
 							'Login to continue.'
 						);
-						//signInRadio.checked = true;
-					}, 2000);
+						// change selected view to sign in
+						loginForm.classList.replace('signup', 'signin');
+						setIndicatorPosition(0);
+					}, 1500);
 					if (!response.ok) {
 						throw new Error('Failed to create user');
 					}
@@ -220,11 +218,9 @@ document.addEventListener('DOMContentLoaded', function () {
 						errorElement,
 						'Failed to create user.'
 					);
+					errorElement.style.display = 'block';
 				});
-			// TODO: Send a POST request to the Sign Up endpoint
 		} else if (resetRadio.checked) {
-			// Handle Reset
-
 			if (studentID === '') {
 				displayTextOneCharacterAtATime(errorElement, 'Please enter your ID.');
 				errorElement.style.display = 'block';
@@ -233,8 +229,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 			// TODO: Send a POST request to the Password Reset endpoint
 		} else if (verificationRadio.checked) {
-			// Handle Verification
-
 			if (verificationCode === '') {
 				displayTextOneCharacterAtATime(
 					errorElement,
@@ -295,13 +289,12 @@ document.addEventListener('DOMContentLoaded', function () {
 				if (decodedToken.IsVerified == 'False') {
 					displayTextOneCharacterAtATime(welcomeElement, verificationText);
 					studentIDInput.classList.add('hidden');
-					verificationRadio.classList.remove('hidden');
-					verifyLabel.classList.remove('hidden');
+					verificationRadio.classList.remove('hide');
+					verifyLabel.classList.remove('hide');
 					verificationCodeInput.classList.remove('hidden');
 
-					verificationRadio.checked = true;
-
-					//TODO VERIFY PAGE
+					loginForm.classList.replace('signin', 'verify');
+					setIndicatorPosition(1);
 				} else window.location.href = './../AracadeMachine/index.html';
 			})
 			.catch(function (error) {
@@ -344,8 +337,9 @@ document.addEventListener('DOMContentLoaded', function () {
 							welcomeElement,
 							'Login to continue.'
 						);
-						signInRadio.checked = true;
-					}, 2000);
+						loginForm.classList.replace('verify', 'signin');
+						setIndicatorPosition(0);
+					}, 1500);
 				} else {
 					displayTextOneCharacterAtATime(
 						errorElement,
