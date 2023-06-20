@@ -1,24 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using GamificationToIP.Context;
 using GamificationToIP.Models;
 using Microsoft.AspNetCore.Authorization;
 using GamificationAPI.Interfaces;
 using GamificationAPI.Models;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+
 using NuGet.Common;
 using Microsoft.VisualStudio.Web.CodeGeneration;
 using GamificationAPI.Services;
+using Newtonsoft.Json;
+using BCrypt.Net;
+
 
 namespace GamificationToIP.Controllers
 {
-    [Authorize(Roles = "Admin, Teacher, Student")]
+  //  [Authorize(Roles = "Admin, Teacher, Student")]
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
@@ -43,14 +41,38 @@ namespace GamificationToIP.Controllers
         }
 
         // GET: api/Users
-        [Authorize(Roles = "Admin")]
+       // [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> GetAllUsers()
         {
             try
             {
                 var users = await _userService.GetUsersAsync();
-                return Ok(users);
+                var jsonSettings = new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                };
+                var json = JsonConvert.SerializeObject(users, Formatting.None, jsonSettings);
+                return Content(json, "application/json");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error: {ex.Message}");
+            }
+        }
+     
+        [HttpGet("role/students")]
+        public async Task<IActionResult> GetAllStudents()
+        {
+            try
+            {
+                var students = await _userService.GetStudentsAsync();
+                var jsonSettings = new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                };
+                var json = JsonConvert.SerializeObject(students, Formatting.None, jsonSettings);
+                return Content(json, "application/json");
             }
             catch (Exception ex)
             {
@@ -89,7 +111,14 @@ namespace GamificationToIP.Controllers
                     return BadRequest("User with this ID already exists");
                 }
 
-                User newUser = new User { UserId = userCredentials.UserId, Password = userCredentials.Password, Username = userCredentials.Name, Surname = userCredentials.Surname };
+
+                string hashedPassword = BCrypt.Net.BCrypt.HashPassword(userCredentials.Password);
+                User newUser = new User { UserId = userCredentials.UserId, Password = userCredentials.hashedPassword, Username = userCredentials.Name, Surname = userCredentials.Surname };
+
+                // Hash the password
+                string hashedPassword = BCrypt.Net.BCrypt.HashPassword(userCredentials.Password);
+
+
                 if (IsDigitsOnly(userCredentials.UserId))
                 {
                     newUser.Role = _context.Roles.FirstOrDefault(x => x.Id == 1);
@@ -190,7 +219,7 @@ namespace GamificationToIP.Controllers
         }
 
         // PUT: api/Users/5
-        [Authorize(Policy = "IsVerified")]
+      //  [Authorize(Policy = "IsVerified")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(string UserId, User User)
         {
@@ -274,8 +303,25 @@ namespace GamificationToIP.Controllers
 
         }
 
+        // PUT: api/users/ban/{id}
+        [HttpPut("ban/{id}")]
+        public IActionResult BanUser(int id, [FromBody] bool isBanned)
+        {
+            var user = _context.Users.FirstOrDefault(u => u.Id == id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            user.IsBanned = isBanned;
+            _context.SaveChanges();
+
+            return Ok();
+        }
+
         // DELETE: api/Users/5
-        [Authorize(Roles = "Admin")]
+        //   [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(string id)
         {
