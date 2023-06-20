@@ -94,6 +94,9 @@ document.addEventListener('DOMContentLoaded', function () {
 		const resetRadio = document.getElementById('reset');
 		const verificationRadio = document.getElementById('verify');
 
+		// get label for verification radio button
+		const verifyLabel = labels[3];
+
 		// Reset styles and hide error message
 		passwordInput.style.border = '';
 		passwordInput.style.boxShadow = '';
@@ -144,12 +147,15 @@ document.addEventListener('DOMContentLoaded', function () {
 					console.log(decodedToken.IsVerified);
 					if (decodedToken.IsVerified == 'False') {
 						displayTextOneCharacterAtATime(welcomeElement, verificationText);
+						studentIDInput.classList.add('hidden');
 						verificationRadio.classList.remove('hidden');
-						verificationRadio.checked = true;
+						verifyLabel.classList.remove('hidden');
 						verificationCodeInput.classList.remove('hidden');
 
+						verificationRadio.checked = true;
+
 						//TODO VERIFY PAGE
-					} else window.location.href = '../AracadeMachine/index.html'; //TODO ARCADE PAGE
+					} else window.location.href = './../AracadeMachine/index.html'; //TODO ARCADE PAGE
 				})
 				.catch(function (error) {
 					console.error(error);
@@ -286,17 +292,17 @@ document.addEventListener('DOMContentLoaded', function () {
 				document.cookie = `jwt=${data.token}; path=/`;
 				token = data.token;
 				var decodedToken = parseJwt(token);
-				if (decodedToken.IsVerified == false) {
+				if (decodedToken.IsVerified == 'False') {
 					displayTextOneCharacterAtATime(welcomeElement, verificationText);
-					verificationRadio.classList.remove('hidden');
-					verificationRadio.checked = true;
-					verificationCodeInput.classList.remove('hidden');
 					studentIDInput.classList.add('hidden');
-					studentIDInput.classList.add('hidden'); //TODO VERIFY PAGE
-				} else {
-					console.log('verified');
-					window.location.href = '../AracadeMachine/index.html'; //TODO ARCADE PAGE
-				}
+					verificationRadio.classList.remove('hidden');
+					verifyLabel.classList.remove('hidden');
+					verificationCodeInput.classList.remove('hidden');
+
+					verificationRadio.checked = true;
+
+					//TODO VERIFY PAGE
+				} else window.location.href = './../AracadeMachine/index.html';
 			})
 			.catch(function (error) {
 				console.error(error);
