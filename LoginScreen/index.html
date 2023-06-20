@@ -9,18 +9,18 @@
 	</head>
 	<body>
 		<p class="welcome"></p>
-		<form id="loginForm" class="hidden signin">
+		<form id="loginForm" class="hide signin">
 			<div class="radio-container">
 				<input checked id="signin" name="action" type="radio" value="signin" />
 				<label for="signin">Sign in</label>
 
 				<input
 					id="verify"
-					class="hidden"
+					class="hide"
 					name="action"
 					type="radio"
 					value="reset" />
-				<label for="verify" class="hidden">Verify</label>
+				<label for="verify" class="hide">Verify</label>
 
 				<input id="signup" name="action" type="radio" value="signup" />
 				<label for="signup">Sign up</label>
@@ -43,7 +43,7 @@
 						class="hidden"
 						placeholder="Verification Code"
 						type="text" />
-					<input id="email" placeholder="ID" type="text" />
+					<input id="studentID" placeholder="ID" type="text" />
 					<input id="password" placeholder="Password" type="password" />
 					<input
 						id="repassword"

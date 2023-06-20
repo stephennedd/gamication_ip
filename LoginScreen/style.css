@@ -61,7 +61,7 @@ button span {
 }
 
 #loginForm.verify button span {
-	transform: translate3d(0,-72px, 0);
+	transform: translate3d(0, -72px, 0);
 }
 
 #loginForm.reset button span {
@@ -144,6 +144,10 @@ button span {
 
 .hidden {
 	display: none;
+}
+
+.hide {
+	visibility: hidden;
 }
 
 #line {
