@@ -147,16 +147,26 @@
     
 
     try {
-          
-        let response = await fetch('https://localhost:7186/api/Leaderboards/' + currentLeaderboard + `?mygroup=${myGroup}`, {
+        let response;
+          if(myGroup == true ){
+         response = await fetch('https://localhost:7186/api/Leaderboards/' + currentLeaderboard + `?group=mygroup`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
             }
         });
-        
-        
+    }
+     
+    else{
+         response = await fetch('https://localhost:7186/api/Leaderboards/' + currentLeaderboard, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+    }
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
