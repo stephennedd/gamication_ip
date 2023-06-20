@@ -295,7 +295,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 					loginForm.classList.replace('signin', 'verify');
 					setIndicatorPosition(1);
-				} else window.location.href = './../AracadeMachine/index.html';
+				} else window.location.href = '../ArcadeMachine';
 			})
 			.catch(function (error) {
 				console.error(error);
