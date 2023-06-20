@@ -77,7 +77,6 @@ async function fetchStudents(event,linkType) {
     .then(data => {
       // Do something with the received students data
       students = data;
-      console.log(students);
       localStorage.setItem('studentsData', JSON.stringify(students));
       if(linkType=='update'){
       populateTableWithData(students,tableBody);
@@ -98,10 +97,8 @@ async function fetchStudents(event,linkType) {
 // Check if subjects data exists in localStorage on page load
 window.addEventListener('DOMContentLoaded', function () {
     const storedStudents = localStorage.getItem('studentsData');
-    console.log(storedStudents);
     if (storedStudents) {
       const students = JSON.parse(storedStudents);
-      console.log(students);
       populateTableWithData(students,tableBody);
       populateTableWithDataForRemoveStudent(students,tableBody1);
       populateTableForBanStudent(students,tableBody2);
