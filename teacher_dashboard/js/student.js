@@ -18,9 +18,18 @@ document.getElementById('ban-student-link').addEventListener('click', function(e
   });  
 
   async function deleteStudent(userId) {
+    var token = document.cookie
+			.split('; ')
+			.find((row) => row.startsWith('jwt='))
+			.split('=')[1];
     // Perform the fetch request to delete the student
    await fetch(`https://localhost:7186/api/Users/${userId}`, {
-      method: 'DELETE'
+      method: 'DELETE',
+      headers: {
+          'Content-Type': 'application/json',
+          // Include the token in the Authorization header
+          'Authorization': `Bearer ${token}`
+      }
     })
       .then(response => {
         if (response.ok) {
@@ -39,7 +48,16 @@ document.getElementById('ban-student-link').addEventListener('click', function(e
       });
   }  
 
+  // async function updateStudent(id,updatedStudent) {
+    
+  // }  
+
   async function updateBannedStatus(id, isBanned) {
+    var token = document.cookie
+			.split('; ')
+			.find((row) => row.startsWith('jwt='))
+			.split('=')[1];
+    console.log(token);
     const url = `https://localhost:7186/api/users/ban/${id}`;
   
     // Prepare the request body
@@ -79,6 +97,7 @@ async function fetchStudents(event,linkType) {
       students = data;
       localStorage.setItem('studentsData', JSON.stringify(students));
       if(linkType=='update'){
+        console.log(students);
       populateTableWithData(students,tableBody);
       window.location.href = '#update-student';
       } else if(linkType=='delete'){
@@ -112,21 +131,22 @@ function populateTableWithData(students,tableBody) {
     students.forEach(student => {
       const row = document.createElement("tr");
   
-      row.setAttribute("data-student-id", student.studentId);
+      row.setAttribute("data-student-id", student.studentId)
       row.setAttribute("data-first-name", student.firstName);
       row.setAttribute("data-middle-name", student.middleName);
       row.setAttribute("data-last-name", student.lastName);
       row.setAttribute("data-student-email", student.studentEmail);
   
       const studentIdCell = createTableCell(student.UserId, "th", { scope: "row" });
-      const firstNameCell = createTableCell(student.UserId, "td");
+      const firstNameCell = createTableCell(student.Name, "td");
       const middleNameCell = createTableCell(student.UserId, "td");
-      const lastNameCell = createTableCell(student.UserId, "td");
+      const lastNameCell = createTableCell(student.Surname, "td");
       const studentEmailCell = createTableCell(`${student.UserId}@student.saxion.nl`, "td");
   
       const updateButtonCell = document.createElement("td");
       const updateButton = createUpdateButton("Update");
       updateButton.addEventListener("click", function() {
+        chosenStudent = student;
         updateStudent(this);
       });
       updateButtonCell.appendChild(updateButton);
@@ -272,29 +292,97 @@ async function confirmDelete(button) {
 }
 
 // Updating a student
-function updateStudent(button) {
-    var row = button.parentNode.parentNode; // Get the parent row
-    var studentId = row.dataset.studentId;
-    var firstName = row.dataset.firstName;
-    var middleName = row.dataset.middleName;
-    var lastName = row.dataset.lastName;
-
+async function updateStudent(button) {
     // open the modal and show the student name
     $('#update-student-modal').modal('show');
-    $('#edit-student-modal-title').text(`Edit Student: ${firstName} ${lastName}`);
-    $('#modal-first-name').val(firstName);
-    $('#modal-middle-name').val(middleName);
-    $('#modal-last-name').val(lastName);
+    $('#edit-student-modal-title').text(`Edit Student: ${chosenStudent.Name} ${chosenStudent.Surname}`);
+    $('#modal-first-name').val(chosenStudent.Name);
+   // $('#modal-middle-name').val(middleName);
+    $('#modal-last-name').val(chosenStudent.Surname);
+
+  //   var token = document.cookie
+	// 		.split('; ')
+	// 		.find((row) => row.startsWith('jwt='))
+	// 		.split('=')[1];
+
+  //     const requestBody = JSON.stringify(updatedStudent);
+  //   // Perform the fetch request to delete the student
+  //  await fetch(`https://localhost:7186/api/Users/students/${id}`, {
+  //     method: 'PUT',
+  //     headers: {
+  //         'Content-Type': 'application/json',
+  //         // Include the token in the Authorization header
+  //         'Authorization': `Bearer ${token}`
+  //     },
+  //     body: requestBody
+  //   })
+  //     .then(response => {
+  //       if (response.ok) {
+  //         // Student deletion successful
+
+  //         console.log(`Student with ID ${userId} deleted successfully.`);
+  //         // Perform any additional actions or updates on the UI if needed
+  //       } else {
+  //         // Student deletion failed
+  //         console.error('Error:', response.status);
+  //         // Handle the error or display an appropriate error message
+  //       }
+  //     })
+  //     .catch(error => {
+  //       console.error('Error:', error);
+  //     });
 }
 
-function confirmStudentUpdate(button) {
+async function confirmStudentUpdate(button) {
     if (confirm("Are you sure you want to update this student?")) {
         // TODO: send a put request to the server
+    
+        var firstName = document.getElementById('modal-first-name').value;
+        var lastName = document.getElementById('modal-last-name').value;
+        var password = document.getElementById('modal-student-password').value;
+          
+      var token = document.cookie
+			.split('; ')
+			.find((row) => row.startsWith('jwt='))
+			.split('=')[1];
+
+      const requestBody = JSON.stringify({
+        name: firstName,
+        surname: lastName,
+        password: password
+      });
+
+    // Perform the fetch request to delete the student
+     await fetch(`https://localhost:7186/api/Users/students/${chosenStudent.Id}`, {
+      method: 'PUT',
+      headers: {
+          'Content-Type': 'application/json',
+          // Include the token in the Authorization header
+          'Authorization': `Bearer ${token}`
+      },
+      body: requestBody
+    })
+      .then(response => {
+        if (response.ok) {
+          // Student deletion successful
+
+          console.log(`Student with ID ${chosenStudent.UserId} deleted successfully.`);
+          // Perform any additional actions or updates on the UI if needed
+        } else {
+          // Student deletion failed
+          console.error('Error:', response.status);
+          // Handle the error or display an appropriate error message
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      }); 
         
+      await fetchStudents(event,'update');
         // close the modal
         $('#update-student-modal').modal('hide');
     }
-}
+    }
 
 // Banning a student
 async function banStudent(button) {

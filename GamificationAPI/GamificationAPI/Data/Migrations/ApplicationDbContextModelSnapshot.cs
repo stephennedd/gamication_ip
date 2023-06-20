@@ -305,6 +305,10 @@ namespace GamificationAPI.Data.Migrations
                     b.Property<bool>("IsVerified")
                         .HasColumnType("boolean");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("text");
@@ -312,7 +316,15 @@ namespace GamificationAPI.Data.Migrations
                     b.Property<int>("RoleId")
                         .HasColumnType("integer");
 
+                    b.Property<string>("Surname")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("text");
 

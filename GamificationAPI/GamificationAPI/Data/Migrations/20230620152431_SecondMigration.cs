@@ -103,6 +103,9 @@ namespace GamificationAPI.Data.Migrations
                     VerificationCode = table.Column<string>(type: "text", nullable: false),
                     IsVerified = table.Column<bool>(type: "boolean", nullable: false),
                     IsBanned = table.Column<bool>(type: "boolean", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Surname = table.Column<string>(type: "text", nullable: false),
+                    Username = table.Column<string>(type: "text", nullable: false),
                     GroupId = table.Column<int>(type: "integer", nullable: true),
                     RoleId = table.Column<int>(type: "integer", nullable: false)
                 },
