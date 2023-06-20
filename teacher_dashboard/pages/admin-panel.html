@@ -217,110 +217,34 @@
       <div class="row">
         <div class="col-md-12 fw-bold fs-4">Student Results</div>
       </div>
+
       <div class="row mt-2">
-        <div class="col-md-3">
-          <div class="card text-white bg-success mb-3" style="max-width: 18rem;">
-            <div class="card-header">Completion Rate</div>
-            <div class="card-body">
-              <h5 class="card-title">10%</h5>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-3">
-          <div class="card text-white bg-danger mb-3" style="max-width: 18rem;">
-            <div class="card-header">Total students</div>
-            <div class="card-body">
-              <h5 class="card-title">150</h5>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-3">
-          <div class="card text-white bg-warning mb-3" style="max-width: 18rem;">
-            <div class="card-header">High Score</div>
-            <div class="card-body">
-              <h5 class="card-title">1000 pts</h5>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-3">
-          <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
-            <div class="card-header">Leagues</div>
-            <div class="card-body">
-              <h5 class="card-title">5</h5>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="row">
         <div class="col-md-12">
           <div class="card">
-            <div class="card-header">All students</div>
+            <div class="card-header">
+              <div class="float-start mt-1" id="student-results-card-header">My Students</div>
+              <div class="float-end">
+                <input type="checkbox" class="btn-check" id="all-students-checkbox">
+                <label class="btn btn-sm btn-outline-primary" for="all-students-checkbox">All Students</label>
+              </div>
+            </div>
             <div class="card-body">
               <div class="table-responsive">
-                <table id="example" class="table table-striped data-table" style="width: 100%">
+                <table id="student-results" class="table table-striped data-table" style="width: 100%">
                   <thead>
                     <tr>
                       <th class="w-25">Leaderboard position</th>
                       <th>Username</th>
                       <th>Score</th>
-                      <th>League</th>
                       <th>Banned</th>
                     </tr>
                   </thead>
-                  <tbody>
-                    <tr>
-                      <td>1</td>
-                      <td>John</td>
-                      <td>1000</td>
-                      <td>1</td>
-                      <td>Yes</td>
-                    </tr>
-                    <tr>
-                      <td>2</td>
-                      <td>Bob</td>
-                      <td>999</td>
-                      <td>1</td>
-                      <td>Yes</td>
-                    </tr>
-                    <tr>
-                      <td>3</td>
-                      <td>Jenny</td>
-                      <td>998</td>
-                      <td>1</td>
-                      <td>No</td>
-                    </tr>
-                    <tr>
-                      <td>4</td>
-                      <td>Rita</td>
-                      <td>970</td>
-                      <td>1</td>
-                      <td>No</td>
-                    </tr>
-                    <tr>
-                      <td>5</td>
-                      <td>Stephen</td>
-                      <td>950</td>
-                      <td>1</td>
-                      <td>No</td>
-                    </tr>
-                    <tr>
-                      <td>6</td>
-                      <td>Chase</td>
-                      <td>930</td>
-                      <td>1</td>
-                      <td>No</td>
-                    </tr>
-
+                  <tbody id="student-results-table">
                   </tbody>
                   <tfoot>
                     <th>Leaderboard position</th>
                     <th>Username</th>
                     <th>Score</th>
-                    <th>League</th>
                     <th>Banned</th>
                   </tfoot>
                 </table>
@@ -1006,6 +930,7 @@
   <script src="../js/quiz.js"></script>
   <script src="../js/student.js"></script>
   <script src="../js/leaderboard.js"></script>
+  <script src="../js/student_results.js"></script>
 </body>
 
 </html>
