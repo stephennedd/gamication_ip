@@ -199,7 +199,6 @@ $(document).ready(function () {
 
 // Event handler for the "Remove Question" button click for the create quiz page
 function removeQuestion(button) {
-  console.log("Liza")
     // Get the question container
     var row = button.parentNode.parentNode;
     const subjectId = row.dataset.quizId;

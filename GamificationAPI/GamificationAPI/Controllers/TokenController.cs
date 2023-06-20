@@ -45,7 +45,7 @@ namespace GamificationAPI.Controllers
             }
 
             User user =  _userService.GetUserById(userCredentials.UserId);
-            if(user == null || user.Role == null || user.Password != userCredentials.Password)
+            if(user == null || user.Role == null || !BCrypt.Net.BCrypt.Verify(userCredentials.Password, user.Password))
             {
                 return BadRequest("Incorrect user data.");
             }

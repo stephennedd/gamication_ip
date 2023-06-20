@@ -64,6 +64,16 @@ public class UserService : IUsers
         return await _dbContext.Users.Include(u => u.Role).Include(u => u.Group).Include(u => u.Badges).ToListAsync();
     }
 
+    public async Task<List<User>> GetStudentsAsync()
+    {
+        return await _dbContext.Users
+        .Include(u => u.Role)
+        .Include(u => u.Group)
+        .Include(u => u.Badges)
+        .Where(u => u.Role.Name == "Student")
+        .ToListAsync();
+    }
+
     public User GetUserById(string UserId)
     {
         return _dbContext.Users.Include(u => u.Role).Include(u => u.Group).Include(u => u.Badges).FirstOrDefault(u => u.UserId == UserId);
