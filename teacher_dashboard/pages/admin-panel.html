@@ -616,21 +616,8 @@
                                   <th class="text-center" scope="col">Remove</th>
                                 </tr>
                               </thead>
-                              <tbody>
-                                <tr>
-                                  <th scope="row">484629</th>
-                                  <td>Stephen Nedd</td>
-                                  <td>484629@student.saxion.nl</td>
-                                  <td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger"
-                                      onclick="confirmDelete(this)">Remove</button></td>
-                                </tr>
-                                <tr>
-                                  <th scope="row">123456</th>
-                                  <td>John Doe</td>
-                                  <td>123456@student.saxion.nl</td>
-                                  <td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger"
-                                      onclick="confirmDelete(this)">Remove</button></td>
-                                </tr>
+                              <tbody id="studentTableBodyForRemoveStudent">
+                               
                               </tbody>
                             </table>
                           </div>
@@ -666,18 +653,7 @@
                                     <th class="text-center" scope="col">Select</th>
                                   </tr>
                                 </thead>
-                                <tbody>
-                                  <tr data-student-id="484629" data-first-name="Stephen" data-middle-name=""
-                                    data-last-name="Nedd" data-student-email="48429@student.saxion.nl">
-                                    <th scope="row">484629</th>
-                                    <td>Stephen</td>
-                                    <td></td>
-                                    <td>Nedd</td>
-                                    <td>484629@student.saxion.nl</td>
-                                    <td class="text-center"><button type="button" class="btn btn-sm btn-outline-primary"
-                                        onclick="updateStudent(this)">Update</button></td>
-                                  </tr>
-                                </tbody>
+                                <tbody id="studentTableBody"></tbody>
                               </table>
                             </div>
                           </div>
@@ -758,16 +734,7 @@
                                     <th class="text-center" scope="col">Select</th>
                                   </tr>
                                 </thead>
-                                <tbody>
-                                  <tr>
-                                    <th scope="row">484629</th>
-                                    <td>Stephen Nedd</td>
-                                    <td>484629@student.saxion.nl</td>
-                                    <td>No</td>
-                                    <td class="text-center"><button type="button" class="btn btn-sm btn-outline-warning"
-                                        onclick="banStudent(this)">Ban</button></td>
-                                  </tr>
-                                </tbody>
+                                <tbody id="studentTableBodyForBanStudent"></tbody>
                               </table>
                             </div>
                           </div>
