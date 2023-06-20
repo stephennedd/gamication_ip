@@ -73,7 +73,8 @@ $(document).ready(function () {
 async function populateLeaderboardTable() {
     console.log('Populating leaderboard table');
     const leaderboardTable = document.getElementById('delete-leaderboard-table');
-    
+    const updateLeaderboardTable = document.getElementById('update-leaderboard-table');
+
     let leaderboards = [];    
     // TODO get all leaderboards from server and store in leaderboards array
     try {
@@ -87,7 +88,9 @@ async function populateLeaderboardTable() {
         for (let i = 0; i < leaderboards.length; i++) {
             const leaderboard = leaderboards[i];
             const row = createLeaderboardTableRow(leaderboard);
+            const updateRow = createUpdateLeaderboardTableRow(leaderboard);
             leaderboardTable.appendChild(row);
+            updateLeaderboardTable.appendChild(updateRow);
         }
         console.log('Leaderboard table populated');
       } catch (error) {
@@ -95,10 +98,9 @@ async function populateLeaderboardTable() {
         alert('Error retrieving leaderboards data');
     }
 
-    
 }
 
-// create table rows for the leaderboard
+// create table rows for the delete leaderboard table
 function createLeaderboardTableRow(leaderboard) {
     const row = document.createElement('tr'); // Create the row
     const name = document.createElement('td'); // Create the name cell
@@ -123,3 +125,54 @@ function createLeaderboardTableRow(leaderboard) {
 
     return row;
 }
+
+// create table rows for the update leaderboard table
+function createUpdateLeaderboardTableRow(leaderboard) {
+    //example row
+//     `<tr>
+//     <td>Flappy-Bird leaderboard</td>
+//     <td>Flappy-Bird</td>
+//     <td class="text-center"><button type="button" class="btn btn-outline-primary btn-sm"
+//         data-bs-toggle="modal" data-bs-target="#update-leaderboard-modal">Update</button></td>
+//   </tr>`
+    const row = document.createElement('tr'); // Create the row
+    const name = document.createElement('td'); // Create the name cell
+    name.innerText = leaderboard.name; // Set the name
+
+    // create update button
+    const updateButton = document.createElement('td');
+    updateButton.classList.add('text-center');
+    const button = document.createElement('button');
+    button.classList.add('btn', 'btn-outline-primary', 'btn-sm');
+    button.setAttribute('type', 'button');
+    button.setAttribute('data-bs-toggle', 'modal');
+    button.setAttribute('data-bs-target', '#update-leaderboard-modal');
+    button.innerText = 'Update';
+    updateButton.appendChild(button);
+
+    // Add the name and update button to the row
+    row.appendChild(name);
+    row.appendChild(updateButton);
+
+    // Add the leaderboard id as a data attribute
+    row.setAttribute('data-id', leaderboard.id);
+
+    return row;
+}
+
+// populate the update leaderboard modal
+$('#update-leaderboard-modal').on('show.bs.modal', function (event) {
+    const button = $(event.relatedTarget); // Button that triggered the modal
+    const leaderboardId = button.parents('tr').attr('data-id'); // Extract info from data-* attributes
+    console.log('Leaderboard id: ' + leaderboardId);
+
+    // Get the leaderboard data from localStorage
+    const leaderboards = JSON.parse(localStorage.getItem('leaderboardsData'));
+    const leaderboard = leaderboards.find(leaderboard => leaderboard.id == leaderboardId);
+    console.log(leaderboard);
+
+    // Populate the form
+    const modal = $(this);
+    modal.find('#update-leaderboard-id').val(leaderboard.id);
+    modal.find('#update-leaderboard-name').val(leaderboard.name);
+});
