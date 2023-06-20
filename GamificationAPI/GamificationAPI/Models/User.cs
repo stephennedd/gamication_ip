@@ -16,6 +16,11 @@ public class User
     public string VerificationCode { get; set; } = CodeGenerator.RandomString(6);
     public bool IsVerified { get; set; } = false;
     public bool IsBanned { get; set; } = false;
+
+    public string Name { get; set; } = string.Empty;
+    public string Surname { get; set; } = string.Empty;
+    public string Username { get; set; } = string.Empty;
+
     public Group? Group { get; set; }
     public Role Role { get; set; }
     public ICollection<Badge> Badges { get; } = new List<Badge>();
