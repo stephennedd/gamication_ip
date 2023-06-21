@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	setIndicatorPosition(0);
 
 	// Show login input fields and login button
-	setTimeout(() => loginForm.classList.remove('hidden'), 40 * mainText.length);
+	setTimeout(() => loginForm.classList.remove('hide'), 40 * mainText.length);
 
 	// Error element for displaying messages
 	const errorElement = document.createElement('div');
@@ -77,20 +77,27 @@ document.addEventListener('DOMContentLoaded', function () {
 	loginForm.addEventListener('submit', function (event) {
 		event.preventDefault(); // Prevent the form from submitting normally
 
-		const email = document.getElementById('email').value;
+		const studentID = document.getElementById('studentID').value;
 		const password = document.getElementById('password').value;
 		const repassword = document.getElementById('repassword').value;
 		const verificationCode = document.getElementById('verificationCode').value;
-		const loginButton = document.querySelector('button span');
-		const emailInput = document.getElementById('email');
+		const firstName = document.getElementById('firstName').value;
+		const lastName = document.getElementById('lastName').value;
+
+		const studentIDInput = document.getElementById('studentID');
 		const passwordInput = document.getElementById('password');
 		const repasswordInput = document.getElementById('repassword');
 		const verificationCodeInput = document.getElementById('verificationCode');
+		const firstNameInput = document.getElementById('firstName');
+		const lastNameInput = document.getElementById('lastName');
 
 		const signInRadio = document.getElementById('signin');
 		const signUpRadio = document.getElementById('signup');
 		const resetRadio = document.getElementById('reset');
 		const verificationRadio = document.getElementById('verify');
+
+		// get label for verification radio button
+		const verifyLabel = labels[1];
 
 		// Reset styles and hide error message
 		passwordInput.style.border = '';
@@ -100,8 +107,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		errorElement.style.display = 'none';
 
 		if (signInRadio.checked) {
-			// Handle Sign In
-			if (email === '' || password === '') {
+			if (studentID === '' || password === '') {
 				displayTextOneCharacterAtATime(
 					errorElement,
 					'Please fill in all fields.'
@@ -110,7 +116,7 @@ document.addEventListener('DOMContentLoaded', function () {
 				return;
 			}
 			var data = {
-				userId: email,
+				userId: studentID,
 				password: password,
 			};
 			fetch('https://localhost:7186/api/Tokens', {
@@ -140,14 +146,16 @@ document.addEventListener('DOMContentLoaded', function () {
 					token = data.token;
 					var decodedToken = parseJwt(token);
 					console.log(decodedToken.IsVerified);
-					if (decodedToken.IsVerified == "False") {
+					if (decodedToken.IsVerified == 'False') {
 						displayTextOneCharacterAtATime(welcomeElement, verificationText);
-						verificationRadio.classList.remove('hidden');
-						verificationRadio.checked = true;
+						studentIDInput.classList.add('hidden');
+						verificationRadio.classList.remove('hide');
+						verifyLabel.classList.remove('hide');
 						verificationCodeInput.classList.remove('hidden');
-						
-						 //TODO VERIFY PAGE
-					} else window.location.href = '../AracadeMachine/index.html'; //TODO ARCADE PAGE
+
+						loginForm.classList.replace('signin', 'verify');
+						setIndicatorPosition(1);
+					} else window.location.href = '../ArcadeMachine';
 				})
 				.catch(function (error) {
 					console.error(error);
@@ -155,9 +163,7 @@ document.addEventListener('DOMContentLoaded', function () {
 					errorElement.style.display = 'block';
 				});
 		} else if (signUpRadio.checked) {
-			// Handle Sign Up
-
-			if (email === '' || password === '' || repassword === '') {
+			if (studentID === '' || password === '' || repassword === '') {
 				displayTextOneCharacterAtATime(
 					errorElement,
 					'Please fill in all fields.'
@@ -178,8 +184,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
 			// Prepare the request payload
 			var data = {
-				userId: email,
+				userId: studentID,
 				password: password,
+				firstName: firstName,
+				lastName: lastName,
 			};
 
 			displayTextOneCharacterAtATime(welcomeElement, 'Creating user...');
@@ -199,8 +207,10 @@ document.addEventListener('DOMContentLoaded', function () {
 							welcomeElement,
 							'Login to continue.'
 						);
-						//signInRadio.checked = true;
-					}, 2000);
+						// change selected view to sign in
+						loginForm.classList.replace('signup', 'signin');
+						setIndicatorPosition(0);
+					}, 1500);
 					if (!response.ok) {
 						throw new Error('Failed to create user');
 					}
@@ -212,12 +222,10 @@ document.addEventListener('DOMContentLoaded', function () {
 						errorElement,
 						'Failed to create user.'
 					);
+					errorElement.style.display = 'block';
 				});
-			// TODO: Send a POST request to the Sign Up endpoint
 		} else if (resetRadio.checked) {
-			// Handle Reset
-
-			if (email === '') {
+			if (studentID === '') {
 				displayTextOneCharacterAtATime(errorElement, 'Please enter your ID.');
 				errorElement.style.display = 'block';
 				return;
@@ -225,8 +233,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 			// TODO: Send a POST request to the Password Reset endpoint
 		} else if (verificationRadio.checked) {
-			// Handle Verification
-
 			if (verificationCode === '') {
 				displayTextOneCharacterAtATime(
 					errorElement,
@@ -255,53 +261,52 @@ document.addEventListener('DOMContentLoaded', function () {
 
 		return JSON.parse(jsonPayload);
 	}
-function refreshJWT() {
-	var token = document.cookie
-	fetch('https://localhost:7186/api/Tokens', {
-				method: 'GET',
-				headers: {
-					'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-				},
-				
+
+	function refreshJWT() {
+		var token = document.cookie;
+		fetch('https://localhost:7186/api/Tokens', {
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json',
+			},
+		})
+			.then(function (response) {
+				if (!response.ok) {
+					throw (
+						(new Error('Invalid username or password'),
+						displayTextOneCharacterAtATime(
+							errorElement,
+							'Invalid username or password'
+						),
+						(errorElement.style.display = 'block'))
+					);
+				}
+				return response.json();
 			})
-				.then(function (response) {
-					if (!response.ok) {
-						throw (
-							(new Error('Invalid username or password'),
-							displayTextOneCharacterAtATime(
-								errorElement,
-								'Invalid username or password'
-							),
-							(errorElement.style.display = 'block'))
-						);
-					}
-					return response.json();
-				})
-				.then(function (data) {
-					document.cookie =
-						'jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-					document.cookie = `jwt=${data.token}; path=/`;
-					token = data.token;
-					var decodedToken = parseJwt(token);
-					if (decodedToken.IsVerified == false) {
-						displayTextOneCharacterAtATime(welcomeElement, verificationText);
-						verificationRadio.classList.remove('hidden');
-						verificationRadio.checked = true;
-						verificationCodeInput.classList.remove('hidden'); 
-						emailInput.classList.add('hidden');
-						emailInput.classList.add('hidden');//TODO VERIFY PAGE
-					} else {
-						console.log("verified");
-						window.location.href = '../AracadeMachine/index.html'; //TODO ARCADE PAGE
-					}
-				})
-				.catch(function (error) {
-					console.error(error);
-					displayTextOneCharacterAtATime(errorElement, 'Login failed.');
-					errorElement.style.display = 'block';
-				});
-			}
+			.then(function (data) {
+				document.cookie =
+					'jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+				document.cookie = `jwt=${data.token}; path=/`;
+				token = data.token;
+				var decodedToken = parseJwt(token);
+				if (decodedToken.IsVerified == 'False') {
+					displayTextOneCharacterAtATime(welcomeElement, verificationText);
+					studentIDInput.classList.add('hidden');
+					verificationRadio.classList.remove('hide');
+					verifyLabel.classList.remove('hide');
+					verificationCodeInput.classList.remove('hidden');
+
+					loginForm.classList.replace('signin', 'verify');
+					setIndicatorPosition(1);
+				} else window.location.href = '../ArcadeMachine';
+			})
+			.catch(function (error) {
+				console.error(error);
+				displayTextOneCharacterAtATime(errorElement, 'Login failed.');
+				errorElement.style.display = 'block';
+			});
+	}
 
 	function verifyCode(code) {
 		var token = document.cookie
@@ -327,9 +332,6 @@ function refreshJWT() {
 			.then((data) => {
 				$('#response-message').empty();
 				if (data.success) {
-					// var html = `<p class="text-success">Code is correct</p>
-					//     <a href="login.html" class="btn btn-primary">Login</a>`;
-					// $('#response-message').append(html);
 					displayTextOneCharacterAtATime(
 						welcomeElement,
 						'Verification sucessfull!'
@@ -339,8 +341,9 @@ function refreshJWT() {
 							welcomeElement,
 							'Login to continue.'
 						);
-						signInRadio.checked = true;
-					}, 2000);
+						loginForm.classList.replace('verify', 'signin');
+						setIndicatorPosition(0);
+					}, 1500);
 				} else {
 					displayTextOneCharacterAtATime(
 						errorElement,
@@ -354,153 +357,3 @@ function refreshJWT() {
 			});
 	}
 });
-
-////////////////////////////////////////// OLD CODE IN CASE SOMETHING BREAKS //////////////////////////////////////////////
-
-// document.addEventListener('DOMContentLoaded', function () {
-// 	// Display the welcome text one character at a time
-// 	var text =
-// 		'WELCOME TO PROJECT G.A.M.I.F.I.C.A.T.I.O.N PLEASE ENTER YOUR CREDENTIALS...';
-// 	var characters = text
-// 		.split('')
-// 		.map((char, index) => {
-// 			if (index === text.length - 1) {
-// 				return `<span class="blink" style="display: none; opacity: 0;">${char}</span>`;
-// 			} else {
-// 				return `<span style="display: none; opacity: 0;">${char}</span>`;
-// 			}
-// 		})
-// 		.join('');
-
-// 	var welcomeElement = document.querySelector('.welcome');
-// 	welcomeElement.innerHTML = characters;
-
-// 	var spans = welcomeElement.getElementsByTagName('span');
-
-// 	for (let i = 0; i < spans.length; i++) {
-// 		setTimeout(function () {
-// 			spans[i].style.display = 'inline';
-// 			spans[i].style.opacity = 1;
-// 		}, 35 * i);
-// 	}
-
-// 	// Change which inputs are visible
-// 	const loginForm = document.getElementById('loginForm');
-// 	const radioButtons = document.querySelectorAll('input[type="radio"]');
-// 	radioButtons.forEach((radio) => {
-// 		radio.addEventListener('change', function () {
-// 			loginForm.className = this.value;
-// 		});
-// 	});
-
-// 	const indicatorLine = document.getElementById('line');
-// 	const labels = document.querySelectorAll('label');
-
-// 	function setIndicatorPosition(radioIndex) {
-// 		const label = labels[radioIndex];
-// 		const labelRect = label.getBoundingClientRect();
-// 		const containerRect = indicatorLine.parentElement.getBoundingClientRect();
-
-// 		indicatorLine.style.left = `${labelRect.left - containerRect.left}px`;
-// 		indicatorLine.style.width = `${labelRect.width}px`;
-// 	}
-
-// 	// Set initial position of the indicator line
-// 	setIndicatorPosition(0);
-
-// 	radioButtons.forEach((radio, index) => {
-// 		radio.addEventListener('change', function () {
-// 			loginForm.className = this.value;
-// 			setIndicatorPosition(index);
-// 		});
-// 	});
-
-// 	// Show login input fields and login button
-// 	setTimeout(function () {
-// 		loginForm.classList.remove('hidden');
-// 	}, 40 * spans.length);
-
-// 	// Handle form submission
-// 	document
-// 		.getElementById('loginForm')
-// 		.addEventListener('submit', function (event) {
-// 			event.preventDefault(); // Prevent the form from submitting normally
-
-// 			var email = document.getElementById('email').value;
-// 			var password = document.getElementById('password').value;
-// 			var repassword = document.getElementById('repassword').value; // For Sign Up
-// 			var loginButton = document.querySelector('button span');
-
-// 			var signInRadio = document.getElementById('signin');
-// 			var signUpRadio = document.getElementById('signup');
-// 			var resetRadio = document.getElementById('reset');
-
-// 			if (signInRadio.checked) {
-// 				// Handle Sign In
-// 				if (email === '' || password === '') {
-// 					// loginButton.textContent = '[ EMPTY INPUT! ]';
-// 					return;
-// 				}
-// 				var data = {
-// 					userId: email,
-// 					password: password,
-// 				};
-// 				fetch('https://localhost:7186/api/Tokens', {
-// 					method: 'POST',
-// 					headers: {
-// 						'Content-Type': 'application/json',
-// 					},
-// 					body: JSON.stringify(data),
-// 				})
-// 					.then(function (response) {
-// 						if (!response.ok) {
-// 							throw new Error('Invalid username or password');
-// 						}
-// 						return response.json();
-// 					})
-// 					.then(function (data) {
-// 						document.cookie =
-// 							'jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-// 						document.cookie = `jwt=${data.token}; path=/`;
-// 						window.location.href = 'index.html'; // TODO: change to whatever.html
-// 					})
-// 					.catch(function (error) {
-// 						console.error(error);
-// 						loginButton.textContent = '[ LOGIN FAILED! ]';
-// 					});
-// 			} else if (signUpRadio.checked) {
-// 				// Handle Sign Up
-// 				// TODO: Add Sign Up logic
-
-// 				if (email === '' || password === '' || repassword === '') {
-// 					// loginButton.textContent = '[ EMPTY INPUT! ]';
-// 					return;
-// 				}
-
-// 				if (password !== repassword) {
-// 					// loginButton.textContent = "[ PASSWORDS DON'T MATCH! ]";
-// 					return;
-// 				}
-
-// 				// Prepare the request payload
-// 				var data = {
-// 					email: email,
-// 					password: password,
-// 				};
-
-// 				// TODO: Send a POST request to the Sign Up endpoint
-// 				// fetch("YOUR_SIGNUP_ENDPOINT", {...})
-// 			} else if (resetRadio.checked) {
-// 				// Handle Reset
-// 				// TODO: Add Password Reset logic
-
-// 				if (email === '') {
-// 					// loginButton.textContent = '[ EMPTY EMAIL INPUT! ]';
-// 					return;
-// 				}
-
-// 				// TODO: Send a POST request to the Password Reset endpoint
-// 				// fetch("YOUR_PASSWORD_RESET_ENDPOINT", {...})
-// 			}
-// 		});
-// });
