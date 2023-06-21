@@ -76,6 +76,23 @@ window.addEventListener('DOMContentLoaded', function () {
   }
 });
 
+// delete a quiz from the database and remove it from the page
+function removeQuiz(button) {
+  if (confirm("Are you sure you want to delete this quiz?")) {
+      // TODO send the delete request to the server
+
+      // if response == OK: remove the quiz from the page
+      var serverResponse = "OK";
+      if (serverResponse == "OK") {
+          var row = button.parentNode.parentNode; // Get the parent row
+          row.remove();
+      }
+      // else: show an error message
+      else {alert("Error deleting quiz");} // TODO: show an error message
+      
+  }
+}
+
 function populateTable(subjects) {
     // Assuming you have the `subjects` array available
 
@@ -480,23 +497,6 @@ if (numberOfExistingQuestions >= index + 1) {
   }
 
 
-
-// delete a quiz from the database and remove it from the page
-function removeQuiz(button) {
-    if (confirm("Are you sure you want to delete this quiz?")) {
-        // TODO send the delete request to the server
-
-        // if response == OK: remove the quiz from the page
-        var serverResponse = "OK";
-        if (serverResponse == "OK") {
-            var row = button.parentNode.parentNode; // Get the parent row
-            row.remove();
-        }
-        // else: show an error message
-        else {alert("Error deleting quiz");} // TODO: show an error message
-        
-    }
-}
 
 // adding a subject to the database
 $('#add-subject-form').submit(function (e) {
