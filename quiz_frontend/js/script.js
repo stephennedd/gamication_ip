@@ -12,6 +12,9 @@ const progressBar = document.querySelector('.progress_container');
 const achievement = document.querySelector('.achievement');
 const achievementText = document.querySelector(".achievement-text");
 const achievementIcon = document.querySelector(".achievement-icon");
+var extraLife = false;
+var scoreMultiplier = false;
+var achievementList = [50, 75, 100];
 
 //import { showGame } from "../../ArcadeMachine/main";
 
@@ -106,6 +109,10 @@ restart_quiz.onclick = async () => {
 // }
 
 function callShowGame() {
+	// Store extraLife and scoreMultiplier in localStorage
+	localStorage.setItem('extraLife', extraLife);
+	localStorage.setItem('scoreMultiplier', scoreMultiplier);
+
 	// Post a message to the parent document asking it to call showGame
 	parent.postMessage({ action: 'showGame' }, '*');
 }
@@ -259,7 +266,7 @@ function showResult() {
 	const playBtn = result_box.querySelector('.buttons .play');
 
 	console.log('Result is ' + studentResult);
-	if (studentResult >= 55) {
+	if (studentResult >= achievementList[0]) {
 		replayBtn.style.display = 'none'; // Display the "Replay Quiz" button
 		playBtn.style.display = 'block'; // Display the "Replay Quiz" button
 		winSound.play(); // play win sound
@@ -320,22 +327,24 @@ async function updateProgress(correctAnswers, totalQuestions) {
 	var progress = (correctAnswers / totalQuestions) * 100;
 	progressBar.style.width = progress + "%";
 	
-	// Activate the milestone at 100% progress
-	if (progress >= 55) {
+	// Activate the milestones at 55%,75%,100% progress
+	if (progress >= achievementList[0]) {
 		milestone50.classList.add("milestone-done");
 		milestone50.style.backgroundColor = "green";
 		achievementSound.play(); // play achievement sound
 		 showAchievement('Game Unlocked',`You've unlocked the game!`, `<i class="fa-sharp fa-solid fa-gamepad"></i>`); // show achievement popup
 	}
 
-	if (progress >= 75) {	
+	if (progress >= achievementList[1]) {	
+		extraLife = true; // enable extra life
 		milestone75.classList.add("milestone-done");
 		milestone75.style.backgroundColor = "red";
 		achievementSound.play(); // play achievement sound
 		 showAchievement('Bonus Life',`You've unlocked +1 life`, `<i class="fa-sharp fa-solid fa-heart" style="color: red"></i>`); // show achievement popup
 	} 
 	
-	if (progress === 100) {
+	if (progress === achievementList[2]) {
+		scoreMultiplier = true; // enable score multiplier
 		milestone100.classList.add("milestone-done");
 		milestone100.style.backgroundColor = "var(--achievement-color)";
 		achievementSound.play(); // play achievement sound
@@ -363,6 +372,8 @@ async function updateProgress(correctAnswers, totalQuestions) {
 	}
 
 	function resetProgress() {
+		scoreMultiplier = false; // disable score multiplier
+		extraLife = false; // disable extra life
 		var progressBar = document.getElementById("progress-bar");
 		var milestone50 = document.querySelector(".milestone-50");
 		var milestone75 = document.querySelector(".milestone-75");

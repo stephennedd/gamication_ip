@@ -4,6 +4,22 @@ const gameLives = document.getElementById("lives");
 
 
 let lives = 3;
+let counter = 0;
+let highScore = 0;
+const gameDataLife = localStorage.getItem('extraLife');
+const gameDataScore = localStorage.getItem('scoreMultiplier');
+console.log(`extraLife: ${gameDataLife}`);
+console.log(`scoreMultiplier: ${gameDataScore}`);
+if (gameDataLife === 'true') {
+    lives = 4;
+}
+if (gameDataScore === 'true') {
+    scoreMultiplier = 2;
+}
+
+for (let i = 0; i < lives; i++) {
+    gameLives.innerHTML += '<div class="life"></div>';
+}
 
 const scene = new THREE.Scene();
 
@@ -563,7 +579,9 @@ function animate(timestamp) {
       switch(moves[0]) {
         case 'forward': {
           currentLane++;
-          counterDOM.innerHTML = currentLane;    
+          counter = currentLane * scoreMultiplier;
+          highScore = counter;
+          counterDOM.innerHTML = counter;    
           break;
         }
         case 'backward': {
