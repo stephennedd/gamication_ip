@@ -311,7 +311,7 @@ async function confirmStudentUpdate(button) {
         var lastName = document.getElementById('modal-last-name').value;
         var password = document.getElementById('modal-student-password').value;
         var username = document.getElementById('modal-username').value;
-          
+
       var token = document.cookie
 			.split('; ')
 			.find((row) => row.startsWith('jwt='))

@@ -1,18 +1,12 @@
 const checkbox = document.getElementById('admin-checkbox');
 const adminSection = document.getElementById('admin-section');
+const userRole = localStorage.getItem('role');
 
-// Check if checkbox is checked and display admin section
-// update this with a function that checks if the user is an admin
-checkbox.addEventListener('change', function () {
-    if (checkbox.checked) {
-        console.log('checked');
-        adminSection.style.display = 'block';
-    } else {
-        console.log('not checked');
-        adminSection.style.display = 'none';
-    }
-});
-
+if (userRole=="Admin") {
+ adminSection.style.display = 'block';
+} else {
+ adminSection.style.display = 'none';
+}
 
 // javascript for the data table
 $(document).ready(function () {
