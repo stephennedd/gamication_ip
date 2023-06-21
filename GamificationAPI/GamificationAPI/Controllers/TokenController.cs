@@ -105,7 +105,7 @@ namespace GamificationAPI.Controllers
                 signingCredentials: creds);
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
 
-            return Ok(new { token = jwt });
+            return Ok(new {token = jwt });
         }
     }
 }
