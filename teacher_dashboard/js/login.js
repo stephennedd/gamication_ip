@@ -47,6 +47,7 @@ document.getElementById("loginForm").addEventListener("submit", function(event) 
       // Display an error message to the user
       alert(error.message);
     });
+    
 });
 
 function parseJwt(token) {
