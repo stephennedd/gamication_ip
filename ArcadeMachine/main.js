@@ -149,6 +149,9 @@ window.addEventListener('DOMContentLoaded', function () {
 	}
 
 	function showGame() {
+		var iframe = document.getElementById('game');
+
+		iframe.src = iframe.src;
 		if (arcadeMachine.classList.contains('move-out-machine')) {
 			hideAllScreens();
 			canvas.classList.remove('hide');

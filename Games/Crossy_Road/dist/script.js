@@ -1,5 +1,9 @@
 const counterDOM = document.getElementById('counter');  
-const endDOM = document.getElementById('end');  
+const endDOM = document.getElementById('end'); 
+const gameLives = document.getElementById("lives");
+
+
+let lives = 3;
 
 const scene = new THREE.Scene();
 
@@ -191,7 +195,7 @@ function Car() {
 
   car.castShadow = true;
   car.receiveShadow = false;
-  
+
   return car;  
 }
 
@@ -418,11 +422,11 @@ function Lane(index) {
   }
 }
 
-document.querySelector("#retry").addEventListener("click", () => {
-  lanes.forEach(lane => scene.remove( lane.mesh ));
-  initaliseValues();
-  endDOM.style.visibility = 'hidden';
-});
+// document.querySelector("#retry").addEventListener("click", () => {
+//   lanes.forEach(lane => scene.remove( lane.mesh ));
+//   initaliseValues();
+//   endDOM.style.visibility = 'hidden';
+// });
 
 document.getElementById('forward').addEventListener("click", () => move('forward'));
 
@@ -591,12 +595,34 @@ function animate(timestamp) {
       const carMinX = vechicle.position.x - vechicleLength*zoom/2;
       const carMaxX = vechicle.position.x + vechicleLength*zoom/2;
       if(chickenMaxX > carMinX && chickenMinX < carMaxX) {
-        endDOM.style.visibility = 'visible';
+        console.log('hit');
+        resetGame();
+        //endDOM.style.visibility = 'visible';
       }
     });
 
   }
   renderer.render( scene, camera );	
 }
+
+function resetGame() {
+  lives--;
+  if (lives <= 0) {
+    gameLives.removeChild(gameLives.lastElementChild);
+    lanes.forEach(lane => scene.remove( lane.mesh ));
+    initaliseValues();
+    // Game over logic (e.g., display game over screen, restart the game)
+    console.log("Game Over");
+    endDOM.style.visibility = 'visible';
+  } else {
+    lanes.forEach(lane => scene.remove( lane.mesh ));
+    // remove life from lives div
+    gameLives.removeChild(gameLives.lastElementChild);
+    // Reset the game to initial state
+    initaliseValues();
+
+  }
+}
+
 
 requestAnimationFrame( animate );
