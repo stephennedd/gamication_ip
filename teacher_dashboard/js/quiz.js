@@ -77,9 +77,36 @@ window.addEventListener('DOMContentLoaded', function () {
 });
 
 // delete a quiz from the database and remove it from the page
-function removeQuiz(button) {
+async function removeQuiz(button,subject) {
   if (confirm("Are you sure you want to delete this quiz?")) {
       // TODO send the delete request to the server
+
+      console.log(subject.Id);
+     await fetch(`https://localhost:7186/api/subjects/?id=${subject.Id}`, {
+        method: 'DELETE',
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Failed to delete subject');
+          }
+          return response.json();
+        })
+        .then(data => {
+          // Handle the successful response
+          console.log('Subject deleted successfully');
+          // Perform any necessary actions or update the UI accordingly
+        })
+        .catch(error => {
+          // Handle errors
+          console.error('Error deleting subject:', error.message);
+        });
+
+        const response = await fetch('https://localhost:7186/api/subjects');
+        const data = await response.json();
+        subjectsToBeDeleted = data;
+        console.log(subjectsToBeDeleted);
+        localStorage.setItem('subjectsDataForRemovePage', JSON.stringify(subjectsToBeDeleted));
+        populateTable2(subjectsToBeDeleted);
 
       // if response == OK: remove the quiz from the page
       var serverResponse = "OK";
