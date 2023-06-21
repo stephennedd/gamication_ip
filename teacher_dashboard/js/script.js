@@ -73,6 +73,7 @@ function handlePageChange() {
         '#add-subject': { sectionId: 'add-subject', linkId: 'add-subject-link' },
         '#add-user': { sectionId: 'add-user', linkId: 'add-user-link' },
         '#add-group': { sectionId: 'add-group', linkId: 'add-group-link' },
+        '#manage-groups': { sectionId: 'manage-groups', linkId: 'manage-groups-link' },
 
     };
   
@@ -90,7 +91,7 @@ function logout() {
     // Delete 'token' cookie
     document.cookie = 'jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
     // You can then redirect to login page or landing page
-     window.location.href = "/gamication_ip/teacher_dashboard/pages/login.html";
+     window.location.href = "/teacher_dashboard/pages/login.html";
   }
 // Handle the initial page load
 handlePageChange();
