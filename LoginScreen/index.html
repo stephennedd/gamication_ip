@@ -7,20 +7,20 @@
 		<link rel="stylesheet" href="style.css" />
 		<script defer src="main.js"></script>
 	</head>
-	<body>
+	<body class="crt">
 		<p class="welcome"></p>
-		<form id="loginForm" class="hidden signin">
+		<form id="loginForm" class="hide signin">
 			<div class="radio-container">
 				<input checked id="signin" name="action" type="radio" value="signin" />
 				<label for="signin">Sign in</label>
 
 				<input
 					id="verify"
-					class="hidden"
+					class="hide"
 					name="action"
 					type="radio"
-					value="reset" />
-				<label for="verify" class="hidden">Verify</label>
+					value="verify" />
+				<label for="verify" class="hide">Verify</label>
 
 				<input id="signup" name="action" type="radio" value="signup" />
 				<label for="signup">Sign up</label>
@@ -43,12 +43,14 @@
 						class="hidden"
 						placeholder="Verification Code"
 						type="text" />
-					<input id="email" placeholder="ID" type="text" />
+					<input id="studentID" placeholder="ID" type="text" />
 					<input id="password" placeholder="Password" type="password" />
 					<input
 						id="repassword"
 						placeholder="Repeat password"
 						type="password" />
+					<input id="firstName" placeholder="First name" type="text" />
+					<input id="lastName" placeholder="Last name" type="text" />
 				</div>
 				<button type="submit">
 					<span>
