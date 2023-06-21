@@ -41,7 +41,8 @@ button span {
 }
 
 #loginForm.signup #wrapper {
-	height: 255px;
+	/* height: 255px; */
+	height: 428px;
 }
 
 #loginForm.verify #wrapper {

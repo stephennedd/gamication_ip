@@ -81,11 +81,15 @@ document.addEventListener('DOMContentLoaded', function () {
 		const password = document.getElementById('password').value;
 		const repassword = document.getElementById('repassword').value;
 		const verificationCode = document.getElementById('verificationCode').value;
+		const firstName = document.getElementById('firstName').value;
+		const lastName = document.getElementById('lastName').value;
 
 		const studentIDInput = document.getElementById('studentID');
 		const passwordInput = document.getElementById('password');
 		const repasswordInput = document.getElementById('repassword');
 		const verificationCodeInput = document.getElementById('verificationCode');
+		const firstNameInput = document.getElementById('firstName');
+		const lastNameInput = document.getElementById('lastName');
 
 		const signInRadio = document.getElementById('signin');
 		const signUpRadio = document.getElementById('signup');
@@ -182,6 +186,8 @@ document.addEventListener('DOMContentLoaded', function () {
 			var data = {
 				userId: studentID,
 				password: password,
+				firstName: firstName,
+				lastName: lastName,
 			};
 
 			displayTextOneCharacterAtATime(welcomeElement, 'Creating user...');
