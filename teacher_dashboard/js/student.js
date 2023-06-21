@@ -310,6 +310,7 @@ async function confirmStudentUpdate(button) {
         var firstName = document.getElementById('modal-first-name').value;
         var lastName = document.getElementById('modal-last-name').value;
         var password = document.getElementById('modal-student-password').value;
+        var username = document.getElementById('modal-username').value;
           
       var token = document.cookie
 			.split('; ')
@@ -319,7 +320,8 @@ async function confirmStudentUpdate(button) {
       const requestBody = JSON.stringify({
         name: firstName,
         surname: lastName,
-        password: password
+        password: password,
+        username: username
       });
 
     // Perform the fetch request to delete the student
