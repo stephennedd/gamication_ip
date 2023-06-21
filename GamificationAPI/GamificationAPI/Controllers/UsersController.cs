@@ -301,6 +301,23 @@ namespace GamificationToIP.Controllers
 
         }
 
+        [Authorize(Policy = "IsVerified")]
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> AddGroupToUser(string userId, string groupName)
+        {
+            if (await _userService.UserExistsAsync(userId) == false)
+            {
+                return NotFound("Group with this name does not exist");
+            }
+
+            bool success = await _userService.AddGroupToUserAsync(userId, groupName);
+            if (success)
+            {
+                return Ok();
+            }
+            return BadRequest("Group with this name does not exist");
+
+        }
         // PUT: api/users/ban/{id}
         [HttpPut("ban/{id}")]
         public IActionResult BanUser(int id, [FromBody] bool isBanned)
