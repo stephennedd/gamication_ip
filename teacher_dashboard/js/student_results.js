@@ -48,8 +48,10 @@ $(document).ready(function () {
 });
 
 groupSelector.addEventListener('change', function () {
-    console.log('group changed');
+    console.log('Group changed to: ' + groupSelector.value);
+    tableHeader.innerHTML = 'Group ' + groupSelector.value;
     // TODO get the students from the selected group
     // TODO update the students table
+
 }
 );
