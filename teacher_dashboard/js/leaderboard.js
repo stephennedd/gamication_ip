@@ -75,10 +75,20 @@ async function populateLeaderboardTable() {
     const leaderboardTable = document.getElementById('delete-leaderboard-table');
     const updateLeaderboardTable = document.getElementById('update-leaderboard-table');
 
-    let leaderboards = [];    
+    let leaderboards = [];  
+    var token = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('jwt='))
+        .split('=')[1];  
     // TODO get all leaderboards from server and store in leaderboards array
     try {
-        const response = await fetch('https://localhost:7186/api/leaderboards');
+        const response = await fetch('https://localhost:7186/api/Leaderboards/', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
         const data = await response.json();
         leaderboards = data;
         // Store the subjects data in localStorage
