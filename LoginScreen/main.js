@@ -87,8 +87,6 @@ document.addEventListener('DOMContentLoaded', function () {
 		const repasswordInput = document.getElementById('repassword');
 		const verificationCodeInput = document.getElementById('verificationCode');
 
-		const loginButton = document.querySelector('button span');
-
 		const signInRadio = document.getElementById('signin');
 		const signUpRadio = document.getElementById('signup');
 		const resetRadio = document.getElementById('reset');
