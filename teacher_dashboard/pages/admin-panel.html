@@ -173,29 +173,19 @@
             </a>
             <div class="collapse" id="admin_options">
               <ul class="navbar-nav ps-3">
-                <!-- <li>
-                  <a href="#create-quiz" class="nav-link px-3" id="create-quiz-link">
-                    <span>Create Quiz</span>
+                <li>
+                  <a href="#add-user" class="nav-link px-3" id="add-user-link">
+                    <span>Add User</span>
                   </a>
-                </li> -->
+                </li>
                 <li>
                   <a href="#delete-quiz" class="nav-link px-3" id="delete-quiz-link">
                     <span>Delete Quiz</span>
                   </a>
                 </li>
                 <li>
-                  <a href="#add-teacher" class="nav-link px-3" id="add-teacher-link">
-                    <span>Add Teacher</span>
-                  </a>
-                </li>
-                <li>
-                  <a href="#add-group" class="nav-link px-3" id="remove-group-link">
+                  <a href="#add-group" class="nav-link px-3" id="add-group-link">
                     <span>Add Group</span>
-                  </a>
-                </li>
-                <li>
-                  <a href="#edit-teacher" class="nav-link px-3" id="edit-teacher-link">
-                    <span>Edit Teacher</span>
                   </a>
                 </li>
                 <li>
@@ -224,9 +214,10 @@
             <div class="card-header">
               <div class="float-start mt-1" id="student-results-card-header">My Students</div>
               <div class="float-end">
-                <input type="checkbox" class="btn-check" id="all-students-checkbox">
-                <label class="btn btn-sm btn-outline-primary" for="all-students-checkbox">All Students</label>
-              </div>
+                <select class="form-select" id="group-selection-dropdown">
+                  <option selected disabled value="">Select a group</option>
+                </select>
+              </div>  
             </div>
             <div class="card-body">
               <div class="table-responsive">
@@ -334,8 +325,7 @@
           </div>
         </div>
       </div>
-
-
+    </div>
   </main>
 
   <!-- Edit Quiz-->
@@ -470,54 +460,6 @@
 
   </main>
 
-  <!-- Add Student -->
-  <main class="pt-3" id="add-student">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-md-12 fw-bold fs-4">Add Student</div>
-      </div>
-      <div class="row mt-2">
-        <div class="col-md-12">
-          <div class="card">
-            <div class="card-header">Enter student details</div>
-            <div class="card-body">
-              <form id="student-form">
-                <div class="row">
-                  <div class="col-md-12">
-                    <div class="mb-3">
-                      <label for="first-name" class="form-label fw-bold">Student name</label>
-                      <input type="text" name="first-name" class="form-control" id="first-name" placeholder="First name"
-                        required>
-                      <input type="text" name="middle-name" class="form-control mt-2" id="middle-name"
-                        placeholder="Middle name">
-                      <input type="text" name="last-name" class="form-control mt-2" id="last-name"
-                        placeholder="Last name" required>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="row">
-                  <div class="col-md-12">
-                    <div class="mb-3">
-                      <label for="student-email" class="form-label fw-bold">Email</label>
-                      <input type="email" name="email" class="form-control" id="student-email"
-                        placeholder="Student email" required>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="row">
-                  <div class="col-md-12 text-end">
-                    <button type="submit" class="btn btn-success">Add Student</button>
-                  </div>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </main>
 
   <!-- Remove Student -->
   <main class="pt-3" id="delete-student">
@@ -887,6 +829,102 @@
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Add user -->
+  <main class="pt-3" id="add-user">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12 fw-bold fs-4">Add User</div>
+      </div>
+      <div class="row mt-2">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header">Enter user details</div>
+            <div class="card-body">
+              <form id="user-form">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="mb-3">
+                      <label for="first-name" class="form-label fw-bold">Name</label>
+                      <input type="text" name="first-name" class="form-control" id="first-name" placeholder="First name"
+                        required>
+                      <input type="text" name="last-name" class="form-control mt-2" id="last-name"
+                        placeholder="Last name" required>
+                      <input type="text" name="username" class="form-control mt-2" id="username"
+                        placeholder="Username">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="mb-3">
+                      <label for="email" class="form-label fw-bold">Email</label>
+                      <input type="email" name="email" class="form-control" id="email"
+                        placeholder="Email" required>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="mb-3">
+                      <select name="user-role" class="form-select" required id="user-role">
+                        <option value="" selected disabled>Select a role</option>
+                        <option value="admin">Admin</option>
+                        <option value="teacher">Teacher</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-12 text-end">
+                    <button type="submit" class="btn btn-success">Add User</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Add group -->
+  <main class="pt-3" id="add-group">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12 fw-bold fs-4">Add Group</div>
+      </div>
+      <div class="row mt-2">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header">Enter group details</div>
+            <div class="card-body">
+              <form id="group-form">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="mb-3">
+                      <label for="group-name" class="form-label fw-bold">Group name</label>
+                      <input type="text" name="group-name" class="form-control" id="group-name"
+                        placeholder="Group name" required>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-12 text-end">
+                    <button type="submit" class="btn btn-success">Add Group</button>
+                  </div>
+                </div>
+              </form>
             </div>
           </div>
         </div>
