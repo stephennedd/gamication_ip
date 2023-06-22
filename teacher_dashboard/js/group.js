@@ -2,6 +2,11 @@
 
 // let groupName = " ";
 
+
+$(document).ready(function () {
+    populateGroupsTable();
+});
+
 // open the add group modal
 function editGroup(button) {
     // open modal
@@ -100,5 +105,64 @@ function deleteGroup(button) {
         // else: show an error message
         else {alert("Error deleting group");} // TODO: show an error message
         
+    }
+}
+async function populateGroupsTable() {
+    try {
+        var token = document.cookie
+            .split('; ')
+            .find(row => row.startsWith('jwt='))
+            .split('=')[1];
+
+        let response = await fetch('https://localhost:7186/api/Groups', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,  // replace `token` with your actual token variable
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        let data = await response.json();
+        console.log('Received data:', data); // Print the raw data
+
+        // Extract groups array
+        let groups = data.$values;
+
+        console.log('Extracted groups:', groups); // Print the extracted groups
+
+        // Get a reference to the table body
+        let tableBody = document.querySelector('#groups-table tbody');
+
+        // Remove any existing rows in the table
+        while (tableBody.firstChild) {
+            tableBody.firstChild.remove();
+        }
+
+        // Iterate over the groups array and add a new row for each group
+        for (let group of groups) {
+            let row = document.createElement('tr');
+
+            let nameCell = document.createElement('td');
+            nameCell.textContent = group.name;
+            row.appendChild(nameCell);
+            
+            //TODO get value from server
+            //let studentsCountCell = document.createElement('td');
+            //studentsCountCell.textContent = group.studentsCount;  
+            //row.appendChild(studentsCountCell);
+ 
+            
+            let actionsCell = document.createElement('td');
+            // Add any actions buttons or links here
+            row.appendChild(actionsCell);
+
+            tableBody.appendChild(row);
+        }
+    } catch (error) {
+        console.log('Fetch Error: ', error);
     }
 }
