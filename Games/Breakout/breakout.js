@@ -14,6 +14,7 @@ class BootScene extends Phaser.Scene {
 			);
 		});
 		this.load.image('heart', '/../Games/Breakout/assets/images/heart.png');
+
 		// this.load.bitmapFont(
 		// 	'PressStart2P',
 		// 	'/../Games/Breakout/assets/Fonts/Press_Start_2P/PressStart2P-Regular.png',
@@ -92,6 +93,25 @@ class MainScene extends Phaser.Scene {
 
 		this.isPaused = false; // To track if the game is paused
 		this.input.keyboard.on('keydown-P', this.togglePause, this);
+
+		// listen to message from parent frame to pause
+		window.addEventListener('message', this.togglePause.bind(this));
+
+		// Check for localstorage items for scoremuliplier and additional live
+		const gameDataLife = localStorage.getItem('extraLife') || false;
+		const gameDataScore = localStorage.getItem('scoreMultiplier') || false;
+		console.log(`extraLife: ${gameDataLife}`);
+		console.log(`scoreMultiplier: ${gameDataScore}`);
+		// if (gameDataLife === 'true') {
+		// 	this.lives = 4;
+		// } else {
+		// 	this.lives = 3;
+		// }
+		// if (gameDataScore === 'true') {
+		// 	this.scoreMultiplier = 2;
+		// } else {
+		// 	this.scoreMultiplier = 1;
+		// }
 
 		this.bricks = this.physics.add.group();
 		this.bricksDestroyed = 0;

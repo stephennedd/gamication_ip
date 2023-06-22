@@ -170,7 +170,6 @@ window.addEventListener('DOMContentLoaded', function () {
 
 			// Send the message to the game iframe
 			canvasWindow.postMessage(message, '*');
-			// console.log('Pause game');
 		}
 	}
 
