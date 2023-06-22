@@ -302,7 +302,7 @@ namespace GamificationToIP.Controllers
         }
 
         [Authorize(Policy = "IsVerified")]
-        [HttpPatch("{id}")]
+        [HttpPatch("Group/{id}")]
         public async Task<IActionResult> AddGroupToUser(string userId, string groupName)
         {
             if (await _userService.UserExistsAsync(userId) == false)

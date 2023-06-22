@@ -94,7 +94,7 @@ function logout() {
     // Delete 'token' cookie
     document.cookie = 'jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
     // You can then redirect to login page or landing page
-    window.location.href = "/gamication_ip/teacher_dashboard/pages/login.html";
+    window.location.href = "/teacher_dashboard/pages/login.html";
   }
 // Handle the initial page load
 handlePageChange();
