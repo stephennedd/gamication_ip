@@ -20,7 +20,7 @@ namespace GamificationAPI.Controllers
 
         [Authorize(Roles = "Admin, Teacher")]
         [HttpPost]
-        public IActionResult AddGroup([FromBody] string groupName)
+        public IActionResult AddGroup(string groupName)
         {
             if (string.IsNullOrWhiteSpace(groupName))
             {

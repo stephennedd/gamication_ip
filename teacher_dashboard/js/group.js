@@ -1,6 +1,6 @@
 
 
-
+// let groupName = " ";
 
 // open the add group modal
 function editGroup(button) {
@@ -8,7 +8,7 @@ function editGroup(button) {
     $('#edit-group-modal').modal('show');
 
     // get the group name
-    var groupName = button.parentNode.parentNode.cells[0].innerHTML;
+     groupName = button.parentNode.parentNode.cells[0].innerHTML;
     $('#edit-group-name').val(groupName);
 }
 
@@ -45,40 +45,46 @@ $('#add-user-to-group-form').submit(function (event) {
     event.preventDefault();
 });
 
+const groupForm = document.getElementById('group-form');
+groupForm.addEventListener('submit', function (event) {
+    event.preventDefault(); // Prevent the form from submitting normally
+    groupName = document.getElementById('group-name').value;
+    createGroup();
+});
+
 
 async function createGroup() {
-    const groupName = document.getElementById('group-name').value;
-    var token = document.cookie
-    .split('; ')
-    .find(row => row.startsWith('jwt='))
-    .split('=')[1];  
-try {
-    const body = JSON.stringify({
-        name: groupName
-    });
-    let response = response = await fetch(`https://localhost:7186/api/Groups`, 
-        {
-        method: 'POST',
-        headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-        },
-        body: body
-        });       
-    
-    if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+    try {
+        var token = document.cookie
+            .split('; ')
+            .find(row => row.startsWith('jwt='))
+            .split('=')[1];
+
+        // Ensure groupName is not empty or undefined
+        if (!groupName || groupName.trim() === '') {
+            console.error("Invalid or empty group name!");
+            return;
+        }
+        let encodedGroupName = encodeURI(groupName);
+
+        let response = await fetch(`https://localhost:7186/api/Groups?groupName=${encodedGroupName}`,
+            {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+            });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        console.log('Group added successfully:');
+    } catch (error) {
+        console.log('Fetch Error: ', error);
     }
-
-    console.log('Group added successfully:');
-
-
-} catch (error) {
-    console.log('Fetch Error: ', error);
 }
-}
-
-
 
 // remove the group from the table and send the delete request to the server
 function deleteGroup(button) {
