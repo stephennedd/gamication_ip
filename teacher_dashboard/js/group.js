@@ -45,6 +45,41 @@ $('#add-user-to-group-form').submit(function (event) {
     event.preventDefault();
 });
 
+
+async function createGroup() {
+    const groupName = document.getElementById('group-name').value;
+    var token = document.cookie
+    .split('; ')
+    .find(row => row.startsWith('jwt='))
+    .split('=')[1];  
+try {
+    const body = JSON.stringify({
+        name: groupName
+    });
+    let response = response = await fetch(`https://localhost:7186/api/Groups`, 
+        {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: body
+        });       
+    
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    console.log('Group added successfully:');
+
+
+} catch (error) {
+    console.log('Fetch Error: ', error);
+}
+}
+
+
+
 // remove the group from the table and send the delete request to the server
 function deleteGroup(button) {
     if (confirm("Are you sure you want to delete this group?")) {

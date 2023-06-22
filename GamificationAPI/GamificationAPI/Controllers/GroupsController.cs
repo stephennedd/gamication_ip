@@ -1,5 +1,6 @@
 ﻿using GamificationAPI.Models;
 using GamificationToIP.Context;
+using GamificationToIP.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,7 +24,7 @@ namespace GamificationAPI.Controllers
         {
             if (string.IsNullOrWhiteSpace(groupName))
             {
-                return BadRequest();
+                return BadRequest("No group name provided");
             }
             _dbContext.Groups.AddAsync(new Group { Name = groupName});
             _dbContext.SaveChanges();
@@ -47,6 +48,18 @@ namespace GamificationAPI.Controllers
             {
                 return NotFound();
             }
+            List<User> users = _dbContext.Users.ToList();
+            foreach (var user in users)
+            {
+                if (user.Group != null)
+                {
+                    if (user.Group.Id == id)
+                    {
+                        user.Group = null;
+                    }
+                }
+            }
+            _dbContext.SaveChanges();
             _dbContext.Groups.Remove(group);
             _dbContext.SaveChanges();
             return Ok();
