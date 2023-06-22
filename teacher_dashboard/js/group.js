@@ -1,29 +1,6 @@
-const groupTable = document.getElementById('groups-table');
 
-$(document).ready(function () {
-    populateGroupsTable();
-});
 
-// populate the groups table with the groups from the server
-function populateGroupsTable() {
-    // example data
-    let groups = [{id: 1 ,name: "Group 1", students: [{id: 1, name: "Student 1"}]}];
 
-    // TODO get the groups from the server
-
-    groups.forEach((group) => {
-        var row = groupTable.insertRow();
-        row.setAttribute("data-groupId", group.id);
-        var cell1 = row.insertCell();
-        var cell2 = row.insertCell();
-        var cell3 = row.insertCell();
-        cell1.innerHTML = group.name;
-        cell2.innerHTML = group.students.length;
-        cell3.innerHTML = `<button class="btn btn-primary btn-sm me-1" onclick="editGroup(this)">Edit Group</button>
-                            <button class="btn btn-success btn-sm me-1" onclick="addUser(this)">Add User</button>
-                            <button class="btn btn-danger btn-sm" onclick="deleteGroup(this)">Delete Group</button>`;
-    });
-}
 
 // open the add group modal
 function editGroup(button) {

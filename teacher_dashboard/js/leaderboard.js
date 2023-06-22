@@ -1,3 +1,6 @@
+
+
+
 // Event handler for form submit
 $('#create-leaderboard-form').submit(function (e) {
     // get the form data
@@ -109,6 +112,7 @@ async function populateLeaderboardTable() {
     }
 
 }
+
 
 // create table rows for the delete leaderboard table
 function createLeaderboardTableRow(leaderboard) {

@@ -1,5 +1,8 @@
 const tableHeader = document.getElementById('student-results-card-header');
 const groupSelector = document.getElementById("group-selection-dropdown");
+let groupName = null;
+let leaderboardName = "main";
+
 //var students = [];
 
 // studentTableCheckbox.addEventListener('change', function () {
@@ -30,22 +33,131 @@ async function getStudents(allStudents) {
 }
 
 
-$(document).ready(function () {
-    //var groups = [];
-    var groups = [{id: 1 ,name: "Group 1"}, {id: 2 ,name: "Group 2"}, {id: 3 ,name: "Group 3"}];
-    // TODO get the groups from the server
+const groupTable = document.getElementById('groups-table');
 
+$(document).ready(function () {
+    fetchGroupNames();
+});
+
+async function fetchGroupNames() {
+    var token = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('jwt='))
+        .split('=')[1];
+    try {
+        const response = await fetch('https://localhost:7186/api/Groups', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        let groups = data.$values;
+
+        populateGroupsDropdown(groups);
+    } catch (error) {
+        console.log('Fetch Error: ', error);
+    }
+}
+
+function populateGroupsDropdown(groups) {
+    const dropdown = document.getElementById('group-selection-dropdown');
+    dropdown.innerHTML = '<option selected disabled value="">Select a group</option>';  // clear existing options
+    var option = document.createElement("option");
+        option.text = "All Students";   
+        option.value = "All Students";
+        groupSelector.appendChild(option);
     // Add the groups to the dropdown
     groups.forEach((group) => {
         var option = document.createElement("option");
         option.text = group.name;
-        option.value = group.id;
+        option.value = group.name;
         console.log(group.name);
         groupSelector.appendChild(option);
 
     });
-    
-});
+    dropdown.addEventListener('change', function() {
+        groupName = this.value;  // update the label
+        fetchLeaderboardData();
+    });
+}
+
+
+async function fetchLeaderboardData() {
+
+    var token = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('jwt='))
+        .split('=')[1];  
+    try {
+        console.log("groupname: " + groupName)
+        let response;
+        if (groupName == null || groupName == "All Students")
+        {
+         response = await fetch(`https://localhost:7186/api/Leaderboards/${leaderboardName}`, 
+            {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+            });
+        }   
+        else {
+        let encodedGroupName = encodeURI(groupName);
+        console.log("encoded name: " + encodedGroupName)
+        response = await fetch(`https://localhost:7186/api/Leaderboards/${leaderboardName}?group=${encodedGroupName}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        console.log("we are here");
+        }
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        let highScores = data.highScores.$values;
+
+        let leaderboardData = highScores.map((scoreEntry, index) => {
+            if (scoreEntry.user) {
+                return {
+                    leaderboardPosition: index + 1,
+                    username: scoreEntry.user.userId,
+                    score: scoreEntry.score,
+                    isBanned: scoreEntry.user.isBanned ? 'Yes' : 'No'
+                };
+            }
+        });
+        console.log(data);
+        populateLeaderboard(leaderboardData);
+    } catch (error) {
+        console.log('Fetch Error: ', error);
+    }
+}
+fetchLeaderboardData();
+
+function populateLeaderboard(leaderboardData) {
+    console.log('Populating leaderboard');
+    // Clear the table
+    $("#student-results-table").empty();
+
+    // Populate the table
+    leaderboardData.forEach(entry => {
+        var row = `<tr><td>${entry.leaderboardPosition}</td><td>${entry.username}</td><td>${entry.score}</td><td>${entry.isBanned}</td></tr>`;
+        $("#student-results-table").append(row);
+    });
+}
 
 groupSelector.addEventListener('change', function () {
     console.log('Group changed to: ' + groupSelector.value);
@@ -55,3 +167,6 @@ groupSelector.addEventListener('change', function () {
 
 }
 );
+function encodeSpaces(str) {
+    return str.replace(/ /g, "%20");
+}
