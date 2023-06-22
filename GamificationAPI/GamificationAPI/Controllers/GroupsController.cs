@@ -25,7 +25,7 @@ namespace GamificationAPI.Controllers
             {
                 return BadRequest();
             }
-            _dbContext.Groups.AddAsync(new Group { Name = groupName });
+            _dbContext.Groups.AddAsync(new Group { Name = groupName});
             _dbContext.SaveChanges();
             return Ok();
         }

@@ -130,4 +130,20 @@ public class UserService : IUsers
 
         return true;
     }
+    public async Task<bool> AddGroupToUserAsync(string userId, string groupName)
+    {
+        var user = await GetUserByIdAsync(userId);
+        if (user == null)
+        {
+            return false;
+        }
+        var group = await _dbContext.Set<Group>().FirstOrDefaultAsync(u => u.Name == groupName);
+        if (group == null)
+        {
+            return false;
+        }
+        user.Group = group;
+        await _dbContext.SaveChangesAsync();
+        return true;
+    }
 }
