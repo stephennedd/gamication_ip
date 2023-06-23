@@ -1,4 +1,4 @@
-
+let leaderboardName;
 
 
 // Event handler for form submit
@@ -12,16 +12,16 @@ $('#create-leaderboard-form').submit(function (e) {
     for (let i = 0; i < formData.length; i++) {
         jsonData[formData[i].name] = formData[i].value;
     }
-
-
-    // Log JSON data
-    console.log(JSON.stringify(jsonData));
-
-    console.log('Form submitted');
-    e.preventDefault(); // Prevent the form from submitting for now
     
-    //TODO Send the form data to the server and handle the response
+    let matched = JSON.stringify(jsonData).match(/"leaderboard-name":"(.*?)"/);
+    leaderboardName = null;
 
+    if (matched && matched.length > 1) {
+        leaderboardName = matched[1];
+    }  
+    e.preventDefault(); // Prevent the form from submitting for now
+
+    createLeaderboard();
 
 });
 
@@ -74,7 +74,6 @@ $(document).ready(function () {
 
 // populating the leaderboard table
 async function populateLeaderboardTable() {
-    console.log('Populating leaderboard table');
     const leaderboardTable = document.getElementById('delete-leaderboard-table');
     const updateLeaderboardTable = document.getElementById('update-leaderboard-table');
 
@@ -105,7 +104,7 @@ async function populateLeaderboardTable() {
             leaderboardTable.appendChild(row);
             updateLeaderboardTable.appendChild(updateRow);
         }
-        console.log('Leaderboard table populated');
+
       } catch (error) {
         console.error(error);
         alert('Error retrieving leaderboards data');
@@ -190,3 +189,35 @@ $('#update-leaderboard-modal').on('show.bs.modal', function (event) {
     modal.find('#update-leaderboard-id').val(leaderboard.id);
     modal.find('#update-leaderboard-name').val(leaderboard.name);
 });
+async function createLeaderboard(){
+    try {
+        var token = document.cookie
+            .split('; ')
+            .find(row => row.startsWith('jwt='))
+            .split('=')[1];
+
+        // Ensure groupName is not empty or undefined
+        if (!leaderboardName || leaderboardName.trim() === '') {
+            console.error("Invalid or empty leaderboard name!");
+            return;
+        }
+        let encodedleaderboardName = encodeURI(leaderboardName);
+
+        let response = await fetch(`https://localhost:7186/api/Leaderboards?leaderboardName=${encodedleaderboardName}`,
+            {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+            });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        console.log('Leaderboard added successfully:');
+    } catch (error) {
+        console.log('Fetch Error: ', error);
+    }
+}
