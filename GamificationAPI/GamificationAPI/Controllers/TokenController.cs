@@ -56,6 +56,7 @@ namespace GamificationAPI.Controllers
         {
             new Claim(ClaimTypes.Name, user.UserId),
             new Claim(ClaimTypes.Role, user.Role.Name),
+            new Claim("Id", user.Id.ToString()),
             new Claim("IsVerified", user.IsVerified.ToString())
         };
             Console.WriteLine(user.IsVerified.ToString());
@@ -93,6 +94,7 @@ namespace GamificationAPI.Controllers
         {
             new Claim(ClaimTypes.Name, user.UserId),
             new Claim(ClaimTypes.Role, user.Role.Name),
+            new Claim("Id", user.Id.ToString()),
             new Claim("IsVerified", user.IsVerified.ToString())
         };
             Console.WriteLine(user.IsVerified.ToString());
