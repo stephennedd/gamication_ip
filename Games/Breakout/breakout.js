@@ -14,11 +14,6 @@ class BootScene extends Phaser.Scene {
 			);
 		});
 		this.load.image('heart', '/../Games/Breakout/assets/images/heart.png');
-
-		// this.load.bitmapFont(
-		// 	'PressStart2P',
-		// 	'/../Games/Breakout/assets/Fonts/Press_Start_2P/PressStart2P-Regular.png',
-		// );
 	}
 
 	create() {
@@ -92,10 +87,10 @@ class MainScene extends Phaser.Scene {
 		// TODO: after restart lives are not decreasing
 
 		this.isPaused = false; // To track if the game is paused
-		this.input.keyboard.on('keydown-P', this.togglePause, this);
+		this.input.keyboard.on('keydown-P', this.pauseGame, this);
 
 		// listen to message from parent frame to pause
-		window.addEventListener('message', this.togglePause.bind(this));
+		window.addEventListener('message', this.handleMessage.bind(this));
 
 		// Check for localstorage items for scoremuliplier and additional live
 		const gameDataLife = localStorage.getItem('extraLife') || false;
@@ -186,41 +181,51 @@ class MainScene extends Phaser.Scene {
 		this.startTime = this.time.now;
 	}
 
-	togglePause() {
-		this.isPaused = !this.isPaused;
+	pauseGame() {
+		this.isPaused = true;
 
-		if (this.isPaused) {
-			// Pause the game
-			this.physics.pause();
-			this.time.paused = true; // pause timers
+		// Pause the game
+		this.physics.pause();
+		this.time.paused = true; // pause timers
 
-			// Add a semi-transparent background to darken the scene
-			this.pauseCover = this.add.rectangle(
-				0,
-				0,
-				this.gameWidth,
-				this.gameHeight,
-				0x000000,
-				0.7
-			);
-			this.pauseCover.setOrigin(0, 0);
+		// Add a semi-transparent background to darken the scene
+		this.pauseCover = this.add.rectangle(
+			0,
+			0,
+			this.gameWidth,
+			this.gameHeight,
+			0x000000,
+			0.7
+		);
+		this.pauseCover.setOrigin(0, 0);
 
-			// Add paused text
-			this.pausedText = this.add
-				.text(this.gameWidth / 2, this.gameHeight / 2, 'Paused', {
-					fontFamily: 'PressStart2P',
-					fontSize: '64px',
-					fill: '#fff',
-				})
-				.setOrigin(0.5);
-		} else {
-			// Resume the game
-			this.physics.resume();
-			this.time.paused = false; // resume timers
+		// Add paused text
+		this.pausedText = this.add
+			.text(this.gameWidth / 2, this.gameHeight / 2, 'Paused', {
+				fontFamily: 'PressStart2P',
+				fontSize: '64px',
+				fill: '#fff',
+			})
+			.setOrigin(0.5);
+	}
 
-			// Remove the paused text and background
-			this.pausedText.destroy();
-			this.pauseCover.destroy();
+	unpauseGame() {
+		this.isPaused = false;
+
+		// Resume the game
+		this.physics.resume();
+		this.time.paused = false; // resume timers
+
+		// Remove the paused text and background
+		this.pausedText.destroy();
+		this.pauseCover.destroy();
+	}
+
+	handleMessage(event) {
+		if (event.data === 'pause') {
+			this.pauseGame();
+		} else if (event.data === 'unpause') {
+			this.unpauseGame();
 		}
 	}
 
