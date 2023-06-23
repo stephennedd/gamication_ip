@@ -666,6 +666,22 @@
     </div>
   </main>
 
+  <!-- Create leaderboard modal success-->
+  <div class="modal fade" id="create-leaderboard-success-modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body">
+          <div class="text-center">
+            <div class="mb-3 fw-bold fs-4">Leaderboard created successfully</div>
+            <div class="mb-3">
+              <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Update leaderboard -->
   <main class="pt-3" id="update-leaderboard">
     <div class="container-fluid">
@@ -682,7 +698,7 @@
               <div class="card-header">Select a leaderboard</div>
               <div class="card-body">
                 <div class="table-responsive">
-                  <table class="table table-responsive" id="update-leaderboard-table">
+                  <table class="table table-responsive">
                     <thead>
                       <th scope="col">Leaderboard Name</th>
                       <th class="text-center" scope="col">Update</th>
@@ -705,7 +721,7 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="edit-student-modal-title"></h5>
+          <h5 class="modal-title" id="edit-student-modal-title">Edit Leaderboard</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -747,7 +763,7 @@
               <div class="card-header">Select a leaderboard</div>
               <div class="card-body">
                 <div class="table-responsive">
-                  <table class="table table-responsive" id="delete-leaderboard-table">
+                  <table class="table table-responsive">
                     <thead>
                       <th scope="col">Leaderboard Name</th>
                       <th class="text-center" scope="col">Delete</th>
@@ -910,7 +926,7 @@
           <div class="card">
             <div class="card-header">Enter group details</div>
             <div class="card-body">
-              <form id="group-form" >
+              <form id="group-form">
                 <div class="row">
                   <div class="col-md-12">
                     <div class="mb-3">
@@ -923,7 +939,7 @@
 
                 <div class="row">
                   <div class="col-md-12 text-end">
-                    <button type="submit"  class="btn btn-success">Add Group</button>
+                    <button type="submit" class="btn btn-success">Add Group</button>
                   </div>
                 </div>
               </form>

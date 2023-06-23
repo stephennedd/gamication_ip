@@ -94,9 +94,9 @@ async function populateLeaderboardTable() {
         let data = await response.json();
 
         let leaderboards = data.$values.map(item => item.name);
-        console.log(leaderboards)
+        console.log('--> leaderboards: ' + leaderboards)
         // Store the subjects data in localStorage
-        localStorage.setItem('subjectsData', JSON.stringify(subjects));
+        localStorage.setItem('leaderboardsData', JSON.stringify(leaderboards));
     
         console.log('Leaderboards data retrieved'); 
         // Clear the table
@@ -140,9 +140,8 @@ function createLeaderboardTableRow(leaderboard) {
     row.appendChild(name);
     row.appendChild(deleteButton);
 
-    // Add the leaderboard id as a data attribute
-    row.setAttribute('data-id', leaderboard.id);
 
+    console.log('row: ' + row.innerHTML);
     return row;
 }
 
@@ -174,9 +173,7 @@ function createUpdateLeaderboardTableRow(leaderboard) {
     row.appendChild(name);
     row.appendChild(updateButton);
 
-    // Add the leaderboard id as a data attribute
-    row.setAttribute('data-id', leaderboard.id);
-
+    row.setAttribute('data-id', leaderboard);
     return row;
 }
 
@@ -188,13 +185,13 @@ $('#update-leaderboard-modal').on('show.bs.modal', function (event) {
 
     // Get the leaderboard data from localStorage
     const leaderboards = JSON.parse(localStorage.getItem('leaderboardsData'));
-    const leaderboard = leaderboards.find(leaderboard => leaderboard.id == leaderboardId);
-    console.log(leaderboard);
+    // Find the leaderboard in the array;
+    const leaderboard = leaderboards.find(leaderboard => leaderboard === leaderboardId);
+    console.log('update Leaderboard: ' + leaderboard);
 
     // Populate the form
     const modal = $(this);
-    modal.find('#update-leaderboard-id').val(leaderboard.id);
-    modal.find('#update-leaderboard-name').val(leaderboard.name);
+    modal.find('#modal-leaderboard-name').val(leaderboard);
 });
 async function createLeaderboard(){
     try {
@@ -220,11 +217,15 @@ async function createLeaderboard(){
             });
 
         if (!response.ok) {
+            alert(`Failed to add leaderboard. error code: ${response.status} `);
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
         console.log('Leaderboard added successfully:');
         
+        // show success message
+        $('#create-leaderboard-success-modal').modal('show');
+
         populateLeaderboardTable();
     } catch (error) {
         console.log('Fetch Error: ', error);
