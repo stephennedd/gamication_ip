@@ -1,4 +1,4 @@
-let leaderboardName;
+
 
 
 // Event handler for form submit
@@ -22,6 +22,7 @@ $('#create-leaderboard-form').submit(function (e) {
     e.preventDefault(); // Prevent the form from submitting for now
 
     createLeaderboard();
+
 
 });
 
@@ -51,13 +52,13 @@ function deleteLeaderboard(button) {
         console.log('Deleting leaderboard');
 
         // Get the leaderboard id from the data attribute
-        const leaderboardId = button.parentNode.parentNode.getAttribute('data-id');
-        console.log('Leaderboard id: ' + leaderboardId);
+        leaderboardName = button.value;
+        console.log('Leaderboard id: ' + leaderboardName);
 
-        // TODO send a delete request to the server with the id ad parameter
-
+        let x = deleteLeaderboardAction();
+        
         // if response is successful, remove the row from the table
-        if (true) {
+        if (x) {
             var row = button.parentNode.parentNode; // Get the parent row
             row.parentNode.removeChild(row); // Remove the row from the table
         } else {
@@ -82,7 +83,6 @@ async function populateLeaderboardTable() {
         .split('; ')
         .find(row => row.startsWith('jwt='))
         .split('=')[1];  
-    // TODO get all leaderboards from server and store in leaderboards array
     try {
         const response = await fetch('https://localhost:7186/api/Leaderboards/', {
             method: 'GET',
@@ -91,12 +91,18 @@ async function populateLeaderboardTable() {
                 'Content-Type': 'application/json'
             }
         });
-        const data = await response.json();
-        leaderboards = data;
+        let data = await response.json();
+
+        let leaderboards = data.$values.map(item => item.name);
+        console.log(leaderboards)
         // Store the subjects data in localStorage
         localStorage.setItem('subjectsData', JSON.stringify(subjects));
     
         console.log('Leaderboards data retrieved'); 
+        // Clear the table
+        leaderboardTable.innerHTML = '';
+        updateLeaderboardTable.innerHTML = '';
+
         for (let i = 0; i < leaderboards.length; i++) {
             const leaderboard = leaderboards[i];
             const row = createLeaderboardTableRow(leaderboard);
@@ -117,7 +123,7 @@ async function populateLeaderboardTable() {
 function createLeaderboardTableRow(leaderboard) {
     const row = document.createElement('tr'); // Create the row
     const name = document.createElement('td'); // Create the name cell
-    name.innerText = leaderboard.name; // Set the name
+    name.innerText = leaderboard; // Set the name
 
     // Create the delete button
     const deleteButton = document.createElement('td');
@@ -126,6 +132,7 @@ function createLeaderboardTableRow(leaderboard) {
     button.classList.add('btn', 'btn-outline-danger', 'btn-sm');
     button.setAttribute('type', 'button');
     button.setAttribute('onclick', 'deleteLeaderboard(this)');
+    button.setAttribute('value', leaderboard);
     button.innerText = 'Delete';
     deleteButton.appendChild(button);
 
@@ -150,7 +157,7 @@ function createUpdateLeaderboardTableRow(leaderboard) {
 //   </tr>`
     const row = document.createElement('tr'); // Create the row
     const name = document.createElement('td'); // Create the name cell
-    name.innerText = leaderboard.name; // Set the name
+    name.innerText = leaderboard; // Set the name
 
     // create update button
     const updateButton = document.createElement('td');
@@ -217,6 +224,42 @@ async function createLeaderboard(){
         }
 
         console.log('Leaderboard added successfully:');
+        
+        populateLeaderboardTable();
+    } catch (error) {
+        console.log('Fetch Error: ', error);
+    }
+}
+async function deleteLeaderboardAction(){
+    try {
+        let response;
+        var token = document.cookie
+            .split('; ')
+            .find(row => row.startsWith('jwt='))
+            .split('=')[1];
+
+        // Ensure groupName is not empty or undefined
+        if (!leaderboardName || leaderboardName.trim() === '') {
+            console.error("Invalid or empty leaderboard name!");
+            return;
+        }
+        let encodedleaderboardName = encodeURI(leaderboardName);
+
+        response = await fetch(`https://localhost:7186/api/Leaderboards/${encodedleaderboardName}`,
+            {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+            });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        console.log('Leaderboard deleted successfully:');
+        return true;
     } catch (error) {
         console.log('Fetch Error: ', error);
     }
