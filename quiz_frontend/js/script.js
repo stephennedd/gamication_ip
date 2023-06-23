@@ -14,7 +14,7 @@ const achievementText = document.querySelector(".achievement-text");
 const achievementIcon = document.querySelector(".achievement-icon");
 var extraLife = false;
 var scoreMultiplier = false;
-var achievementList = [50, 75, 100];
+var achievementList = [55, 75, 100];
 
 //import { showGame } from "../../ArcadeMachine/main";
 
@@ -270,7 +270,9 @@ async function optionSelected(answer) {
 		answer.insertAdjacentHTML('beforeend', tickIconTag); //adding tick icon to correct selected option
 		console.log('Correct Answer');
 		console.log('Your correct answers = ' + userScore);
-		updateProgress(userScore, allOptions);
+		//Yehor
+		console.log(questions.length)
+		updateProgress(userScore, questions.length);
 	} else {
 		answer.classList.add('incorrect'); //adding red color to correct selected option
 		answer.insertAdjacentHTML('beforeend', crossIconTag); //adding cross icon to correct selected option
