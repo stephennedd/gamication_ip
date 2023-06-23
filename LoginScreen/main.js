@@ -1,5 +1,4 @@
 let token;
-const adminSection = document.getElementById('admin-section');
 
 document.addEventListener('DOMContentLoaded', function () {
 	const mainText =
@@ -146,18 +145,7 @@ document.addEventListener('DOMContentLoaded', function () {
 					document.cookie = `jwt=${data.token}; path=/`;
 					token = data.token;
 					var decodedToken = parseJwt(token);
-					console.log(decodedToken.Role);
-					console.log("Eliza")
-
-					if(decodedToken.Role=="Admin"){
-						console.log(decodedToken.Role);
-						adminSection.style.display = 'block';                      
-					} else{
-						console.log(decodedToken.Role);
-						adminSection.style.display = 'none';
-					}
-
-					console.log(decodedToken.IsVerified);
+		
 					if (decodedToken.IsVerified == 'False') {
 						displayTextOneCharacterAtATime(welcomeElement, verificationText);
 						studentIDInput.classList.add('hidden');
