@@ -10,6 +10,8 @@ const option_list = document.querySelector('.option_list');
 const mute_btn = document.querySelector('.mute_btn');
 const progressBar = document.querySelector('.progress_container');
 const achievement = document.querySelector('.achievement');
+const achievementText = document.querySelector('.achievement-text');
+const achievementIcon = document.querySelector('.achievement-icon');
 const achievementText = document.querySelector(".achievement-text");
 const achievementIcon = document.querySelector(".achievement-icon");
 var extraLife = false;
@@ -38,12 +40,12 @@ mute_btn.onclick = () => {
 
 async function getGeneratedTestForStudent() {
 	var token = document.cookie
-        .split('; ')
-        .find(row => row.startsWith('jwt='))
-        .split('=')[1];
+		.split('; ')
+		.find((row) => row.startsWith('jwt='))
+		.split('=')[1];
 	var decodedToken = parseJwt(token);
 	console.log(decodedToken);
-	var studentId = decodedToken["Id"];
+	var studentId = decodedToken['Id'];
 	console.log(studentId);
 	//var studentId = decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
 	///console.log(studentId);
@@ -54,7 +56,11 @@ async function getGeneratedTestForStudent() {
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify({ studentId: studentId, testId: 1, numberOfQuestions: 5 }),
+			body: JSON.stringify({
+				studentId: studentId,
+				testId: 1,
+				numberOfQuestions: 5,
+			}),
 		});
 
 		const response2 = await fetch(
@@ -140,6 +146,9 @@ function callShowGame() {
 
 	// Post a message to the parent document asking it to call showGame
 	parent.postMessage({ action: 'showGame' }, '*');
+	parent.postMessage({ action: 'showButtons' }, '*');
+	// create a new file in local storage that will save the fact that student has finished the test
+	localStorage.setItem('quizPassed', quizPassed);
 }
 // if quitQuiz button clicked
 play_game.onclick = () => {
@@ -160,12 +169,12 @@ next_btn.onclick = async () => {
 		queCounter(que_numb); //passing que_numbfetch value to queCounter
 	} else {
 		var token = document.cookie
-        .split('; ')
-        .find(row => row.startsWith('jwt='))
-        .split('=')[1];
-	    var decodedToken = parseJwt(token);
-	    console.log(decodedToken);
-	    var studentId = decodedToken["Id"];
+			.split('; ')
+			.find((row) => row.startsWith('jwt='))
+			.split('=')[1];
+		var decodedToken = parseJwt(token);
+		console.log(decodedToken);
+		var studentId = decodedToken['Id'];
 		await getStudentResult(studentId);
 		clearInterval(counter); //clear counter
 		clearInterval(counterLine); //clear counterLine
@@ -271,7 +280,7 @@ async function optionSelected(answer) {
 		console.log('Correct Answer');
 		console.log('Your correct answers = ' + userScore);
 		//Yehor
-		console.log(questions.length)
+		console.log(questions.length);
 		updateProgress(userScore, questions.length);
 	} else {
 		answer.classList.add('incorrect'); //adding red color to correct selected option
@@ -304,7 +313,6 @@ function showResult() {
 		replayBtn.style.display = 'none'; // Display the "Replay Quiz" button
 		playBtn.style.display = 'block'; // Display the "Replay Quiz" button
 		winSound.play(); // play win sound
-
 	} else {
 		replayBtn.style.display = 'block'; // Hide the "Replay Quiz" button
 		playBtn.style.display = 'none';
@@ -354,11 +362,17 @@ function queCounter(index) {
 
 // Update the progress bar and milestones based on the number of correct answers
 async function updateProgress(correctAnswers, totalQuestions) {
-	var progressBar = document.getElementById("progress-bar");
-	var milestone50 = document.querySelector(".milestone-50");
-	var milestone75 = document.querySelector(".milestone-75");
-	var milestone100 = document.querySelector(".milestone-100");
+	var progressBar = document.getElementById('progress-bar');
+	var milestone50 = document.querySelector('.milestone-50');
+	var milestone75 = document.querySelector('.milestone-75');
+	var milestone100 = document.querySelector('.milestone-100');
 	var progress = (correctAnswers / totalQuestions) * 100;
+	progressBar.style.width = progress + '%';
+
+	// Activate the milestone at 100% progress
+	if (progress >= 55) {
+		milestone50.classList.add('milestone-done');
+		milestone50.style.backgroundColor = 'green';
 	progressBar.style.width = progress + "%";
 	
 	// Activate the milestones at 55%,75%,100% progress
@@ -366,14 +380,31 @@ async function updateProgress(correctAnswers, totalQuestions) {
 		milestone50.classList.add("milestone-done");
 		milestone50.style.backgroundColor = "green";
 		achievementSound.play(); // play achievement sound
-		 showAchievement('Game Unlocked',`You've unlocked the game!`, `<i class="fa-sharp fa-solid fa-gamepad"></i>`); // show achievement popup
+		showAchievement(
+			'Game Unlocked',
+			`You've unlocked the game!`,
+			`<i class="fa-sharp fa-solid fa-gamepad"></i>`
+		); // show achievement popup
 	}
 
+	if (progress >= 75) {
+		milestone75.classList.add('milestone-done');
+		milestone75.style.backgroundColor = 'red';
 	if (progress >= achievementList[1]) {	
 		extraLife = true; // enable extra life
 		milestone75.classList.add("milestone-done");
 		milestone75.style.backgroundColor = "red";
 		achievementSound.play(); // play achievement sound
+		showAchievement(
+			'Bonus Life',
+			`You've unlocked +1 life`,
+			`<i class="fa-sharp fa-solid fa-heart" style="color: red"></i>`
+		); // show achievement popup
+	}
+
+	if (progress === 100) {
+		milestone100.classList.add('milestone-done');
+		milestone100.style.backgroundColor = 'var(--achievement-color)';
 		 showAchievement('Bonus Life',`You've unlocked +1 life`, `<i class="fa-sharp fa-solid fa-heart" style="color: red"></i>`); // show achievement popup
 	} 
 	
@@ -382,28 +413,45 @@ async function updateProgress(correctAnswers, totalQuestions) {
 		milestone100.classList.add("milestone-done");
 		milestone100.style.backgroundColor = "var(--achievement-color)";
 		achievementSound.play(); // play achievement sound
-		showAchievement('Score Multiplier',`You've unlocked 2x score multiplier`,`<i class="fa-sharp fa-solid fa-trophy" style="color: green"></i>`); // show achievement popup
-	}  
+		showAchievement(
+			'Score Multiplier',
+			`You've unlocked 2x score multiplier`,
+			`<i class="fa-sharp fa-solid fa-trophy" style="color: green"></i>`
+		); // show achievement popup
+	}
+}
 
-  }
-
-  function showAchievement(title, text, icon) {
-	var achievmentTitle = document.querySelector(".achievement-title");
+function showAchievement(title, text, icon) {
+	var achievmentTitle = document.querySelector('.achievement-title');
 	// clear the achievement text and icon and title
-	achievementText.innerHTML = "";
-	achievementIcon.innerHTML = "";
-	achievmentTitle.innerHTML = "";
+	achievementText.innerHTML = '';
+	achievementIcon.innerHTML = '';
+	achievmentTitle.innerHTML = '';
 
 	achievementText.innerHTML = text;
 	achievementIcon.innerHTML = icon;
 	achievmentTitle.innerHTML = title;
-	console.log("Achievement unlocked: " + text);
-	achievement.classList.add("show-achievement");
+	console.log('Achievement unlocked: ' + text);
+	achievement.classList.add('show-achievement');
 
 	setTimeout(function () {
-	  achievement.classList.remove("show-achievement");
+		achievement.classList.remove('show-achievement');
 	}, 3000);
-	}
+}
+
+function resetProgress() {
+	var progressBar = document.getElementById('progress-bar');
+	var milestone50 = document.querySelector('.milestone-50');
+	var milestone75 = document.querySelector('.milestone-75');
+	var milestone100 = document.querySelector('.milestone-100');
+	progressBar.style.width = 0 + '%';
+	milestone50.classList.remove('milestone-done');
+	milestone75.classList.remove('milestone-done');
+	milestone100.classList.remove('milestone-done');
+	milestone50.style.backgroundColor = '#ddd';
+	milestone75.style.backgroundColor = '#ddd';
+	milestone100.style.backgroundColor = '#ddd';
+}
 
 	function resetProgress() {
 		scoreMultiplier = false; // disable score multiplier
