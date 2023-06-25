@@ -181,13 +181,15 @@ function populateTableWithData(students,tableBody) {
         chosenStudent = student;
         confirmDelete(this);
       });
+      removeButtonCell.appendChild(removeButton);
       
       row.appendChild(studentIdCell);
       row.appendChild(usernameCell);
       row.appendChild(firstNameCell);
       row.appendChild(lastNameCell);
       row.appendChild(studentEmailCell);
-      row.appendChild(removeButton);
+      row.appendChild(removeButtonCell);
+
   
       tableBody.appendChild(row);
     });
