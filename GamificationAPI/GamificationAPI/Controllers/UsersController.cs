@@ -142,7 +142,7 @@ namespace GamificationToIP.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (!HttpContext.Request.Headers.TryGetValue("Authorization", out var authorizationHeader))
+                if (!HttpContext.Request.Headers.TryGetValue("Authorization", out var authorizationHeader) || string.IsNullOrWhiteSpace(authorizationHeader))
                 {
                     return BadRequest("Authorization header is missing.");
                 }
@@ -189,7 +189,7 @@ namespace GamificationToIP.Controllers
         [HttpPost("{token}")]
         public async Task<IActionResult> VerifyUser(string token)
         {
-            if (!HttpContext.Request.Headers.TryGetValue("Authorization", out var authorizationHeader))
+            if (!HttpContext.Request.Headers.TryGetValue("Authorization", out var authorizationHeader) || string.IsNullOrWhiteSpace(authorizationHeader))
             {
                 return BadRequest("Authorization header is missing.");
             }
@@ -248,7 +248,7 @@ namespace GamificationToIP.Controllers
         [HttpPatch]
         public async Task<IActionResult> ChangePassword(string newPassword)
         {
-            if (!HttpContext.Request.Headers.TryGetValue("Authorization", out var authorizationHeader))
+            if (!HttpContext.Request.Headers.TryGetValue("Authorization", out var authorizationHeader) || string.IsNullOrWhiteSpace(authorizationHeader))
             {
                 return BadRequest("Authorization header is missing.");
             }

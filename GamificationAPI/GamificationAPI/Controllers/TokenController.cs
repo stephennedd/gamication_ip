@@ -74,7 +74,7 @@ namespace GamificationAPI.Controllers
         [HttpGet]      
         public async Task<IActionResult> RefreshTokenAsync()
         {
-            if (!HttpContext.Request.Headers.TryGetValue("Authorization", out var authorizationHeader))
+            if (!HttpContext.Request.Headers.TryGetValue("Authorization", out var authorizationHeader) || string.IsNullOrWhiteSpace(authorizationHeader))
             {
                 return BadRequest("Authorization header is missing.");
             }
@@ -107,5 +107,6 @@ namespace GamificationAPI.Controllers
 
             return Ok(new {token = jwt });
         }
+
     }
 }
