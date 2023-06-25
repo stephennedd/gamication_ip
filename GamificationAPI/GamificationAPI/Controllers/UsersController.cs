@@ -159,8 +159,8 @@ namespace GamificationToIP.Controllers
                 {
                     return BadRequest("User with this ID already exists");
                 }
-
-                User newUser = new User { UserId = teacherRegister.UserId, Password = CodeGenerator.RandomString(8), Name = teacherRegister.Name, Surname = teacherRegister.Surname };
+                string generatedCode = CodeGenerator.RandomString(8);
+                User newUser = new User { UserId = teacherRegister.UserId, Password = BCrypt.Net.BCrypt.HashPassword(generatedCode), Name = teacherRegister.Name, Surname = teacherRegister.Surname };
                 if (IsDigitsOnly(teacherRegister.UserId))
                 {
                     BadRequest("Student account cant be created by teacher");
@@ -179,7 +179,7 @@ namespace GamificationToIP.Controllers
                 newUser.IsVerified = true;
                 await _userService.AddUserAsync(newUser);
                 //TODO: Send email with password to UserId + @domain
-                EmailDto Email = new EmailDto { To = "t6666349@gmail.com", Subject = "Your Gamification Password", Body = $"Your new Password is: {newUser.VerificationCode} You can change it any time" };
+                EmailDto Email = new EmailDto { To = "t6666349@gmail.com", Subject = "Your Gamification Password", Body = $"Your new Password is: {generatedCode} You can change it any time" };
                 _emailService.SendEmail(Email);
                 return CreatedAtAction("GetUser", new { UserId = newUser.UserId }, newUser);
             }
@@ -384,6 +384,7 @@ namespace GamificationToIP.Controllers
 
     public class UserUpdateDto
     {
+        public string Username { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
         public string Password { get; set; }

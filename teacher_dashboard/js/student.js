@@ -133,13 +133,13 @@ function populateTableWithData(students,tableBody) {
   
       row.setAttribute("data-student-id", student.studentId)
       row.setAttribute("data-first-name", student.firstName);
-      row.setAttribute("data-middle-name", student.middleName);
+      row.setAttribute("data-user-name", student.username);
       row.setAttribute("data-last-name", student.lastName);
       row.setAttribute("data-student-email", student.studentEmail);
   
       const studentIdCell = createTableCell(student.UserId, "th", { scope: "row" });
+      const usernameCell = createTableCell(student.Username, "td");
       const firstNameCell = createTableCell(student.Name, "td");
-      const middleNameCell = createTableCell(student.UserId, "td");
       const lastNameCell = createTableCell(student.Surname, "td");
       const studentEmailCell = createTableCell(`${student.UserId}@student.saxion.nl`, "td");
   
@@ -152,8 +152,8 @@ function populateTableWithData(students,tableBody) {
       updateButtonCell.appendChild(updateButton);
   
       row.appendChild(studentIdCell);
+      row.appendChild(usernameCell);
       row.appendChild(firstNameCell);
-      row.appendChild(middleNameCell);
       row.appendChild(lastNameCell);
       row.appendChild(studentEmailCell);
       row.appendChild(updateButtonCell);
@@ -170,7 +170,9 @@ function populateTableWithData(students,tableBody) {
       const row = document.createElement("tr");
   
       const studentIdCell = createTableCell(student.UserId, "th", { scope: "row" });
-      const fullNameCell = createTableCell(`${student.UserId}`, "td");
+      const usernameCell = createTableCell(`${student.Username}`, "td");
+      const firstNameCell = createTableCell(`${student.Name}`, "td");
+      const lastNameCell = createTableCell(`${student.Surname}`, "td");
       const studentEmailCell = createTableCell(`${student.UserId}@student.saxion.nl`, "td");
   
       const removeButtonCell = document.createElement("td");
@@ -179,12 +181,13 @@ function populateTableWithData(students,tableBody) {
         chosenStudent = student;
         confirmDelete(this);
       });
-      removeButtonCell.appendChild(removeButton);
-  
+      
       row.appendChild(studentIdCell);
-      row.appendChild(fullNameCell);
+      row.appendChild(usernameCell);
+      row.appendChild(firstNameCell);
+      row.appendChild(lastNameCell);
       row.appendChild(studentEmailCell);
-      row.appendChild(removeButtonCell);
+      row.appendChild(removeButton);
   
       tableBody.appendChild(row);
     });
@@ -198,7 +201,7 @@ function populateTableWithData(students,tableBody) {
       const row = document.createElement("tr");
   
       const studentIdCell = createTableCell(student.UserId, "th", { scope: "row" });
-      const fullNameCell = createTableCell(`${student.UserId}`, "td");
+      const fullNameCell = createTableCell(`${student.Name} ${student.Surname}`, "td");
       const studentEmailCell = createTableCell(`${student.UserId}@student.saxion.nl`, "td");
       const banStatusCell = createTableCell(student.IsBanned ? "Yes" : "No", "td");
   
@@ -297,40 +300,7 @@ async function updateStudent(button) {
     $('#update-student-modal').modal('show');
     $('#edit-student-modal-title').text(`Edit Student: ${chosenStudent.Name} ${chosenStudent.Surname}`);
     $('#modal-first-name').val(chosenStudent.Name);
-   // $('#modal-middle-name').val(middleName);
     $('#modal-last-name').val(chosenStudent.Surname);
-
-  //   var token = document.cookie
-	// 		.split('; ')
-	// 		.find((row) => row.startsWith('jwt='))
-	// 		.split('=')[1];
-
-  //     const requestBody = JSON.stringify(updatedStudent);
-  //   // Perform the fetch request to delete the student
-  //  await fetch(`https://localhost:7186/api/Users/students/${id}`, {
-  //     method: 'PUT',
-  //     headers: {
-  //         'Content-Type': 'application/json',
-  //         // Include the token in the Authorization header
-  //         'Authorization': `Bearer ${token}`
-  //     },
-  //     body: requestBody
-  //   })
-  //     .then(response => {
-  //       if (response.ok) {
-  //         // Student deletion successful
-
-  //         console.log(`Student with ID ${userId} deleted successfully.`);
-  //         // Perform any additional actions or updates on the UI if needed
-  //       } else {
-  //         // Student deletion failed
-  //         console.error('Error:', response.status);
-  //         // Handle the error or display an appropriate error message
-  //       }
-  //     })
-  //     .catch(error => {
-  //       console.error('Error:', error);
-  //     });
 }
 
 async function confirmStudentUpdate(button) {
@@ -340,7 +310,8 @@ async function confirmStudentUpdate(button) {
         var firstName = document.getElementById('modal-first-name').value;
         var lastName = document.getElementById('modal-last-name').value;
         var password = document.getElementById('modal-student-password').value;
-          
+        var username = document.getElementById('modal-username').value;
+
       var token = document.cookie
 			.split('; ')
 			.find((row) => row.startsWith('jwt='))
@@ -349,7 +320,8 @@ async function confirmStudentUpdate(button) {
       const requestBody = JSON.stringify({
         name: firstName,
         surname: lastName,
-        password: password
+        password: password,
+        username: username
       });
 
     // Perform the fetch request to delete the student

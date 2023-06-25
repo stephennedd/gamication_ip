@@ -67,6 +67,15 @@ public class SubjectController : ControllerBase
 
         return Content(json, "application/json");
     }
+
+    [HttpDelete]
+    public async Task<IActionResult> DeleteSubject(int id)
+    {
+        Subject subject = await _subjectService.DeleteSubject(id);
+
+        return Ok();
+    }
+
 }
 
 public class NewSubject

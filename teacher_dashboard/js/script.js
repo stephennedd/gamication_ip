@@ -1,18 +1,12 @@
 const checkbox = document.getElementById('admin-checkbox');
 const adminSection = document.getElementById('admin-section');
+const userRole = localStorage.getItem('role');
 
-// Check if checkbox is checked and display admin section
-// update this with a function that checks if the user is an admin
-checkbox.addEventListener('change', function () {
-    if (checkbox.checked) {
-        console.log('checked');
-        adminSection.style.display = 'block';
-    } else {
-        console.log('not checked');
-        adminSection.style.display = 'none';
-    }
-});
-
+if (userRole=="Admin") {
+ adminSection.style.display = 'block';
+} else {
+ adminSection.style.display = 'none';
+}
 
 // javascript for the data table
 $(document).ready(function () {
@@ -70,7 +64,6 @@ function handlePageChange() {
         '#edit-quiz': { sectionId: 'edit-quiz', linkId: 'edit-quiz-link' },
         '#student-results': { sectionId: 'student-results', linkId: 'student-results-link' },
         '#delete-quiz': { sectionId: 'delete-quiz', linkId: 'delete-quiz-link' },
-        '#add-student': { sectionId: 'add-student', linkId: 'add-student-link' },
         '#delete-student': { sectionId: 'delete-student', linkId: 'delete-student-link' },
         '#update-student': { sectionId: 'update-student', linkId: 'update-student-link' },
         '#ban-student': { sectionId: 'ban-student', linkId: 'ban-student-link' },
@@ -78,6 +71,9 @@ function handlePageChange() {
         '#delete-leaderboard': { sectionId: 'delete-leaderboard', linkId: 'delete-leaderboard-link' },
         '#update-leaderboard': { sectionId: 'update-leaderboard', linkId: 'update-leaderboard-link' },
         '#add-subject': { sectionId: 'add-subject', linkId: 'add-subject-link' },
+        '#add-user': { sectionId: 'add-user', linkId: 'add-user-link' },
+        '#add-group': { sectionId: 'add-group', linkId: 'add-group-link' },
+
     };
   
     // Default section and link IDs if the hash doesn't match any mapping

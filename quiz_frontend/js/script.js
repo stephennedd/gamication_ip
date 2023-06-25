@@ -12,6 +12,9 @@ const progressBar = document.querySelector('.progress_container');
 const achievement = document.querySelector('.achievement');
 const achievementText = document.querySelector(".achievement-text");
 const achievementIcon = document.querySelector(".achievement-icon");
+var extraLife = false;
+var scoreMultiplier = false;
+var achievementList = [55, 75, 100];
 
 //import { showGame } from "../../ArcadeMachine/main";
 
@@ -34,6 +37,16 @@ mute_btn.onclick = () => {
 };
 
 async function getGeneratedTestForStudent() {
+	var token = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('jwt='))
+        .split('=')[1];
+	var decodedToken = parseJwt(token);
+	console.log(decodedToken);
+	var studentId = decodedToken["Id"];
+	console.log(studentId);
+	//var studentId = decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
+	///console.log(studentId);
 	try {
 		// Fetch data from the API
 		const response = await fetch('https://localhost:7186/api/generatedTests', {
@@ -41,11 +54,11 @@ async function getGeneratedTestForStudent() {
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify({ studentId: 1, testId: 1, numberOfQuestions: 4 }),
+			body: JSON.stringify({ studentId: studentId, testId: 1, numberOfQuestions: 5 }),
 		});
 
 		const response2 = await fetch(
-			'https://localhost:7186/api/generatedTests/1/1'
+			`https://localhost:7186/api/generatedTests/${studentId}/1`
 		);
 		const data = await response2.json();
 		questions = data['Questions'];
@@ -55,6 +68,21 @@ async function getGeneratedTestForStudent() {
 	} catch (error) {
 		console.error('Error fetching questions:', error);
 	}
+}
+
+function parseJwt(token) {
+	var base64Url = token.split('.')[1];
+	var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+	var jsonPayload = decodeURIComponent(
+		atob(base64)
+			.split('')
+			.map(function (c) {
+				return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+			})
+			.join('')
+	);
+
+	return JSON.parse(jsonPayload);
 }
 
 // if startQuiz button clicked
@@ -106,6 +134,10 @@ restart_quiz.onclick = async () => {
 // }
 
 function callShowGame() {
+	// Store extraLife and scoreMultiplier in localStorage
+	localStorage.setItem('extraLife', extraLife);
+	localStorage.setItem('scoreMultiplier', scoreMultiplier);
+
 	// Post a message to the parent document asking it to call showGame
 	parent.postMessage({ action: 'showGame' }, '*');
 }
@@ -127,7 +159,14 @@ next_btn.onclick = async () => {
 		next_btn.classList.remove('show'); //hide the next button
 		queCounter(que_numb); //passing que_numbfetch value to queCounter
 	} else {
-		await getStudentResult(1);
+		var token = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('jwt='))
+        .split('=')[1];
+	    var decodedToken = parseJwt(token);
+	    console.log(decodedToken);
+	    var studentId = decodedToken["Id"];
+		await getStudentResult(studentId);
 		clearInterval(counter); //clear counter
 		clearInterval(counterLine); //clear counterLine
 		showResult(); //calling showResult function
@@ -231,7 +270,9 @@ async function optionSelected(answer) {
 		answer.insertAdjacentHTML('beforeend', tickIconTag); //adding tick icon to correct selected option
 		console.log('Correct Answer');
 		console.log('Your correct answers = ' + userScore);
-		updateProgress(userScore, allOptions);
+		//Yehor
+		console.log(questions.length)
+		updateProgress(userScore, questions.length);
 	} else {
 		answer.classList.add('incorrect'); //adding red color to correct selected option
 		answer.insertAdjacentHTML('beforeend', crossIconTag); //adding cross icon to correct selected option
@@ -259,7 +300,7 @@ function showResult() {
 	const playBtn = result_box.querySelector('.buttons .play');
 
 	console.log('Result is ' + studentResult);
-	if (studentResult >= 55) {
+	if (studentResult >= achievementList[0]) {
 		replayBtn.style.display = 'none'; // Display the "Replay Quiz" button
 		playBtn.style.display = 'block'; // Display the "Replay Quiz" button
 		winSound.play(); // play win sound
@@ -320,22 +361,24 @@ async function updateProgress(correctAnswers, totalQuestions) {
 	var progress = (correctAnswers / totalQuestions) * 100;
 	progressBar.style.width = progress + "%";
 	
-	// Activate the milestone at 100% progress
-	if (progress >= 55) {
+	// Activate the milestones at 55%,75%,100% progress
+	if (progress >= achievementList[0]) {
 		milestone50.classList.add("milestone-done");
 		milestone50.style.backgroundColor = "green";
 		achievementSound.play(); // play achievement sound
 		 showAchievement('Game Unlocked',`You've unlocked the game!`, `<i class="fa-sharp fa-solid fa-gamepad"></i>`); // show achievement popup
 	}
 
-	if (progress >= 75) {	
+	if (progress >= achievementList[1]) {	
+		extraLife = true; // enable extra life
 		milestone75.classList.add("milestone-done");
 		milestone75.style.backgroundColor = "red";
 		achievementSound.play(); // play achievement sound
 		 showAchievement('Bonus Life',`You've unlocked +1 life`, `<i class="fa-sharp fa-solid fa-heart" style="color: red"></i>`); // show achievement popup
 	} 
 	
-	if (progress === 100) {
+	if (progress === achievementList[2]) {
+		scoreMultiplier = true; // enable score multiplier
 		milestone100.classList.add("milestone-done");
 		milestone100.style.backgroundColor = "var(--achievement-color)";
 		achievementSound.play(); // play achievement sound
@@ -363,6 +406,8 @@ async function updateProgress(correctAnswers, totalQuestions) {
 	}
 
 	function resetProgress() {
+		scoreMultiplier = false; // disable score multiplier
+		extraLife = false; // disable extra life
 		var progressBar = document.getElementById("progress-bar");
 		var milestone50 = document.querySelector(".milestone-50");
 		var milestone75 = document.querySelector(".milestone-75");

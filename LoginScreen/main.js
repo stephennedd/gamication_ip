@@ -145,7 +145,7 @@ document.addEventListener('DOMContentLoaded', function () {
 					document.cookie = `jwt=${data.token}; path=/`;
 					token = data.token;
 					var decodedToken = parseJwt(token);
-					console.log(decodedToken.IsVerified);
+		
 					if (decodedToken.IsVerified == 'False') {
 						displayTextOneCharacterAtATime(welcomeElement, verificationText);
 						studentIDInput.classList.add('hidden');
