@@ -56,6 +56,7 @@ namespace GamificationAPI.Controllers
         {
             new Claim(ClaimTypes.Name, user.UserId),
             new Claim(ClaimTypes.Role, user.Role.Name),
+            new Claim("Id", user.Id.ToString()),
             new Claim("IsVerified", user.IsVerified.ToString())
         };
             Console.WriteLine(user.IsVerified.ToString());
@@ -74,7 +75,7 @@ namespace GamificationAPI.Controllers
         [HttpGet]      
         public async Task<IActionResult> RefreshTokenAsync()
         {
-            if (!HttpContext.Request.Headers.TryGetValue("Authorization", out var authorizationHeader))
+            if (!HttpContext.Request.Headers.TryGetValue("Authorization", out var authorizationHeader) || string.IsNullOrWhiteSpace(authorizationHeader))
             {
                 return BadRequest("Authorization header is missing.");
             }
@@ -93,6 +94,7 @@ namespace GamificationAPI.Controllers
         {
             new Claim(ClaimTypes.Name, user.UserId),
             new Claim(ClaimTypes.Role, user.Role.Name),
+            new Claim("Id", user.Id.ToString()),
             new Claim("IsVerified", user.IsVerified.ToString())
         };
             Console.WriteLine(user.IsVerified.ToString());
@@ -107,5 +109,6 @@ namespace GamificationAPI.Controllers
 
             return Ok(new {token = jwt });
         }
+
     }
 }

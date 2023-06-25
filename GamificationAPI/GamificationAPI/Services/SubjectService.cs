@@ -35,6 +35,35 @@ public class SubjectService : ISubjects
         return subjects;
     }
 
+    public async Task<Subject> DeleteSubject(int id)
+    {
+        Subject subject = await _dbContext.Subjects.FindAsync(id);
+       
+
+        // Check if the subject has an associated test
+        if (subject.TestId != null)
+        {
+            Test test = await _dbContext.Tests
+                .Include(t => t.Questions)
+                .ThenInclude(q => q.Answers)
+                .FirstOrDefaultAsync(t => t.Id == subject.TestId);
+
+            if (test != null)
+            {
+                // Remove the questions and answers of the test
+                _dbContext.Answers.RemoveRange(test.Questions.SelectMany(q => q.Answers));
+                _dbContext.Questions.RemoveRange(test.Questions);
+
+                _dbContext.Tests.Remove(test);
+            }
+        }
+
+        _dbContext.Subjects.Remove(subject);
+        await _dbContext.SaveChangesAsync();
+
+        return subject;
+    }
+
     public async Task<Subject> AddSubject(NewSubject newSubject)
     {
         var newTest = new Test

@@ -20,6 +20,7 @@ namespace GamificationAPI.Interfaces
         Task<bool> ChangePasswordAsync(string UserId, string newPassword);
         Task<bool> AddBadgeAsync(Badge badge, string userId);
         Task UpdateStudentAsync(int id, [FromBody] UserUpdateDto userDto);
+
         Task<bool> AddGroupToUserAsync(string userId, string groupName);
 
     }
