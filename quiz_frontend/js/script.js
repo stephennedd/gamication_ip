@@ -12,8 +12,6 @@ const progressBar = document.querySelector('.progress_container');
 const achievement = document.querySelector('.achievement');
 const achievementText = document.querySelector('.achievement-text');
 const achievementIcon = document.querySelector('.achievement-icon');
-const achievementText = document.querySelector(".achievement-text");
-const achievementIcon = document.querySelector(".achievement-icon");
 var extraLife = false;
 var scoreMultiplier = false;
 var achievementList = [55, 75, 100];
@@ -468,3 +466,5 @@ function resetProgress() {
 		milestone75.style.backgroundColor = "#ddd";
 		milestone100.style.backgroundColor = "#ddd";
 	}
+}
+}
