@@ -14,7 +14,7 @@ const achievementText = document.querySelector(".achievement-text");
 const achievementIcon = document.querySelector(".achievement-icon");
 var extraLife = false;
 var scoreMultiplier = false;
-var achievementList = [50, 75, 100];
+var achievementList = [55, 75, 100];
 
 //import { showGame } from "../../ArcadeMachine/main";
 
@@ -37,6 +37,16 @@ mute_btn.onclick = () => {
 };
 
 async function getGeneratedTestForStudent() {
+	var token = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('jwt='))
+        .split('=')[1];
+	var decodedToken = parseJwt(token);
+	console.log(decodedToken);
+	var studentId = decodedToken["Id"];
+	console.log(studentId);
+	//var studentId = decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
+	///console.log(studentId);
 	try {
 		// Fetch data from the API
 		const response = await fetch('https://localhost:7186/api/generatedTests', {
@@ -44,11 +54,11 @@ async function getGeneratedTestForStudent() {
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify({ studentId: 1, testId: 1, numberOfQuestions: 4 }),
+			body: JSON.stringify({ studentId: studentId, testId: 1, numberOfQuestions: 5 }),
 		});
 
 		const response2 = await fetch(
-			'https://localhost:7186/api/generatedTests/1/1'
+			`https://localhost:7186/api/generatedTests/${studentId}/1`
 		);
 		const data = await response2.json();
 		questions = data['Questions'];
@@ -58,6 +68,21 @@ async function getGeneratedTestForStudent() {
 	} catch (error) {
 		console.error('Error fetching questions:', error);
 	}
+}
+
+function parseJwt(token) {
+	var base64Url = token.split('.')[1];
+	var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+	var jsonPayload = decodeURIComponent(
+		atob(base64)
+			.split('')
+			.map(function (c) {
+				return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+			})
+			.join('')
+	);
+
+	return JSON.parse(jsonPayload);
 }
 
 // if startQuiz button clicked
@@ -134,7 +159,14 @@ next_btn.onclick = async () => {
 		next_btn.classList.remove('show'); //hide the next button
 		queCounter(que_numb); //passing que_numbfetch value to queCounter
 	} else {
-		await getStudentResult(1);
+		var token = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('jwt='))
+        .split('=')[1];
+	    var decodedToken = parseJwt(token);
+	    console.log(decodedToken);
+	    var studentId = decodedToken["Id"];
+		await getStudentResult(studentId);
 		clearInterval(counter); //clear counter
 		clearInterval(counterLine); //clear counterLine
 		showResult(); //calling showResult function
@@ -238,7 +270,9 @@ async function optionSelected(answer) {
 		answer.insertAdjacentHTML('beforeend', tickIconTag); //adding tick icon to correct selected option
 		console.log('Correct Answer');
 		console.log('Your correct answers = ' + userScore);
-		updateProgress(userScore, allOptions);
+		//Yehor
+		console.log(questions.length)
+		updateProgress(userScore, questions.length);
 	} else {
 		answer.classList.add('incorrect'); //adding red color to correct selected option
 		answer.insertAdjacentHTML('beforeend', crossIconTag); //adding cross icon to correct selected option
