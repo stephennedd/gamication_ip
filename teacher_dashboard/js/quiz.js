@@ -35,7 +35,8 @@ form.addEventListener('submit', (e) => {
     .then(response => {
       if (response.ok) {
         console.log('API request successful');
-        // Perform any further actions on successful response
+        $('#add-subject-success-modal').modal('show'); // Show success modal
+        // redirect to the student dashboard
       } else {
         console.log('API request failed');
         // Handle the error case
@@ -523,23 +524,4 @@ if (numberOfExistingQuestions >= index + 1) {
       $('#edit-quiz-modal').modal('hide');
   }
 
-
-
-// adding a subject to the database
-$('#add-subject-form').submit(function (e) {
-  console.log("Liza");
-    // get the form data
-    var formData = $(this).serializeArray();
-
-    // convert form data to JSON
-    const jsonData = {};
-    for (let i = 0; i < formData.length; i++) {
-        jsonData[formData[i].name] = formData[i].value;
-    }
-
-    // Log JSON data
-    console.log(JSON.stringify(jsonData));
-
-    e.preventDefault(); // Prevent the form from submitting for now
-    // TODO send the form data to the server
-})}
+}

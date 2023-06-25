@@ -7,7 +7,7 @@ document.getElementById("user-form").addEventListener("submit", function(event) 
     var firstName = document.getElementById("first-name").value;
     var lastName = document.getElementById("last-name").value;
     var username = document.getElementById("username").value;
-    var email = document.getElementById("email").value;
+    var email = document.getElementById("userid").value;
     var userRole = document.getElementById("user-role").value;
     const userId = email.split('@')[0];
     // const capitalizedRole = userRole.charAt(0).toUpperCase() + userRole.slice(1);  
@@ -57,11 +57,14 @@ fetch(`https://localhost:7186/api/Users/Admin?admin=${admin}`, {
         console.log(response);
       throw new Error('Request failed.');
     }
+    // If request is successful, resolve the promise by returning the request response
     return response.json();
   })
   .then(data => {
     // Process the response data
     console.log(data);
+    // show success message
+    $('#add-user-success-modal').modal('show');
   })
   .catch(error => {
     // Handle any errors that occurred during the fetch request

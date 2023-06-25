@@ -218,6 +218,11 @@
           <div class="card">
             <div class="card-header">
               <div class="float-start mt-1" id="student-results-card-header">My Students</div>
+              <div class="float-end ms-1">
+                <select class="form-select" id="leaderboard-selection-dropdown">
+                  <option selected disabled value="">Select a leaderboard</option>
+                </select>
+              </div>
               <div class="float-end">
                 <select class="form-select" id="group-selection-dropdown">
                   <option selected disabled value="">Select a group</option>
@@ -434,7 +439,7 @@
                   </tr>
                 </thead>
                 <tbody id="quiz-table-body-remove">
-                  
+
                 </tbody>
               </table>
             </div>
@@ -837,6 +842,22 @@
     </div>
   </main>
 
+  <!-- Add user success modal-->
+  <div class="modal fade" id="add-subject-success-modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body">
+          <div class="text-center">
+            <div class="mb-3 fw-bold fs-4">subject created successfully</div>
+            <div class="mb-3">
+              <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Add user -->
   <main class="pt-3" id="add-user">
     <div class="container-fluid">
@@ -865,8 +886,9 @@
                 <div class="row">
                   <div class="col-md-12">
                     <div class="mb-3">
-                      <label for="email" class="form-label fw-bold">Email</label>
-                      <input type="email" name="email" class="form-control" id="email" placeholder="Email" required>
+                      <p class="ps-3 m-0">enter just the first part of the teacher email (ex. j.w.boer) without the
+                        domain </p>
+                      <input type="text" name="id" class="form-control" id="userid" placeholder="ID" required>
                     </div>
                   </div>
                 </div>
@@ -895,6 +917,22 @@
       </div>
     </div>
   </main>
+
+  <!-- Add user success modal-->
+  <div class="modal fade" id="add-user-success-modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body">
+          <div class="text-center">
+            <div class="mb-3 fw-bold fs-4">user created successfully</div>
+            <div class="mb-3">
+              <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Add group -->
   <main class="pt-3" id="add-group">
@@ -931,6 +969,22 @@
     </div>
   </main>
 
+  <!-- Add user success modal-->
+  <div class="modal fade" id="add-group-success-modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body">
+          <div class="text-center">
+            <div class="mb-3 fw-bold fs-4">group created successfully</div>
+            <div class="mb-3">
+              <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Manage groups -->
   <main class="pt-3" id="manage-groups">
     <div class="container-fluid">
@@ -949,7 +1003,6 @@
                     <thead>
                       <tr>
                         <th>Group name</th>
-                        <th>Number of students</th>
                         <th>Actions</th>
                       </tr>
                     </thead>

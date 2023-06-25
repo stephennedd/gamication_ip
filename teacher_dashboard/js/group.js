@@ -82,10 +82,13 @@ async function createGroup() {
             });
 
         if (!response.ok) {
+            alert("Error adding group");
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-
-        console.log('Group added successfully:');
+        if (response.status == 200) {
+            refreshGroupsTable();
+            $('#add-group-success-modal').modal('show');
+        }
     } catch (error) {
         console.log('Fetch Error: ', error);
     }
@@ -157,6 +160,11 @@ async function populateGroupsTable() {
  
             
             let actionsCell = document.createElement('td');
+            // <button class="btn btn-danger" onclick="deleteGroup(this)">Delete</button>
+            // <button class="btn btn-success" onclick="addUser(this)">Add User</button>
+            actionsCell.innerHTML = `
+                <button class="btn btn-sm btn-primary" onclick="editGroup(this)">Edit</button>
+            `;
             // Add any actions buttons or links here
             row.appendChild(actionsCell);
 
@@ -165,4 +173,9 @@ async function populateGroupsTable() {
     } catch (error) {
         console.log('Fetch Error: ', error);
     }
+}
+
+// refresh the groups table
+function refreshGroupsTable() {
+    populateGroupsTable();
 }
