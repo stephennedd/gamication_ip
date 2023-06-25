@@ -26,8 +26,8 @@ window.addEventListener("DOMContentLoaded", function() {
           // User is not authenticated
           authenticationCheckComplete = true;
           console.log("User is not authenticated");
-          //redirectTo("/pages/login.html");
-          redirectTo("pages/admin-panel.html");
+          //redirectTo("http://127.0.0.1:5500/teacher_dashboard/pages/admin-panel.html");
+          redirectTo("http://127.0.0.1:5500/teacher_dashboard/pages/login.html");
         }
       })
       .catch(function(error) {

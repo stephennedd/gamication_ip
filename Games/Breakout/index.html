@@ -6,11 +6,10 @@
 			name="viewport"
 			content="width=device-width, initial-scale=1, user-scalable=no" />
 		<title>Breakout</title>
-		<!-- <link
-			rel="preload"
-			as="font"
-			href="Assets/Fonts/Press_Start_2P/PressStart2P-Regular.ttf"
-			type="font/ttf" /> -->
+		<link
+			href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+			rel="stylesheet" />
+
 		<link rel="stylesheet" href="style.css" />
 		<script
 			defer
@@ -19,10 +18,14 @@
 	</head>
 
 	<body>
-		<!-- <div id="game"></div> -->
-		<!-- <button id="winButton">Win</button>
-		<button id="loseButton">Lose</button>
-		<button id="bonus1Button">Speed</button>
-		<button id="bonus2Button">Balls</button> -->
+		<div id="game"></div>
+		<script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+		<script>
+			WebFont.load({
+				google: {
+					families: ['Press Start 2P'],
+				},
+			});
+		</script>
 	</body>
 </html>

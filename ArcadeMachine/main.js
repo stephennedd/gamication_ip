@@ -8,8 +8,10 @@ window.addEventListener('DOMContentLoaded', function () {
 		quiz,
 		leaderboardButton,
 		leaderboard,
-		canvas,
-		canvasWindow;
+		game,
+		gameWindow;
+	// just for testing assigned true, delete later
+	const quizPassed = localStorage.getItem('quizPassed') || 'true';
 
 	const unpressedImages = {
 		moveIn: 'Media/Images/up.png',
@@ -32,8 +34,8 @@ window.addEventListener('DOMContentLoaded', function () {
 		gameButton = document.getElementById('showGame');
 		quizButton = document.getElementById('showQuiz');
 		leaderboardButton = document.getElementById('leaderboardButton');
-		canvas = document.getElementById('game');
 
+		game = document.getElementById('game');
 		leaderboard = document.getElementById('leaderboard');
 		quiz = document.getElementById('quiz');
 
@@ -43,7 +45,7 @@ window.addEventListener('DOMContentLoaded', function () {
 			quiz &&
 			leaderboardButton &&
 			leaderboard &&
-			canvas
+			game
 		) {
 			// Elements exist, attach event listeners
 			attachEventListeners();
@@ -92,6 +94,13 @@ window.addEventListener('DOMContentLoaded', function () {
 			quizButton.src = unpressedImages.quizButton;
 			gameButton.src = unpressedImages.gameButton;
 		});
+
+		// await for message 'showButtons' fire up showButtons function
+		window.addEventListener('message', function (event) {
+			if (event.data.action === 'showButtons') {
+				showButtons();
+			}
+		});
 	}
 
 	function moveCorridor() {
@@ -105,13 +114,12 @@ window.addEventListener('DOMContentLoaded', function () {
 		setTimeout(() => {
 			quiz.classList.remove('hide');
 
-			document.getElementById('buttonsPanel').style.width = '650px';
-
-			setTimeout(() => {
-				quizButton.classList.remove('hide');
-				gameButton.classList.remove('hide');
-				leaderboardButton.classList.remove('hide');
-			}, 150);
+			// If quiz is passed, show buttons
+			if (quizPassed === 'true') {
+				setTimeout(() => {
+					showButtons();
+				}, 150);
+			}
 		}, 1850);
 	}
 
@@ -123,13 +131,22 @@ window.addEventListener('DOMContentLoaded', function () {
 
 		setTimeout(() => {
 			arcadeMachine.classList.add('blur');
-
-			quizButton.classList.add('hide');
-			gameButton.classList.add('hide');
-			leaderboardButton.classList.add('hide');
-
-			document.getElementById('buttonsPanel').style.width = '250px';
+			hideButtons();
 		}, 1300);
+	}
+
+	function showButtons() {
+		document.getElementById('buttonsPanel').style.width = '650px';
+		quizButton.classList.remove('hide');
+		gameButton.classList.remove('hide');
+		leaderboardButton.classList.remove('hide');
+	}
+
+	function hideButtons() {
+		quizButton.classList.add('hide');
+		gameButton.classList.add('hide');
+		leaderboardButton.classList.add('hide');
+		document.getElementById('buttonsPanel').style.width = '250px';
 	}
 
 	function showQuiz() {
@@ -154,26 +171,25 @@ window.addEventListener('DOMContentLoaded', function () {
 		iframe.src = iframe.src;
 		if (arcadeMachine.classList.contains('move-out-machine')) {
 			hideAllScreens();
-			canvas.classList.remove('hide');
-			canvasWindow = canvas.contentWindow;
+			game.classList.remove('hide');
+			gameWindow = game.contentWindow;
 		}
 	}
 
 	function hideAllScreens() {
-		canvas.classList.add('hide');
+		game.classList.add('hide');
 		quiz.classList.add('hide');
 		leaderboard.classList.add('hide');
 	}
 
 	function pressPause() {
-		if (!canvas.classList.contains('hide')) {
+		if (!game.classList.contains('hide')) {
 			const message = {
 				action: 'pauseGame',
 			};
 
 			// Send the message to the game iframe
-			canvasWindow.postMessage(message, '*');
-			// console.log('Pause game');
+			gameWindow.postMessage(message, '*');
 		}
 	}
 

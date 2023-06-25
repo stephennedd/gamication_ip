@@ -1,44 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Arcade</title>
+		<link rel="stylesheet" href="main.css" />
+		<script defer src="main.js"></script>
+		<link
+			rel="icon"
+			type="image/png"
+			sizes="32x32"
+			href="Media/Images/favicon-32x32.png" />
+	</head>
+	<body>
+		<div id="corridor">
+			<img src="Media/Images/background.png" id="background" />
 
-<head>
-	<meta charset="UTF-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>Gamification</title>
-	<link rel="preload" as="font" href="Media/Fonts/Press_Start_2P/PressStart2P-Regular.ttf" type="font/ttf" />
-	<link rel="stylesheet" href="main.css" />
-	<script defer src="main.js"></script>
-	<link rel="icon" type="image/png" sizes="32x32" href="Media/Images/favicon-32x32.png" />
+			<img
+				src="Media/Images/Arcade Machine - Saxion with bottom and screen.png"
+				id="machine"
+				class="blur" />
 
-	<script defer src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
+			<iframe
+				src="../quiz_frontend/index.html"
+				id="quiz"
+				class="hide crt screen"></iframe>
 
-	<script defer src="/Games/Breakout/breakout.js"></script>
-</head>
+			<iframe
+				src="/leaderboard_frontend/index.html"
+				id="leaderboard"
+				class="hide crt screen"></iframe>
 
-<body>
-	<div id="corridor">
-		<img src="Media/Images/background.png" id="background" />
+			<iframe
+				src="/Games/Dino_Jump/index.html"
+				id="game"
+				class="hide crt screen"></iframe>
+		</div>
 
-		<img src="Media/Images/Arcade Machine - Saxion with bottom and screen.png" id="machine" class="blur" />
+		<div id="buttonsPanel">
+			<img src="Media/Images/up.png" id="animate" />
 
-		<iframe src="../quiz_frontend/index.html" id="quiz" class="hide crt screen"></iframe>
+			<img src="Media/Images/Quiz.png" id="showQuiz" class="hide" />
+			<img src="Media/Images/Play.png" id="showGame" class="hide" />
+			<img
+				src="Media/Images/leaderboard.png"
+				id="leaderboardButton"
+				class="hide" />
 
-		<iframe src="/leaderboard_frontend/index.html" id="leaderboard" class="hide crt screen"></iframe>
-
-		<!-- <div id="game" class="hide crt screen"></div> -->
-		<iframe src="/Games/Crossy_Road/dist/index.html" id="game" class="hide crt screen"></iframe>
-	</div>
-
-	<div id="buttonsPanel">
-		<img src="Media/Images/up.png" id="animate" />
-
-		<img src="Media/Images/Quiz.png" id="showQuiz" class="hide" />
-		<img src="Media/Images/Play.png" id="showGame" class="hide" />
-		<img src="Media/Images/leaderboard.png" id="leaderboardButton" class="hide" />
-
-		<img src="Media/Images/downPressed.png" id="back" />
-	</div>
-</body>
-
+			<img src="Media/Images/downPressed.png" id="back" />
+		</div>
+	</body>
 </html>

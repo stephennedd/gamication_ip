@@ -142,7 +142,7 @@ namespace GamificationToIP.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (!HttpContext.Request.Headers.TryGetValue("Authorization", out var authorizationHeader))
+                if (!HttpContext.Request.Headers.TryGetValue("Authorization", out var authorizationHeader) || string.IsNullOrWhiteSpace(authorizationHeader))
                 {
                     return BadRequest("Authorization header is missing.");
                 }
@@ -189,7 +189,7 @@ namespace GamificationToIP.Controllers
         [HttpPost("{token}")]
         public async Task<IActionResult> VerifyUser(string token)
         {
-            if (!HttpContext.Request.Headers.TryGetValue("Authorization", out var authorizationHeader))
+            if (!HttpContext.Request.Headers.TryGetValue("Authorization", out var authorizationHeader) || string.IsNullOrWhiteSpace(authorizationHeader))
             {
                 return BadRequest("Authorization header is missing.");
             }
@@ -218,7 +218,7 @@ namespace GamificationToIP.Controllers
 
         // PUT: api/Users/5
         [Authorize(Policy = "IsVerified")]
-        [HttpPut("{id}")]
+        [HttpPut("{userId}")]
         public async Task<IActionResult> UpdateUser(string UserId, User User)
         {
             if (UserId != User.UserId)
@@ -248,7 +248,7 @@ namespace GamificationToIP.Controllers
         [HttpPatch]
         public async Task<IActionResult> ChangePassword(string newPassword)
         {
-            if (!HttpContext.Request.Headers.TryGetValue("Authorization", out var authorizationHeader))
+            if (!HttpContext.Request.Headers.TryGetValue("Authorization", out var authorizationHeader) || string.IsNullOrWhiteSpace(authorizationHeader))
             {
                 return BadRequest("Authorization header is missing.");
             }
@@ -276,10 +276,10 @@ namespace GamificationToIP.Controllers
             return BadRequest();
         }
         [Authorize(Policy = "IsVerified")]
-        [HttpPatch("{id}")]
-        public async Task<IActionResult> AddBadgeToUser (string id, int badgeId)
+        [HttpPatch("{userId}")]
+        public async Task<IActionResult> AddBadgeToUser (string userId, int badgeId)
         {
-            if (await _userService.UserExistsAsync(id) == false)
+            if (await _userService.UserExistsAsync(userId) == false)
             {
                 return NotFound("User with this ID does not exist");
             }
@@ -292,7 +292,7 @@ namespace GamificationToIP.Controllers
             {
                 return BadRequest();
             }
-            bool success = await _userService.AddBadgeAsync(badge, id);
+            bool success = await _userService.AddBadgeAsync(badge, userId);
             if (success)
             {
                 return Ok();
@@ -302,7 +302,8 @@ namespace GamificationToIP.Controllers
         }
 
         [Authorize(Policy = "IsVerified")]
-        [HttpPatch("Group/{id}")]
+        [HttpPatch("Group/{userId}")]
+
         public async Task<IActionResult> AddGroupToUser(string userId, string groupName)
         {
             if (await _userService.UserExistsAsync(userId) == false)
@@ -337,22 +338,22 @@ namespace GamificationToIP.Controllers
 
         // DELETE: api/Users/5
         [Authorize(Roles = "Admin")]
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(string id)
+        [HttpDelete("{userId}")]
+        public async Task<IActionResult> DeleteUser(string userId)
         {
 
-            if (await _userService.UserExistsAsync(id) == false)
+            if (await _userService.UserExistsAsync(userId) == false)
             {
                 return NotFound("User with this ID does not exist");
             }
 
-            var User = await _userService.GetUserByIdAsync(id);
+            var User = await _userService.GetUserByIdAsync(userId);
             if (User == null)
             {
                 return NotFound();
             }
 
-            await _userService.DeleteUserAsync(id);
+            await _userService.DeleteUserAsync(userId);
 
             return Ok();
         }

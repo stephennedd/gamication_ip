@@ -186,8 +186,8 @@ document.addEventListener('DOMContentLoaded', function () {
 			var data = {
 				userId: studentID,
 				password: password,
-				firstName: firstName,
-				lastName: lastName,
+				name: firstName,
+				surname: lastName,
 			};
 
 			displayTextOneCharacterAtATime(welcomeElement, 'Creating user...');

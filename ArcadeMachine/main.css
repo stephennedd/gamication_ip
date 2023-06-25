@@ -7,36 +7,28 @@ body {
 	background-color: #00222f;
 }
 
-#animate {
-	width: 70px;
-	height: 70px;
+html {
+	font-size: 16px; /* This sets a base font size for rem units */
 }
 
+#animate,
 #back {
-	width: 70px;
-	height: 70px;
+	width: 4.375rem; /* 70px when base font-size is 16px */
+	height: 4.375rem;
 }
 
-#leaderboardButton {
-	width: 90px;
-	height: 90px;
-}
-
-#showQuiz {
-	width: 90px;
-	height: 90px;
-}
-
+#leaderboardButton,
+#showQuiz,
 #showGame {
-	width: 90px;
-	height: 90px;
+	width: 5.625rem; /* 90px when base font-size is 16px */
+	height: 5.625rem;
 }
 
 #buttonsPanel {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	gap: 30px;
+	gap: 1.875rem; /* 30px when base font-size is 16px */
 	flex-wrap: nowrap;
 
 	position: absolute;
@@ -44,8 +36,8 @@ body {
 	left: 50%;
 	transform: translate(-50%, -0%);
 
-	width: 250px;
-	height: 150px;
+	width: 15.625rem; /* 250px when base font-size is 16px */
+	height: 9.375rem; /* 150px when base font-size is 16px */
 	background-image: url('Media/Images/buttonsPanel.png');
 	background-size: 100% 100%;
 
@@ -56,7 +48,7 @@ body {
 	position: relative;
 	width: 100%;
 	height: 100vh;
-	perspective: 1000px;
+	perspective: 62.5rem;
 	overflow: hidden;
 	display: flex;
 	justify-content: center;
@@ -92,16 +84,8 @@ body {
 	overflow: hidden;
 }
 
-#quiz {
-	width: 800px;
-	height: 600px;
-}
-
-#leaderboard {
-	width: 800px;
-	height: 600px;
-}
-
+#quiz,
+#leaderboard,
 #game {
 	width: 800px;
 	height: 600px;
@@ -312,5 +296,3 @@ body {
 .crt {
 	animation: textShadow 1.6s infinite;
 }
-
-/* Turn on and turn off effect */
