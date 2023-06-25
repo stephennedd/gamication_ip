@@ -17,6 +17,14 @@ class BootScene extends Phaser.Scene {
 	}
 
 	create() {
+		// Wait for the font to be loaded before starting the next scene
+		this.fontsReady = false;
+		this.fontsLoaded = this.fontsLoaded.bind(this);
+		document.fonts.load('10pt "PressStart2P"').then(this.fontsLoaded);
+	}
+
+	fontsLoaded() {
+		this.fontsReady = true;
 		this.scene.start('StartScene');
 	}
 }
@@ -34,7 +42,7 @@ class StartScene extends Phaser.Scene {
 				'Press the left mouse button to start',
 				{
 					fontFamily: 'PressStart2P',
-					fontSize: '32px',
+					fontSize: '20px',
 					fill: '#fff',
 				}
 			)
@@ -73,6 +81,7 @@ class MainScene extends Phaser.Scene {
 		this.startTime = 0;
 		this.gameOver = false;
 		this.scoreText;
+		this.isPaused = false;
 
 		this.livesSprites = [];
 		this.heartSpacing = 30; // Spacing between hearts
@@ -81,82 +90,63 @@ class MainScene extends Phaser.Scene {
 	}
 
 	create() {
-		// dirty way to fix issue with game not restarting
-		// TODO: find a better way to fix this
-		// TODO: there is a bug where if you click when ball is about to fall it will restart the game
-		// TODO: after restart lives are not decreasing
+		this.initializeVariables();
+		this.attachEventListeners();
+		this.createBall();
+		this.createPaddle();
+		this.createScoreText();
+		this.createLivesDisplay();
+		this.createColliders();
+		this.generateBricksRow();
+	}
 
-		this.isPaused = false; // To track if the game is paused
-		this.input.keyboard.on('keydown-P', this.pauseGame, this);
-
-		// listen to message from parent frame to pause
-		window.addEventListener('message', this.handleMessage.bind(this));
-
-		// Check for localstorage items for scoremuliplier and additional live
-		const gameDataLife = localStorage.getItem('extraLife') || false;
-		const gameDataScore = localStorage.getItem('scoreMultiplier') || false;
-		console.log(`extraLife: ${gameDataLife}`);
-		console.log(`scoreMultiplier: ${gameDataScore}`);
-		// if (gameDataLife === 'true') {
-		// 	this.lives = 4;
-		// } else {
-		// 	this.lives = 3;
-		// }
-		// if (gameDataScore === 'true') {
-		// 	this.scoreMultiplier = 2;
-		// } else {
-		// 	this.scoreMultiplier = 1;
-		// }
-
+	initializeVariables() {
 		this.bricks = this.physics.add.group();
 		this.bricksDestroyed = 0;
-		this.lifes = 3;
 		this.score = 0;
 		this.startTime = 0;
 		this.gameOver = false;
-
-		//  Enable world bounds, but disable the floor
 		this.physics.world.setBoundsCollision(true, true, true, false);
 
-		// create ball and paddle
+		// Check for localstorage items for extraLife and scoreMultiplier
+		const gameDataLife = localStorage.getItem('extraLife');
+		const gameDataScore = localStorage.getItem('scoreMultiplier');
+
+		// Update lives based on localstorage
+		if (gameDataLife === 'true') {
+			this.lifes = 4; // Add 1 extra life
+		} else {
+			this.lifes = 3;
+		}
+
+		// Update score multiplier based on localstorage
+		if (gameDataScore === 'true') {
+			this.scoreMultiplier = 2; // Multiply score by 2
+		} else {
+			this.scoreMultiplier = 1;
+		}
+	}
+
+	attachEventListeners() {
+		this.input.keyboard.on('keydown-P', this.togglePause, this);
+		window.addEventListener('blur', this.pauseGame.bind(this));
+		window.addEventListener('visibilitychange', this.pauseGame.bind(this));
+	}
+
+	createBall() {
 		this.ball = this.physics.add
 			.image(400, 500, 'ball')
 			.setCollideWorldBounds(true)
 			.setBounce(1);
 		this.ball.setData('onPaddle', true);
+	}
 
+	createPaddle() {
 		this.paddle = this.physics.add.image(400, 550, 'paddle').setImmovable();
 
-		// display score
-		this.scoreText = this.add.text(16, 16, 'Score: 0', {
-			fontFamily: 'PressStart2P',
-			fontSize: '22px',
-			fill: '#fff',
-		});
-
-		// display lives
-		for (let i = 0; i < this.lifes; i++) {
-			let heart = this.add
-				.image(this.heartX + i * this.heartSpacing, this.heartY, 'heart')
-				.setOrigin(1, 0);
-			heart.setScale(0.055);
-			this.livesSprites.push(heart);
-		}
-
-		// collider between ball and paddle
-		this.physics.add.collider(
-			this.ball,
-			this.paddle,
-			this.hitPaddle,
-			null,
-			this
-		);
-
-		//  Input events
 		this.input.on(
 			'pointermove',
 			function (pointer) {
-				//  Keep the paddle within the game
 				this.paddle.x = Phaser.Math.Clamp(pointer.x, 52, 748);
 
 				if (this.ball.getData('onPaddle')) {
@@ -176,19 +166,42 @@ class MainScene extends Phaser.Scene {
 			},
 			this
 		);
+	}
 
-		this.generateBricksRow();
-		this.startTime = this.time.now;
+	createScoreText() {
+		this.scoreText = this.add.text(16, 16, 'Score: 0', {
+			fontFamily: 'PressStart2P',
+			fontSize: '22px',
+			fill: '#fff',
+		});
+	}
+
+	createLivesDisplay() {
+		this.livesSprites = [];
+		for (let i = 0; i < this.lifes; i++) {
+			let heart = this.add
+				.image(this.heartX + i * this.heartSpacing, this.heartY, 'heart')
+				.setOrigin(1, 0);
+			heart.setScale(0.055);
+			this.livesSprites.push(heart);
+		}
+	}
+
+	createColliders() {
+		this.physics.add.collider(
+			this.ball,
+			this.paddle,
+			this.hitPaddle,
+			null,
+			this
+		);
 	}
 
 	pauseGame() {
+		if (this.isPaused) return; // Prevent pausing multiple times
 		this.isPaused = true;
-
-		// Pause the game
 		this.physics.pause();
-		this.time.paused = true; // pause timers
-
-		// Add a semi-transparent background to darken the scene
+		this.time.paused = true;
 		this.pauseCover = this.add.rectangle(
 			0,
 			0,
@@ -198,8 +211,6 @@ class MainScene extends Phaser.Scene {
 			0.7
 		);
 		this.pauseCover.setOrigin(0, 0);
-
-		// Add paused text
 		this.pausedText = this.add
 			.text(this.gameWidth / 2, this.gameHeight / 2, 'Paused', {
 				fontFamily: 'PressStart2P',
@@ -207,25 +218,68 @@ class MainScene extends Phaser.Scene {
 				fill: '#fff',
 			})
 			.setOrigin(0.5);
+		this.pausedText2 = this.add
+			.text(
+				this.gameWidth / 2,
+				this.gameHeight / 2 + 100,
+				'Press P to resume',
+				{
+					fontFamily: 'PressStart2P',
+					fontSize: '32px',
+					fill: '#fff',
+				}
+			)
+			.setOrigin(0.5);
 	}
 
-	unpauseGame() {
-		this.isPaused = false;
+	togglePause() {
+		this.isPaused = !this.isPaused;
 
-		// Resume the game
-		this.physics.resume();
-		this.time.paused = false; // resume timers
+		if (this.isPaused) {
+			// Pause the game
+			this.physics.pause();
+			this.time.paused = true; // pause timers
 
-		// Remove the paused text and background
-		this.pausedText.destroy();
-		this.pauseCover.destroy();
-	}
+			// Add a semi-transparent background to darken the scene
+			this.pauseCover = this.add.rectangle(
+				0,
+				0,
+				this.gameWidth,
+				this.gameHeight,
+				0x000000,
+				0.7
+			);
+			this.pauseCover.setOrigin(0, 0);
 
-	handleMessage(event) {
-		if (event.data === 'pause') {
-			this.pauseGame();
-		} else if (event.data === 'unpause') {
-			this.unpauseGame();
+			// Add paused text
+			this.pausedText = this.add
+				.text(this.gameWidth / 2, this.gameHeight / 2, 'Paused', {
+					fontFamily: 'PressStart2P',
+					fontSize: '64px',
+					fill: '#fff',
+				})
+				.setOrigin(0.5);
+			this.pausedText2 = this.add
+				.text(
+					this.gameWidth / 2,
+					this.gameHeight / 2 + 100,
+					'Press P to resume',
+					{
+						fontFamily: 'PressStart2P',
+						fontSize: '32px',
+						fill: '#fff',
+					}
+				)
+				.setOrigin(0.5);
+		} else {
+			// Resume the game
+			this.physics.resume();
+			this.time.paused = false; // resume timers
+
+			// Remove the paused text and background
+			this.pausedText.destroy();
+			this.pausedText2.destroy();
+			this.pauseCover.destroy();
 		}
 	}
 
@@ -322,7 +376,10 @@ class MainScene extends Phaser.Scene {
 
 	hitBrick(ball, brick) {
 		brick.disableBody(true, true);
-		this.score += 10;
+
+		// Multiply the score by the score multiplier
+		this.score += 10 * this.scoreMultiplier;
+
 		this.bricksDestroyed++;
 		this.scoreText.setText('Score: ' + this.score);
 	}

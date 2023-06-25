@@ -1,12 +1,12 @@
-/* @font-face {
+@font-face {
 	font-family: 'PressStart2P';
 	src: url('Assets/Fonts/Press_Start_2P/PressStart2P-Regular.ttf');
-} */
+}
 
 body {
 	margin: 0 auto;
 	padding: 0;
 	width: 100%;
 	height: 100%;
-	/* font-family: 'Press Start 2P', cursive; */
+	font-family: 'Press Start 2P', cursive;
 }
