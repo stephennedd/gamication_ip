@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Teacher dashboard - Bootstrap</title>
+  <title>Teacher Dashboard - IP </title>
   <link rel="stylesheet" href="../css/bootstrap.min.css" />
   <link rel="stylesheet" href="../css/dataTables.bootstrap5.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
@@ -74,7 +74,8 @@
             </div>
           </li>
           <li>
-            <a class="nav-link px-3 sidebar-link text-white" data-bs-toggle="collapse" href="#quiz">
+            <a class="nav-link px-3 sidebar-link text-white" data-bs-toggle="collapse" href="#quiz"
+              id="test-menu-dropdown">
               <span class="me-2"><i class="bi bi-ui-checks-grid"></i></span>
               <span>Quiz</span>
               <span class="ms-auto">
@@ -646,6 +647,22 @@
     </div>
   </main>
 
+  <!-- Create leaderboard modal success-->
+  <div class="modal fade" id="create-leaderboard-success-modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body">
+          <div class="text-center">
+            <div class="mb-3 fw-bold fs-4">Leaderboard created successfully</div>
+            <div class="mb-3">
+              <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Update leaderboard -->
   <main class="pt-3" id="update-leaderboard">
     <div class="container-fluid">
@@ -662,7 +679,7 @@
               <div class="card-header">Select a leaderboard</div>
               <div class="card-body">
                 <div class="table-responsive">
-                  <table class="table table-responsive" id="update-leaderboard-table">
+                  <table class="table table-responsive">
                     <thead>
                       <th scope="col">Leaderboard Name</th>
                       <th class="text-center" scope="col">Update</th>
@@ -685,7 +702,7 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="edit-student-modal-title"></h5>
+          <h5 class="modal-title" id="edit-student-modal-title">Edit Leaderboard</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -727,7 +744,7 @@
               <div class="card-header">Select a leaderboard</div>
               <div class="card-body">
                 <div class="table-responsive">
-                  <table class="table table-responsive" id="delete-leaderboard-table">
+                  <table class="table table-responsive">
                     <thead>
                       <th scope="col">Leaderboard Name</th>
                       <th class="text-center" scope="col">Delete</th>
@@ -890,7 +907,7 @@
           <div class="card">
             <div class="card-header">Enter group details</div>
             <div class="card-body">
-              <form id="group-form" >
+              <form id="group-form">
                 <div class="row">
                   <div class="col-md-12">
                     <div class="mb-3">
@@ -903,7 +920,7 @@
 
                 <div class="row">
                   <div class="col-md-12 text-end">
-                    <button type="submit"  class="btn btn-success">Add Group</button>
+                    <button type="submit" class="btn btn-success">Add Group</button>
                   </div>
                 </div>
               </form>
