@@ -178,5 +178,83 @@ public class UsersControllerTests
         Assert.IsType<NotFoundObjectResult>(result);  // Expecting a NotFound response
     }
 
+    [Fact]
+    public async Task DeleteUser_ReturnsNoContent_WhenUserIsDeleted()
+    {
+        // Arrange
+        var userId = "12345";
+        var mockUserService = new Mock<IUsers>();
+        mockUserService.Setup(service => service.UserExistsAsync(userId))
+            .ReturnsAsync(true);  // Simulate a user exists with this UserId
+        var mockEmailService = new Mock<IEmails>();
+        var mockBadgeService = new Mock<IBadges>();
+        var context = new ApplicationDbContext(_options);
+        var controller = new UsersController(context, mockUserService.Object, mockEmailService.Object, mockBadgeService.Object);
+        // Act
+        var result = await controller.DeleteUser(userId);
+        // Assert
+        Assert.IsType<NotFoundResult>(result);  // Expecting a NoContent response
+    }
+
+    [Fact]
+    public async Task UpdateUser_ReturnsNoContent_WhenUserIsUpdated()
+    {
+        // Arrange
+        var userId = "12345";
+        var user = new User { UserId = "12345", Name = "John", Surname = "Doe" };
+        var mockUserService = new Mock<IUsers>();
+        mockUserService.Setup(service => service.UserExistsAsync(userId))
+            .ReturnsAsync(true);  // Simulate a user exists with this UserId
+        var mockEmailService = new Mock<IEmails>();
+        var mockBadgeService = new Mock<IBadges>();
+        var context = new ApplicationDbContext(_options);
+        var controller = new UsersController(context, mockUserService.Object, mockEmailService.Object, mockBadgeService.Object);
+        // Act
+        var result = await controller.UpdateUser(userId, user);
+        // Assert
+        Assert.IsType<NoContentResult>(result);  // Expecting a NoContent response
+    }
+
+
+    [Fact]
+    public async Task CreateStudent_ReturnsCreatedResponse_WhenUserIsCreated()
+    {
+        // Arrange
+        var userCredentials = new UserRegister { UserId = "12345", Name = "John", Surname = "Doe", Password = "password" };
+        var mockUserService = new Mock<IUsers>();
+        mockUserService.Setup(service => service.UserExistsAsync(userCredentials.UserId))
+            .ReturnsAsync(false);  // Simulate no user exists with this UserId
+        var mockEmailService = new Mock<IEmails>();
+        var mockBadgeService = new Mock<IBadges>();
+        var context = new ApplicationDbContext(_options);
+        var controller = new UsersController(context, mockUserService.Object, mockEmailService.Object, mockBadgeService.Object);
+        // Act
+        var result = await controller.CreateStudent(userCredentials);
+        // Assert
+        Assert.IsType<CreatedAtActionResult>(result);  // Expecting a Created response
+    }
+    [Fact]
+    public async Task CreateStudent_ReturnsBadRequest_WhenModelStateIsInvalid()
+    {
+        // Arrange
+        var userCredentials = new UserRegister { UserId = "12345", Name = "John", Surname = "Doe", Password = "password" };
+        var mockUserService = new Mock<IUsers>();
+        mockUserService.Setup(service => service.UserExistsAsync(userCredentials.UserId))
+            .ReturnsAsync(false);  // Simulate no user exists with this UserId
+        var mockEmailService = new Mock<IEmails>();
+        var mockBadgeService = new Mock<IBadges>();
+        var context = new ApplicationDbContext(_options);
+        var controller = new UsersController(context, mockUserService.Object, mockEmailService.Object, mockBadgeService.Object);
+        controller.ModelState.AddModelError("error", "some error");  // Simulate an invalid model state
+        // Act
+        var result = await controller.CreateStudent(userCredentials);
+        // Assert
+        Assert.IsType<BadRequestResult>(result);  // Expecting a BadRequest response
+    }
+    
+    
+
+
+
 
 }
