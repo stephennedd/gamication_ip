@@ -54,3 +54,6 @@ Thumbs.db
 *.testsettings
 *.msi
 *.Deploy.xml
+
+# teacher dashboard
+teacher_dashboard/node_modules

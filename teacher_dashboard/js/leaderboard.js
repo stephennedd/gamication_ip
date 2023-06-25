@@ -78,7 +78,6 @@ async function populateLeaderboardTable() {
     const leaderboardTable = document.getElementById('delete-leaderboard-table');
     const updateLeaderboardTable = document.getElementById('update-leaderboard-table');
 
-    let leaderboards = [];  
     var token = document.cookie
         .split('; ')
         .find(row => row.startsWith('jwt='))
@@ -140,8 +139,6 @@ function createLeaderboardTableRow(leaderboard) {
     row.appendChild(name);
     row.appendChild(deleteButton);
 
-
-    console.log('row: ' + row.innerHTML);
     return row;
 }
 
