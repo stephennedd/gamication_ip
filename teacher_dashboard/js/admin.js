@@ -7,9 +7,8 @@ document.getElementById("user-form").addEventListener("submit", function(event) 
     var firstName = document.getElementById("first-name").value;
     var lastName = document.getElementById("last-name").value;
     var username = document.getElementById("username").value;
-    var email = document.getElementById("userid").value;
     var userRole = document.getElementById("user-role").value;
-    const userId = email.split('@')[0];
+    const userId = document.getElementById("userid").value;
     // const capitalizedRole = userRole.charAt(0).toUpperCase() + userRole.slice(1);  
     // Prepare the request payload
     // var data = {
