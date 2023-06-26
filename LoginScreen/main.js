@@ -259,7 +259,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 			verifyCode(verificationCode);
 			refreshJWT();
-			// location.reload();
+			//location.reload();
 		}
 	});
 
@@ -302,8 +302,13 @@ document.addEventListener('DOMContentLoaded', function () {
 				return response.json();
 			})
 			.then(function (data) {
+				let date = new Date();
+				date.setMinutes(date.getMinutes() + 45);
 				document.cookie =
 					'jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+				document.cookie = `jwt=${
+					data.token
+				}; path=/ ; expires=${date.toUTCString()};`;
 				token = data.token;
 				document.cookie = `jwt=${token}; path=/`;
 				const decodedToken = parseJwt(token);
