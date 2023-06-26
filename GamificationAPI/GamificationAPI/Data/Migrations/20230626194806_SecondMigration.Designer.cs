@@ -12,11 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GamificationAPI.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-<<<<<<<< HEAD:GamificationAPI/GamificationAPI/Data/Migrations/20230626103353_SecondMigration.Designer.cs
-    [Migration("20230626103353_SecondMigration")]
-========
-    [Migration("20230626113057_SecondMigration")]
->>>>>>>> improving-login-screen:GamificationAPI/GamificationAPI/Data/Migrations/20230626113057_SecondMigration.Designer.cs
+    [Migration("20230626194806_SecondMigration")]
     partial class SecondMigration
     {
         /// <inheritdoc />
