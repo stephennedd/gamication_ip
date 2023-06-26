@@ -159,7 +159,7 @@ document.addEventListener('DOMContentLoaded', function () {
 						verifyLabel.classList.remove('hide');
 						verificationCodeInput.classList.remove('hidden');
 						groupSelector.classList.remove('hidden');
-
+						fetchGroupNames();
 						loginForm.classList.replace('signin', 'verify');
 						verificationRadio.checked = true;
 						setIndicatorPosition(1);
@@ -242,8 +242,11 @@ document.addEventListener('DOMContentLoaded', function () {
 				return;
 			}
 
-			// TODO: Send a POST request to the Password Reset endpoint
+			
+			
+
 		} else if (verificationRadio.checked) {
+			groupName = groupSelector.value;
 			if (verificationCode === '') {
 				displayTextOneCharacterAtATime(
 					errorElement,
@@ -252,13 +255,24 @@ document.addEventListener('DOMContentLoaded', function () {
 				errorElement.style.display = 'block';
 				return;
 			}
+			console.log("I need healing" + groupName);
+			if (groupName === '' || groupName === null) {
+				displayTextOneCharacterAtATime(
+					errorElement,
+					'Please choose your group.'
+				);
+				errorElement.style.display = 'block';
+				return;
+			}
 			displayTextOneCharacterAtATime(
 				welcomeElement,
-				'Enter verification code sent to your email and chose your group.'
+				'Enter verification code sent to your email and choose your group.'
 			);
-
-			verifyCode(verificationCode);
+			assignGroup();
+			verifyCode(verificationCode);	
+			
 			refreshJWT();
+			
 			//location.reload();
 		}
 	});
@@ -331,7 +345,25 @@ document.addEventListener('DOMContentLoaded', function () {
 				errorElement.style.display = 'block';
 			});
 	}
-
+	function assignGroup() {
+		let token = document.cookie
+			.split('; ')
+			.find((row) => row.startsWith('jwt='))
+			.split('=')[1];
+		fetch(`https://localhost:7186/api/Users/Group?groupName=${groupName}`, {
+			method: 'PATCH',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json',
+				},
+				}).catch(function (error) {
+					console.error(error);
+					displayTextOneCharacterAtATime(errorElement, 'Assigning group failed.');
+					errorElement.style.display = 'block';
+				}
+			);
+	}
+	
 	function verifyCode(code) {
 		let token = document.cookie
 			.split('; ')
@@ -420,9 +452,10 @@ document.addEventListener('DOMContentLoaded', function () {
 		});
 		dropdown.addEventListener('change', function () {
 			groupName = this.value; // update the label
-			fetchLeaderboardData();
+			console.log(groupName);
+			
 		});
 	}
 
-	fetchGroupNames();
+	
 });
