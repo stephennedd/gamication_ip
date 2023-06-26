@@ -90,6 +90,8 @@ document.addEventListener('DOMContentLoaded', function () {
 		const verificationCodeInput = document.getElementById('verificationCode');
 		const firstNameInput = document.getElementById('firstName');
 		const lastNameInput = document.getElementById('lastName');
+		const groupSelector = document.getElementById('groupSelect');
+		let groupName = null;
 
 		const signInRadio = document.getElementById('signin');
 		const signUpRadio = document.getElementById('signup');
@@ -115,7 +117,7 @@ document.addEventListener('DOMContentLoaded', function () {
 				errorElement.style.display = 'block';
 				return;
 			}
-			var data = {
+			const data = {
 				userId: studentID,
 				password: password,
 			};
@@ -144,8 +146,8 @@ document.addEventListener('DOMContentLoaded', function () {
 						'jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
 					document.cookie = `jwt=${data.token}; path=/`;
 					token = data.token;
-					var decodedToken = parseJwt(token);
-		
+					const decodedToken = parseJwt(token);
+
 					if (decodedToken.IsVerified == 'False') {
 						displayTextOneCharacterAtATime(welcomeElement, verificationText);
 						studentIDInput.classList.add('hidden');
@@ -154,6 +156,7 @@ document.addEventListener('DOMContentLoaded', function () {
 						verificationCodeInput.classList.remove('hidden');
 
 						loginForm.classList.replace('signin', 'verify');
+						verificationRadio.checked = true;
 						setIndicatorPosition(1);
 					} else window.location.href = '../ArcadeMachine';
 				})
@@ -183,7 +186,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			}
 
 			// Prepare the request payload
-			var data = {
+			const data = {
 				userId: studentID,
 				password: password,
 				name: firstName,
@@ -200,7 +203,13 @@ document.addEventListener('DOMContentLoaded', function () {
 				body: JSON.stringify(data),
 			})
 				.then(function (response) {
+					if (!response.ok) {
+						throw new Error('Failed to create user');
+					}
 					console.log(response);
+					return response.json(); // this should be returned
+				})
+				.then(function (data) {
 					displayTextOneCharacterAtATime(welcomeElement, 'Account created!');
 					setTimeout(() => {
 						displayTextOneCharacterAtATime(
@@ -211,10 +220,6 @@ document.addEventListener('DOMContentLoaded', function () {
 						loginForm.classList.replace('signup', 'signin');
 						setIndicatorPosition(0);
 					}, 1500);
-					if (!response.ok) {
-						throw new Error('Failed to create user');
-					}
-					return;
 				})
 				.catch(function (error) {
 					console.error(error);
@@ -248,9 +253,9 @@ document.addEventListener('DOMContentLoaded', function () {
 	});
 
 	function parseJwt(token) {
-		var base64Url = token.split('.')[1];
-		var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-		var jsonPayload = decodeURIComponent(
+		const base64Url = token.split('.')[1];
+		const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+		const jsonPayload = decodeURIComponent(
 			atob(base64)
 				.split('')
 				.map(function (c) {
@@ -263,7 +268,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	}
 
 	function refreshJWT() {
-		var token = document.cookie;
+		const token = document.cookie;
 		fetch('https://localhost:7186/api/Tokens', {
 			method: 'GET',
 			headers: {
@@ -289,7 +294,7 @@ document.addEventListener('DOMContentLoaded', function () {
 					'jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
 				document.cookie = `jwt=${data.token}; path=/`;
 				token = data.token;
-				var decodedToken = parseJwt(token);
+				const decodedToken = parseJwt(token);
 				if (decodedToken.IsVerified == 'False') {
 					displayTextOneCharacterAtATime(welcomeElement, verificationText);
 					studentIDInput.classList.add('hidden');
@@ -309,7 +314,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	}
 
 	function verifyCode(code) {
-		var token = document.cookie
+		const token = document.cookie
 			.split('; ')
 			.find((row) => row.startsWith('jwt='))
 			.split('=')[1];
@@ -330,7 +335,7 @@ document.addEventListener('DOMContentLoaded', function () {
 				}
 			})
 			.then((data) => {
-				$('#response-message').empty();
+				// $('#response-message').empty();
 				if (data.success) {
 					displayTextOneCharacterAtATime(
 						welcomeElement,
@@ -356,4 +361,56 @@ document.addEventListener('DOMContentLoaded', function () {
 				console.error('Error:', error);
 			});
 	}
+
+	// For group selection
+	async function fetchGroupNames() {
+		const token = document.cookie
+			.split('; ')
+			.find((row) => row.startsWith('jwt='))
+			.split('=')[1];
+		try {
+			const response = await fetch('https://localhost:7186/api/Groups', {
+				method: 'GET',
+				headers: {
+					Authorization: `Bearer ${token}`,
+					'Content-Type': 'application/json',
+				},
+			});
+
+			if (!response.ok) {
+				throw new Error(`HTTP error! status: ${response.status}`);
+			}
+
+			const data = await response.json();
+			let groups = data.$values;
+
+			populateGroupsDropdown(groups);
+		} catch (error) {
+			console.log('Fetch Error: ', error);
+		}
+	}
+
+	function populateGroupsDropdown(groups) {
+		const dropdown = document.getElementById('groupSelect');
+		dropdown.innerHTML =
+			'<option selected disabled value="">Select a group</option>'; // clear existing options
+		const option = document.createElement('option');
+		option.text = 'All Students';
+		option.value = 'All Students';
+		groupSelector.appendChild(option);
+		// Add the groups to the dropdown
+		groups.forEach((group) => {
+			var option = document.createElement('option');
+			option.text = group.name;
+			option.value = group.name;
+			console.log(group.name);
+			groupSelector.appendChild(option);
+		});
+		dropdown.addEventListener('change', function () {
+			groupName = this.value; // update the label
+			fetchLeaderboardData();
+		});
+	}
+
+	fetchGroupNames();
 });

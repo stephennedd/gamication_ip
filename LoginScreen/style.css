@@ -36,13 +36,18 @@ button span {
 	overflow: hidden;
 }
 
+#loginForm {
+	transform: translateY(-120px);
+}
+
 #loginForm.signin #wrapper {
 	height: 171px;
 }
 
 #loginForm.signup #wrapper {
 	/* height: 255px; */
-	height: 428px;
+	/* height: 428px; */
+	height: 510px;
 }
 
 #loginForm.verify #wrapper {
@@ -136,11 +141,31 @@ button span {
 	transform: translate3d(0, 0, 0);
 }
 
+select {
+	font-family: 'Press Start 2P', cursive;
+	background: var(--background);
+	border: 1px solid var(--text);
+	color: var(--text);
+	text-shadow: 0 0 10px var(--text);
+	box-shadow: 0 0 5px var(--text);
+	font-size: 18px;
+	height: 72px;
+	width: 100%;
+	margin-bottom: 10px;
+	text-indent: 20px;
+	transition: all 0.2s ease-in-out;
+
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+}
+
 .welcome {
 	font-size: 1.2em;
 	width: 450px;
 	transition: all 0.3s cubic-bezier(0.6, 0, 0.4, 1);
 	margin-bottom: 50px;
+	transform: translateY(-120px);
 }
 
 .hidden {
