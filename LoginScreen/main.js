@@ -140,9 +140,10 @@ document.addEventListener('DOMContentLoaded', function () {
 					return response.json();
 				})
 				.then(function (data) {
-					document.cookie =
-						'jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-					document.cookie = `jwt=${data.token}; path=/`;
+					let date = new Date();
+      date.setMinutes(date.getMinutes() + 45);
+      document.cookie = 'jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      document.cookie = `jwt=${data.token}; path=/ ; expires=${date.toUTCString()};`;
 					token = data.token;
 					var decodedToken = parseJwt(token);
 		

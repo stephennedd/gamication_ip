@@ -159,6 +159,26 @@ public class LeaderboardsController : ControllerBase
         return BadRequest("Something went wrong.");
         
     }
+    [Authorize(Roles = "Admin, Teacher")]
+    [HttpPut("{leaderboardName}")]
+    public async Task<IActionResult> UpdateLeaderboard(string leaderboardName, string newLeaderboardName)
+    {
+        if (string.IsNullOrWhiteSpace(leaderboardName))
+        {
+            return BadRequest("Leaderboard name cannot be empty.");
+        }
+        var existingLeaderboard = await _leaderboardService.GetLeaderboardByNameAsync(leaderboardName);
+        if (existingLeaderboard == null)
+        {
+            return NotFound("No leaderboard with this name exists.");
+        }
+        bool x = await _leaderboardService.UpdateLeaderboardAsync(leaderboardName, newLeaderboardName);
+        if (x)
+        {
+            return Ok();
+        }
+        return BadRequest("Something went wrong.");
+    }
 
 
 }

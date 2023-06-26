@@ -1,5 +1,5 @@
 
-
+let oldName = null;
 
 // Event handler for form submit
 $('#create-leaderboard-form').submit(function (e) {
@@ -40,10 +40,11 @@ $('#update-leaderboard-form').submit(function (e) {
 
     // Log JSON data
     console.log(JSON.stringify(jsonData));
-
-    console.log('Form submitted');
+    let newName = jsonData["leaderboard-name"];
+    console.log("New name = "+newName);
+    console.log("Leaderboard name = " + oldName);
     e.preventDefault(); // Prevent the form from submitting for now
-    // TODO Send the form data to the server
+    updateLeaderboard(oldName, newName);
 });
 
 // Deleting a leaderboard
@@ -185,11 +186,15 @@ $('#update-leaderboard-modal').on('show.bs.modal', function (event) {
     // Find the leaderboard in the array;
     const leaderboard = leaderboards.find(leaderboard => leaderboard === leaderboardId);
     console.log('update Leaderboard: ' + leaderboard);
+    oldName = leaderboard;
 
     // Populate the form
     const modal = $(this);
     modal.find('#modal-leaderboard-name').val(leaderboard);
+
+
 });
+
 async function createLeaderboard(){
     try {
         var token = document.cookie
@@ -257,6 +262,41 @@ async function deleteLeaderboardAction(){
         }
 
         console.log('Leaderboard deleted successfully:');
+        return true;
+    } catch (error) {
+        console.log('Fetch Error: ', error);
+    }
+}
+async function updateLeaderboard(oldName, newName){
+    try {
+        let response;
+        var token = document.cookie
+            .split('; ')
+            .find(row => row.startsWith('jwt='))
+            .split('=')[1];
+
+        // Ensure groupName is not empty or undefined
+        if (!oldName || oldName.trim() === '' || !newName) {
+            console.error("Invalid or empty leaderboard name!");
+            return;
+        }
+        let encodedoldName = encodeURI(oldName);
+        let encodednewName = encodeURI(newName);
+        console.log("old name: "+oldName+" new name: "+newName);
+        response = await fetch(`https://localhost:7186/api/Leaderboards/${encodedoldName}?newLeaderboardName=${encodednewName}`,
+            {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+            });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        console.log('Leaderboard updated successfully:');
         return true;
     } catch (error) {
         console.log('Fetch Error: ', error);
