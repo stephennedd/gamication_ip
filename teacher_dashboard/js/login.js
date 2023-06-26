@@ -30,8 +30,10 @@ document.getElementById("loginForm").addEventListener("submit", function(event) 
     .then(function(data) {
       // Here we assume your server response includes a property "token" containing the JWT
       // Store the JWT in a cookie
+      let date = new Date();
+      date.setMinutes(date.getMinutes() + 45);
       document.cookie = 'jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-      document.cookie = `jwt=${data.token}; path=/`;
+      document.cookie = `jwt=${data.token}; path=/ ; expires=${date.toUTCString()};`;
       
       var decodedToken = parseJwt(data.token);
 			const userRole = decodedToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
