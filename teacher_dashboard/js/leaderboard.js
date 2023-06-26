@@ -1,5 +1,5 @@
 
-
+let oldName = null;
 
 // Event handler for form submit
 $('#create-leaderboard-form').submit(function (e) {
@@ -40,10 +40,11 @@ $('#update-leaderboard-form').submit(function (e) {
 
     // Log JSON data
     console.log(JSON.stringify(jsonData));
-
-
+    let newName = jsonData["leaderboard-name"];
+    console.log("New name = "+newName);
+    console.log("Leaderboard name = " + oldName);
     e.preventDefault(); // Prevent the form from submitting for now
-    updateLeaderboard();
+    updateLeaderboard(oldName, newName);
 });
 
 // Deleting a leaderboard
@@ -185,14 +186,13 @@ $('#update-leaderboard-modal').on('show.bs.modal', function (event) {
     // Find the leaderboard in the array;
     const leaderboard = leaderboards.find(leaderboard => leaderboard === leaderboardId);
     console.log('update Leaderboard: ' + leaderboard);
-    let oldName = leaderboard;
+    oldName = leaderboard;
 
     // Populate the form
     const modal = $(this);
     modal.find('#modal-leaderboard-name').val(leaderboard);
-    const newName = modal.find('#modal-leaderboard-name').value;
-    console.log("tego szukam "+newName);
-    updateLeaderboard(oldName, newName);
+
+
 });
 
 async function createLeaderboard(){
@@ -276,13 +276,13 @@ async function updateLeaderboard(oldName, newName){
             .split('=')[1];
 
         // Ensure groupName is not empty or undefined
-        if (!oldName || oldName.trim() === '' || !newName || newName.trim() === '') {
+        if (!oldName || oldName.trim() === '' || !newName) {
             console.error("Invalid or empty leaderboard name!");
             return;
         }
         let encodedoldName = encodeURI(oldName);
         let encodednewName = encodeURI(newName);
-
+        console.log("old name: "+oldName+" new name: "+newName);
         response = await fetch(`https://localhost:7186/api/Leaderboards/${encodedoldName}?newLeaderboardName=${encodednewName}`,
             {
                 method: 'PUT',
