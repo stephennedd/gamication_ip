@@ -31,7 +31,7 @@ namespace GamificationAPI.Controllers
             return Ok();
         }
 
-       
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult GetGroups()
         {
