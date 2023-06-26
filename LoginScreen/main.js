@@ -143,9 +143,12 @@ document.addEventListener('DOMContentLoaded', function () {
 				})
 				.then(function (data) {
 					let date = new Date();
-      date.setMinutes(date.getMinutes() + 45);
-      document.cookie = 'jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-      document.cookie = `jwt=${data.token}; path=/ ; expires=${date.toUTCString()};`;
+					date.setMinutes(date.getMinutes() + 45);
+					document.cookie =
+						'jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+					document.cookie = `jwt=${
+						data.token
+					}; path=/ ; expires=${date.toUTCString()};`;
 					token = data.token;
 					const decodedToken = parseJwt(token);
 
@@ -155,6 +158,7 @@ document.addEventListener('DOMContentLoaded', function () {
 						verificationRadio.classList.remove('hide');
 						verifyLabel.classList.remove('hide');
 						verificationCodeInput.classList.remove('hidden');
+						groupSelector.classList.remove('hidden');
 
 						loginForm.classList.replace('signin', 'verify');
 						verificationRadio.checked = true;
@@ -208,7 +212,7 @@ document.addEventListener('DOMContentLoaded', function () {
 						throw new Error('Failed to create user');
 					}
 					console.log(response);
-					return response.json(); // this should be returned
+					return response.json();
 				})
 				.then(function (data) {
 					displayTextOneCharacterAtATime(welcomeElement, 'Account created!');
@@ -248,10 +252,14 @@ document.addEventListener('DOMContentLoaded', function () {
 				errorElement.style.display = 'block';
 				return;
 			}
+			displayTextOneCharacterAtATime(
+				welcomeElement,
+				'Enter verification code sent to your email and chose your group.'
+			);
 
 			verifyCode(verificationCode);
-			// refreshJWT();
-			location.reload();
+			refreshJWT();
+			// location.reload();
 		}
 	});
 
@@ -275,8 +283,6 @@ document.addEventListener('DOMContentLoaded', function () {
 			.split('; ')
 			.find((row) => row.startsWith('jwt='))
 			.split('=')[1];
-		console.log(token);
-		token = document.cookie;
 		fetch('https://localhost:7186/api/Tokens', {
 			method: 'GET',
 			headers: {
@@ -286,22 +292,20 @@ document.addEventListener('DOMContentLoaded', function () {
 		})
 			.then(function (response) {
 				if (!response.ok) {
-					throw (
-						(new Error('Invalid username or password'),
-						displayTextOneCharacterAtATime(
-							errorElement,
-							'Invalid username or password'
-						),
-						(errorElement.style.display = 'block'))
+					displayTextOneCharacterAtATime(
+						errorElement,
+						'Invalid username or password'
 					);
+					errorElement.style.display = 'block';
+					throw new Error('Invalid username or password');
 				}
 				return response.json();
 			})
 			.then(function (data) {
 				document.cookie =
 					'jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-				document.cookie = `jwt=${data.token}; path=/`;
 				token = data.token;
+				document.cookie = `jwt=${token}; path=/`;
 				const decodedToken = parseJwt(token);
 				if (decodedToken.IsVerified == 'False') {
 					displayTextOneCharacterAtATime(welcomeElement, verificationText);
@@ -312,7 +316,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
 					loginForm.classList.replace('signin', 'verify');
 					setIndicatorPosition(1);
-				} else window.location.href = '../ArcadeMachine';
+				} else {
+					window.location.href = '../ArcadeMachine';
+				}
 			})
 			.catch(function (error) {
 				console.error(error);
