@@ -6,13 +6,13 @@ window.addEventListener("DOMContentLoaded", function() {
       console.log("User is authenticated");
       if (!window.location.href.includes("admin-panel.html")) {
         setTimeout(function() {
-          window.location.href = "http://127.0.0.1:5500/teacher_dashboard/pages/admin-panel.html";
+          window.location.href = "http://127.0.0.1:5500/gamication_ip/teacher_dashboard/pages/admin-panel.html";
         }, 1000);
       }
     } else {
       // User is not authenticated, redirect to login
       console.log("User is not authenticated");
-      this.window.location.href = "http://127.0.0.1:5500/teacher_dashboard/pages/login.html";
+      window.location.href = "http://127.0.0.1:5500/gamication_ip/teacher_dashboard/pages/login.html";
     }
 });
 
