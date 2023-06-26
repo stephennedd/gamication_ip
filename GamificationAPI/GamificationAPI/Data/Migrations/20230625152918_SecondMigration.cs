@@ -56,11 +56,13 @@ namespace GamificationAPI.Data.Migrations
                 name: "Leaderboards",
                 columns: table => new
                 {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Leaderboards", x => x.Name);
+                    table.PrimaryKey("PK_Leaderboards", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -233,17 +235,17 @@ namespace GamificationAPI.Data.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     UserId = table.Column<int>(type: "integer", nullable: false),
-                    LeaderboardName = table.Column<string>(type: "text", nullable: false),
+                    LeaderboardId = table.Column<int>(type: "integer", nullable: false),
                     Score = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_HighScores", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_HighScores_Leaderboards_LeaderboardName",
-                        column: x => x.LeaderboardName,
+                        name: "FK_HighScores_Leaderboards_LeaderboardId",
+                        column: x => x.LeaderboardId,
                         principalTable: "Leaderboards",
-                        principalColumn: "Name",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_HighScores_Users_UserId",
@@ -326,9 +328,9 @@ namespace GamificationAPI.Data.Migrations
                 column: "TestId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_HighScores_LeaderboardName",
+                name: "IX_HighScores_LeaderboardId",
                 table: "HighScores",
-                column: "LeaderboardName");
+                column: "LeaderboardId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_HighScores_UserId",

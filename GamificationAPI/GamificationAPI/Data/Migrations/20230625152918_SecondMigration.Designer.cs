@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GamificationAPI.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230625102055_SecondMigration")]
+    [Migration("20230625152918_SecondMigration")]
     partial class SecondMigration
     {
         /// <inheritdoc />
@@ -116,9 +116,8 @@ namespace GamificationAPI.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("LeaderboardName")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("LeaderboardId")
+                        .HasColumnType("integer");
 
                     b.Property<int>("Score")
                         .HasColumnType("integer");
@@ -128,7 +127,7 @@ namespace GamificationAPI.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LeaderboardName");
+                    b.HasIndex("LeaderboardId");
 
                     b.HasIndex("UserId");
 
@@ -137,10 +136,17 @@ namespace GamificationAPI.Data.Migrations
 
             modelBuilder.Entity("GamificationAPI.Models.Leaderboard", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("Name");
+                    b.HasKey("Id");
 
                     b.ToTable("Leaderboards");
                 });
@@ -413,7 +419,7 @@ namespace GamificationAPI.Data.Migrations
                 {
                     b.HasOne("GamificationAPI.Models.Leaderboard", "Leaderboard")
                         .WithMany("HighScores")
-                        .HasForeignKey("LeaderboardName")
+                        .HasForeignKey("LeaderboardId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

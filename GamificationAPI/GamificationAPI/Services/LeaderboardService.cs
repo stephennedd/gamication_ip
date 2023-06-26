@@ -64,10 +64,17 @@ public class LeaderboardService : ILeaderboards
         return true;
     }
 
-    public async Task UpdateLeaderboardAsync(Leaderboard leaderboard)
+    public async Task<bool> UpdateLeaderboardAsync(string oldName, string newName)
     {
-        _dbContext.Set<Leaderboard>().Update(leaderboard);
-        await _dbContext.SaveChangesAsync();
+        var leaderboard = await GetLeaderboardByNameAsync(oldName);
+        if(leaderboard == null)
+        { return false; }
+        else
+        {
+            leaderboard.Name = newName;
+            await _dbContext.SaveChangesAsync();
+            return true;
+        }
     }
 
     public async Task<bool> DeleteLeaderboardAsync(string name)
