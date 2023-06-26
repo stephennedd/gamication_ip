@@ -5,15 +5,15 @@ class BootScene extends Phaser.Scene {
 	}
 
 	preload() {
-		this.load.image('ball', '/../Games/Breakout/assets/images/ball.png');
-		this.load.image('paddle', '/../Games/Breakout/assets/images/paddle.png');
+		this.load.image('ball', 'assets/images/ball.png');
+		this.load.image('paddle', 'assets/images/paddle.png');
 		this.brickColors.forEach((color) => {
 			this.load.image(
 				color,
-				'/../Games/Breakout/assets/images/' + color + '.png'
+				'assets/images/' + color + '.png'
 			);
 		});
-		this.load.image('heart', '/../Games/Breakout/assets/images/heart.png');
+		this.load.image('heart', 'assets/images/heart.png');
 	}
 
 	create() {
@@ -288,6 +288,8 @@ class MainScene extends Phaser.Scene {
 			return; // Don't execute the update loop if the game is paused
 		}
 		if (this.gameOver) {
+			sendScore(this.score);
+			console.log("Score sent");
 			this.showGameOverScreen();
 			return;
 		}
@@ -531,3 +533,37 @@ const config = {
 };
 
 const game = new Phaser.Game(config);
+
+async function sendScore(score){
+    try {
+        let response;
+        var token = document.cookie
+            .split('; ')
+            .find(row => row.startsWith('jwt='))
+            .split('=')[1];
+
+        // Ensure groupName is not empty or undefined
+        if (!score) {
+            console.error("Invalid or empty score!");
+            return;
+        }
+
+        response = await fetch(`https://localhost:7186/api/HighScores?score=${score}&leaderboardName=Breakout`,
+            {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+            });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        console.log('Leaderboard updated successfully:');
+        return true;
+    } catch (error) {
+        console.log('Fetch Error: ', error);
+    }
+}

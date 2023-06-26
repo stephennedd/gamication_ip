@@ -115,6 +115,9 @@
     },
     {
       "Name": "game1"
+    },
+    {
+      "Name": "game2"
     }
   ],
   "highscores": [
@@ -144,6 +147,18 @@
     },
     {
       "UserId": "3333",
+      "Password": "$2a$12$zFMGB9ktpEaIHqYb67/Dbuu04gPMDg8VdpdXzd.AirurAa4.M4AMy",
+      "RoleId": "1",
+      "GroupId": "2"
+    },
+    {
+      "UserId": "4444",
+      "Password": "$2a$12$zFMGB9ktpEaIHqYb67/Dbuu04gPMDg8VdpdXzd.AirurAa4.M4AMy",
+      "RoleId": "1",
+      "GroupId": "2"
+    },
+    {
+      "UserId": "5555",
       "Password": "$2a$12$zFMGB9ktpEaIHqYb67/Dbuu04gPMDg8VdpdXzd.AirurAa4.M4AMy",
       "RoleId": "1",
       "GroupId": "2"
