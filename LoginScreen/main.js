@@ -273,15 +273,15 @@ document.addEventListener('DOMContentLoaded', function () {
 		let token = document.cookie
 			.split('; ')
 			.find((row) => row.startsWith('jwt='))
-			.split('=')[1]; 
-		console.log(token)
-		 token = document.cookie;
+			.split('=')[1];
+		console.log(token);
+		token = document.cookie;
 		fetch('https://localhost:7186/api/Tokens', {
 			method: 'GET',
 			headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json',
+			},
 		})
 			.then(function (response) {
 				if (!response.ok) {
@@ -330,7 +330,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
-				'Authorization': `Bearer ${token}`,
+				Authorization: `Bearer ${token}`,
 			},
 			body: JSON.stringify({ code: code }),
 		})
@@ -371,7 +371,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	// For group selection
 	async function fetchGroupNames() {
-
 		try {
 			const response = await fetch('https://localhost:7186/api/Groups', {
 				method: 'GET',
@@ -398,7 +397,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		const dropdown = document.getElementById('groupSelect');
 		dropdown.innerHTML =
 			'<option selected disabled value="">Select a group</option>'; // clear existing options
-		
+
 		// Add the groups to the dropdown
 		groups.forEach((group) => {
 			var option = document.createElement('option');
