@@ -4,6 +4,7 @@ using GamificationToIP.Context;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Moq;
+using Newtonsoft.Json;
 
 namespace GamificationAPITests
 {
@@ -137,6 +138,29 @@ namespace GamificationAPITests
 
             // Assert
             Assert.Equal(resultPercentage, returnedPercentage);
+        }
+
+        [Fact]
+        public async Task GetGeneratedTest_ReturnsGeneratedTestDto()
+        {
+            // Arrange
+            int studentId = 1;
+            int testId = 1;
+            var generatedTest = new GeneratedTestDto { Id = 1 };
+
+            _mockGeneratedTestService.Setup(service => service.GetGeneratedTest(studentId, testId))
+                .ReturnsAsync(generatedTest);
+
+            // Act
+            var result = await _controller.GetGeneratedTest(studentId, testId);
+
+            var actionResult = Assert.IsType<ActionResult<GeneratedTestDto>>(result);
+            var contentResult = Assert.IsType<ContentResult>(actionResult.Result);
+            var content = contentResult.Content;
+            var returnedTest = JsonConvert.DeserializeObject<GeneratedTestDto>(content);
+
+            // Assert
+            Assert.Equal(generatedTest.Id, returnedTest.Id);
         }
     }
 }
