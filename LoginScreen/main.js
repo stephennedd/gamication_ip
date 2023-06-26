@@ -218,6 +218,7 @@ document.addEventListener('DOMContentLoaded', function () {
 						);
 						// change selected view to sign in
 						loginForm.classList.replace('signup', 'signin');
+						signInRadio.checked = true;
 						setIndicatorPosition(0);
 					}, 1500);
 				})
