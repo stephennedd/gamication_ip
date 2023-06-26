@@ -249,7 +249,8 @@ document.addEventListener('DOMContentLoaded', function () {
 			}
 
 			verifyCode(verificationCode);
-			refreshJWT();
+			// refreshJWT();
+			location.reload();
 		}
 	});
 
@@ -309,7 +310,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			})
 			.catch(function (error) {
 				console.error(error);
-				displayTextOneCharacterAtATime(errorElement, 'Login failed.');
+				displayTextOneCharacterAtATime(errorElement, 'Verification failed.');
 				errorElement.style.display = 'block';
 			});
 	}
@@ -336,7 +337,7 @@ document.addEventListener('DOMContentLoaded', function () {
 				}
 			})
 			.then((data) => {
-				// $('#response-message').empty();
+				$('#response-message').empty();
 				if (data.success) {
 					displayTextOneCharacterAtATime(
 						welcomeElement,
