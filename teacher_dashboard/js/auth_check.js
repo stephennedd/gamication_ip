@@ -4,6 +4,11 @@ window.addEventListener("DOMContentLoaded", function() {
     if (isAuthenticated()) {
       // User is authenticated, redirect to dashboard
       console.log("User is authenticated");
+      if (!window.location.href.includes("admin-panel.html")) {
+        setTimeout(function() {
+          window.location.href = "/teacher_dashboard/pages/admin-panel.html";
+        }, 1000);
+      }
     } else {
       // User is not authenticated, redirect to login
       console.log("User is not authenticated");
