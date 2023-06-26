@@ -397,14 +397,14 @@ document.addEventListener('DOMContentLoaded', function () {
 		const option = document.createElement('option');
 		option.text = 'All Students';
 		option.value = 'All Students';
-		groupSelector.appendChild(option);
+		dropdown.appendChild(option);
 		// Add the groups to the dropdown
 		groups.forEach((group) => {
 			var option = document.createElement('option');
 			option.text = group.name;
 			option.value = group.name;
 			console.log(group.name);
-			groupSelector.appendChild(option);
+			dropdown.appendChild(option);
 		});
 		dropdown.addEventListener('change', function () {
 			groupName = this.value; // update the label
