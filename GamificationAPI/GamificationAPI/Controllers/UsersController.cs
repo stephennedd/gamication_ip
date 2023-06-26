@@ -13,7 +13,7 @@ using GamificationAPI.Services;
 using Newtonsoft.Json;
 using BCrypt.Net;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.IdentityModel.Tokens;
 
 namespace GamificationToIP.Controllers
 {
@@ -301,16 +301,28 @@ namespace GamificationToIP.Controllers
 
         }
 
-        [Authorize(Policy = "IsVerified")]
-        [HttpPatch("Group/{userId}")]
-
-        public async Task<IActionResult> AddGroupToUser(string userId, string groupName)
+        [HttpPatch("Group")]
+        [Authorize(Roles = "Student, Admin, Teacher")]
+        public async Task<IActionResult> AddGroupToUser(string groupName)
         {
+
+            if (!HttpContext.Request.Headers.TryGetValue("Authorization", out var authorizationHeader) || string.IsNullOrWhiteSpace(authorizationHeader))
+            {
+                return BadRequest("Authorization header is missing.");
+            }
+            var userId = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return BadRequest("Invalid token.");
+            }
             if (await _userService.UserExistsAsync(userId) == false)
             {
-                return NotFound("Group with this name does not exist");
+                return BadRequest("user with this id does not exist");
             }
-
+            if(groupName.IsNullOrEmpty())
+            {
+                return BadRequest("Group name must contain 'Group' word");
+            }
             bool success = await _userService.AddGroupToUserAsync(userId, groupName);
             if (success)
             {
