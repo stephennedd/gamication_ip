@@ -11,7 +11,7 @@ window.addEventListener('DOMContentLoaded', function () {
 		game,
 		gameWindow;
 	// just for testing assigned true, delete later
-	const quizPassed = localStorage.getItem('quizPassed') || 'true';
+	const quizPassed = localStorage.getItem('quizPassed') ;
 
 	const unpressedImages = {
 		moveIn: 'Media/Images/up.png',
