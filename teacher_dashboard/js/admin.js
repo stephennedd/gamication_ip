@@ -94,7 +94,7 @@ fetch(`https://localhost:7186/api/Users/Admin?admin=${admin}`, {
 
 // Check if subjects data exists in localStorage on page load
 window.addEventListener('DOMContentLoaded', function () {
-    console.log(localStorage.getItem('subjectsDataForRemovePage'))
+    //console.log(localStorage.getItem('subjectsDataForRemovePage'))
     const storedSubjects = localStorage.getItem('subjectsDataForRemovePage');
   
     if (storedSubjects) {
@@ -111,7 +111,7 @@ window.addEventListener('DOMContentLoaded', function () {
   
     // Function to create a table row based on a subject object
     function createTableRow(subject) {
-        console.log(subject);
+        //console.log(subject);
       const tr = document.createElement('tr');
       tr.setAttribute('data-quiz-id', subject.Test.Id);
       tr.setAttribute('data-quiz-name', subject.Test.Title);
