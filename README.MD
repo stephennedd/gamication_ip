@@ -23,6 +23,27 @@ Project was created with:
 
 To get a local copy up and running follow these steps.
 
+1. Clone the repo
+
+```sh
+git clone
+```
+
+2. Run the backend using the instructions in the backend folder
+   [click here to see instructions on running backend](/GamificationAPI/README.md)
+
+3. To run the arcade machine, navigate to the arcade machine folder and start a live server
+
+```sh
+cd ArcadeMachine
+```
+
+4. To run the teacher dashboard, navigate to the teacher dashboard folder and run the index.html file
+
+```sh
+cd teacher_dashboard
+```
+
 ## Features
 
 - [x] Login
