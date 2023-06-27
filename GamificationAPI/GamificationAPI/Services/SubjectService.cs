@@ -38,7 +38,6 @@ public class SubjectService : ISubjects
     public async Task<Subject> DeleteSubject(int id)
     {
         Subject subject = await _dbContext.Subjects.FindAsync(id);
-       
 
         // Check if the subject has an associated test
         if (subject.TestId != null)
@@ -48,12 +47,13 @@ public class SubjectService : ISubjects
                 .ThenInclude(q => q.Answers)
                 .FirstOrDefaultAsync(t => t.Id == subject.TestId);
 
+
+
             if (test != null)
             {
                 // Remove the questions and answers of the test
                 _dbContext.Answers.RemoveRange(test.Questions.SelectMany(q => q.Answers));
-                _dbContext.Questions.RemoveRange(test.Questions);
-
+                _dbContext.Questions.RemoveRange(test.Questions);         
                 _dbContext.Tests.Remove(test);
             }
         }
@@ -65,37 +65,42 @@ public class SubjectService : ISubjects
     }
 
     public async Task<Subject> AddSubject(NewSubject newSubject)
+{
+    var newTest = new Test
     {
-        var newTest = new Test
+        Title = newSubject.SubjectTitle,
+        ImageUrl = "",
+        Description = "",
+        TimeSeconds = 0
+    };
+    
+    _dbContext.Set<Test>().Add(newTest);
+    await _dbContext.SaveChangesAsync();
+
+    int newTestId = newTest.Id;
+
+    var subject = new Subject
+    {
+        SubjectTitle = newSubject.SubjectTitle,
+        WeekNumber = newSubject.WeekNumber,
+        TestId = newTestId,
+        GameId = newSubject.GameId,
+        Leaderboard = new Leaderboard
         {
-            Title = newSubject.SubjectTitle,
-            ImageUrl = "",
-            Description = "",
-            TimeSeconds = 0
-        };
+            Name = newSubject.SubjectTitle,
+        }
+        // Create a new Leaderboard instance and assign it to the Subject's Leaderboard property
 
-        _dbContext.Set<Test>().Add(newTest);
-        await _dbContext.SaveChangesAsync();
-
-        int newTestId = newTest.Id;
-
-        var subject = new Subject
-        {
-            SubjectTitle = newSubject.SubjectTitle,
-            WeekNumber = newSubject.WeekNumber,
-            TestId = newTestId,
-            GameId = newSubject.GameId
-        };
+    };
+       
 
         // Add the subject to the context
         _dbContext.Subjects.Add(subject);
 
+    await _dbContext.SaveChangesAsync();
 
-        await _dbContext.SaveChangesAsync();
-
-
-        return subject;
-    }
+    return subject;
+}
     public async Task<RootObject> UpdateTables(RootObject data)
     {
 

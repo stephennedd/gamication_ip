@@ -37,6 +37,13 @@ mute_btn.onclick = () => {
 };
 
 async function getGeneratedTestForStudent() {
+
+  const subjectName = localStorage.getItem("subject"); // Replace with your desired subject name
+  const response = await fetch(`https://localhost:7186/api/subjects/${subjectName}/test`)
+  const data = await response.json();
+  let  testId = data;
+  console.log(`Test ID for ${subjectName}: ${testId}`);
+
 	var token = document.cookie
 		.split('; ')
 		.find((row) => row.startsWith('jwt='))
@@ -56,7 +63,7 @@ async function getGeneratedTestForStudent() {
 			},
 			body: JSON.stringify({
 				studentId: studentId,
-				testId: 1,
+				testId: testId,
 				numberOfQuestions: 5,
 			}),
 		});

@@ -113,7 +113,7 @@ public class HighScoreService : IHighScores
 
             if (userHS.Count != 0)
             {
-                HighScore? highScoreInDB = userHS.FirstOrDefault(item => item.Leaderboard.Name == "main");
+                HighScore? highScoreInDB = userHS.FirstOrDefault(item => item.Leaderboard.Name == "Main");
                 int overallScore = 0;
                 if (highScoreInDB != null)
                 {
@@ -134,7 +134,7 @@ public class HighScoreService : IHighScores
                 {
                     var highScore = new HighScore
                     {
-                        Leaderboard = await _dbContext.Leaderboards.FirstOrDefaultAsync(l => l.Name == "main"),
+                        Leaderboard = await _dbContext.Leaderboards.FirstOrDefaultAsync(l => l.Name == "Main"),
                         Score = overallScore,
                         User = user
                     };

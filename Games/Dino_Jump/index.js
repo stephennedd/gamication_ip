@@ -2904,7 +2904,8 @@ async function sendScore(score) {
 			.split('; ')
 			.find((row) => row.startsWith('jwt='))
 			.split('=')[1];
-
+		const subject = localStorage.getItem('subject');
+		console.log("subject = " + subject);
 		// Ensure groupName is not empty or undefined
 		if (!score) {
 			console.error('Invalid or empty score!');
@@ -2912,7 +2913,7 @@ async function sendScore(score) {
 		}
 
 		response = await fetch(
-			`https://localhost:7186/api/HighScores?score=${score}&leaderboardName=Dino`,
+			`https://localhost:7186/api/HighScores?score=${score}&leaderboardName=${subject}`,
 			{
 				method: 'POST',
 				headers: {
@@ -2932,3 +2933,4 @@ async function sendScore(score) {
 		console.log('Fetch Error: ', error);
 	}
 }
+

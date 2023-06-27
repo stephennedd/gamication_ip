@@ -1,6 +1,7 @@
 ﻿using GamificationAPI.Models;
 using GamificationToIP.Context;
 using GamificationToIP.Models;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 
@@ -84,14 +85,14 @@ namespace GamificationToIP.Seed
                     applicationDbContext.Set<User>().Add(newUser);
                     await applicationDbContext.SaveChangesAsync();
                 }
-
+                /*
                 foreach (var leaderboard in gamificationToIpData.leaderboards)
                 {
                     Leaderboard leaderboard1 = new Leaderboard { Name = leaderboard.Name };
                     applicationDbContext.Set<Leaderboard>().Add(leaderboard1);
                     await applicationDbContext.SaveChangesAsync();
                 };
-
+                */
                 /*
                 foreach (var highscore in gamificationToIpData.highscores)
                 {
@@ -149,6 +150,10 @@ namespace GamificationToIP.Seed
                     }
                 }
 
+                var mainLeaderboard = new Leaderboard { Name = "Main" };
+                applicationDbContext.Set<Leaderboard>().Add(mainLeaderboard);
+                await applicationDbContext.SaveChangesAsync();
+
                 foreach (var subject in gamificationToIpData.subjects)
                 {
                     var newSubject = new Subject
@@ -156,15 +161,22 @@ namespace GamificationToIP.Seed
                         SubjectTitle = subject.SubjectTitle,
                         WeekNumber = subject.WeekNumber,
                         TestId = subject.TestId,
-                        GameId= subject.GameId, 
+                        GameId = subject.GameId
                     };
+
+                    var leaderboard = new Leaderboard
+                    {
+                        Name = newSubject.SubjectTitle,
+                    };
+
+                    newSubject.Leaderboard = leaderboard;
 
                     applicationDbContext.Set<Subject>().Add(newSubject);
                     await applicationDbContext.SaveChangesAsync();
+
                 }
             }
         }
-
         private async Task ClearData()
         {
             var answers = applicationDbContext.Answers.ToList();

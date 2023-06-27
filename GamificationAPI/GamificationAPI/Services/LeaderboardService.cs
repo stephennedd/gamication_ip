@@ -45,6 +45,7 @@ public class LeaderboardService : ILeaderboards
         .Include(l => l.HighScores)
         .ThenInclude(h => h.User)
         .ThenInclude(u => u.Badges)
+        .Include(b => b.Subject)
         .FirstOrDefaultAsync(l => l.Name == name);
     }
 
@@ -77,33 +78,7 @@ public class LeaderboardService : ILeaderboards
         }
     }
 
-    public async Task<bool> DeleteLeaderboardAsync(string name)
-    {
-        var leaderboard = await GetLeaderboardByNameAsync(name);
 
-        if (leaderboard != null)
-        {
-            _dbContext.Leaderboards.Remove(leaderboard);
-            await _dbContext.SaveChangesAsync();
-            return true;
-        }
-        return false;
-    }
-    public async Task<bool> CreateLeaderboardAsync(string name)
-    {
-        var leaderboard = await GetLeaderboardByNameAsync(name.ToLower());
-        if (leaderboard != null || string.IsNullOrWhiteSpace(name.ToLower()))
-        {
-            return false;
-        }
-        else
-        {
-            leaderboard = new Leaderboard { Name = name.ToLower() };
-            _dbContext.Set<Leaderboard>().Add(leaderboard);
-            await _dbContext.SaveChangesAsync();
-            return true;
-        }
-    }
    
     public async Task<bool> CheckIfStudentHasHighScoreInLeadeboard(string studentId, string name)
     {
