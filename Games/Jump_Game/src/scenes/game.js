@@ -33,10 +33,10 @@ var star;
 var enemy_n;
 var enemy_s;
 let jumpheight = 840;
-let life = 2;
+let life = 1;
 let invincible = false;
 let isProcessing = false;
-let scoreMultiplier = 2;
+let scoreMultiplier = 1;
 
 export class GameScene extends Phaser.Scene {
 	constructor() {
@@ -68,6 +68,22 @@ export class GameScene extends Phaser.Scene {
 	}
 
 	create() {
+		// Check for localstorage items for extraLife and scoreMultiplier
+		const gameDataLife = localStorage.getItem('extraLife');
+		const gameDataScore = localStorage.getItem('scoreMultiplier');
+		if (gameDataLife === 'true') {
+			this.life = 3; // Add 2 extra lifes
+		} else {
+			this.lifes = 1;
+		}
+
+		// Update score multiplier based on localstorage
+		if (gameDataScore === 'true') {
+			this.scoreMultiplier = 2; // Multiply score by 2
+		} else {
+			this.scoreMultiplier = 1;
+		}
+		score = 0;
 		this.createTiles();
 		/* Create Breaking Tiles/Platforms Group */
 		this.createBreakTiles();
@@ -512,8 +528,10 @@ export class GameScene extends Phaser.Scene {
 	}
 
 	GameOver() {
-		this.score = this.score * scoreMultiplier;
-
+		let multipliedScore = score * scoreMultiplier;
+		console.log("score = " + score);
+		console.log(multipliedScore);
+		sendScore(multipliedScore);
 		// Show Game Over Text
 		GameOverText.visible = true;
 
@@ -541,9 +559,14 @@ export class GameScene extends Phaser.Scene {
 		enemySgroup.setAlpha(0);
 		enemySgroup.clear();
 
-		/* Player Opacity */
 		player.setAlpha(0.45);
-		//TODO SEND SCORE TO BACKEND
+		
+		//add event listener for retry
+		this.input.on('pointerdown', () => {
+
+		this.scene.restart();
+		});
+
 	}
 	FallOff() {
 		life -= 1;
@@ -580,4 +603,37 @@ export class GameScene extends Phaser.Scene {
 			player.body.velocity.x = 400;
 		} else if (player.body.velocity.x < -400) player.body.velocity.x = -400;
 	}
+}
+async function sendScore(score){
+    try {
+        let response;
+        var token = document.cookie
+            .split('; ')
+            .find(row => row.startsWith('jwt='))
+            .split('=')[1];
+
+        // Ensure groupName is not empty or undefined
+        if (!score) {
+            console.error("Invalid or empty score!");
+            return;
+        }
+
+        response = await fetch(`https://localhost:7186/api/HighScores?score=${score}&leaderboardName=jump`,
+            {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+            });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        console.log('Leaderboard updated successfully:');
+        return true;
+    } catch (error) {
+        console.log('Fetch Error: ', error);
+    }
 }
