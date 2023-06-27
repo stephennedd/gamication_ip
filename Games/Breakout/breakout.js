@@ -8,10 +8,7 @@ class BootScene extends Phaser.Scene {
 		this.load.image('ball', 'assets/images/ball.png');
 		this.load.image('paddle', 'assets/images/paddle.png');
 		this.brickColors.forEach((color) => {
-			this.load.image(
-				color,
-				'assets/images/' + color + '.png'
-			);
+			this.load.image(color, 'assets/images/' + color + '.png');
 		});
 		this.load.image('heart', 'assets/images/heart.png');
 	}
@@ -181,7 +178,7 @@ class MainScene extends Phaser.Scene {
 		for (let i = 0; i < this.lifes; i++) {
 			let heart = this.add
 				.image(this.heartX + i * this.heartSpacing, this.heartY, 'heart')
-				.setOrigin(1, 0);
+				.setOrigin(2.5, 0);
 			heart.setScale(0.055);
 			this.livesSprites.push(heart);
 		}
@@ -288,8 +285,9 @@ class MainScene extends Phaser.Scene {
 			return; // Don't execute the update loop if the game is paused
 		}
 		if (this.gameOver) {
+			this.gameOver = true;
 			sendScore(this.score);
-			console.log("Score sent");
+			console.log('Score sent');
 			this.showGameOverScreen();
 			return;
 		}
@@ -305,12 +303,6 @@ class MainScene extends Phaser.Scene {
 				gameOver = true;
 			}
 		});
-
-		if (gameOver) {
-			this.gameOver = true;
-			this.showGameOverScreen();
-			return;
-		}
 
 		// Check if the game window is hidden
 		const gameWindow = document.getElementById('game');
@@ -534,36 +526,38 @@ const config = {
 
 const game = new Phaser.Game(config);
 
-async function sendScore(score){
-    try {
-        let response;
-        var token = document.cookie
-            .split('; ')
-            .find(row => row.startsWith('jwt='))
-            .split('=')[1];
+async function sendScore(score) {
+	try {
+		let response;
+		var token = document.cookie
+			.split('; ')
+			.find((row) => row.startsWith('jwt='))
+			.split('=')[1];
 
-        // Ensure groupName is not empty or undefined
-        if (!score) {
-            console.error("Invalid or empty score!");
-            return;
-        }
+		// Ensure groupName is not empty or undefined
+		if (!score) {
+			console.error('Invalid or empty score!');
+			return;
+		}
 
-        response = await fetch(`https://localhost:7186/api/HighScores?score=${score}&leaderboardName=Breakout`,
-            {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                },
-            });
+		response = await fetch(
+			`https://localhost:7186/api/HighScores?score=${score}&leaderboardName=Breakout`,
+			{
+				method: 'POST',
+				headers: {
+					Authorization: `Bearer ${token}`,
+					'Content-Type': 'application/json',
+				},
+			}
+		);
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
 
-        console.log('Leaderboard updated successfully:');
-        return true;
-    } catch (error) {
-        console.log('Fetch Error: ', error);
-    }
+		console.log('Leaderboard updated successfully:');
+		return true;
+	} catch (error) {
+		console.log('Fetch Error: ', error);
+	}
 }

@@ -108,3 +108,25 @@
 	font-size: 5rem;
 	font-family: 'Press Start 2P', cursive;
 }
+
+/* Reset Button Styles */
+button {
+	font-family: 'Press Start 2P', cursive;
+	background-color: #4caf50; /* Green background */
+	border: none; /* Remove borders */
+	color: white; /* White text */
+	padding: 15px 32px; /* Some padding */
+	text-align: center; /* Center the text */
+	text-decoration: none; /* Remove underline */
+	display: inline-block; /* Required for specific browsers */
+	font-size: 16px; /* Set font-size */
+	margin: 20px 2px; /* Some margin */
+	cursor: pointer; /* Add a pointer on hover */
+	border-radius: 12px; /* Rounded corners */
+	transition: background-color 0.3s, transform 0.3s; /* Transition effect */
+}
+
+button:hover {
+	background-color: #45a049; /* Darken background */
+	transform: scale(1.05); /* Slightly increase size */
+}

@@ -59,6 +59,7 @@ function play() {
 					message.classList.add('messageStyle');
 					img.style.display = 'none';
 					sound_die.play();
+					sendScore(score_val.innerHTML);
 					return;
 				} else {
 					if (
@@ -136,4 +137,40 @@ function play() {
 		requestAnimationFrame(create_pipe);
 	}
 	requestAnimationFrame(create_pipe);
+}
+
+async function sendScore(score) {
+	try {
+		let response;
+		var token = document.cookie
+			.split('; ')
+			.find((row) => row.startsWith('jwt='))
+			.split('=')[1];
+
+		// Ensure groupName is not empty or undefined
+		if (!score) {
+			console.error('Invalid or empty score!');
+			return;
+		}
+
+		response = await fetch(
+			`https://localhost:7186/api/HighScores?score=${score}&leaderboardName=FlappyBird`,
+			{
+				method: 'POST',
+				headers: {
+					Authorization: `Bearer ${token}`,
+					'Content-Type': 'application/json',
+				},
+			}
+		);
+
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+
+		console.log('Leaderboard updated successfully:');
+		return true;
+	} catch (error) {
+		console.log('Fetch Error: ', error);
+	}
 }

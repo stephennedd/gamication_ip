@@ -2,6 +2,25 @@
 const context = c.getContext('2d'); // canvas 2d context
 const startScreen = document.getElementById('startScreen'); // start screen
 const gameOverScreen = document.getElementById('gameOverScreen'); // game over screen
+// Check for localstorage items for extraLife and scoreMultiplier
+const gameDataLife = localStorage.getItem('extraLife');
+const gameDataScore = localStorage.getItem('scoreMultiplier');
+
+//TO DO implement powerups
+// // Update time based on localstorage
+// if (gameDataLife === 'true') {
+// 	time = 30; // Add 10 extra seconds
+// } else {
+// 	time = maxTime;
+// }
+
+// // Update score multiplier based on localstorage
+// if (gameDataScore === 'true') {
+// 	scoreMultiplier = 2; // Multiply score by 2
+// } else {
+// 	scoreMultiplier = 1;
+// }
+
 const drawDistance = 800; // how many road segments to draw in front of player
 const cameraDepth = 0.9; // FOV of camera (1 / Math.tan((fieldOfView/2) * Math.PI/180))
 const roadSegmentLength = 100; // length of each road segment
@@ -53,10 +72,19 @@ let road; // the list of road segments
 let time; // time left before game over
 let lastUpdate = 0; // time of last update
 let timeBuffer = 0; // frame rate adjustment
+let score = 0; //score based on distance traveled
+
+// steering input
+let startPressed = 0;
+let axisX = 0;
+let mouseLockX = 0;
+let keyDirection = 0; // Variable to keep track of the arrow key being pressed
+let isBraking = false; // Variable to keep track of the brake key being pressed
 
 let gameStarted = false;
 let isPaused = false;
 let isGameOver = false;
+let gameOverScreenCreated = false;
 
 function StartLevel() {
 	// build the road with procedural generation
@@ -130,165 +158,155 @@ function StartLevel() {
 }
 
 function Update() {
-	// time regulation, in case running faster then 60 fps, though it causes judder REMOVE FROM MINFIED
-	const now = performance.now();
-	if (lastUpdate) {
-		// limit to 60 fps
-		const delta = now - lastUpdate;
-		if (timeBuffer + delta < 0) {
-			// running fast
-			requestAnimationFrame(Update);
-			return;
+	// Check if time is less than or equal to 0, and if it is, display the game over screen
+	if (isGameOver == true) {
+		createGameOverScreen(score);
+		return;
+	} else {
+		// time regulation, in case running faster then 60 fps, though it causes judder REMOVE FROM MINFIED
+		const now = performance.now();
+		if (lastUpdate) {
+			// limit to 60 fps
+			const delta = now - lastUpdate;
+			if (timeBuffer + delta < 0) {
+				// running fast
+				requestAnimationFrame(Update);
+				return;
+			}
+
+			// update time buffer
+			timeBuffer += delta;
+			timeBuffer -= timeDelta * 1e3;
+			if (timeBuffer > timeDelta * 1e3) timeBuffer = 0; // if running too slow
 		}
+		lastUpdate = now;
 
-		// update time buffer
-		timeBuffer += delta;
-		timeBuffer -= timeDelta * 1e3;
-		if (timeBuffer > timeDelta * 1e3) timeBuffer = 0; // if running too slow
-	}
-	lastUpdate = now;
+		// set size
+		c.width = window.innerWidth;
+		c.height = window.innerHeight;
 
-	// set size
-	c.width = window.innerWidth;
-	c.height = window.innerHeight;
+		// update player - controls and physics
+		// get player road segment
+		const playerRoadSegment = (playerPos.z / roadSegmentLength) | 0; // current player road segment
+		const playerRoadSegmentPercent = (playerPos.z / roadSegmentLength) % 1; // how far player is along current segment
 
-	// update player - controls and physics
-	// get player road segment
-	const playerRoadSegment = (playerPos.z / roadSegmentLength) | 0; // current player road segment
-	const playerRoadSegmentPercent = (playerPos.z / roadSegmentLength) % 1; // how far player is along current segment
-
-	// get lerped values between last and current road segment
-	const playerRoadX = Lerp(
-		playerRoadSegmentPercent,
-		road[playerRoadSegment].x,
-		road[playerRoadSegment + 1].x
-	);
-	const playerRoadY =
-		Lerp(
+		// get lerped values between last and current road segment
+		const playerRoadX = Lerp(
 			playerRoadSegmentPercent,
-			road[playerRoadSegment].y,
-			road[playerRoadSegment + 1].y
-		) + playerHeight;
-	const roadPitch = Lerp(
-		playerRoadSegmentPercent,
-		road[playerRoadSegment].a,
-		road[playerRoadSegment + 1].a
-	);
+			road[playerRoadSegment].x,
+			road[playerRoadSegment + 1].x
+		);
+		const playerRoadY =
+			Lerp(
+				playerRoadSegmentPercent,
+				road[playerRoadSegment].y,
+				road[playerRoadSegment + 1].y
+			) + playerHeight;
+		const roadPitch = Lerp(
+			playerRoadSegmentPercent,
+			road[playerRoadSegment].a,
+			road[playerRoadSegment + 1].a
+		);
 
-	const playerVelocityLast = playerVelocity.Add(0); // save last velocity
-	playerVelocity.y += gravity; // gravity
-	playerVelocity.x *= lateralDamping; // apply lateral damping
-	playerVelocity.z = Math.max(0, time ? forwardDamping * playerVelocity.z : 0); // apply damping, prevent moving backwards
-	playerPos = playerPos.Add(playerVelocity); // add player velocity
+		const playerVelocityLast = playerVelocity.Add(0); // save last velocity
+		playerVelocity.y += gravity; // gravity
+		playerVelocity.x *= lateralDamping; // apply lateral damping
+		playerVelocity.z = Math.max(
+			0,
+			time ? forwardDamping * playerVelocity.z : 0
+		); // apply damping, prevent moving backwards
+		playerPos = playerPos.Add(playerVelocity); // add player velocity
 
-	const playerTurnAmount = Lerp(
-		playerVelocity.z / playerMaxSpeed,
-		axisX * playerTurnControl,
-		0
-	); // turning
+		const playerTurnAmount = Lerp(
+			playerVelocity.z / playerMaxSpeed,
+			axisX * playerTurnControl,
+			0
+		); // turning
 
-	playerVelocity.x += // update x velocity
-		playerVelocity.z * playerTurnAmount - // apply turn
-		playerVelocity.z ** 2 * centrifugal * playerRoadX; // apply centrifugal force
-	playerPos.x = Clamp(playerPos.x, -maxPlayerX, maxPlayerX); // limit player x position
+		playerVelocity.x += // update x velocity
+			playerVelocity.z * playerTurnAmount - // apply turn
+			playerVelocity.z ** 2 * centrifugal * playerRoadX; // apply centrifugal force
+		playerPos.x = Clamp(playerPos.x, -maxPlayerX, maxPlayerX); // limit player x position
 
-	// check if on ground
-	if (playerPos.y < playerRoadY) {
-		// bounce velocity against ground normal
-		playerPos.y = playerRoadY; // match y to ground plane
-		playerVelocity = new Vector3(0, Math.cos(roadPitch), Math.sin(roadPitch)) // get ground normal
-			.Multiply(
-				-elasticity * // apply bounce
-					(Math.cos(roadPitch) * playerVelocity.y +
-						Math.sin(roadPitch) * playerVelocity.z)
-			) // dot of road and velocity
-			.Add(playerVelocity); // add velocity
+		// check if on ground
+		if (playerPos.y < playerRoadY) {
+			// bounce velocity against ground normal
+			playerPos.y = playerRoadY; // match y to ground plane
+			playerVelocity = new Vector3(0, Math.cos(roadPitch), Math.sin(roadPitch)) // get ground normal
+				.Multiply(
+					-elasticity * // apply bounce
+						(Math.cos(roadPitch) * playerVelocity.y +
+							Math.sin(roadPitch) * playerVelocity.z)
+				) // dot of road and velocity
+				.Add(playerVelocity); // add velocity
 
-		playerVelocity.z += isBraking
-			? playerBrake // apply brake
-			: Lerp(playerVelocity.z / playerMaxSpeed, startPressed * playerAccel, 0); // apply accel
+			playerVelocity.z += isBraking
+				? playerBrake // apply brake
+				: Lerp(
+						playerVelocity.z / playerMaxSpeed,
+						startPressed * playerAccel,
+						0
+				  ); // apply accel
 
-		if (Math.abs(playerPos.x) > road[playerRoadSegment].w) {
-			// check if off road
-			playerVelocity.z *= offRoadDamping; // slow down when off road
+			if (Math.abs(playerPos.x) > road[playerRoadSegment].w) {
+				// check if off road
+				playerVelocity.z *= offRoadDamping; // slow down when off road
+			}
 		}
-	}
 
-	const airPercent = (playerPos.y - playerRoadY) / 99; // calculate above ground percent
-	playerPitchSpringVelocity += Lerp(airPercent, 0, playerVelocity.y / 4e4); // pitch down with vertical velocity
+		const airPercent = (playerPos.y - playerRoadY) / 99; // calculate above ground percent
+		playerPitchSpringVelocity += Lerp(airPercent, 0, playerVelocity.y / 4e4); // pitch down with vertical velocity
 
-	// update player pitch
-	playerPitchSpringVelocity += (playerVelocity.z - playerVelocityLast.z) / 2e3; // pitch down with forward accel
-	playerPitchSpringVelocity -= playerPitchSpring * playerSpringConstant; // apply pitch spring constant
-	playerPitchSpringVelocity *= pitchSpringDamping; // dampen pitch spring
-	playerPitchSpring += playerPitchSpringVelocity; // update pitch spring
-	playerPitchRoad = Lerp(
-		pitchLerp,
-		playerPitchRoad,
-		Lerp(airPercent, -roadPitch, 0)
-	); // match pitch to road
-	const playerPitch = playerPitchSpring + playerPitchRoad; // update player pitch
+		// update player pitch
+		playerPitchSpringVelocity +=
+			(playerVelocity.z - playerVelocityLast.z) / 2e3; // pitch down with forward accel
+		playerPitchSpringVelocity -= playerPitchSpring * playerSpringConstant; // apply pitch spring constant
+		playerPitchSpringVelocity *= pitchSpringDamping; // dampen pitch spring
+		playerPitchSpring += playerPitchSpringVelocity; // update pitch spring
+		playerPitchRoad = Lerp(
+			pitchLerp,
+			playerPitchRoad,
+			Lerp(airPercent, -roadPitch, 0)
+		); // match pitch to road
+		const playerPitch = playerPitchSpring + playerPitchRoad; // update player pitch
 
-	if (playerPos.z > nextCheckPoint) {
-		// crossed checkpoint
-		time += checkPointTime; // add more time
-		nextCheckPoint += checkPointDistance; // set next checkpoint
-		hueShift += 36; // shift hue
-	}
+		if (playerPos.z > nextCheckPoint) {
+			// crossed checkpoint
+			time += checkPointTime; // add more time
+			nextCheckPoint += checkPointDistance; // set next checkpoint
+			hueShift += 36; // shift hue
+		}
 
-	// draw background - sky, sun/moon, mountains, and horizon
-	// multi use local variables
-	let x, y, w, i;
+		// draw background - sky, sun/moon, mountains, and horizon
+		// multi use local variables
+		let x, y, w, i;
 
-	randomSeed = startRandomSeed; // set start seed
-	worldHeading = ClampAngle(
-		worldHeading + playerVelocity.z * playerRoadX * worldRotateScale
-	); // update world angle
+		randomSeed = startRandomSeed; // set start seed
+		worldHeading = ClampAngle(
+			worldHeading + playerVelocity.z * playerRoadX * worldRotateScale
+		); // update world angle
 
-	// pre calculate projection scale, flip y because y+ is down on canvas
-	const projectScale = new Vector3(1, -1, 1).Multiply(
-		c.width / 2 / cameraDepth
-	); // get projection scale
-	const cameraHeading = playerTurnAmount * cameraHeadingScale; // turn camera with player
-	const cameraOffset = Math.sin(cameraHeading) / 2; // apply heading with offset
+		// pre calculate projection scale, flip y because y+ is down on canvas
+		const projectScale = new Vector3(1, -1, 1).Multiply(
+			c.width / 2 / cameraDepth
+		); // get projection scale
+		const cameraHeading = playerTurnAmount * cameraHeadingScale; // turn camera with player
+		const cameraOffset = Math.sin(cameraHeading) / 2; // apply heading with offset
 
-	// draw sky
-	const lighting = Math.cos(worldHeading); // brightness from sun
-	const horizon = c.height / 2 - Math.tan(playerPitch) * projectScale.y; // get horizon line
-	const g = context.createLinearGradient(0, horizon - c.height / 2, 0, horizon); // linear gradient for sky
-	g.addColorStop(
-		0,
-		LSHA(39 + lighting * 25, 49 + lighting * 19, 230 - lighting * 19)
-	); // top sky color
-	g.addColorStop(1, LSHA(5, 79, 250 - lighting * 9)); // bottom sky color
-	DrawPoly(c.width / 2, 0, c.width / 2, c.width / 2, c.height, c.width / 2, g); // draw sky
-
-	// draw sun and moon
-	for (
-		i = 2;
-		i--; // 0 is sun, 1 is moon
-
-	) {
-		const g = context.createRadialGradient(
-			// radial gradient for sun
-			(x =
-				c.width *
-				(0.5 +
-					Lerp(
-						// angle 0 is center
-						(worldHeading / Math.PI / 2 + 0.5 + i / 2) % 1, // sun angle percent
-						4,
-						-4
-					) -
-					cameraOffset)), // sun x pos, move far away for wrap
-			(y = horizon - c.width / 5), // sun y pos
-			c.width / 25, // sun size
-			x,
-			y,
-			i ? c.width / 23 : c.width
-		); // sun end pos & size
-		g.addColorStop(0, LSHA(i ? 70 : 99)); // sun start color
-		g.addColorStop(1, LSHA(0, 0, 0, 0)); // sun end color
+		// draw sky
+		const lighting = Math.cos(worldHeading); // brightness from sun
+		const horizon = c.height / 2 - Math.tan(playerPitch) * projectScale.y; // get horizon line
+		const g = context.createLinearGradient(
+			0,
+			horizon - c.height / 2,
+			0,
+			horizon
+		); // linear gradient for sky
+		g.addColorStop(
+			0,
+			LSHA(39 + lighting * 25, 49 + lighting * 19, 230 - lighting * 19)
+		); // top sky color
+		g.addColorStop(1, LSHA(5, 79, 250 - lighting * 9)); // bottom sky color
 		DrawPoly(
 			c.width / 2,
 			0,
@@ -297,212 +315,256 @@ function Update() {
 			c.height,
 			c.width / 2,
 			g
-		); // draw sun
-	}
+		); // draw sky
 
-	// draw mountains
-	for (
-		i = mountainCount;
-		i--; // draw every mountain
+		// draw sun and moon
+		for (
+			i = 2;
+			i--; // 0 is sun, 1 is moon
 
-	) {
-		const angle = ClampAngle(worldHeading + Random(19)); // mountain random angle
-		const lighting = Math.cos(angle - worldHeading); // mountain lighting
+		) {
+			const g = context.createRadialGradient(
+				// radial gradient for sun
+				(x =
+					c.width *
+					(0.5 +
+						Lerp(
+							// angle 0 is center
+							(worldHeading / Math.PI / 2 + 0.5 + i / 2) % 1, // sun angle percent
+							4,
+							-4
+						) -
+						cameraOffset)), // sun x pos, move far away for wrap
+				(y = horizon - c.width / 5), // sun y pos
+				c.width / 25, // sun size
+				x,
+				y,
+				i ? c.width / 23 : c.width
+			); // sun end pos & size
+			g.addColorStop(0, LSHA(i ? 70 : 99)); // sun start color
+			g.addColorStop(1, LSHA(0, 0, 0, 0)); // sun end color
+			DrawPoly(
+				c.width / 2,
+				0,
+				c.width / 2,
+				c.width / 2,
+				c.height,
+				c.width / 2,
+				g
+			); // draw sun
+		}
+
+		// draw mountains
+		for (
+			i = mountainCount;
+			i--; // draw every mountain
+
+		) {
+			const angle = ClampAngle(worldHeading + Random(19)); // mountain random angle
+			const lighting = Math.cos(angle - worldHeading); // mountain lighting
+			DrawPoly(
+				(x =
+					c.width *
+					(0.5 + Lerp(angle / Math.PI / 2 + 0.5, 4, -4) - cameraOffset)), // mountain x pos, move far away for wrap
+				(y = horizon), // mountain base
+				(w = (Random(0.2, 0.8) ** 2 * c.width) / 2), // mountain width
+				x + w * Random(-0.5, 0.5), // random tip skew
+				y - Random(0.5, 0.8) * w,
+				0, // mountain height
+				LSHA(
+					Random(15, 25) + i / 3 - lighting * 9,
+					i / 2 + Random(19),
+					Random(220, 230)
+				)
+			); // mountain color
+		}
+
+		// draw horizon
 		DrawPoly(
-			(x =
-				c.width *
-				(0.5 + Lerp(angle / Math.PI / 2 + 0.5, 4, -4) - cameraOffset)), // mountain x pos, move far away for wrap
-			(y = horizon), // mountain base
-			(w = (Random(0.2, 0.8) ** 2 * c.width) / 2), // mountain width
-			x + w * Random(-0.5, 0.5), // random tip skew
-			y - Random(0.5, 0.8) * w,
-			0, // mountain height
-			LSHA(
-				Random(15, 25) + i / 3 - lighting * 9,
-				i / 2 + Random(19),
-				Random(220, 230)
-			)
-		); // mountain color
-	}
+			c.width / 2,
+			horizon,
+			c.width / 2,
+			c.width / 2,
+			c.height,
+			c.width / 2, // horizon pos & size
+			LSHA(25, 30, 95)
+		); // horizon color
 
-	// draw horizon
-	DrawPoly(
-		c.width / 2,
-		horizon,
-		c.width / 2,
-		c.width / 2,
-		c.height,
-		c.width / 2, // horizon pos & size
-		LSHA(25, 30, 95)
-	); // horizon color
+		// draw road and objects
 
-	// draw road and objects
+		// calculate road x offsets and projections
+		for (x = w = i = 0; i < drawDistance + 1; ) {
+			// create road world position
+			let p = new Vector3( // set road position
+				(x += w += road[playerRoadSegment + i].x), // sum local road offsets
+				road[playerRoadSegment + i].y,
+				(playerRoadSegment + i) * roadSegmentLength
+			) // road y and z pos
+				.Add(playerPos.Multiply(-1)); // subtract to get local space
 
-	// calculate road x offsets and projections
-	for (x = w = i = 0; i < drawDistance + 1; ) {
-		// create road world position
-		let p = new Vector3( // set road position
-			(x += w += road[playerRoadSegment + i].x), // sum local road offsets
-			road[playerRoadSegment + i].y,
-			(playerRoadSegment + i) * roadSegmentLength
-		) // road y and z pos
-			.Add(playerPos.Multiply(-1)); // subtract to get local space
+			p.x = p.x * Math.cos(cameraHeading) - p.z * Math.sin(cameraHeading); // rotate camera heading
 
-		p.x = p.x * Math.cos(cameraHeading) - p.z * Math.sin(cameraHeading); // rotate camera heading
+			// tilt camera pitch
+			const z = 1 / (p.z * Math.cos(playerPitch) - p.y * Math.sin(playerPitch)); // invert z for projection
+			p.y = p.y * Math.cos(playerPitch) - p.z * Math.sin(playerPitch);
+			p.z = z;
 
-		// tilt camera pitch
-		const z = 1 / (p.z * Math.cos(playerPitch) - p.y * Math.sin(playerPitch)); // invert z for projection
-		p.y = p.y * Math.cos(playerPitch) - p.z * Math.sin(playerPitch);
-		p.z = z;
+			// project road segment to canvas space
+			road[playerRoadSegment + i++].p = // set projected road point
+				p
+					.Multiply(new Vector3(z, z, 1)) // projection
+					.Multiply(projectScale) // scale
+					.Add(new Vector3(c.width / 2, c.height / 2)); // center on canvas
+		}
 
-		// project road segment to canvas space
-		road[playerRoadSegment + i++].p = // set projected road point
-			p
-				.Multiply(new Vector3(z, z, 1)) // projection
-				.Multiply(projectScale) // scale
-				.Add(new Vector3(c.width / 2, c.height / 2)); // center on canvas
-	}
+		// draw the road segments
+		let segment2 = road[playerRoadSegment + drawDistance]; // store the last segment
+		for (
+			i = drawDistance;
+			i--; // iterate in reverse
 
-	// draw the road segments
-	let segment2 = road[playerRoadSegment + drawDistance]; // store the last segment
-	for (
-		i = drawDistance;
-		i--; // iterate in reverse
+		) {
+			const segment1 = road[playerRoadSegment + i];
+			randomSeed = startRandomSeed + playerRoadSegment + i; // random seed for this segment
+			const lighting = Math.sin(segment1.a) * Math.cos(worldHeading) * 99; // calculate segment lighting
+			const p1 = segment1.p; // projected point
+			const p2 = segment2.p; // last projected point
 
-	) {
-		const segment1 = road[playerRoadSegment + i];
-		randomSeed = startRandomSeed + playerRoadSegment + i; // random seed for this segment
-		const lighting = Math.sin(segment1.a) * Math.cos(worldHeading) * 99; // calculate segment lighting
-		const p1 = segment1.p; // projected point
-		const p2 = segment2.p; // last projected point
-
-		if (p1.z < 1e5 && p1.z > 0) {
-			// check near and far clip
-			// draw road segment
-			if (i % (Lerp(i / drawDistance, 1, 9) | 0) == 0) {
-				// fade in road resolution
-				// ground
-				DrawPoly(
-					c.width / 2,
-					p1.y,
-					c.width / 2,
-					c.width / 2,
-					p2.y,
-					c.width / 2, // ground top & bottom
-					LSHA(25 + lighting, 30, 95)
-				); // ground color
-
-				// warning track
-				if (segment1.w > 400)
-					// no warning track if thin
+			if (p1.z < 1e5 && p1.z > 0) {
+				// check near and far clip
+				// draw road segment
+				if (i % (Lerp(i / drawDistance, 1, 9) | 0) == 0) {
+					// fade in road resolution
+					// ground
 					DrawPoly(
-						p1.x,
+						c.width / 2,
 						p1.y,
-						p1.z * (segment1.w + warningTrackWidth), // warning track top
-						p2.x,
+						c.width / 2,
+						c.width / 2,
 						p2.y,
-						p2.z * (segment2.w + warningTrackWidth), // warning track bottom
-						LSHA(((playerRoadSegment + i) % 19 < 9 ? 50 : 20) + lighting)
-					); // warning track stripe color
+						c.width / 2, // ground top & bottom
+						LSHA(25 + lighting, 30, 95)
+					); // ground color
 
-				// road
-				const z = (playerRoadSegment + i) * roadSegmentLength; // segment distance
-				DrawPoly(
-					p1.x,
-					p1.y,
-					p1.z * segment1.w, // road top
-					p2.x,
-					p2.y,
-					p2.z * segment2.w, // road bottom
-					LSHA((z % checkPointDistance < 300 ? 70 : 7) + lighting)
-				); // road color and checkpoint
-
-				// dashed lines
-				if (segment1.w > 300)
-					// no dash lines if very thin
-					(playerRoadSegment + i) % 9 == 0 &&
-						i < drawDistance / 3 && // make dashes and skip if far out
+					// warning track
+					if (segment1.w > 400)
+						// no warning track if thin
 						DrawPoly(
 							p1.x,
 							p1.y,
-							p1.z * dashLineWidth, // dash lines top
+							p1.z * (segment1.w + warningTrackWidth), // warning track top
 							p2.x,
 							p2.y,
-							p2.z * dashLineWidth, // dash lines bottom
-							LSHA(70 + lighting)
-						); // dash lines color
+							p2.z * (segment2.w + warningTrackWidth), // warning track bottom
+							LSHA(((playerRoadSegment + i) % 19 < 9 ? 50 : 20) + lighting)
+						); // warning track stripe color
 
-				segment2 = segment1; // prep for next segment
-			}
+					// road
+					const z = (playerRoadSegment + i) * roadSegmentLength; // segment distance
+					DrawPoly(
+						p1.x,
+						p1.y,
+						p1.z * segment1.w, // road top
+						p2.x,
+						p2.y,
+						p2.z * segment2.w, // road bottom
+						LSHA((z % checkPointDistance < 300 ? 70 : 7) + lighting)
+					); // road color and checkpoint
 
-			// random object (tree or rock)
-			if (Random() < 0.2 && playerRoadSegment + i > 29) {
-				// check for road object
-				// player object collision check
-				const z = (playerRoadSegment + i) * roadSegmentLength; // segment distance
-				const height = (Random(2) | 0) * 400; // object type & height
-				x = 2 * roadWidth * Random(10, -10) * Random(9); // choose object pos
-				if (
-					!segment1.h && // prevent hitting the same object
-					Math.abs(playerPos.x - x) < 200 && // x collision
-					Math.abs(playerPos.z - z) < 200 && // z collision
-					playerPos.y - playerHeight < segment1.y + 200 + height
-				) {
-					// y collision + object height
-					playerVelocity = playerVelocity.Multiply(
-						(segment1.h = playerCollisionSlow)
-					); // stop player and mark hit
+					// dashed lines
+					if (segment1.w > 300)
+						// no dash lines if very thin
+						(playerRoadSegment + i) % 9 == 0 &&
+							i < drawDistance / 3 && // make dashes and skip if far out
+							DrawPoly(
+								p1.x,
+								p1.y,
+								p1.z * dashLineWidth, // dash lines top
+								p2.x,
+								p2.y,
+								p2.z * dashLineWidth, // dash lines bottom
+								LSHA(70 + lighting)
+							); // dash lines color
+
+					segment2 = segment1; // prep for next segment
 				}
 
-				// draw road object
-				const alpha = Lerp(i / drawDistance, 4, 0); // fade in object alpha
-				if (height) {
-					// tree
-					DrawPoly(
-						(x = p1.x + p1.z * x),
-						p1.y,
-						p1.z * 29, // trunk bottom
-						x,
-						p1.y - 99 * p1.z,
-						p1.z * 29, // trunk top
-						LSHA(5 + Random(9), 50 + Random(9), 29 + Random(9), alpha)
-					); // trunk color
-					DrawPoly(
-						x,
-						p1.y - Random(50, 99) * p1.z,
-						p1.z * Random(199, 250), // leaves bottom
-						x,
-						p1.y - Random(600, 800) * p1.z,
-						0, // leaves top
-						LSHA(25 + Random(9), 80 + Random(9), 9 + Random(29), alpha)
-					); // leaves color
-				} // rock
-				else {
-					DrawPoly(
-						(x = p1.x + p1.z * x),
-						p1.y,
-						p1.z * Random(200, 250), // rock bottom
-						x + p1.z * Random(99, -99),
-						p1.y - Random(200, 250) * p1.z,
-						p1.z * Random(99), // rock top
-						LSHA(50 + Random(19), 25 + Random(19), 209 + Random(9), alpha)
-					); // rock color
+				// random object (tree or rock)
+				if (Random() < 0.2 && playerRoadSegment + i > 29) {
+					// check for road object
+					// player object collision check
+					const z = (playerRoadSegment + i) * roadSegmentLength; // segment distance
+					const height = (Random(2) | 0) * 400; // object type & height
+					x = 2 * roadWidth * Random(10, -10) * Random(9); // choose object pos
+					if (
+						!segment1.h && // prevent hitting the same object
+						Math.abs(playerPos.x - x) < 200 && // x collision
+						Math.abs(playerPos.z - z) < 200 && // z collision
+						playerPos.y - playerHeight < segment1.y + 200 + height
+					) {
+						// y collision + object height
+						playerVelocity = playerVelocity.Multiply(
+							(segment1.h = playerCollisionSlow)
+						); // stop player and mark hit
+						time = time - 1;
+					}
+
+					// draw road object
+					const alpha = Lerp(i / drawDistance, 4, 0); // fade in object alpha
+					if (height) {
+						// tree
+						DrawPoly(
+							(x = p1.x + p1.z * x),
+							p1.y,
+							p1.z * 29, // trunk bottom
+							x,
+							p1.y - 99 * p1.z,
+							p1.z * 29, // trunk top
+							LSHA(5 + Random(9), 50 + Random(9), 29 + Random(9), alpha)
+						); // trunk color
+						DrawPoly(
+							x,
+							p1.y - Random(50, 99) * p1.z,
+							p1.z * Random(199, 250), // leaves bottom
+							x,
+							p1.y - Random(600, 800) * p1.z,
+							0, // leaves top
+							LSHA(25 + Random(9), 80 + Random(9), 9 + Random(29), alpha)
+						); // leaves color
+					} // rock
+					else {
+						DrawPoly(
+							(x = p1.x + p1.z * x),
+							p1.y,
+							p1.z * Random(200, 250), // rock bottom
+							x + p1.z * Random(99, -99),
+							p1.y - Random(200, 250) * p1.z,
+							p1.z * Random(99), // rock top
+							LSHA(50 + Random(19), 25 + Random(19), 209 + Random(9), alpha)
+						); // rock color
+					}
 				}
 			}
 		}
-	}
-	// draw and update time
-	if (startPressed) {
-		DrawText(Math.ceil((time = Clamp(time - timeDelta, 0, maxTime))), 9); // show and update time
-		context.textAlign = 'right'; // set right alignment for distance
-		DrawText(0 | (playerPos.z / 1e3), c.width - 9); // show distance
-	}
+		// draw and update time
+		if (startPressed) {
+			DrawText(Math.ceil((time = Clamp(time - timeDelta, 0, maxTime))), 9); // show and update time
+			context.textAlign = 'right'; // set right alignment for distance
+			score = Math.round(playerPos.z / 1e3);
+			DrawText(0 | score, c.width - 9); // show distance
+		}
 
-	if (!isPaused) {
-		requestAnimationFrame(Update);
-		hidePauseScreen();
-	} else {
-		createPauseScreen();
+		if (!isPaused) {
+			requestAnimationFrame(Update);
+			hidePauseScreen();
+		} else {
+			createPauseScreen();
+		}
+
+		// check for game over
+		if (time == 0) {
+			isGameOver = true;
+		}
 	}
 }
 
@@ -555,7 +617,7 @@ function DrawText(text, posX) {
 // Restart game when 'R' is pressed
 window.addEventListener('keydown', function (e) {
 	if (e.key === 'r' || e.key === 'R') {
-		StartLevel();
+		resetGame();
 	}
 });
 
@@ -588,6 +650,16 @@ window.addEventListener('message', function (event) {
 		requestAnimationFrame(Update);
 	}
 });
+
+function resetGame() {
+	// Reset all necessary game variables here.
+	isGameOver = false;
+	time = maxTime;
+	gameOverScreenCreated = false;
+	hideGameOverScreen();
+	StartLevel(); // restart the game loop.
+	Update();
+}
 
 function createStartScreen() {
 	// Create the main container div
@@ -622,17 +694,6 @@ function removeStartScreen() {
 	}
 }
 
-function drawPauseScreen() {
-	context.fillStyle = 'rgba(0, 0, 0, 0.5)';
-	context.fillRect(0, 0, c.width, c.height);
-	context.font = '9em Impact';
-	context.fillStyle = LSHA(99, 0, 0, 0.5);
-	const text = 'PAUSED';
-	context.fillText(text, c.width / 1.25, c.height / 1.75);
-	context.lineWidth = 3;
-	context.strokeText(text, c.width / 1.25, c.height / 1.75);
-}
-
 // Function to create the pause screen element
 function createPauseScreen() {
 	// Create the main container div
@@ -657,63 +718,48 @@ function hidePauseScreen() {
 	}
 }
 
-// Function to create the game over screen element
-function createGameOverScreen() {
-	// Create the main container div
-	const gameOverScreen = document.createElement('div');
-	gameOverScreen.id = 'gameOverScreen';
-	gameOverScreen.classList.add('hide');
+// Function to create the Game Over screen element
+function createGameOverScreen(score) {
+	if (gameOverScreenCreated == true) {
+		return;
+	} else {
+		// Create the main container div
+		const gameOverScreen = document.createElement('div');
+		gameOverScreen.id = 'gameOverScreen';
+		gameOverScreen.classList.add('hide');
 
-	// Create the heading element
-	const heading = document.createElement('h1');
-	heading.textContent = 'Game Over';
-	gameOverScreen.appendChild(heading);
+		// Create the heading element
+		const heading = document.createElement('h1');
+		heading.textContent = 'Game Over';
+		gameOverScreen.appendChild(heading);
 
-	// Create the paragraph elements
-	const timeParagraph = document.createElement('p');
-	timeParagraph.innerHTML = 'Time: <span id="gameOverTime"></span>';
-	gameOverScreen.appendChild(timeParagraph);
+		// Create the score element
+		const scoreElement = document.createElement('p');
+		scoreElement.textContent = `Score: ${score}`;
+		gameOverScreen.appendChild(scoreElement);
 
-	const scoreParagraph = document.createElement('p');
-	scoreParagraph.innerHTML = 'Score: <span id="gameOverScore"></span>';
-	gameOverScreen.appendChild(scoreParagraph);
+		// Create the restart button
+		const restartButton = document.createElement('button');
+		restartButton.textContent = 'Restart';
+		restartButton.addEventListener('click', function () {
+			resetGame();
+		});
+		gameOverScreen.appendChild(restartButton);
 
-	const restartParagraph = document.createElement('p');
-	restartParagraph.textContent = 'Press R to restart the game';
-	gameOverScreen.appendChild(restartParagraph);
-
-	// Append the game over screen to the document body
-	document.body.appendChild(gameOverScreen);
-}
-
-// Function to show the game over screen with the provided time and score
-function showGameOverScreen(time, score) {
-	const gameOverScreen = document.getElementById('gameOverScreen');
-	if (gameOverScreen) {
-		const timeElement = document.getElementById('gameOverTime');
-		const scoreElement = document.getElementById('gameOverScore');
-		if (timeElement && scoreElement) {
-			timeElement.textContent = time;
-			scoreElement.textContent = score;
-			gameOverScreen.classList.remove('hide');
-		}
+		// Append the Game Over screen to the document body
+		document.body.appendChild(gameOverScreen);
+		gameOverScreenCreated = true;
+		sendScore(score);
 	}
 }
 
-// Function to hide the game over screen
+// Function to hide the Game Over screen
 function hideGameOverScreen() {
 	const gameOverScreen = document.getElementById('gameOverScreen');
 	if (gameOverScreen) {
-		gameOverScreen.classList.add('hide');
+		gameOverScreen.parentNode.removeChild(gameOverScreen);
 	}
 }
-
-// steering input
-let startPressed = 0;
-let axisX = 0;
-let mouseLockX = 0;
-let keyDirection = 0; // Variable to keep track of the arrow key being pressed
-let isBraking = false; // Variable to keep track of the brake key being pressed
 
 document.addEventListener('keydown', function (event) {
 	switch (event.key) {
@@ -749,6 +795,42 @@ function updateSteering() {
 		axisX = Math.max(-1, Math.min(1, axisX)); // Clamp the value of axisX between -1 and 1
 
 		requestAnimationFrame(updateSteering);
+	}
+}
+
+async function sendScore(score) {
+	try {
+		let response;
+		var token = document.cookie
+			.split('; ')
+			.find((row) => row.startsWith('jwt='))
+			.split('=')[1];
+
+		// Ensure groupName is not empty or undefined
+		if (!score) {
+			console.error('Invalid or empty score!');
+			return;
+		}
+
+		response = await fetch(
+			`https://localhost:7186/api/HighScores?score=${score}&leaderboardName=EndlessRunner`,
+			{
+				method: 'POST',
+				headers: {
+					Authorization: `Bearer ${token}`,
+					'Content-Type': 'application/json',
+				},
+			}
+		);
+
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+
+		console.log('Leaderboard updated successfully:');
+		return true;
+	} catch (error) {
+		console.log('Fetch Error: ', error);
 	}
 }
 
