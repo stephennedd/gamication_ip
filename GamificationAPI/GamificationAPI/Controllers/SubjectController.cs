@@ -1,4 +1,5 @@
 ﻿﻿using GamificationAPI.Interfaces;
+using GamificationAPI.Models;
 using GamificationToIP.Context;
 using GamificationToIP.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -40,7 +41,38 @@ public class SubjectController : ControllerBase
 
         return Content(json, "application/json");
     }
-    
+
+    [HttpGet("{subjectName}/game")]
+    public async Task<ActionResult<string>> GetGameNameBySubject(string subjectName)
+    {
+        var gameName = await _dbContext.Games
+            .Where(g => g.Subjects.Any(s => s.SubjectTitle == subjectName))
+            .Select(g => g.GameName)
+            .FirstOrDefaultAsync();
+
+        if (gameName == null)
+        {
+            return NotFound();
+        }
+
+        return gameName;
+    }
+
+    [HttpGet("{subjectName}/test")]
+    public ActionResult<int> GetTestId(string subjectName)
+    {
+        var subject = _dbContext.Subjects
+            .Include(s => s.Test)
+            .FirstOrDefault(s => s.SubjectTitle == subjectName);
+
+        if (subject == null || subject.Test == null)
+        {
+            return NotFound();
+        }
+
+        return subject.Test.Id;
+    }
+
     [HttpPost]
     public async Task<ActionResult<Subject>> AddSubject([FromBody] NewSubject newSubject)
     {
@@ -84,17 +116,7 @@ public class NewSubject
     public int WeekNumber { get; set; }
     public int GameId { get; set; }
 }
-public class Subject
-{
-    public int Id { get; set; }
-    public string SubjectTitle { get; set; }
-    public int WeekNumber { get; set; }
-    public int TestId { get; set; }
-    public Test Test { get; set; }
 
-    public int GameId { get; set; }
-    public Game Game { get; set; }
-}
 
 public class RootObject
 {
