@@ -1,3 +1,9 @@
+// Get the dynamic parameter from the URL
+const urlParams = new URLSearchParams(window.location.search);
+const nameOfSubject = urlParams.get('subject');
+
+localStorage.setItem('subject', nameOfSubject);
+
 let token;
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -141,7 +147,7 @@ document.addEventListener('DOMContentLoaded', function () {
 					}
 					return response.json();
 				})
-				.then(function (data) {
+				.then(async function (data) {
 					let date = new Date();
 					date.setMinutes(date.getMinutes() + 45);
 					document.cookie =
@@ -163,7 +169,13 @@ document.addEventListener('DOMContentLoaded', function () {
 						loginForm.classList.replace('signin', 'verify');
 						verificationRadio.checked = true;
 						setIndicatorPosition(1);
-					} else window.location.href = '../ArcadeMachine';
+					} else {
+						const subjectName = localStorage.getItem("subject"); 
+						const response = await fetch(`https://localhost:7186/api/subjects/${subjectName}/game`)
+                        const gameName = await response.text();
+						localStorage.setItem("gameName",gameName);
+						window.location.href = '../ArcadeMachine';
+					}
 				})
 				.catch(function (error) {
 					console.error(error);

@@ -40,7 +40,38 @@ public class SubjectController : ControllerBase
 
         return Content(json, "application/json");
     }
-    
+
+    [HttpGet("{subjectName}/game")]
+    public async Task<ActionResult<string>> GetGameNameBySubject(string subjectName)
+    {
+        var gameName = await _dbContext.Games
+            .Where(g => g.Subjects.Any(s => s.SubjectTitle == subjectName))
+            .Select(g => g.GameName)
+            .FirstOrDefaultAsync();
+
+        if (gameName == null)
+        {
+            return NotFound();
+        }
+
+        return gameName;
+    }
+
+    [HttpGet("{subjectName}/test")]
+    public ActionResult<int> GetTestId(string subjectName)
+    {
+        var subject = _dbContext.Subjects
+            .Include(s => s.Test)
+            .FirstOrDefault(s => s.SubjectTitle == subjectName);
+
+        if (subject == null || subject.Test == null)
+        {
+            return NotFound();
+        }
+
+        return subject.Test.Id;
+    }
+
     [HttpPost]
     public async Task<ActionResult<Subject>> AddSubject([FromBody] NewSubject newSubject)
     {
