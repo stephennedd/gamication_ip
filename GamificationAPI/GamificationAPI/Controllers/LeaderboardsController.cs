@@ -116,49 +116,7 @@ public class LeaderboardsController : ControllerBase
 
         return Ok(leaderboard);
     }
-    [Authorize(Roles = "Admin, Teacher")]
-    [HttpPost]
-    public async Task<IActionResult> CreateNewLeaderboard(string leaderboardName)
-    {
-        if (string.IsNullOrWhiteSpace(leaderboardName))
-        {
-            return BadRequest("Leaderboard name cannot be empty.");
-        }
 
-        var existingLeaderboard = await _leaderboardService.GetLeaderboardByNameAsync(leaderboardName);
-        if (existingLeaderboard != null)
-        {
-            return Conflict("A leaderboard with this name already exists.");
-        }
-
-        await _leaderboardService.CreateLeaderboardAsync(leaderboardName);
-
-        return Ok();
-    }
-    [Authorize(Roles = "Admin, Teacher")]
-    [HttpDelete("{leaderboardName}")]
-    public async Task<IActionResult> DeleteLeaderboard(string leaderboardName)
-    {
-        if (string.IsNullOrWhiteSpace(leaderboardName))
-        {
-            return BadRequest("Leaderboard name cannot be empty.");
-        }
-
-        var existingLeaderboard = await _leaderboardService.GetLeaderboardByNameAsync(leaderboardName);
-        if (existingLeaderboard == null)
-        {
-            return NotFound("No leaderboard with this name exists.");
-        }
-
-        bool x = await _leaderboardService.DeleteLeaderboardAsync(leaderboardName);
-        if (x)
-        {
-            return Ok();
-        }
-
-        return BadRequest("Something went wrong.");
-        
-    }
     [Authorize(Roles = "Admin, Teacher")]
     [HttpPut("{leaderboardName}")]
     public async Task<IActionResult> UpdateLeaderboard(string leaderboardName, string newLeaderboardName)
