@@ -83,6 +83,7 @@ export class GameScene extends Phaser.Scene {
 		} else {
 			this.scoreMultiplier = 1;
 		}
+		score = 0;
 		this.createTiles();
 		/* Create Breaking Tiles/Platforms Group */
 		this.createBreakTiles();
@@ -527,8 +528,10 @@ export class GameScene extends Phaser.Scene {
 	}
 
 	GameOver() {
-		this.score = this.score * scoreMultiplier;
-		sendScore(this.score);
+		let multipliedScore = score * scoreMultiplier;
+		console.log("score = " + score);
+		console.log(multipliedScore);
+		sendScore(multipliedScore);
 		// Show Game Over Text
 		GameOverText.visible = true;
 
@@ -556,9 +559,14 @@ export class GameScene extends Phaser.Scene {
 		enemySgroup.setAlpha(0);
 		enemySgroup.clear();
 
-		/* Player Opacity */
 		player.setAlpha(0.45);
-		//TODO SEND SCORE TO BACKEND
+		
+		//add event listener for retry
+		this.input.on('pointerdown', () => {
+
+		this.scene.restart();
+		});
+
 	}
 	FallOff() {
 		life -= 1;
@@ -610,7 +618,7 @@ async function sendScore(score){
             return;
         }
 
-        response = await fetch(`https://localhost:7186/api/HighScores?score=${score}&leaderboardName=Jump`,
+        response = await fetch(`https://localhost:7186/api/HighScores?score=${score}&leaderboardName=jump`,
             {
                 method: 'POST',
                 headers: {
