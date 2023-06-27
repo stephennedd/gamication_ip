@@ -143,7 +143,7 @@ namespace GamificationAPI.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("SubjectId")
+                    b.Property<int?>("SubjectId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -439,9 +439,7 @@ namespace GamificationAPI.Data.Migrations
                 {
                     b.HasOne("GamificationAPI.Models.Subject", "Subject")
                         .WithOne("Leaderboard")
-                        .HasForeignKey("GamificationAPI.Models.Leaderboard", "SubjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("GamificationAPI.Models.Leaderboard", "SubjectId");
 
                     b.Navigation("Subject");
                 });

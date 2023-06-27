@@ -52,7 +52,7 @@ namespace GamificationAPI.Controllers
                 return BadRequest();
             }
 
-            if (leaderboardName == "main")
+            if (leaderboardName == "Main")
             {
                 return BadRequest("Cant post highscores to main leaderboard");
             }

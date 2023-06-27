@@ -604,36 +604,39 @@ export class GameScene extends Phaser.Scene {
 		} else if (player.body.velocity.x < -400) player.body.velocity.x = -400;
 	}
 }
-async function sendScore(score){
-    try {
-        let response;
-        var token = document.cookie
-            .split('; ')
-            .find(row => row.startsWith('jwt='))
-            .split('=')[1];
+async function sendScore(score) {
+	try {
+		let response;
+		var token = document.cookie
+			.split('; ')
+			.find((row) => row.startsWith('jwt='))
+			.split('=')[1];
+		const subject = localStorage.getItem('subject');
+		console.log("subject = " + subject);
+		// Ensure groupName is not empty or undefined
+		if (!score) {
+			console.error('Invalid or empty score!');
+			return;
+		}
 
-        // Ensure groupName is not empty or undefined
-        if (!score) {
-            console.error("Invalid or empty score!");
-            return;
-        }
+		response = await fetch(
+			`https://localhost:7186/api/HighScores?score=${score}&leaderboardName=${subject}`,
+			{
+				method: 'POST',
+				headers: {
+					Authorization: `Bearer ${token}`,
+					'Content-Type': 'application/json',
+				},
+			}
+		);
 
-        response = await fetch(`https://localhost:7186/api/HighScores?score=${score}&leaderboardName=jump`,
-            {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                },
-            });
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        console.log('Leaderboard updated successfully:');
-        return true;
-    } catch (error) {
-        console.log('Fetch Error: ', error);
-    }
+		console.log('Leaderboard updated successfully:');
+		return true;
+	} catch (error) {
+		console.log('Fetch Error: ', error);
+	}
 }

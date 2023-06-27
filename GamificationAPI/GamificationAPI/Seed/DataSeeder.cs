@@ -150,6 +150,10 @@ namespace GamificationToIP.Seed
                     }
                 }
 
+                var mainLeaderboard = new Leaderboard { Name = "Main" };
+                applicationDbContext.Set<Leaderboard>().Add(mainLeaderboard);
+                await applicationDbContext.SaveChangesAsync();
+
                 foreach (var subject in gamificationToIpData.subjects)
                 {
                     var newSubject = new Subject

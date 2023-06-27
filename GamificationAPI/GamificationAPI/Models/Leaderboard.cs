@@ -11,7 +11,7 @@ namespace GamificationAPI.Models
         public List<HighScore> HighScores { get; set; } = new List<HighScore> { };
 
         [ForeignKey("Subject")]
-        public int SubjectId { get; set; }
-        public virtual Subject Subject { get; set; }
+        public int? SubjectId { get; set; }
+        public virtual Subject? Subject { get; set; }
     }
 }

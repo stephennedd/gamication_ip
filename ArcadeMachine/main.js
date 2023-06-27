@@ -11,7 +11,7 @@ window.addEventListener('DOMContentLoaded', function () {
 		game,
 		gameWindow;
 	// just for testing assigned true, delete later
-	const quizPassed = localStorage.getItem('quizPassed') ;
+	const quizPassed = localStorage.getItem('quizPassed');
 
 	const unpressedImages = {
 		moveIn: 'Media/Images/up.png',
@@ -115,7 +115,7 @@ window.addEventListener('DOMContentLoaded', function () {
 			quiz.classList.remove('hide');
 
 			// If quiz is passed, show buttons
-			if (quizPassed === 'true') {
+			if (quizPassed === true) {
 				setTimeout(() => {
 					showButtons();
 				}, 150);
