@@ -1,5 +1,25 @@
 const counterDOM = document.getElementById('counter');  
-const endDOM = document.getElementById('end');  
+const endDOM = document.getElementById('end'); 
+const gameLives = document.getElementById("lives");
+
+
+let lives = 3;
+let counter = 0;
+let highScore = 0;
+const gameDataLife = localStorage.getItem('extraLife');
+const gameDataScore = localStorage.getItem('scoreMultiplier');
+console.log(`extraLife: ${gameDataLife}`);
+console.log(`scoreMultiplier: ${gameDataScore}`);
+if (gameDataLife === 'true') {
+    lives = 4;
+}
+if (gameDataScore === 'true') {
+    scoreMultiplier = 2;
+}
+
+for (let i = 0; i < lives; i++) {
+    gameLives.innerHTML += '<div class="life"></div>';
+}
 
 const scene = new THREE.Scene();
 
@@ -191,7 +211,7 @@ function Car() {
 
   car.castShadow = true;
   car.receiveShadow = false;
-  
+
   return car;  
 }
 
@@ -418,11 +438,11 @@ function Lane(index) {
   }
 }
 
-document.querySelector("#retry").addEventListener("click", () => {
-  lanes.forEach(lane => scene.remove( lane.mesh ));
-  initaliseValues();
-  endDOM.style.visibility = 'hidden';
-});
+// document.querySelector("#retry").addEventListener("click", () => {
+//   lanes.forEach(lane => scene.remove( lane.mesh ));
+//   initaliseValues();
+//   endDOM.style.visibility = 'hidden';
+// });
 
 document.getElementById('forward').addEventListener("click", () => move('forward'));
 
@@ -435,18 +455,22 @@ document.getElementById('right').addEventListener("click", () => move('right'));
 window.addEventListener("keydown", event => {
   if (event.keyCode == '38') {
     // up arrow
+    if (endDOM.style.visibility === 'visible') return;
     move('forward');
   }
   else if (event.keyCode == '40') {
     // down arrow
+    if (endDOM.style.visibility === 'visible') return;
     move('backward');
   }
   else if (event.keyCode == '37') {
     // left arrow
+    if (endDOM.style.visibility === 'visible') return;
     move('left');
   }
   else if (event.keyCode == '39') {
     // right arrow
+    if (endDOM.style.visibility === 'visible') return;
     move('right');
   }
 });
@@ -555,7 +579,9 @@ function animate(timestamp) {
       switch(moves[0]) {
         case 'forward': {
           currentLane++;
-          counterDOM.innerHTML = currentLane;    
+          counter = currentLane * scoreMultiplier;
+          highScore = counter;
+          counterDOM.innerHTML = counter;    
           break;
         }
         case 'backward': {
@@ -587,12 +613,34 @@ function animate(timestamp) {
       const carMinX = vechicle.position.x - vechicleLength*zoom/2;
       const carMaxX = vechicle.position.x + vechicleLength*zoom/2;
       if(chickenMaxX > carMinX && chickenMinX < carMaxX) {
-        endDOM.style.visibility = 'visible';
+        console.log('hit');
+        resetGame();
+        //endDOM.style.visibility = 'visible';
       }
     });
 
   }
   renderer.render( scene, camera );	
 }
+
+function resetGame() {
+  lives--;
+  if (lives <= 0) {
+    gameLives.removeChild(gameLives.lastElementChild);
+    lanes.forEach(lane => scene.remove( lane.mesh ));
+    initaliseValues();
+    // Game over logic (e.g., display game over screen, restart the game)
+    console.log("Game Over");
+    endDOM.style.visibility = 'visible';
+  } else {
+    lanes.forEach(lane => scene.remove( lane.mesh ));
+    // remove life from lives div
+    gameLives.removeChild(gameLives.lastElementChild);
+    // Reset the game to initial state
+    initaliseValues();
+
+  }
+}
+
 
 requestAnimationFrame( animate );
