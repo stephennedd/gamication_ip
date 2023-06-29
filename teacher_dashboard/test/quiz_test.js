@@ -73,5 +73,5 @@ describe('quiz tests', function() {
 
     assert.notEqual(quizNameText, updatedQuizNameText);
     assert.notEqual(numberOfQuestionsText, updatedNumberOfQuestionsText);
-});
+  });
 });

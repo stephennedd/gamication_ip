@@ -1,7 +1,7 @@
 const { Builder, By, until } = require('selenium-webdriver');
 const assert = require('assert');
 
-describe('sidebar tests', function() {
+describe('sidebar test', function() {
     let driver;
 
     before (async function() {
@@ -27,7 +27,7 @@ describe('sidebar tests', function() {
         const loginButton = await driver.findElement(By.id('login-button'));
         await loginButton.click();
 
-        await driver.sleep(400);
+        await driver.sleep(350);
         
         const menuButton = await driver.findElement(By.css('.navbar-toggler'));
         await menuButton.click();

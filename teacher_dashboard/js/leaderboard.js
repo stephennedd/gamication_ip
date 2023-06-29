@@ -155,6 +155,7 @@ function createUpdateLeaderboardTableRow(leaderboard) {
     const row = document.createElement('tr'); // Create the row
     const name = document.createElement('td'); // Create the name cell
     name.innerText = leaderboard; // Set the name
+    name.id = 'leaderboard-name';
 
     // create update button
     const updateButton = document.createElement('td');
@@ -165,6 +166,7 @@ function createUpdateLeaderboardTableRow(leaderboard) {
     button.setAttribute('data-bs-toggle', 'modal');
     button.setAttribute('data-bs-target', '#update-leaderboard-modal');
     button.innerText = 'Update';
+    button.id = 'update-leaderboard-button';
     updateButton.appendChild(button);
 
     // Add the name and update button to the row
