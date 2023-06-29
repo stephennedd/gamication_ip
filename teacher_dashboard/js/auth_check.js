@@ -1,3 +1,8 @@
+// run each time the page is loaded
+window.addEventListener("DOMContentLoaded", function() {
+  checkAuth();
+});
+
 // check if user is authenticated before loading the page
 function checkAuth() {
   // Check if user is authenticated
@@ -5,18 +10,17 @@ function checkAuth() {
     // User is authenticated, redirect to dashboard
     if (!window.location.href.includes("admin-panel.html")) {
       setTimeout(function() {
-        window.location.href = "http://127.0.0.1:5500/teacher_dashboard/pages/admin-panel.html";
+        window.location.href = "pages/admin-panel.html";
       }, 800);
     }
   } else {
+    console.log("User is not authenticated");
     // User is not authenticated, redirect to login
     setTimeout(function() {
-      this.window.location.href = "http://127.0.0.1:5500/teacher_dashboard/pages/login.html";
+      this.window.location.href = "http://127.0.0.1:5501/teacher_dashboard/pages/login.html";
     }, 800);
   }
 }
-
-checkAuth();
 
   // Function to check if the JWT token is authenticated
 function isAuthenticated() {

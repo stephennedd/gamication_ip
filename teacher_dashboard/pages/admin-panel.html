@@ -16,28 +16,29 @@
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-dark background_color fixed-top">
     <div class="container-fluid">
-      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar"
+      <button class="navbar-toggler" id="left-toggle" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar"
         aria-controls="offcanvasExample">
         <span class="navbar-toggler-icon" data-bs-target="#sidebar"></span>
       </button>
       <a class="navbar-brand" href="#">
         <img src="../assets/images/lg_saxion_white.png" alt="logo-saxion" height="55" />
       </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler" id="right-toggle" type="button" data-bs-toggle="collapse"
+        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+        aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
         <ul class="navbar-nav d-flex ms-auto my-3">
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle p-0" href="#" role="button" data-bs-toggle="dropdown"
-              aria-expanded="false">
+            <a class="nav-link dropdown-toggle p-0" id="logout-dropdown" href="#" role="button"
+              data-bs-toggle="dropdown" aria-expanded="false">
               <i class="bi bi-person-circle"></i>
             </a>
             <ul class="dropdown-menu dropdown-menu-end">
               <li>
-                <a class="dropdown-item" href="#" onclick="logout()">Logout</a>
+                <a class="dropdown-item" href="#" id="logout-button" onclick="logout()">Logout</a>
               </li>
             </ul>
           </li>
@@ -95,7 +96,8 @@
             </div>
           </li>
           <li>
-            <a class="nav-link px-3 sidebar-link text-white" data-bs-toggle="collapse" href="#student">
+            <a class="nav-link px-3 sidebar-link text-white" data-bs-toggle="collapse" href="#student"
+              id="test-menu-dropdown-2">
               <span class="me-2"><i class="bi bi-mortarboard"></i></span>
               <span>Manage Students</span>
               <span class="ms-auto">
@@ -407,10 +409,11 @@
         </div>
         <div class="modal-footer">
           <div class="col text-end">
-            <button type="button" class="btn btn-primary" onclick="addQuestionToModal()">Add Question</button>
+            <button type="button" class="btn btn-primary" onclick="addQuestionToModal()" id="add-question-to-quiz">Add
+              Question</button>
             <!-- <button type="button" class="btn btn-success" onclick="submitEditQuizForm()">Save changes</button> -->
             <button type="submit" form="edit-quiz-form" class="btn btn-success"
-              onclick="confirmQuizUpdate(this,subjects)">Save changes</button>
+              onclick="confirmQuizUpdate(this,subjects)" id="update-quiz-button">Save changes</button>
           </div>
 
         </div>
@@ -561,7 +564,8 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" onclick="confirmStudentUpdate(this)">Save
+          <button type="button" class="btn btn-primary" onclick="confirmStudentUpdate(this)"
+            id="update-student-modal-button">Save
             changes</button>
         </div>
       </div>

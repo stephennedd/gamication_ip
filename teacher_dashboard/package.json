@@ -1,16 +1,16 @@
 {
   "name": "teacher_dashboard",
   "version": "1.0.0",
-  "description": "",
-  "main": "js/script.js",
+  "description": "a dashboard for teachers to manage their students' progress and quizzes",
+  "private": true,
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "serve": "http-server -p 5500 -o"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "jsonwebtoken": "^9.0.0",
     "mocha": "^10.2.0",
     "selenium-webdriver": "^4.10.0"
   }
