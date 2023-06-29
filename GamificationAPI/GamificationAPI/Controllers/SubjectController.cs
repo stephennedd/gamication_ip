@@ -104,6 +104,11 @@ public class SubjectController : ControllerBase
     {
         Subject subject = await _subjectService.DeleteSubject(id);
 
+        if (subject == null)
+        {
+            return NotFound(); // Subject not found, return 404 status code
+        }
+
         return Ok();
     }
 

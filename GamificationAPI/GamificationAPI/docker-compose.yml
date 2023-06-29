@@ -6,37 +6,44 @@ networks:
 
 services:
   api:
-    image: docker.io/library/api
+    build:
+      context: ../.
+      dockerfile: Dockerfile
+      args:
+        - ASPNETCORE_ENVIRONMENT=Development
     depends_on:
-      - "app_db"
+      - app_db
     container_name: api-services
     ports:
       - '8088:80'
-    build:
-      context: ../.
-      dockerfile: Dockerfile  
     environment:
-      - ConnectionStrings__DefaultConnection=User ID=postgres;Password=postgres;Server=app_db;Port=5432;Database=IPgamification; IntegratedSecurity=true;Pooling=true;
+      - ConnectionStrings__DefaultConnection=User ID=postgres;Password=postgres;Server=app_db;Port=5432;Database=test; IntegratedSecurity=true;Pooling=true;
       - ASPNETCORE_URLS=http://+:80
     networks:
       - dev
-
+    
   app_db:
-     image: postgres:latest
-     container_name: app_db
-     environment:
+    image: postgres:latest
+    container_name: app_db
+    environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=IPgamification
-     ports:
+      - POSTGRES_DB=test
+    ports:
       - "5433:5432"
-     restart: always
-     volumes:
+    restart: always
+    volumes:
       - app_data:/var/lib/postgresql/data
-     networks:
+    networks:
       - dev
-
 
 volumes:
   app_data:
+
+
+
+
+
+
+
       

@@ -4,6 +4,8 @@ const nameOfSubject = urlParams.get('subject');
 
 localStorage.setItem('subject', nameOfSubject);
 
+console.log(nameOfSubject)
+
 let token;
 
 document.addEventListener('DOMContentLoaded', function () {
