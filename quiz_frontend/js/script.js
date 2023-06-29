@@ -14,6 +14,7 @@ const achievementText = document.querySelector('.achievement-text');
 const achievementIcon = document.querySelector('.achievement-icon');
 var extraLife = false;
 var scoreMultiplier = false;
+var quizPassed = false;
 var achievementList = [55, 75, 100];
 
 //import { showGame } from "../../ArcadeMachine/main";
@@ -37,12 +38,13 @@ mute_btn.onclick = () => {
 };
 
 async function getGeneratedTestForStudent() {
-
-  const subjectName = localStorage.getItem("subject"); // Replace with your desired subject name
-  const response = await fetch(`https://localhost:7186/api/subjects/${subjectName}/test`)
-  const data = await response.json();
-  let  testId = data;
-  console.log(`Test ID for ${subjectName}: ${testId}`);
+	const subjectName = localStorage.getItem('subject'); // Replace with your desired subject name
+	const response = await fetch(
+		`https://localhost:7186/api/subjects/${subjectName}/test`
+	);
+	const data = await response.json();
+	let testId = data;
+	console.log(`Test ID for ${subjectName}: ${testId}`);
 
 	var token = document.cookie
 		.split('; ')
@@ -378,100 +380,104 @@ async function updateProgress(correctAnswers, totalQuestions) {
 	if (progress >= 55) {
 		milestone50.classList.add('milestone-done');
 		milestone50.style.backgroundColor = 'green';
-	progressBar.style.width = progress + "%";
-	
-	// Activate the milestones at 55%,75%,100% progress
-	if (progress >= achievementList[0]) {
-		milestone50.classList.add("milestone-done");
-		milestone50.style.backgroundColor = "green";
-		achievementSound.play(); // play achievement sound
-		showAchievement(
-			'Game Unlocked',
-			`You've unlocked the game!`,
-			`<i class="fa-sharp fa-solid fa-gamepad"></i>`
-		); // show achievement popup
+		progressBar.style.width = progress + '%';
+
+		// Activate the milestones at 55%,75%,100% progress
+		if (progress >= achievementList[0]) {
+			milestone50.classList.add('milestone-done');
+			milestone50.style.backgroundColor = 'green';
+			achievementSound.play(); // play achievement sound
+			showAchievement(
+				'Game Unlocked',
+				`You've unlocked the game!`,
+				`<i class="fa-sharp fa-solid fa-gamepad"></i>`
+			); // show achievement popup
+		}
+
+		if (progress >= 75) {
+			milestone75.classList.add('milestone-done');
+			milestone75.style.backgroundColor = 'red';
+			if (progress >= achievementList[1]) {
+				extraLife = true; // enable extra life
+				milestone75.classList.add('milestone-done');
+				milestone75.style.backgroundColor = 'red';
+				achievementSound.play(); // play achievement sound
+				showAchievement(
+					'Bonus Life',
+					`You've unlocked +1 life`,
+					`<i class="fa-sharp fa-solid fa-heart" style="color: red"></i>`
+				); // show achievement popup
+			}
+
+			if (progress === 100) {
+				milestone100.classList.add('milestone-done');
+				milestone100.style.backgroundColor = 'var(--achievement-color)';
+				showAchievement(
+					'Bonus Life',
+					`You've unlocked +1 life`,
+					`<i class="fa-sharp fa-solid fa-heart" style="color: red"></i>`
+				); // show achievement popup
+			}
+
+			if (progress === achievementList[2]) {
+				scoreMultiplier = true; // enable score multiplier
+				milestone100.classList.add('milestone-done');
+				milestone100.style.backgroundColor = 'var(--achievement-color)';
+				achievementSound.play(); // play achievement sound
+				showAchievement(
+					'Score Multiplier',
+					`You've unlocked 2x score multiplier`,
+					`<i class="fa-sharp fa-solid fa-trophy" style="color: green"></i>`
+				); // show achievement popup
+			}
+		}
+
+		function showAchievement(title, text, icon) {
+			var achievmentTitle = document.querySelector('.achievement-title');
+			// clear the achievement text and icon and title
+			achievementText.innerHTML = '';
+			achievementIcon.innerHTML = '';
+			achievmentTitle.innerHTML = '';
+
+			achievementText.innerHTML = text;
+			achievementIcon.innerHTML = icon;
+			achievmentTitle.innerHTML = title;
+			console.log('Achievement unlocked: ' + text);
+			achievement.classList.add('show-achievement');
+
+			setTimeout(function () {
+				achievement.classList.remove('show-achievement');
+			}, 3000);
+		}
+
+		function resetProgress() {
+			var progressBar = document.getElementById('progress-bar');
+			var milestone50 = document.querySelector('.milestone-50');
+			var milestone75 = document.querySelector('.milestone-75');
+			var milestone100 = document.querySelector('.milestone-100');
+			progressBar.style.width = 0 + '%';
+			milestone50.classList.remove('milestone-done');
+			milestone75.classList.remove('milestone-done');
+			milestone100.classList.remove('milestone-done');
+			milestone50.style.backgroundColor = '#ddd';
+			milestone75.style.backgroundColor = '#ddd';
+			milestone100.style.backgroundColor = '#ddd';
+		}
+
+		function resetProgress() {
+			scoreMultiplier = false; // disable score multiplier
+			extraLife = false; // disable extra life
+			var progressBar = document.getElementById('progress-bar');
+			var milestone50 = document.querySelector('.milestone-50');
+			var milestone75 = document.querySelector('.milestone-75');
+			var milestone100 = document.querySelector('.milestone-100');
+			progressBar.style.width = 0 + '%';
+			milestone50.classList.remove('milestone-done');
+			milestone75.classList.remove('milestone-done');
+			milestone100.classList.remove('milestone-done');
+			milestone50.style.backgroundColor = '#ddd';
+			milestone75.style.backgroundColor = '#ddd';
+			milestone100.style.backgroundColor = '#ddd';
+		}
 	}
-
-	if (progress >= 75) {
-		milestone75.classList.add('milestone-done');
-		milestone75.style.backgroundColor = 'red';
-	if (progress >= achievementList[1]) {	
-		extraLife = true; // enable extra life
-		milestone75.classList.add("milestone-done");
-		milestone75.style.backgroundColor = "red";
-		achievementSound.play(); // play achievement sound
-		showAchievement(
-			'Bonus Life',
-			`You've unlocked +1 life`,
-			`<i class="fa-sharp fa-solid fa-heart" style="color: red"></i>`
-		); // show achievement popup
-	}
-
-	if (progress === 100) {
-		milestone100.classList.add('milestone-done');
-		milestone100.style.backgroundColor = 'var(--achievement-color)';
-		 showAchievement('Bonus Life',`You've unlocked +1 life`, `<i class="fa-sharp fa-solid fa-heart" style="color: red"></i>`); // show achievement popup
-	} 
-	
-	if (progress === achievementList[2]) {
-		scoreMultiplier = true; // enable score multiplier
-		milestone100.classList.add("milestone-done");
-		milestone100.style.backgroundColor = "var(--achievement-color)";
-		achievementSound.play(); // play achievement sound
-		showAchievement(
-			'Score Multiplier',
-			`You've unlocked 2x score multiplier`,
-			`<i class="fa-sharp fa-solid fa-trophy" style="color: green"></i>`
-		); // show achievement popup
-	}
-}
-
-function showAchievement(title, text, icon) {
-	var achievmentTitle = document.querySelector('.achievement-title');
-	// clear the achievement text and icon and title
-	achievementText.innerHTML = '';
-	achievementIcon.innerHTML = '';
-	achievmentTitle.innerHTML = '';
-
-	achievementText.innerHTML = text;
-	achievementIcon.innerHTML = icon;
-	achievmentTitle.innerHTML = title;
-	console.log('Achievement unlocked: ' + text);
-	achievement.classList.add('show-achievement');
-
-	setTimeout(function () {
-		achievement.classList.remove('show-achievement');
-	}, 3000);
-}
-
-function resetProgress() {
-	var progressBar = document.getElementById('progress-bar');
-	var milestone50 = document.querySelector('.milestone-50');
-	var milestone75 = document.querySelector('.milestone-75');
-	var milestone100 = document.querySelector('.milestone-100');
-	progressBar.style.width = 0 + '%';
-	milestone50.classList.remove('milestone-done');
-	milestone75.classList.remove('milestone-done');
-	milestone100.classList.remove('milestone-done');
-	milestone50.style.backgroundColor = '#ddd';
-	milestone75.style.backgroundColor = '#ddd';
-	milestone100.style.backgroundColor = '#ddd';
-}
-
-	function resetProgress() {
-		scoreMultiplier = false; // disable score multiplier
-		extraLife = false; // disable extra life
-		var progressBar = document.getElementById("progress-bar");
-		var milestone50 = document.querySelector(".milestone-50");
-		var milestone75 = document.querySelector(".milestone-75");
-		var milestone100 = document.querySelector(".milestone-100");
-		progressBar.style.width = 0 + "%";
-		milestone50.classList.remove("milestone-done");
-		milestone75.classList.remove("milestone-done");
-		milestone100.classList.remove("milestone-done");
-		milestone50.style.backgroundColor = "#ddd";
-		milestone75.style.backgroundColor = "#ddd";
-		milestone100.style.backgroundColor = "#ddd";
-	}
-}
 }

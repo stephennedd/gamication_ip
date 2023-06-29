@@ -11,9 +11,31 @@ let bird_props = bird.getBoundingClientRect();
 // This method returns DOMReact -> top, right, bottom, left, x, y, width and height
 let background = document.querySelector('.background').getBoundingClientRect();
 
-let score_val = document.querySelector('.score_val');
 let message = document.querySelector('.message');
+let score_val = document.querySelector('.score_val');
 let score_title = document.querySelector('.score_title');
+let lives_val = document.querySelector('.lives_val');
+let lives_title = document.querySelector('.lives_title');
+let lives;
+let scoreMultiplier;
+let invincibility = false;
+
+// Check for localstorage items for extraLife and scoreMultiplier
+const gameDataLife = localStorage.getItem('extraLife');
+const gameDataScore = localStorage.getItem('scoreMultiplier');
+
+if (gameDataLife === 'true') {
+	lives = 3; // Add 2 extra lifes
+} else {
+	lives = 1;
+}
+
+// Update score multiplier based on localstorage
+if (gameDataScore === 'true') {
+	scoreMultiplier = 2; // Multiply score by 2
+} else {
+	scoreMultiplier = 1;
+}
 
 let game_state = 'Start';
 img.style.display = 'none';
@@ -30,6 +52,8 @@ document.addEventListener('keydown', (e) => {
 		message.innerHTML = '';
 		score_title.innerHTML = 'Score : ';
 		score_val.innerHTML = '0';
+		lives_title.innerHTML = 'Lives : ';
+		lives_val.innerHTML = lives;
 		message.classList.remove('messageStyle');
 		play();
 	}
@@ -47,27 +71,41 @@ function play() {
 			if (pipe_sprite_props.right <= 0) {
 				element.remove();
 			} else {
+				// Check for collision with pipes
 				if (
+					!invincibility && // Add this condition
 					bird_props.left < pipe_sprite_props.left + pipe_sprite_props.width &&
 					bird_props.left + bird_props.width > pipe_sprite_props.left &&
 					bird_props.top < pipe_sprite_props.top + pipe_sprite_props.height &&
 					bird_props.top + bird_props.height > pipe_sprite_props.top
 				) {
-					game_state = 'End';
-					message.innerHTML =
-						'Game Over'.fontcolor('red') + '<br>Press Enter To Restart';
-					message.classList.add('messageStyle');
-					img.style.display = 'none';
-					sound_die.play();
-					sendScore(score_val.innerHTML);
-					return;
+					lives--; // Decrease life by 1 when hit
+					lives_val.innerHTML = lives;
+
+					// Make bird invincible for a brief period
+					invincibility = true;
+					setTimeout(() => {
+						invincibility = false;
+					}, 1000); // 1 second invincibility period
+
+					if (lives <= 0) {
+						// Check if lives are 0 to end the game
+						game_state = 'End';
+						message.innerHTML =
+							'Game Over'.fontcolor('red') + '<br>Press Enter To Restart';
+						message.classList.add('messageStyle');
+						img.style.display = 'none';
+						sound_die.play();
+						sendScore(score_val.innerHTML);
+						return;
+					}
 				} else {
 					if (
 						pipe_sprite_props.right < bird_props.left &&
 						pipe_sprite_props.right + move_speed >= bird_props.left &&
 						element.increase_score == '1'
 					) {
-						score_val.innerHTML = +score_val.innerHTML + 1;
+						score_val.innerHTML = (+score_val.innerHTML + 1) * scoreMultiplier; // Multiply the score
 						sound_point.play();
 					}
 					element.style.left = pipe_sprite_props.left - move_speed + 'px';
@@ -147,7 +185,7 @@ async function sendScore(score) {
 			.find((row) => row.startsWith('jwt='))
 			.split('=')[1];
 		const subject = localStorage.getItem('subject');
-		console.log("subject = " + subject);
+		console.log('subject = ' + subject);
 		// Ensure groupName is not empty or undefined
 		if (!score) {
 			console.error('Invalid or empty score!');

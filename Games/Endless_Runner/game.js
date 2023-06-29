@@ -6,21 +6,6 @@ const gameOverScreen = document.getElementById('gameOverScreen'); // game over s
 const gameDataLife = localStorage.getItem('extraLife');
 const gameDataScore = localStorage.getItem('scoreMultiplier');
 
-//TO DO implement powerups
-// // Update time based on localstorage
-// if (gameDataLife === 'true') {
-// 	time = 30; // Add 10 extra seconds
-// } else {
-// 	time = maxTime;
-// }
-
-// // Update score multiplier based on localstorage
-// if (gameDataScore === 'true') {
-// 	scoreMultiplier = 2; // Multiply score by 2
-// } else {
-// 	scoreMultiplier = 1;
-// }
-
 const drawDistance = 800; // how many road segments to draw in front of player
 const cameraDepth = 0.9; // FOV of camera (1 / Math.tan((fieldOfView/2) * Math.PI/180))
 const roadSegmentLength = 100; // length of each road segment
@@ -51,7 +36,7 @@ const cameraHeadingScale = 2; // scale of player turning to rotate camera
 const worldRotateScale = 0.00005; // how much to rotate world around turns
 
 // level settings
-const maxTime = 20; // time to start with
+let maxTime = 20; // time to start with
 const checkPointTime = 10; // how much time for getting to checkpoint
 const checkPointDistance = 1e5; // how far between checkpoints
 const checkpointMaxDifficulty = 9; // how many checkpoints before max difficulty
@@ -85,6 +70,21 @@ let gameStarted = false;
 let isPaused = false;
 let isGameOver = false;
 let gameOverScreenCreated = false;
+let scoreMultiplier;
+
+// Update time based on localstorage
+if (gameDataLife === 'true') {
+	maxTime = 30; // Add 10 extra seconds
+} else {
+	maxTime = 20;
+}
+
+// Update score multiplier based on localstorage
+if (gameDataScore === 'true') {
+	scoreMultiplier = 2; // Multiply score by 2
+} else {
+	scoreMultiplier = 1;
+}
 
 function StartLevel() {
 	// build the road with procedural generation
@@ -550,7 +550,7 @@ function Update() {
 		if (startPressed) {
 			DrawText(Math.ceil((time = Clamp(time - timeDelta, 0, maxTime))), 9); // show and update time
 			context.textAlign = 'right'; // set right alignment for distance
-			score = Math.round(playerPos.z / 1e3);
+			score = scoreMultiplier * Math.round(playerPos.z / 1e3);
 			DrawText(0 | score, c.width - 9); // show distance
 		}
 
@@ -806,7 +806,7 @@ async function sendScore(score) {
 			.find((row) => row.startsWith('jwt='))
 			.split('=')[1];
 		const subject = localStorage.getItem('subject');
-		console.log("subject = " + subject);
+		console.log('subject = ' + subject);
 		// Ensure groupName is not empty or undefined
 		if (!score) {
 			console.error('Invalid or empty score!');
@@ -834,7 +834,6 @@ async function sendScore(score) {
 		console.log('Fetch Error: ', error);
 	}
 }
-
 
 // startup and kick off update loop
 createStartScreen();

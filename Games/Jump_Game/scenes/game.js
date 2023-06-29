@@ -45,17 +45,17 @@ export class GameScene extends Phaser.Scene {
 
 	preload() {
 		// Load your assets here
-		this.load.image('tile-n', './../public/images/tileblue.png');
-		this.load.image('player', './../public/images/rocketLowBoost.png');
-		this.load.image('playerBoosted', './../public/images/rocketHighBoost.png');
-		this.load.image('tile-b', './../public/images/tilered.png');
-		this.load.image('tile-d', './../public/images/tileyellow.png');
-		this.load.image('spring', './../public/images/jump.png');
-		this.load.image('star', './../public/images/star.png');
-		this.load.image('rocket', './../public/images/bomb.png');
-		this.load.image('enemy-n', './../public/images/bomb.png');
-		this.load.image('enemy-s', './../public/images/bomb.png');
-		this.load.image('bullet', './../public/images/bomb.png');
+		this.load.image('tile-n', 'public/images/blue.png');
+		this.load.image('player', 'public/images/player.png');
+		this.load.image('playerBoosted', '.public/images/rocketHighBoost.png');
+		this.load.image('tile-b', 'public/images/red.png');
+		this.load.image('tile-d', 'public/images/yellow.png');
+		this.load.image('spring', 'public/images/spring.png');
+		this.load.image('star', 'public/images/star.png');
+		this.load.image('rocket', 'public/images/bomb.png');
+		this.load.image('enemy-n', 'public/images/bomb.png');
+		this.load.image('enemy-s', 'public/images/bomb.png');
+		this.load.image('bullet', 'public/images/bomb.png');
 
 		/*
 		
@@ -74,7 +74,7 @@ export class GameScene extends Phaser.Scene {
 		if (gameDataLife === 'true') {
 			this.life = 3; // Add 2 extra lifes
 		} else {
-			this.lifes = 1;
+			this.life = 1;
 		}
 
 		// Update score multiplier based on localstorage
@@ -362,7 +362,7 @@ export class GameScene extends Phaser.Scene {
 		player.setVelocity(0, -1000);
 		player.setGravityY(800);
 		player.setBounce(0.4);
-		player.setScale(0.4);
+		player.setScale(1.5);
 		player.body.checkCollision.up = false;
 		player.depth = 1;
 
@@ -529,7 +529,7 @@ export class GameScene extends Phaser.Scene {
 
 	GameOver() {
 		let multipliedScore = score * scoreMultiplier;
-		console.log("score = " + score);
+		console.log('score = ' + score);
 		console.log(multipliedScore);
 		sendScore(multipliedScore);
 		// Show Game Over Text
@@ -560,13 +560,11 @@ export class GameScene extends Phaser.Scene {
 		enemySgroup.clear();
 
 		player.setAlpha(0.45);
-		
+
 		//add event listener for retry
 		this.input.on('pointerdown', () => {
-
-		this.scene.restart();
+			this.scene.restart();
 		});
-
 	}
 	FallOff() {
 		life -= 1;
@@ -612,7 +610,7 @@ async function sendScore(score) {
 			.find((row) => row.startsWith('jwt='))
 			.split('=')[1];
 		const subject = localStorage.getItem('subject');
-		console.log("subject = " + subject);
+		console.log('subject = ' + subject);
 		// Ensure groupName is not empty or undefined
 		if (!score) {
 			console.error('Invalid or empty score!');
