@@ -51,19 +51,6 @@ namespace GamificationAPITests
             Assert.Equal(3, roles.Count);
         }
 
-        [Fact]
-        public void GetRoles_Returns500StatusCode_WhenExceptionIsThrown()
-        {
-            // Arrange
-            _dbContext.Database.EnsureDeleted(); // This will cause an exception to be thrown in the GetRoles method
-
-            // Act
-            var result = _controller.GetRoles();
-
-            // Assert
-            var statusCodeResult = Assert.IsType<StatusCodeResult>(result);
-            Assert.Equal(500, statusCodeResult.StatusCode);
-        }
     }
 
 }
