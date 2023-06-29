@@ -46,6 +46,13 @@ namespace GamificationToIP.Context
                 .HasMany(e => e.HighScores)
                 .WithOne(e => e.Leaderboard)
                 .IsRequired(true);
+            modelBuilder.Entity<Subject>()
+        .HasOne(s => s.Leaderboard)
+        .WithOne(l => l.Subject)
+        .HasForeignKey<Leaderboard>(l => l.SubjectId)
+        .OnDelete(DeleteBehavior.Cascade);
+
+            base.OnModelCreating(modelBuilder);
 
         }
     }

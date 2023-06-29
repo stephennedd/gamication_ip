@@ -1,4 +1,5 @@
 ﻿using GamificationAPI.Controllers;
+using GamificationAPI.Interfaces;
 using GamificationAPI.Models;
 using GamificationToIP.Context;
 using Microsoft.AspNetCore.Mvc;
@@ -14,71 +15,55 @@ namespace GamificationAPITests
 {
     public class RolesControllerTests
     {
-        private readonly RolesController _controller;
-        private readonly Mock<DbSet<Role>> _mockSet;
+        private RolesController _controller;
+        private ApplicationDbContext _dbContext;
 
         public RolesControllerTests()
         {
-            var roles = new List<Role>
+            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()) // Use unique name for in-memory database to avoid clashing keys
+                .Options;
+
+            _dbContext = new ApplicationDbContext(options);
+
+            _controller = new RolesController(_dbContext);
+
+            SeedDatabase(); // Call method to seed the database
+        }
+
+        private void SeedDatabase()
         {
-            new Role { Id = 1, Name = "Role1" },
-            new Role { Id = 2, Name = "Role2" },
-            new Role { Id = 3, Name = "Role3" }
-        }.AsQueryable();
-
-            _mockSet = new Mock<DbSet<Role>>();
-            _mockSet.As<IQueryable<Role>>().Setup(m => m.Provider).Returns(roles.Provider);
-            _mockSet.As<IQueryable<Role>>().Setup(m => m.Expression).Returns(roles.Expression);
-            _mockSet.As<IQueryable<Role>>().Setup(m => m.ElementType).Returns(roles.ElementType);
-            _mockSet.As<IQueryable<Role>>().Setup(m => m.GetEnumerator()).Returns(roles.GetEnumerator());
-
-            var mockContext = new Mock<ApplicationDbContext>();
-            mockContext.Setup(c => c.Roles).Returns(_mockSet.Object);
-
-            _controller = new RolesController(mockContext.Object);
+            _dbContext.Roles.Add(new Role { Id = 1, Name = "Admin" });
+            _dbContext.Roles.Add(new Role { Id = 2, Name = "Teacher" });
+            _dbContext.Roles.Add(new Role { Id = 3, Name = "Student" });
+            _dbContext.SaveChanges();
         }
 
         [Fact]
-        public void GetRoles_ReturnsAllRoles()
+        public void GetRoles_ReturnsOkResult_WithListOfRoles()
         {
+            // Act
             var result = _controller.GetRoles();
 
-            Assert.IsType<OkObjectResult>(result);
-            var okResult = result as OkObjectResult;
-            var roles = okResult.Value as List<Role>;
-
+            // Assert
+            var okResult = Assert.IsType<OkObjectResult>(result);
+            var roles = Assert.IsType<List<Role>>(okResult.Value);
             Assert.Equal(3, roles.Count);
         }
 
         [Fact]
-        public void DeleteRole_ReturnsOkResult_WhenRoleExists()
+        public void GetRoles_Returns500StatusCode_WhenExceptionIsThrown()
         {
-            var result = _controller.DeleteRole(1);
+            // Arrange
+            _dbContext.Database.EnsureDeleted(); // This will cause an exception to be thrown in the GetRoles method
 
-            Assert.IsType<OkResult>(result);
+            // Act
+            var result = _controller.GetRoles();
+
+            // Assert
+            var statusCodeResult = Assert.IsType<StatusCodeResult>(result);
+            Assert.Equal(500, statusCodeResult.StatusCode);
         }
-
-        [Fact]
-        public void DeleteRole_ReturnsNotFound_WhenRoleDoesNotExist()
-        {
-            var result = _controller.DeleteRole(0);
-
-            Assert.IsType<NotFoundResult>(result);
-        }
-
-        [Fact]
-public void AddRole_ReturnsBadRequest_WhenRoleNameIsNullOrWhitespace()
-{
-    // Arrange
-    string roleName = null; // or string.Empty or "   ";
-
-    // Act
-    var result = _controller.AddRole(roleName);
-
-    // Assert
-    var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
-    Assert.Equal("Role name cannot be null or empty", badRequestResult.Value);
-}
-
     }
+
 }

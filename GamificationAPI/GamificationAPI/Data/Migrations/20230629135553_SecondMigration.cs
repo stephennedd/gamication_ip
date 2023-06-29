@@ -252,7 +252,8 @@ namespace GamificationAPI.Data.Migrations
                         name: "FK_Leaderboards_Subjects_SubjectId",
                         column: x => x.SubjectId,
                         principalTable: "Subjects",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
