@@ -287,7 +287,6 @@ class MainScene extends Phaser.Scene {
 		if (this.gameOver) {
 			this.gameOver = true;
 			sendScore(this.score);
-			console.log('Score sent');
 			this.showGameOverScreen();
 			return;
 		}
@@ -304,11 +303,22 @@ class MainScene extends Phaser.Scene {
 			}
 		});
 
+		// Handle game over if a brick reached the bottom
+		if (gameOver) {
+			this.gameOver = true; // Set the class's gameOver property to true
+			return; // Exit the update method early, the game over logic will be handled on the next frame.
+		}
+
 		// Check if the game window is hidden
 		const gameWindow = document.getElementById('game');
-		if (gameWindow.classList.contains('hide')) {
+		if (gameWindow.classList.contains('hide') & (gameOver == false)) {
 			this.togglePause();
 		}
+
+		window.ballPosition = {
+			x: this.ball.x,
+			y: this.ball.y,
+		};
 	}
 
 	startGame() {
@@ -514,7 +524,8 @@ class GameOverScene extends Phaser.Scene {
 
 const config = {
 	type: Phaser.WEBGL,
-	backgroundColor: '#46576b',
+	// backgroundColor: '#46576b',
+	transparent: true,
 	width: 800,
 	height: 600,
 	parent: 'game',
@@ -534,7 +545,7 @@ async function sendScore(score) {
 			.find((row) => row.startsWith('jwt='))
 			.split('=')[1];
 		const subject = localStorage.getItem('subject');
-		console.log("subject = " + subject);
+		console.log('subject = ' + subject);
 		// Ensure groupName is not empty or undefined
 		if (!score) {
 			console.error('Invalid or empty score!');

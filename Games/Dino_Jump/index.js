@@ -32,6 +32,26 @@
 		this.distanceRan = 0;
 
 		this.highestScore = 0;
+		// Check for localstorage items for extraLife and scoreMultiplier
+		const gameDataLife = localStorage.getItem('extraLife');
+		const gameDataScore = localStorage.getItem('scoreMultiplier');
+		this.scoreMultiplier;
+		if (gameDataScore == 'true') {
+			this.scoreMultiplier = 2; // Multiply score by 2
+		} else {
+			this.scoreMultiplier = 1;
+		}
+
+		this.lives;
+		if (gameDataLife == 'true') {
+			this.lives = 4;
+		} else {
+			this.lives = 3;
+		}
+
+		this.invulnerable = false; // Indicates whether the dino is currently invulnerable.
+		this.invulnerableTime = 0; // The timestamp of when the dino became invulnerable.
+		this.lastCollisionTime = 0;
 
 		this.time = 0;
 		this.runningTime = 0;
@@ -60,7 +80,8 @@
 		// Images.
 		this.images = {};
 		this.imagesLoaded = 0;
-
+		this.lifeIndicatorImage = new Image();
+		this.lifeIndicatorImage.src = 'assets/dino.png';
 		this.loadImages();
 	}
 	window['Runner'] = Runner;
@@ -565,14 +586,32 @@
 					hasObstacles &&
 					checkForCollision(this.horizon.obstacles[0], this.tRex);
 
-				if (!collision) {
+				if (collision && !this.invulnerable) {
+					this.lives--; // Decrement lives
+
+					// If no lives are left, game over.
+					if (this.lives <= 0) {
+						this.gameOver();
+					} else {
+						// Handle the player getting hit but still having lives left.
+						this.playSound(this.soundFx.HIT); // Play hit sound
+						this.updateLives(0.3); // Deduct one life
+						// Make the dino invulnerable
+						this.invulnerable = true;
+						this.invulnerableTime = now;
+					}
+				} else {
 					this.distanceRan += (this.currentSpeed * deltaTime) / this.msPerFrame;
 
 					if (this.currentSpeed < this.config.MAX_SPEED) {
 						this.currentSpeed += this.config.ACCELERATION;
 					}
-				} else {
-					this.gameOver();
+				}
+
+				// Handle invulnerability timer
+				if (this.invulnerable && now - this.invulnerableTime > 2000) {
+					// 2 seconds
+					this.invulnerable = false;
 				}
 
 				var playAchievementSound = this.distanceMeter.update(
@@ -617,6 +656,50 @@
 				this.tRex.update(deltaTime);
 				this.scheduleNextUpdate();
 			}
+
+			this.drawLives();
+		},
+
+		// show how many lives player has
+		drawLives: function () {
+			var lifeIconWidth = 25; // Width of the dino icon
+			var lifeIconHeight = 25; // Height of the dino icon
+			var lifeIconSpacing = 5; // Spacing between dino icons
+
+			// Clear the previous life icons
+			this.canvasCtx.clearRect(
+				0,
+				0,
+				lifeIconWidth + lifeIconSpacing,
+				lifeIconHeight + lifeIconSpacing
+			);
+
+			// Draw the dino icons
+			for (var i = 0; i < this.lives; i++) {
+				var xPosition = i * (lifeIconWidth + lifeIconSpacing);
+				// Replace 'yourDinoImage' with the reference to your small dino image
+				// Draw the life indicator image
+				this.canvasCtx.drawImage(
+					this.lifeIndicatorImage, // Reference to the life indicator image
+					xPosition,
+					lifeIconSpacing,
+					lifeIconWidth,
+					lifeIconHeight // Destination rectangle (canvas)
+				);
+			}
+		},
+
+		updateLives: function (livesToDeduct) {
+			// Deduct the specified number of lives.
+			this.lives -= livesToDeduct;
+
+			// If lives are below 0, set them to 0.
+			if (this.lives < 0) {
+				this.lives = 0;
+			}
+
+			// Draw the updated life indicators.
+			this.drawLives();
 		},
 
 		/**
@@ -826,7 +909,7 @@
 
 			// Update the high score.
 			if (this.distanceRan > this.highestScore) {
-				this.highestScore = Math.ceil(this.distanceRan);
+				this.highestScore = Math.ceil(this.distanceRan * this.scoreMultiplier);
 				this.distanceMeter.setHighScore(this.highestScore);
 			}
 
@@ -868,6 +951,10 @@
 				this.horizon.reset();
 				this.tRex.reset();
 				this.playSound(this.soundFx.BUTTON_PRESS);
+				this.lastCollisionTime = 0;
+				this.lives = 3;
+				this.invulnerable = false;
+				this.drawLives();
 				this.invert(true);
 				this.update();
 			}
@@ -1257,24 +1344,6 @@
 			box.width,
 			box.height
 		);
-	}
-
-	/**
-	 * Draw the collision boxes for debug.
-	 */
-	function drawCollisionBoxes(canvasCtx, tRexBox, obstacleBox) {
-		canvasCtx.save();
-		canvasCtx.strokeStyle = '#f00';
-		canvasCtx.strokeRect(tRexBox.x, tRexBox.y, tRexBox.width, tRexBox.height);
-
-		canvasCtx.strokeStyle = '#0f0';
-		canvasCtx.strokeRect(
-			obstacleBox.x,
-			obstacleBox.y,
-			obstacleBox.width,
-			obstacleBox.height
-		);
-		canvasCtx.restore();
 	}
 
 	/**
@@ -2905,7 +2974,7 @@ async function sendScore(score) {
 			.find((row) => row.startsWith('jwt='))
 			.split('=')[1];
 		const subject = localStorage.getItem('subject');
-		console.log("subject = " + subject);
+		console.log('subject = ' + subject);
 		// Ensure groupName is not empty or undefined
 		if (!score) {
 			console.error('Invalid or empty score!');
@@ -2933,4 +3002,3 @@ async function sendScore(score) {
 		console.log('Fetch Error: ', error);
 	}
 }
-
