@@ -439,7 +439,8 @@ namespace GamificationAPI.Data.Migrations
                 {
                     b.HasOne("GamificationAPI.Models.Subject", "Subject")
                         .WithOne("Leaderboard")
-                        .HasForeignKey("GamificationAPI.Models.Leaderboard", "SubjectId");
+                        .HasForeignKey("GamificationAPI.Models.Leaderboard", "SubjectId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Subject");
                 });

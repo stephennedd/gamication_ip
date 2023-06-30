@@ -25,10 +25,15 @@ namespace GamificationAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> AddBadge(Badge badge)
         {
+            if(badge == null)
+            {
+                return BadRequest();
+            }
             if (string.IsNullOrWhiteSpace(badge.Name))
             {
                 return BadRequest();
             }
+            
             bool success = await _badgeService.AddBadgeAsync(badge);
             if (success)
             {
@@ -41,8 +46,15 @@ namespace GamificationAPI.Controllers
         [HttpPatch]
         public async Task<IActionResult> UpdateBadge([FromBody] Badge badge)
         {
-            
-            if(await _badgeService.BadgeExistsAsync(badge.Id)== false)
+            if (badge == null)
+            {
+                return BadRequest();
+            }
+            if (string.IsNullOrWhiteSpace(badge.Name))
+            {
+                return BadRequest();
+            }
+            if (await _badgeService.BadgeExistsAsync(badge.Id)== false)
             {
                 return NotFound("Badge with this id does not exist");
             }
