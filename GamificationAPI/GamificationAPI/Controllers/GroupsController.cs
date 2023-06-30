@@ -26,6 +26,11 @@ namespace GamificationAPI.Controllers
             {
                 return BadRequest("No group name provided");
             }
+            var group = _dbContext.Groups.FirstOrDefault(g => g.Name == groupName);
+            if (group != null) 
+            { 
+                return BadRequest("Group with this name already exists");
+            }
             _dbContext.Groups.AddAsync(new Group { Name = groupName});
             _dbContext.SaveChanges();
             return Ok();

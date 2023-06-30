@@ -185,6 +185,18 @@ namespace GamificationAPITests
             // Assert
             Assert.IsType<NotFoundResult>(result); // Assuming that your method returns BadRequest in this scenario
         }
+        [Fact]
+        public async Task AddGroup_ReturnsBadRequest_WhenGroupNameAlreadyExists()
+        {
+            // Arrange
+            var existingGroupName = "Group1";
+
+            // Act
+            var result = _controller.AddGroup(existingGroupName);
+
+            // Assert
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
 
         public void Dispose()
         {
