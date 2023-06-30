@@ -28,22 +28,34 @@ describe('leaderboard test', function() {
     const loginButton = await driver.findElement(By.id('login-button'));     // click login button
     await loginButton.click();
 
-    await driver.sleep(150);
+    await driver.sleep(800);
 
     await driver.get('http://127.0.0.1:5501/teacher_dashboard/pages/admin-panel.html#update-leaderboard');
 
-    // const leaderboardName = await driver.findElement(By.id('leaderboard-name'));     // check the leaderboard name
-    // const leaderboardNameText = await leaderboardName.getText();
+    const leaderboardName = await driver.findElement(By.id('leaderboard-name'));     // check the leaderboard name
+    const leaderboardNameText = await leaderboardName.getText();
 
-    // const updateButton = await driver.findElement(By.id('update-leaderboard-button'));
-    // await updateButton.click();
+    const updateButton = await driver.findElement(By.id('update-leaderboard-button'));
+    await updateButton.click();
 
-    // await driver.sleep(150);
+    await driver.sleep(1050);
 
-    // const leaderboardNameField = await driver.findElement(By.id('modal-leaderboard-name'));
-    // await leaderboardNameField.clear();
-    // const randomLeaderboardName = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);   // generate random leaderboard name
-    // await leaderboardNameField.sendKeys(randomLeaderboardName);
+    const leaderboardNameField = await driver.findElement(By.id('modal-leaderboard-name'));
+    await leaderboardNameField.clear();
+    const randomLeaderboardName = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);   // generate random leaderboard name
+    await leaderboardNameField.sendKeys(randomLeaderboardName);
 
+    const updateButton2 = await driver.findElement(By.id('update-leaderboard-save-button'));
+    await updateButton2.click();
+
+    await driver.sleep(1050);
+
+    const leaderboardName2 = await driver.findElement(By.id('leaderboard-name'));     // check the leaderboard name
+    const leaderboardNameText2 = await leaderboardName2.;
+    console.log('we are here!');
+    console.log(leaderboardNameText);
+    console.log(leaderboardNameText2);
+
+    assert.equal(leaderboardNameText, leaderboardNameText2);
 });
 });

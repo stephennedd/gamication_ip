@@ -13,7 +13,7 @@ describe('test authorization', function() {
     await driver.quit();
   });
 
-  it('should navigate to the home page when the user is logged in', async function() {
+  it('should navigate to the home page when the user is logged in (GW)', async function() {
     await driver.get('http://127.0.0.1:5501/teacher_dashboard/pages/login.html');
     
     // enter username and password
@@ -33,7 +33,7 @@ describe('test authorization', function() {
     assert.equal(url, 'http://127.0.0.1:5501/teacher_dashboard/pages/admin-panel.html');
   });
 
-  it('should navigate to the login page when the user is logged out', async function() {
+  it('should navigate to the login page when the user is logged out (GW)', async function() {
     this.timeout(10000);
     await driver.get('http://127.0.0.1:5501/teacher_dashboard/pages/login.html');
     

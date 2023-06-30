@@ -295,12 +295,15 @@ async function updateLeaderboard(oldName, newName){
             });
 
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            alert(`Failed to update leaderboard. error code: ${response.status} `);
+            //throw new Error(`HTTP error! status: ${response.status}`);
         }
-
+        $('#update-leaderboard-modal').modal('hide');
+        populateLeaderboardTable();
         console.log('Leaderboard updated successfully:');
         return true;
     } catch (error) {
         console.log('Fetch Error: ', error);
+        alert(`Failed to update leaderboard. error code: ${error} `);
     }
 }

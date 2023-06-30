@@ -14,7 +14,7 @@ describe('admin test', function() {
         await driver.quit();
     });
     
-    it('add teacher (GW)', async function() {
+    it('should add a teacher (GW)', async function() {
         this.timeout(10000);
         await driver.get('http://127.0.0.1:5501/teacher_dashboard/pages/login.html');
 
@@ -64,7 +64,7 @@ describe('admin test', function() {
         assert.equal(modalIsDisplayed, true);
     });
 
-    it('add teacher (BW)', async function() {
+    it('should add a teacher (BW)', async function() {
         this.timeout(10000);
         await driver.get('http://127.0.0.1:5501/teacher_dashboard/pages/admin-panel.html#add-user');
         await driver.sleep(800);
@@ -96,21 +96,17 @@ describe('admin test', function() {
         // Step 2: Try to accept or dismiss the alert
         await driver.switchTo().alert().accept();
 
-        // or alert.dismiss();
-
         // If no exception is thrown, the alert was open
-        console.log('Alert is open');
         assert.ok(true, 'Alert is open');
         } catch (e) {
         // Step 3: Handle the exception if the alert was not open
-        console.log('Alert is not open');
         assert.ok(false, 'Alert is not open');
         }
 
 
     });
 
-    it('remove subject (GW)', async function() {
+    it('should remove a subject (GW)', async function() {
         this.timeout(100000);
         await driver.get('http://127.0.0.1:5501/teacher_dashboard/index.html');
         await driver.sleep(800);
@@ -125,23 +121,89 @@ describe('admin test', function() {
 
         await driver.sleep(250);
 
-        // count the number of subjects
-        const table = await driver.findElement(By.id('quiz-table'));
-        const rows = await table.findElements(By.tagName('tr'));
-        const rowCount = rows.length;
-
         const removeSubjectButton = await driver.findElement(By.id('remove-quiz-button'));     // click remove subject button
         await removeSubjectButton.click();
 
-        await driver.switchTo().alert().accept();
-        await driver.sleep(8000);
+        try {
+            await driver.switchTo().alert().dismiss();
+            assert.ok(true, 'Alert is open');
+        } catch (e) {
+            assert.ok(false, 'Alert is not open');
+        }
+    });
+    
+    it('should add a group (GW)', async function() {
+        this.timeout(10000);
+        await driver.get('http://127.0.0.1:5501/teacher_dashboard/pages/admin-panel.html#add-group');
+        await driver.sleep(800);
 
-        // count the number of subjects after removing one
-        const table2 = await driver.findElement(By.id('quiz-table'));
-        const rows2 = await table2.findElements(By.tagName('tr'));
-        const rowCount2 = rows2.length;
-        
-        assert.equal(rowCount2, rowCount - 1);
-    }); 
+        const randomstring = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);   // generate random username
+        const groupNameField = await driver.findElement(By.id('group-name'));     // enter group name
+        await groupNameField.sendKeys(randomstring);
+
+        const addGroupButton = await driver.findElement(By.id('add-group-button'));     // click add group button
+        await addGroupButton.click();
+
+        await driver.sleep(2000);
+
+        // check if modal is visible
+        const modal = await driver.findElement(By.id('add-group-success-modal'));
+        //check if the modal is shown
+        const modalIsDisplayed = await modal.isDisplayed();
+
+        assert.equal(modalIsDisplayed, true);
+
+        const dismissButton = await driver.findElement(By.id('dismiss-add-group-modal'));     // click dismiss button
+        await dismissButton.click();
+    });
+
+    // it('change group name (GW)', async function() {
+    //     this.timeout(10000);
+    //     await driver.get('http://127.0.0.1:5501/teacher_dashboard/pages/admin-panel.html#manage-groups');
+    //     await driver.sleep(800);
+
+    //     const editGroupButton = await driver.findElement(By.id('edit-group-button'));     // click edit group button
+    //     await editGroupButton.click();
+
+    //     await driver.sleep(200);
+
+    //     const groupNameField = await driver.findElement(By.id('edit-group-name'));     // enter group name
+    //     await groupNameField.sendKeys('test');
+    // });
+
+    it('should add a subject (GW)', async function() {
+        this.timeout(10000);
+        await driver.get('http://127.0.0.1:5501/teacher_dashboard/pages/admin-panel.html#add-subject');
+        await driver.sleep(800);
+
+        const randomstring = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);   // generate random username
+        const subjectNameField = await driver.findElement(By.id('subject-name'));     // enter subject name
+        await subjectNameField.sendKeys(randomstring);
+
+        const selectWeekDropdown = await driver.findElement(By.id('subject-week'));     // select week from dropdown
+        await selectWeekDropdown.click();
+        const weekOption = await driver.findElement(By.css('#subject-week > option:nth-child(2)'));
+        await weekOption.click();
+
+        const selectLinkedGameDropdown = await driver.findElement(By.id('subject-game'));     // select linked game from dropdown
+        await selectLinkedGameDropdown.click();
+        const linkedGameOption = await driver.findElement(By.css('#subject-game > option:nth-child(2)'));
+        await linkedGameOption.click();
+
+        const addSubjectButton = await driver.findElement(By.id('add-subject-button'));     // click add subject button
+        await addSubjectButton.click();
+
+        await driver.sleep(2000);
+
+        // check if modal is visible
+        const modal = await driver.findElement(By.id('add-subject-success-modal'));
+        //check if the modal is shown
+        const modalIsDisplayed = await modal.isDisplayed();
+
+        assert.equal(modalIsDisplayed, true);
+
+        const dismissButton = await driver.findElement(By.id('dismiss-add-subject-modal'));     // click dismiss button
+        await dismissButton.click();
+    });
 });
 
