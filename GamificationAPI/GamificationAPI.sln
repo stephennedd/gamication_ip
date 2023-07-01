@@ -5,9 +5,7 @@ VisualStudioVersion = 17.5.33502.453
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GamificationAPI", "GamificationAPI\GamificationAPI.csproj", "{257642D7-E289-44A2-976F-FD1F661DE413}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GamificationAPITests", "GamificationAPITests\GamificationAPITests.csproj", "{55C43EA9-2486-4620-81E7-43CFCC49F5C0}"
-EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{E4419A58-242F-4119-9484-E7907D8121B2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GamificationAPITests", "GamificationAPITests\GamificationAPITests.csproj", "{55C43EA9-2486-4620-81E7-43CFCC49F5C0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +21,6 @@ Global
 		{55C43EA9-2486-4620-81E7-43CFCC49F5C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{55C43EA9-2486-4620-81E7-43CFCC49F5C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{55C43EA9-2486-4620-81E7-43CFCC49F5C0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E4419A58-242F-4119-9484-E7907D8121B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E4419A58-242F-4119-9484-E7907D8121B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E4419A58-242F-4119-9484-E7907D8121B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E4419A58-242F-4119-9484-E7907D8121B2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
