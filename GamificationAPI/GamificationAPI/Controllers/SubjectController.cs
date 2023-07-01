@@ -1,4 +1,5 @@
 ﻿﻿using GamificationAPI.Interfaces;
+using GamificationAPI.Models;
 using GamificationToIP.Context;
 using GamificationToIP.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -121,17 +122,7 @@ public class NewSubject
     public int WeekNumber { get; set; }
     public int GameId { get; set; }
 }
-public class Subject
-{
-    public int Id { get; set; }
-    public string SubjectTitle { get; set; }
-    public int WeekNumber { get; set; }
-    public int TestId { get; set; }
-    public Test Test { get; set; }
 
-    public int GameId { get; set; }
-    public Game Game { get; set; }
-}
 
 public class RootObject
 {

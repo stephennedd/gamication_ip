@@ -46,6 +46,7 @@ namespace GamificationToIP.Context
                 .HasMany(e => e.HighScores)
                 .WithOne(e => e.Leaderboard)
                 .IsRequired(true);
+
         }
     }
 }

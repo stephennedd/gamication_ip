@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GamificationAPI.Models
 {
@@ -9,5 +10,8 @@ namespace GamificationAPI.Models
         public string Name { get; set; }
         public List<HighScore> HighScores { get; set; } = new List<HighScore> { };
 
+        [ForeignKey("Subject")]
+        public int SubjectId { get; set; }
+        public virtual Subject Subject { get; set; }
     }
 }
