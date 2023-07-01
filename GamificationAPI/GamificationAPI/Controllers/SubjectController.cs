@@ -57,6 +57,7 @@ public class SubjectController : ControllerBase
         return gameName;
     }
 
+
     [HttpGet("{subjectName}/test")]
     public ActionResult<int> GetTestId(string subjectName)
     {

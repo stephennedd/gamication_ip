@@ -2,6 +2,7 @@
 using GamificationAPI.Interfaces;
 using GamificationAPI.Models;
 using GamificationToIP.Context;
+using GamificationToIP.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Moq;
@@ -21,6 +22,9 @@ namespace GamificationAPITests
        // private readonly Mock<DbSet<Subject>> _mockSet;
         private Mock<ISubjects> _mockSubjectsService;
         private readonly ApplicationDbContext _dbContext;
+        private readonly Mock<ApplicationDbContext> _mockDbContext;
+
+
         public SubjectsControllerTest()
         {
             var options = new DbContextOptionsBuilder<ApplicationDbContext>()
@@ -32,7 +36,135 @@ namespace GamificationAPITests
             _mockSubjectsService = new Mock<ISubjects>();
 
             _controller = new SubjectController(_mockSubjectsService.Object, _dbContext);
+
+            _mockDbContext = new Mock<ApplicationDbContext>();
         }
+
+
+        [Fact]
+        public async Task GetGameNameBySubject_ReturnsGameName_WhenSubjectExists()
+        {
+            // Arrange
+            string subjectName = "Subject 1";
+            string gameName = "Game 1";
+
+            var games = new List<Game>
+    {
+        new Game { GameName = gameName, Subjects = new List<Subject> { new Subject { SubjectTitle = subjectName } } },
+        new Game { GameName = "Game 2", Subjects = new List<Subject> { new Subject { SubjectTitle = "Subject 2" } } },
+        new Game { GameName = "Game 3", Subjects = new List<Subject> { new Subject { SubjectTitle = "Subject 3" } } }
+    };
+
+            _dbContext.Games.AddRange(games);
+            await _dbContext.SaveChangesAsync();
+
+            // Log the count of games in the context to verify the data is correctly added
+            Console.WriteLine("Game count in context: " + _dbContext.Games.Count());
+
+            // Act
+            var result = await _controller.GetGameNameBySubject(subjectName);
+           
+            // Assert
+            Assert.Equal("Game 1", result.Value);
+        }
+
+        [Fact]
+        public async Task GetGameNameBySubject_ReturnsNotFound_WhenSubjectDoesNotExist()
+        {
+            // Arrange
+            string subjectName = "Non-existent Subject";
+            var games = new List<Game>
+        {
+            new Game { GameName = "Game 1", Subjects = new List<Subject> { new Subject { SubjectTitle = "Subject 1" } } },
+            new Game { GameName = "Game 2", Subjects = new List<Subject> { new Subject { SubjectTitle = "Subject 2" } } },
+            new Game { GameName = "Game 3", Subjects = new List<Subject> { new Subject { SubjectTitle = "Subject 3" } } }
+        };
+
+            _dbContext.Games.AddRange(games);
+            await _dbContext.SaveChangesAsync();
+
+            // Act
+            var result = await _controller.GetGameNameBySubject(subjectName);
+            var actionResult = Assert.IsType<ActionResult<string>>(result);
+            var notFoundResult = Assert.IsType<NotFoundResult>(actionResult.Result);
+
+            // Assert
+            Assert.Equal(404, notFoundResult.StatusCode);
+        }
+
+        [Fact]
+        public void GetTestId_ReturnsTestId_WhenSubjectExists()
+        {
+            // Arrange
+            string subjectName = "Subject 1";
+            int testId = 1;
+
+            var test = new Test
+            {
+                Id = testId,
+                Title = "Test Title",
+                Description = "Test Description",
+                ImageUrl = "https://example.com/test-image.jpg"
+            };
+
+            var subject = new Subject
+            {
+                SubjectTitle = subjectName,
+                Test = test
+            };
+
+            _dbContext.Subjects.Add(subject);
+            _dbContext.Tests.Add(test);
+            _dbContext.SaveChanges();
+
+            // Act
+            var result = _controller.GetTestId(subjectName);
+
+            // Assert
+            Assert.Equal(testId, result.Value);
+        }
+
+
+        [Fact]
+        public void GetTestId_ReturnsNotFound_WhenSubjectDoesNotExist()
+        {
+            // Arrange
+            string subjectName = "Non-existent Subject";
+
+            // Act
+            var result = _controller.GetTestId(subjectName);
+            var actionResult = Assert.IsType<ActionResult<int>>(result);
+            var notFoundResult = Assert.IsType<NotFoundResult>(actionResult.Result);
+
+            // Assert
+            Assert.Equal(404, notFoundResult.StatusCode);
+        }
+
+        [Fact]
+        public void GetTestId_ReturnsNotFound_WhenSubjectHasNoTest()
+        {
+            // Arrange
+            string subjectName = "Subject 1";
+
+            var subject = new Subject
+            {
+                SubjectTitle = subjectName,
+                Test = null
+            };
+
+            _dbContext.Subjects.Add(subject);
+            _dbContext.SaveChanges();
+
+            // Act
+            var result = _controller.GetTestId(subjectName);
+            var actionResult = Assert.IsType<ActionResult<int>>(result);
+            var notFoundResult = Assert.IsType<NotFoundResult>(actionResult.Result);
+
+            // Assert
+            Assert.Equal(404, notFoundResult.StatusCode);
+        }
+
+
 
         [Fact]
         public async Task GetSubjects_ReturnsListOfSubjects()
@@ -101,6 +233,21 @@ namespace GamificationAPITests
         }
 
         [Fact]
+        public async Task GetSubjects_ReturnsNotFound()
+        {
+            // Arrange
+            List<Subject> subjects = null;
+            _mockSubjectsService.Setup(service => service.GetSubjects()).ReturnsAsync(subjects);
+
+            // Act
+            var result = await _controller.GetSubjects();
+
+            // Assert
+            var actionResult = Assert.IsType<NotFoundResult>(result.Result);
+            Assert.Equal(404, actionResult.StatusCode);
+        }
+
+        [Fact]
         public async Task DeleteSubject_ReturnsOkResult_WhenSubjectExists()
         {
             // Arrange
@@ -113,5 +260,20 @@ namespace GamificationAPITests
             // Assert
             Assert.IsType<OkResult>(result);
         }
+
+        [Fact]
+        public async Task DeleteSubject_ReturnsNotFound_WhenSubjectDoesNotExist()
+        {
+            // Arrange
+            int subjectId = 1;
+            _mockSubjectsService.Setup(service => service.DeleteSubject(subjectId)).ReturnsAsync((Subject)null);
+
+            // Act
+            var result = await _controller.DeleteSubject(subjectId);
+
+            // Assert
+            Assert.IsType<NotFoundResult>(result);
+        }
+
     }
 }

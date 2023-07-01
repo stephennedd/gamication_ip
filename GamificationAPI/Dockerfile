@@ -1,41 +1,31 @@
-# Use the appropriate base image that includes the .NET SDK and Entity Framework Core tools
+#Depending on the operating system of the host machines(s) that will build or run the containers, the image specified in the FROM statement may need to be changed.
+#For more information, please see https://aka.ms/containercompat
+
+FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
+WORKDIR /app
+EXPOSE 80
+EXPOSE 443
+
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-
-# Copy and restore dependencies
 COPY ["GamificationAPI/GamificationAPI.csproj", "GamificationAPI/"]
 RUN dotnet restore "GamificationAPI/GamificationAPI.csproj"
 
-# Copy the application code
+# Install EF Core CLI
+RUN dotnet tool install --global dotnet-ef --version 7.0.5
+ENV PATH="${PATH}:/root/.dotnet/tools"
+
 COPY . .
-
 WORKDIR "/src/GamificationAPI"
-
-# Build the application
 RUN dotnet build "GamificationAPI.csproj" -c Release -o /app/build
+RUN dotnet ef migrations add SecondMigration -c ApplicationDbContext -o Data/Migrations
+RUN dotnet ef database update
+RUN dotnet run seeddata
 
-# Rest of the Dockerfile remains unchanged
 FROM build AS publish
 RUN dotnet publish "GamificationAPI.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
-FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS final
+FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-
-# Add the following lines to the Dockerfile to run the database commands
-RUN apt-get update \
-    && apt-get install -y postgresql-client \
-    && apt-get clean
-
-# Install Entity Framework Core tools
-RUN dotnet tool install --global dotnet-ef --version 7.0.0
-
-# Set the PATH environment variable to include the Entity Framework Core tools path
-ENV PATH="${PATH}:/root/.dotnet/tools"
-
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh"]
-
-
-
+ENTRYPOINT ["dotnet", "GamificationAPI.dll"]

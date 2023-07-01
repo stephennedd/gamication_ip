@@ -1,6 +1,8 @@
 ﻿using GamificationAPI.Interfaces;
 using GamificationAPI.Models;
 using GamificationToIP.Context;
+using GamificationToIP.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Moq;
@@ -117,6 +119,56 @@ namespace GamificationAPITests
             // Assert
             Assert.Equal(response, returnedResponse);
         }
+
+        [Fact]
+        public async Task GetGeneratedTests_ReturnsNotFound_WhenNoTestsExist()
+        {
+            // Arrange
+            var emptyGeneratedTestsList = new List<GeneratedTest>();
+            _mockGeneratedTestService.Setup(service => service.GetGeneratedTests()).ReturnsAsync((List<GeneratedTest>)null);
+
+            // Act
+            var result = await _controller.GetGeneratedTests();
+
+            var notFoundResult = Assert.IsType<NotFoundResult>(result);
+
+            Assert.Equal(StatusCodes.Status404NotFound, notFoundResult.StatusCode);
+        }
+
+        [Fact]
+        public async Task GetGeneratedTestById_ReturnsNotFound_WhenTestDoesNotExist()
+        {
+            // Arrange
+            int testId = 1;
+            _mockGeneratedTestService.Setup(service => service.GetGeneratedTestById(testId)).ReturnsAsync((GeneratedTest)null);
+
+            // Act
+            var result = await _controller.GetGeneratedTestById(testId);
+
+            // Assert
+            var notFoundResult = Assert.IsType<NotFoundResult>(result);
+
+            Assert.Equal(StatusCodes.Status404NotFound, notFoundResult.StatusCode);
+        }
+
+        [Fact]
+        public async Task GetGeneratedTest_ReturnsNotFound_WhenTestDoesNotExist()
+        {
+            // Arrange
+            int studentId = 1;
+            int testId = 1;
+            _mockGeneratedTestService.Setup(service => service.GetGeneratedTest(studentId, testId)).ReturnsAsync((GeneratedTestDto)null);
+
+            // Act
+            var result = await _controller.GetGeneratedTest(studentId, testId);
+
+            // Assert
+            var actionResult = Assert.IsType<ActionResult<GeneratedTestDto>>(result);
+            var notFoundResult = Assert.IsType<NotFoundResult>(actionResult.Result);
+
+            Assert.Equal(StatusCodes.Status404NotFound, notFoundResult.StatusCode);
+        }
+
 
         [Fact]
         public async Task CalculateStudentResult_ReturnsResultPercentage()

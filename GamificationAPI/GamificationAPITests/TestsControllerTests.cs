@@ -49,6 +49,22 @@ namespace GamificationAPITests
         }
 
         [Fact]
+        public async Task GetTest_ReturnsNotFound()
+        {
+            // Arrange
+            int testId = 1;
+            TestDto test = null;
+            _mockTestService.Setup(service => service.GetTestByIdAsync(testId)).ReturnsAsync(test);
+
+            // Act
+            var result = await _controller.GetTest(testId);
+
+            // Assert
+            var actionResult = Assert.IsType<NotFoundResult>(result.Result);
+            Assert.Equal(404, actionResult.StatusCode);
+        }
+
+        [Fact]
         public async Task GetTestQuestions_ReturnsTestQuestions()
         {
             // Arrange
@@ -70,6 +86,23 @@ namespace GamificationAPITests
 
             Assert.Equal(questions.Count, returnedQuestions.Count);
         }
+
+        [Fact]
+        public async Task GetTestQuestions_ReturnsNotFound()
+        {
+            // Arrange
+            int testId = 1;
+            List<QuestionDto> questions = null;
+            _mockTestService.Setup(service => service.GetQuestionsByTestIdAsync(testId)).ReturnsAsync(questions);
+
+            // Act
+            var result = await _controller.GetTestQuestions(testId);
+
+            // Assert
+            var actionResult = Assert.IsType<NotFoundResult>(result.Result);
+            Assert.Equal(404, actionResult.StatusCode);
+        }
+
 
         [Fact]
         public async Task CreateTest_ReturnsCreatedTest()
@@ -111,6 +144,7 @@ namespace GamificationAPITests
             Assert.Equal(addedQuestion.Id, returnedQuestion.Id);
             Assert.Equal(addedQuestion.QuestionText, returnedQuestion.QuestionText);
         }
+
 
     }
 }
