@@ -16,10 +16,15 @@ COPY . .
 WORKDIR "/src/GamificationAPI"
 RUN dotnet build "GamificationAPI.csproj" -c Release -o /app/build
 
+RUN dotnet dev-certs https -ep /app/build/https/aspnetapp.pfx -p password
+
 FROM build AS publish
 RUN dotnet publish "GamificationAPI.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+COPY --from=build /app/build/https/aspnetapp.pfx /https/aspnetapp.pfx
+ENV ASPNETCORE_Kestrel__Certificates__Default__Password="password"
+ENV ASPNETCORE_Kestrel__Certificates__Default__Path="/https/aspnetapp.pfx"
 ENTRYPOINT ["dotnet", "GamificationAPI.dll"]
