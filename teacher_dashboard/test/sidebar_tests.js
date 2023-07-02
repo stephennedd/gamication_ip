@@ -12,7 +12,7 @@ describe('sidebar test', function() {
         await driver.quit();
     });
 
-    it('should change the main content when a sidebar link is clicked', async function() {
+    it('INT012 - should change the main content when a sidebar link is clicked', async function() {
         this.timeout(12000);
         await driver.get('http://127.0.0.1:5501/teacher_dashboard/pages/login.html');
     

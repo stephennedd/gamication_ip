@@ -2,7 +2,7 @@ const { Builder, By } = require('selenium-webdriver');
 const assert = require('assert');
 
 
-describe('quiz tests', function() {
+describe('quiz test', function() {
   let driver;
 
   before (async function() {
@@ -15,7 +15,7 @@ describe('quiz tests', function() {
     await driver.quit();
   });
 
-  it('edit quiz (GW)', async function() {
+  it('INT011 - should show updated quiz name and number of questions (GW)', async function() {
     this.timeout(12000);
     await driver.get('http://127.0.0.1:5501/teacher_dashboard/pages/login.html');
     

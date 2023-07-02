@@ -15,7 +15,7 @@ describe('student test', function() {
     await driver.quit();
   });
 
-  it('update student (GW)', async function() {
+  it('INT013 - should show an updated student name, lastname, and username', async function() {
     this.timeout(10000);
     await driver.get('http://127.0.0.1:5501/teacher_dashboard/pages/login.html');
     
@@ -89,7 +89,7 @@ describe('student test', function() {
     assert.notEqual(userNameText, updatedUserNameText);
     });
 
-    it('delete student (GW)', async function() {
+    it('INT014 - should count 1 student less in the list of students (GW)', async function() {
         this.timeout(10000);
         await driver.get('http://127.0.0.1:5501/teacher_dashboard/pages/login.html');
     
@@ -128,7 +128,7 @@ describe('student test', function() {
         assert.equal(count, count2 + 1);
     });
 
-    it('ban student (GW)', async function() {
+    it('INT015 - student status should show as the opposite of before (GW)', async function() {
         this.timeout(10000);
         await driver.get('http://127.0.0.1:5501/teacher_dashboard/pages/login.html');
     

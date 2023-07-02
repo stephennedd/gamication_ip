@@ -2,7 +2,7 @@ const { Builder, By } = require('selenium-webdriver');
 const assert = require('assert');
 
 
-describe('navbar tests', function() {
+describe('navbar test', function() {
   let driver;
 
   before (async function() {
@@ -13,7 +13,7 @@ describe('navbar tests', function() {
     await driver.quit();
   });
 
-  it('should navigate to the home page when the logo is clicked', async function() {
+  it('INT010 - should navigate to the home page when the logo is clicked', async function() {
     await driver.get('http://127.0.0.1:5501/teacher_dashboard/pages/login.html');
     
     // enter username and password
