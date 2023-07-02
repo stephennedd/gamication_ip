@@ -12,7 +12,8 @@ services:
       dockerfile: GamificationAPI/Dockerfile
     container_name: api
     ports:
-      - '8088:80'
+      - 8088:80
+      - 4434:443
     networks:
       - dev
 

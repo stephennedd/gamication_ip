@@ -106,7 +106,10 @@ async void SeedData(IHost app)
             var service = scope.ServiceProvider.GetService<DatabaseSeeder>();
             if (service is not null)
             {
-                await service.Seed();
+                if (service.IsDatabaseEmpty())
+                {
+                    await service.Seed();
+                }       
             }
         }
     }
@@ -134,7 +137,6 @@ using (var scope = app.Services.CreateScope())
     if (context.Database.GetPendingMigrations().Any())
     {
         context.Database.Migrate();
-        
     }
     SeedData(app);
 }
