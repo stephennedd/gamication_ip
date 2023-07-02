@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "test": "mocha",
-    "serve": "http-server -p 5500 -o"
+    "serve": "http-server -p 5501 -o"
   },
   "keywords": [],
   "author": "",

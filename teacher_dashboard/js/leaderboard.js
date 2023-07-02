@@ -299,6 +299,7 @@ async function updateLeaderboard(oldName, newName){
             //throw new Error(`HTTP error! status: ${response.status}`);
         }
         $('#update-leaderboard-modal').modal('hide');
+        $('#edit-leaderboard-success-modal').modal('show');
         populateLeaderboardTable();
         console.log('Leaderboard updated successfully:');
         return true;

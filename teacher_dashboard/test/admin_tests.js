@@ -1,4 +1,4 @@
-const {Builder, By, until, } = require('selenium-webdriver');
+const {Builder, By } = require('selenium-webdriver');
 const assert = require('assert');
 
 describe('admin test', function() {
@@ -14,7 +14,7 @@ describe('admin test', function() {
         await driver.quit();
     });
     
-    it('should add a teacher (GW)', async function() {
+    it('INT004 - should add a teacher (GW)', async function() {
         this.timeout(10000);
         await driver.get('http://127.0.0.1:5501/teacher_dashboard/pages/login.html');
 
@@ -64,7 +64,7 @@ describe('admin test', function() {
         assert.equal(modalIsDisplayed, true);
     });
 
-    it('should add a teacher (BW)', async function() {
+    it('INT005 - should show an error while creating a new teacher (BW)', async function() {
         this.timeout(10000);
         await driver.get('http://127.0.0.1:5501/teacher_dashboard/pages/admin-panel.html#add-user');
         await driver.sleep(800);
@@ -106,7 +106,7 @@ describe('admin test', function() {
 
     });
 
-    it('should remove a subject (GW)', async function() {
+    it('INT006 - should show success modal after removing a subject (GW)', async function() {
         this.timeout(100000);
         await driver.get('http://127.0.0.1:5501/teacher_dashboard/index.html');
         await driver.sleep(800);
@@ -132,7 +132,7 @@ describe('admin test', function() {
         }
     });
     
-    it('should add a group (GW)', async function() {
+    it('INT007 - should show success modal after adding a group (GW)', async function() {
         this.timeout(10000);
         await driver.get('http://127.0.0.1:5501/teacher_dashboard/pages/admin-panel.html#add-group');
         await driver.sleep(800);
@@ -171,7 +171,7 @@ describe('admin test', function() {
     //     await groupNameField.sendKeys('test');
     // });
 
-    it('should add a subject (GW)', async function() {
+    it('INT008 - should show a success modal after adding a subject (GW)', async function() {
         this.timeout(10000);
         await driver.get('http://127.0.0.1:5501/teacher_dashboard/pages/admin-panel.html#add-subject');
         await driver.sleep(800);
@@ -202,7 +202,7 @@ describe('admin test', function() {
 
         assert.equal(modalIsDisplayed, true);
 
-        const dismissButton = await driver.findElement(By.id('dismiss-add-subject-modal'));     // click dismiss button
+        const dismissButton = await driver.findElement(By.id('dismiss-subject-modal'));     // click dismiss button
         await dismissButton.click();
     });
 });

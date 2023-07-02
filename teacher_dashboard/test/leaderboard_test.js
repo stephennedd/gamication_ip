@@ -15,7 +15,7 @@ describe('leaderboard test', function() {
     await driver.quit();
   });
 
-  it('edit leaderboard (GW)', async function() {
+  it('INT009 - should edit a leaderboard (GW)', async function() {
     this.timeout(10000);
     await driver.get('http://127.0.0.1:5501/teacher_dashboard/pages/login.html');
     
@@ -32,9 +32,6 @@ describe('leaderboard test', function() {
 
     await driver.get('http://127.0.0.1:5501/teacher_dashboard/pages/admin-panel.html#update-leaderboard');
 
-    const leaderboardName = await driver.findElement(By.id('leaderboard-name'));     // check the leaderboard name
-    const leaderboardNameText = await leaderboardName.getText();
-
     const updateButton = await driver.findElement(By.id('update-leaderboard-button'));
     await updateButton.click();
 
@@ -48,14 +45,12 @@ describe('leaderboard test', function() {
     const updateButton2 = await driver.findElement(By.id('update-leaderboard-save-button'));
     await updateButton2.click();
 
-    await driver.sleep(1050);
+    await driver.sleep(450);
 
-    const leaderboardName2 = await driver.findElement(By.id('leaderboard-name'));     // check the leaderboard name
-    const leaderboardNameText2 = await leaderboardName2.;
-    console.log('we are here!');
-    console.log(leaderboardNameText);
-    console.log(leaderboardNameText2);
+    // check if modal is visible
+    const modal = await driver.findElement(By.id('edit-leaderboard-success-modal'));
+    const modalVisible = await modal.isDisplayed();
 
-    assert.equal(leaderboardNameText, leaderboardNameText2);
+    assert.equal(modalVisible, true);
 });
 });
