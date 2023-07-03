@@ -24,17 +24,17 @@ jobs:
 
       - name: Build with dotnet
         run: |
-          cd GamificationAPI/GamificationAPI # navigate to backend folder 
+          cd gamication_ip/gamication_ip # navigate to backend folder 
           dotnet build --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o ${{github.workspace}}/publish
+        run: dotnet publish -c Release -o ./publish
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
           name: .net-app
-          path: ${{github.workspace}}/publish
+          path: ./publish
 
   deploy:
     runs-on: windows-latest
@@ -56,4 +56,4 @@ jobs:
           app-name: "aad-gamification"
           slot-name: "Production"
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_9912F8393DCD4BF19EF09D3906D6B2DE }}
-          package: ${{github.workspace}}/publish
+          package: ./publish
