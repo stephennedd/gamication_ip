@@ -23,8 +23,8 @@ jobs:
           include-prerelease: true
 
       - name: Build with dotnet
-        run: 
-          cd GamificationAPI/GamificationAPI
+        run: |
+          cd GamificationAPI/GamificationAPI # navigate to backend folder 
           dotnet build --configuration Release
 
       - name: dotnet publish
