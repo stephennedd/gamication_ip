@@ -106,7 +106,10 @@ async void SeedData(IHost app)
             var service = scope.ServiceProvider.GetService<DatabaseSeeder>();
             if (service is not null)
             {
-                await service.Seed();
+                if (service.IsDatabaseEmpty())
+                {
+                    await service.Seed();
+                }       
             }
         }
     }
@@ -126,5 +129,15 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
 
+    var context = services.GetRequiredService<ApplicationDbContext>();
+    if (context.Database.GetPendingMigrations().Any())
+    {
+        context.Database.Migrate();
+    }
+    SeedData(app);
+}
 app.Run();

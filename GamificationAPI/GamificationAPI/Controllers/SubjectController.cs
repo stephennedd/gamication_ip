@@ -58,6 +58,7 @@ public class SubjectController : ControllerBase
         return gameName;
     }
 
+
     [HttpGet("{subjectName}/test")]
     public ActionResult<int> GetTestId(string subjectName)
     {
@@ -104,6 +105,11 @@ public class SubjectController : ControllerBase
     public async Task<IActionResult> DeleteSubject(int id)
     {
         Subject subject = await _subjectService.DeleteSubject(id);
+
+        if (subject == null)
+        {
+            return NotFound(); // Subject not found, return 404 status code
+        }
 
         return Ok();
     }
