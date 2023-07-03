@@ -1,0 +1,35 @@
+version: '3.4'
+
+networks:
+  dev:
+    driver: bridge
+
+services:
+  api:
+    image: docker.io/library/api
+    build: 
+      context: .
+      dockerfile: GamificationAPI/Dockerfile
+    container_name: api
+    ports:
+      - 8088:80
+      - 4434:443
+    networks:
+      - dev
+
+  app_db:
+     image: postgres:latest
+     container_name: app_db
+     hostname: api-db
+     environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=IPgamification
+     restart: always
+   #  volumes:
+   #   - app_data:/var/lib/postgresql/data
+     networks:
+      - dev
+
+#volumes:
+ # app_data:
