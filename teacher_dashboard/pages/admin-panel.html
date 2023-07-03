@@ -16,28 +16,29 @@
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-dark background_color fixed-top">
     <div class="container-fluid">
-      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar"
+      <button class="navbar-toggler" id="left-toggle" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar"
         aria-controls="offcanvasExample">
         <span class="navbar-toggler-icon" data-bs-target="#sidebar"></span>
       </button>
       <a class="navbar-brand" href="#">
         <img src="../assets/images/lg_saxion_white.png" alt="logo-saxion" height="55" />
       </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler" id="right-toggle" type="button" data-bs-toggle="collapse"
+        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+        aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
         <ul class="navbar-nav d-flex ms-auto my-3">
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle p-0" href="#" role="button" data-bs-toggle="dropdown"
-              aria-expanded="false">
+            <a class="nav-link dropdown-toggle p-0" id="logout-dropdown" href="#" role="button"
+              data-bs-toggle="dropdown" aria-expanded="false">
               <i class="bi bi-person-circle"></i>
             </a>
             <ul class="dropdown-menu dropdown-menu-end">
               <li>
-                <a class="dropdown-item" href="#" onclick="logout()">Logout</a>
+                <a class="dropdown-item" href="#" id="logout-button" onclick="logout()">Logout</a>
               </li>
             </ul>
           </li>
@@ -95,7 +96,8 @@
             </div>
           </li>
           <li>
-            <a class="nav-link px-3 sidebar-link text-white" data-bs-toggle="collapse" href="#student">
+            <a class="nav-link px-3 sidebar-link text-white" data-bs-toggle="collapse" href="#student"
+              id="test-menu-dropdown-2">
               <span class="me-2"><i class="bi bi-mortarboard"></i></span>
               <span>Manage Students</span>
               <span class="ms-auto">
@@ -130,7 +132,8 @@
             </div>
           </li>
           <li>
-            <a class="nav-link px-3 sidebar-link text-white" data-bs-toggle="collapse" href="#leaderboard">
+            <a class="nav-link px-3 sidebar-link text-white" data-bs-toggle="collapse" href="#leaderboard"
+              id="test-menu-dropdown-3">
               <span class="me-2"><i class="bi bi-trophy"></i></span>
               <span>Leaderboards</span>
               <span class="ms-auto">
@@ -141,7 +144,7 @@
             </a>
             <div class="collapse" id="leaderboard">
               <ul class="navbar-nav ps-3">
-                <li>
+                <!-- <li>
                   <a href="#add-leaderboard" class="nav-link px-3" id="add-leaderboard-link">
                     <span>Add leaderboard</span>
                   </a>
@@ -150,7 +153,7 @@
                   <a href="#delete-leaderboard" class="nav-link px-3" id="delete-leaderboard-link">
                     <span>Remove leaderboard</span>
                   </a>
-                </li>
+                </li> -->
                 <li>
                   <a href="#update-leaderboard" class="nav-link px-3" id="update-leaderboard-link">
                     <span>Update leaderboard</span>
@@ -162,7 +165,8 @@
 
           <!-- Admin options-->
           <li id="admin-section">
-            <a class="nav-link px-3 sidebar-link text-white" data-bs-toggle="collapse" href="#admin_options">
+            <a class="nav-link px-3 sidebar-link text-white" data-bs-toggle="collapse" href="#admin_options"
+              id="admin-options">
               <span class="me-2"><i class="bi bi-braces"></i></span>
               <span>Admin</span>
               <span class="ms-auto">
@@ -407,10 +411,11 @@
         </div>
         <div class="modal-footer">
           <div class="col text-end">
-            <button type="button" class="btn btn-primary" onclick="addQuestionToModal()">Add Question</button>
+            <button type="button" class="btn btn-primary" onclick="addQuestionToModal()" id="add-question-to-quiz">Add
+              Question</button>
             <!-- <button type="button" class="btn btn-success" onclick="submitEditQuizForm()">Save changes</button> -->
             <button type="submit" form="edit-quiz-form" class="btn btn-success"
-              onclick="confirmQuizUpdate(this,subjects)">Save changes</button>
+              onclick="confirmQuizUpdate(this,subjects)" id="update-quiz-button">Save changes</button>
           </div>
 
         </div>
@@ -429,7 +434,7 @@
           <div class="card">
             <div class="card-header">Remove a quiz</div>
             <div class="card-body">
-              <table class="table table-responsive">
+              <table class="table table-responsive" id="quiz-table">
                 <thead>
                   <tr>
                     <th scope="col">Quiz name</th>
@@ -561,7 +566,8 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" onclick="confirmStudentUpdate(this)">Save
+          <button type="button" class="btn btn-primary" onclick="confirmStudentUpdate(this)"
+            id="update-student-modal-button">Save
             changes</button>
         </div>
       </div>
@@ -726,8 +732,26 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary" form="update-leaderboard-form">Save
+          <button type="submit" class="btn btn-primary" form="update-leaderboard-form"
+            id="update-leaderboard-save-button">Save
             changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit leaderboard success modal-->
+  <div class="modal fade" id="edit-leaderboard-success-modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body">
+          <div class="text-center">
+            <div class="mb-3 fw-bold fs-4">leaderboard edited successfully</div>
+            <div class="mb-3">
+              <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                id="dismiss-leaderboard-update-modal">OK</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -830,7 +854,7 @@
               <div class="card-footer">
                 <div class="row">
                   <div class="col-md-12 text-end">
-                    <button type="submit" class="btn btn-primary" form="add-subject-form">Add
+                    <button type="submit" class="btn btn-primary" form="add-subject-form" id="add-subject-button">Add
                       subject</button>
                   </div>
                 </div>
@@ -842,7 +866,7 @@
     </div>
   </main>
 
-  <!-- Add user success modal-->
+  <!-- Add subject success modal-->
   <div class="modal fade" id="add-subject-success-modal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
@@ -850,7 +874,8 @@
           <div class="text-center">
             <div class="mb-3 fw-bold fs-4">subject created successfully</div>
             <div class="mb-3">
-              <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+              <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                id="dismiss-subject-modal">OK</button>
             </div>
           </div>
         </div>
@@ -907,7 +932,7 @@
 
                 <div class="row">
                   <div class="col-md-12 text-end">
-                    <button type="submit" class="btn btn-success">Add User</button>
+                    <button type="submit" class="btn btn-success" id="add-user-button">Add User</button>
                   </div>
                 </div>
               </form>
@@ -958,7 +983,7 @@
 
                 <div class="row">
                   <div class="col-md-12 text-end">
-                    <button type="submit" class="btn btn-success">Add Group</button>
+                    <button type="submit" class="btn btn-success" id="add-group-button">Add Group</button>
                   </div>
                 </div>
               </form>
@@ -969,7 +994,7 @@
     </div>
   </main>
 
-  <!-- Add user success modal-->
+  <!-- Add group success modal-->
   <div class="modal fade" id="add-group-success-modal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
@@ -977,7 +1002,8 @@
           <div class="text-center">
             <div class="mb-3 fw-bold fs-4">group created successfully</div>
             <div class="mb-3">
-              <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+              <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                id="dismiss-add-group-modal">OK</button>
             </div>
           </div>
         </div>
@@ -1031,29 +1057,6 @@
         </div>
         <div class="modal-footer">
           <button type="submit" form="edit-group-form" class="btn btn-success">Save changes</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-  <!-- add user to group modal -->
-  <div class="modal fade" id="add-user-to-group-modal" tabindex="-1" aria-labelledby="addUserToGroupModal"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-body">
-          <form id="add-user-to-group-form">
-            <div class="mb-3">
-              <label for="username" class="form-label fw-bold">Username</label>
-              <input type="text" name="username" class="form-control" id="add-user-to-group-username"
-                placeholder="Username" required>
-            </div>
-
-            <div class="text-end">
-              <button type="submit" class="btn btn-success">Add User to Group</button>
-            </div>
-          </form>
         </div>
       </div>
     </div>

@@ -18,6 +18,12 @@ namespace GamificationToIP.Seed
             this.applicationDbContext = applicationDbContext;
             _logger = logger;
         }
+
+        public bool IsDatabaseEmpty()
+        {
+            return !applicationDbContext.Roles.Any();
+        }
+
         public async Task Seed()
         {
             await ClearData(); // Clear existing data before seeding

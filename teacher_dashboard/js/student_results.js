@@ -4,7 +4,7 @@ const leaderboardSelector = document.getElementById(
 	'leaderboard-selection-dropdown'
 );
 let groupName = null;
-let leaderboardName = 'main';
+let leaderboardName = 'Main';
 
 //var students = [];
 

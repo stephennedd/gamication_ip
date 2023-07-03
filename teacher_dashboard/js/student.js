@@ -139,12 +139,16 @@ function populateTableWithData(students,tableBody) {
   
       const studentIdCell = createTableCell(student.UserId, "th", { scope: "row" });
       const usernameCell = createTableCell(student.Username, "td");
+      usernameCell.id = "student-username";
       const firstNameCell = createTableCell(student.Name, "td");
+      firstNameCell.id = "student-first-name";
       const lastNameCell = createTableCell(student.Surname, "td");
+      lastNameCell.id = "student-last-name";
       const studentEmailCell = createTableCell(`${student.UserId}@student.saxion.nl`, "td");
   
       const updateButtonCell = document.createElement("td");
       const updateButton = createUpdateButton("Update");
+      updateButton.id = "update-student-button";
       updateButton.addEventListener("click", function() {
         chosenStudent = student;
         updateStudent(this);
@@ -177,6 +181,7 @@ function populateTableWithData(students,tableBody) {
   
       const removeButtonCell = document.createElement("td");
       const removeButton = createRemoveButton("Remove");
+      removeButton.id = "delete-student-button";
       removeButton.addEventListener("click", function() {
         chosenStudent = student;
         confirmDelete(this);
@@ -206,9 +211,11 @@ function populateTableWithData(students,tableBody) {
       const fullNameCell = createTableCell(`${student.Name} ${student.Surname}`, "td");
       const studentEmailCell = createTableCell(`${student.UserId}@student.saxion.nl`, "td");
       const banStatusCell = createTableCell(student.IsBanned ? "Yes" : "No", "td");
+      banStatusCell.id = "ban-status";
   
       const banButtonCell = document.createElement("td");
       const banButton = createBanButton(student.IsBanned ? "Unban" : "Ban");
+      banButton.id = "ban-student-button";
       banButton.addEventListener("click", function() {
         chosenStudent = student;
         banStudent(this);

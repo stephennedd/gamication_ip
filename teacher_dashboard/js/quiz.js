@@ -135,6 +135,7 @@ function populateTable(subjects) {
 
   const td1 = document.createElement('td');
   td1.textContent = subject.Test.Title;
+  td1.id = 'quiz-title';
   tr.appendChild(td1);
 
   const td2 = document.createElement('td');
@@ -148,6 +149,7 @@ function populateTable(subjects) {
   const td4 = document.createElement('td');
   td4.className = 'text-center';
   td4.textContent = subject.Test.Questions.length;
+  td4.id = 'quiz-question-count';
   tr.appendChild(td4);
 
   const td5 = document.createElement('td');
@@ -155,6 +157,7 @@ function populateTable(subjects) {
   button.type = 'button';
   button.className = 'btn btn-sm btn-outline-success';
   button.textContent = 'Edit';
+  button.id = 'edit-quiz-button';
   button.addEventListener('click', function () {
     chosenSubject = subject;
     numberOfExistingQuestions = subject.Test.Questions.length;
