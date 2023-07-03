@@ -4,7 +4,7 @@ const assert = require('assert');
 describe('Testing Signup and Verification', function () {
 	const nock = require('nock');
 
-	// At the beginning of your test case
+	// simulating API calls
 	nock('http://localhost:5501')
 		.post('/api/signup')
 		.reply(200, { status: 'ok' })
