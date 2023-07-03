@@ -170,10 +170,12 @@ document.addEventListener('DOMContentLoaded', function () {
 						verificationRadio.checked = true;
 						setIndicatorPosition(1);
 					} else {
-						const subjectName = localStorage.getItem("subject"); 
-						const response = await fetch(`https://localhost:7186/api/subjects/${subjectName}/game`)
-                        const gameName = await response.text();
-						localStorage.setItem("gameName",gameName);
+						const subjectName = localStorage.getItem('subject');
+						const response = await fetch(
+							`https://localhost:7186/api/subjects/${subjectName}/game`
+						);
+						const gameName = await response.text();
+						localStorage.setItem('gameName', gameName);
 						window.location.href = '../ArcadeMachine';
 					}
 				})
@@ -253,10 +255,6 @@ document.addEventListener('DOMContentLoaded', function () {
 				errorElement.style.display = 'block';
 				return;
 			}
-
-			
-			
-
 		} else if (verificationRadio.checked) {
 			groupName = groupSelector.value;
 			if (verificationCode === '') {
@@ -267,7 +265,7 @@ document.addEventListener('DOMContentLoaded', function () {
 				errorElement.style.display = 'block';
 				return;
 			}
-			console.log("I need healing" + groupName);
+			console.log('I need healing' + groupName);
 			if (groupName === '' || groupName === null) {
 				displayTextOneCharacterAtATime(
 					errorElement,
@@ -281,11 +279,8 @@ document.addEventListener('DOMContentLoaded', function () {
 				'Enter verification code sent to your email and choose your group.'
 			);
 			assignGroup();
-			verifyCode(verificationCode);	
-			
+			verifyCode(verificationCode);
 			refreshJWT();
-			
-			//location.reload();
 		}
 	});
 
@@ -303,7 +298,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 		return JSON.parse(jsonPayload);
 	}
-
 	function refreshJWT() {
 		let token = document.cookie
 			.split('; ')
@@ -367,15 +361,13 @@ document.addEventListener('DOMContentLoaded', function () {
 			headers: {
 				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json',
-				},
-				}).catch(function (error) {
-					console.error(error);
-					displayTextOneCharacterAtATime(errorElement, 'Assigning group failed.');
-					errorElement.style.display = 'block';
-				}
-			);
+			},
+		}).catch(function (error) {
+			console.error(error);
+			displayTextOneCharacterAtATime(errorElement, 'Assigning group failed.');
+			errorElement.style.display = 'block';
+		});
 	}
-	
 	function verifyCode(code) {
 		let token = document.cookie
 			.split('; ')
@@ -424,8 +416,6 @@ document.addEventListener('DOMContentLoaded', function () {
 				console.error('Error:', error);
 			});
 	}
-
-	// For group selection
 	async function fetchGroupNames() {
 		try {
 			const response = await fetch('https://localhost:7186/api/Groups', {
@@ -448,7 +438,6 @@ document.addEventListener('DOMContentLoaded', function () {
 			console.log('Fetch Error: ', error);
 		}
 	}
-
 	function populateGroupsDropdown(groups) {
 		const dropdown = document.getElementById('groupSelect');
 		dropdown.innerHTML =
@@ -465,9 +454,6 @@ document.addEventListener('DOMContentLoaded', function () {
 		dropdown.addEventListener('change', function () {
 			groupName = this.value; // update the label
 			console.log(groupName);
-			
 		});
 	}
-
-	
 });
