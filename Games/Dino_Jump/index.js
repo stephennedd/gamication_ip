@@ -2982,7 +2982,7 @@ async function sendScore(score) {
 		}
 
 		response = await fetch(
-			`https://localhost:7186/api/HighScores?score=${score}&leaderboardName=${subject}`,
+			`http://localhost:4434/api/HighScores?score=${score}&leaderboardName=${subject}`,
 			{
 				method: 'POST',
 				headers: {
