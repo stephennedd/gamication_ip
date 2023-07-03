@@ -24,7 +24,7 @@ jobs:
 
       - name: Build with dotnet
         run: |
-          cd gamication_ip/gamication_ip # navigate to backend folder 
+          cd GamificationAPI/GamificationAPI # navigate to backend folder 
           dotnet build --configuration Release
 
       - name: dotnet publish
