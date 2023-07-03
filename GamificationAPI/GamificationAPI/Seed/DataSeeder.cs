@@ -57,63 +57,24 @@ namespace GamificationToIP.Seed
                     await applicationDbContext.SaveChangesAsync();
                 }
 
-                foreach (var group in gamificationToIpData.groups)
-                {
-                    var newGroup = new Group
-                    {
-                        Id = group.Id,
-                        Name = group.Name
-                    };
-                    applicationDbContext.Set<Group>().Add(newGroup);
-                    await applicationDbContext.SaveChangesAsync();
-                }
-
                 foreach (var user in gamificationToIpData.users)
                 {
                     int roleId = user.RoleId;
                     Role role = applicationDbContext.Set<Role>().Find(roleId);
-                    int? groupId = user.GroupId;
+
                     var newUser = new User
                     {
                         UserId = user.UserId,
                         Password = user.Password,
                         Role = role
                     };
-                    if (groupId != null)
-                    {
-                        Group group = applicationDbContext.Set<Group>().Find(groupId);
 
-                        newUser.Group = group;
-
-                    }
                     newUser.IsVerified = true;
 
                     applicationDbContext.Set<User>().Add(newUser);
                     await applicationDbContext.SaveChangesAsync();
                 }
-                /*
-                foreach (var leaderboard in gamificationToIpData.leaderboards)
-                {
-                    Leaderboard leaderboard1 = new Leaderboard { Name = leaderboard.Name };
-                    applicationDbContext.Set<Leaderboard>().Add(leaderboard1);
-                    await applicationDbContext.SaveChangesAsync();
-                };
-                */
-                /*
-                foreach (var highscore in gamificationToIpData.highscores)
-                {
-                    string userId = highscore.UserId;
-                    string leaderboardName = highscore.LeaderboardName;
-                    User user = await applicationDbContext.Set<User>().FirstOrDefaultAsync(u => u.UserId == userId);;
-                    var leaderboard = applicationDbContext.Set<Leaderboard>().Find(leaderboardName);
-                    if (user != null && leaderboard != null)
-                    {
-                        HighScore newHighScore = new HighScore { Leaderboard = leaderboard, Score = highscore.Score, User = user };
-                        applicationDbContext.Set<HighScore>().Add(newHighScore);
-                        await applicationDbContext.SaveChangesAsync();
-                    }
-                }
-                */
+
                 foreach (var test in gamificationToIpData.tests)
                 {
                     var newTest = new Test

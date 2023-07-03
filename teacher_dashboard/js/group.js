@@ -1,6 +1,6 @@
 
 
-// let groupName = " ";
+ let oldGroupName = null;
 
 
 $(document).ready(function () {
@@ -14,6 +14,8 @@ function editGroup(button) {
 
     // get the group name
      groupName = button.parentNode.parentNode.cells[0].innerHTML;
+     oldGroupName = groupName;
+     console.log("Old group name = " + groupName);
     $('#edit-group-name').val(groupName);
 }
 
@@ -27,8 +29,12 @@ $('#edit-group-form').submit(function (event) {
     var json = JSON.stringify(formData);
     // TODO send the edit request to the server
 
-    console.log(json);
+    let newGroupName = JSON.parse(json).name;
+    
+    console.log("Group name = " + oldGroupName);
+    console.log("New name = " + newGroupName);
     event.preventDefault();
+    updateGroup(oldGroupName, newGroupName);
 });
 
 function addUser(button) {
@@ -178,4 +184,44 @@ async function populateGroupsTable() {
 // refresh the groups table
 function refreshGroupsTable() {
     populateGroupsTable();
+}
+async function updateGroup(oldGroupName, newGroupName){
+    try {
+        let response;
+        var token = document.cookie
+            .split('; ')
+            .find(row => row.startsWith('jwt='))
+            .split('=')[1];
+
+        // Ensure groupName is not empty or undefined
+        if (!oldGroupName || oldGroupName.trim() === '' || !newGroupName) {
+            console.error("Invalid or empty Group name!");
+            return;
+        }
+        let encodedoldGroupName = encodeURI(oldGroupName);
+        let encodednewGroupName = encodeURI(newGroupName);
+        console.log("old name: "+oldGroupName+" new name: "+newGroupName);
+        response = await fetch(`https://localhost:7186/api/Groups/${encodedoldGroupName}?newName=${encodednewGroupName}`,
+            {
+                method: 'PATCH',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+            });
+
+        if (!response.ok) {
+            alert(`Failed to update Group. error code: ${response.status} `);
+            //throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        $('#edit-group-modal').modal('hide');
+
+
+        console.log('Group updated successfully:');
+        refreshGroupsTable();
+        return true;
+    } catch (error) {
+        console.log('Fetch Error: ', error);
+        alert(`Failed to update group. error code: ${error} `);
+    }
 }
