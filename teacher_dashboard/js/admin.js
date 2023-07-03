@@ -68,6 +68,8 @@ fetch(`https://localhost:7186/api/Users/Admin?admin=${admin}`, {
   .catch(error => {
     // Handle any errors that occurred during the fetch request
     console.error(error);
+    // show error message
+    alert('There was an error adding the user. ', error);
   });
   
    
@@ -136,6 +138,7 @@ window.addEventListener('DOMContentLoaded', function () {
       button.addEventListener('click', function() {
         removeQuiz(this,subject);
       });
+      button.id = 'remove-quiz-button';
       td5.appendChild(button);
       tr.appendChild(td5);
   

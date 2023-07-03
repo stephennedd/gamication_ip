@@ -1,7 +1,7 @@
-const { Builder, By } = require('selenium-webdriver');
+const { Builder, By, until } = require('selenium-webdriver');
 const assert = require('assert');
 
-describe('Test Sidebar', function() {
+describe('sidebar test', function() {
     let driver;
 
     before (async function() {
@@ -12,9 +12,23 @@ describe('Test Sidebar', function() {
         await driver.quit();
     });
 
-    it('should change the main content when a sidebar link is clicked', async function() {
-        await driver.get('http://127.0.0.1:5500/teacher_dashboard/pages/admin-panel.html');
+    it('INT012 - should change the main content when a sidebar link is clicked', async function() {
+        this.timeout(12000);
+        await driver.get('http://127.0.0.1:5501/teacher_dashboard/pages/login.html');
+    
+        // enter username and password
+        const usernameField = await driver.findElement(By.id('username'));
+        await usernameField.sendKeys('Admin');
 
+        const passwordField = await driver.findElement(By.id('password'));
+        await passwordField.sendKeys('password123');
+
+        // click login button
+        const loginButton = await driver.findElement(By.id('login-button'));
+        await loginButton.click();
+
+        await driver.sleep(350);
+        
         const menuButton = await driver.findElement(By.css('.navbar-toggler'));
         await menuButton.click();
 
@@ -31,6 +45,6 @@ describe('Test Sidebar', function() {
         await driver.sleep(400);
 
         const url = await driver.getCurrentUrl();
-        assert.equal(url, 'http://127.0.0.1:5500/teacher_dashboard/pages/admin-panel.html#edit-quiz');
+        assert.equal(url, 'http://127.0.0.1:5501/teacher_dashboard/pages/admin-panel.html#edit-quiz');
     });
 });
