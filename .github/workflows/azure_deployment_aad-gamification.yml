@@ -51,10 +51,6 @@ jobs:
         with:
           name: .net-app
 
-      - name: Navigate to artifact directory
-        run: |
-          cd GamificationAPI/GamificationAPI/publish
-
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
