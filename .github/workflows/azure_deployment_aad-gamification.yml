@@ -51,6 +51,10 @@ jobs:
         with:
           name: .net-app
 
+      - name: Navigate to artifact directory
+        run: |
+          cd GamificationAPI/GamificationAPI/publish
+
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
@@ -58,5 +62,4 @@ jobs:
           app-name: "aad-gamification"
           slot-name: "Production"
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_9912F8393DCD4BF19EF09D3906D6B2DE }}
-          working-directory: GamificationAPI/GamificationAPI # navigate to the correct folder
-          package: ./publish
+          package: .
