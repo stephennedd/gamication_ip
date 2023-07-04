@@ -58,4 +58,4 @@ jobs:
           app-name: "aad-gamification"
           slot-name: "Production"
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_9912F8393DCD4BF19EF09D3906D6B2DE }}
-          package: ./publish
+          package: GamificationAPI/GamificationAPI/publish
