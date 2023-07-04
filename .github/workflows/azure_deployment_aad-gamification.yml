@@ -28,7 +28,9 @@ jobs:
           dotnet build --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o ./publish
+        run: |
+          cd GamificationAPI/GamificationAPI # navigate to backend folder 
+          dotnet publish -c Release -o ./publish
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
