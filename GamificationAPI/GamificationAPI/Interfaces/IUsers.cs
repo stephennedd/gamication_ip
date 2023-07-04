@@ -1,7 +1,7 @@
 ﻿
 using GamificationAPI.Models;
-using GamificationToIP.Controllers;
-using GamificationToIP.Models;
+using GamificationAPI.Controllers;
+using GamificationAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GamificationAPI.Interfaces

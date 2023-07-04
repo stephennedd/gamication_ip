@@ -1,12 +1,12 @@
 ﻿using GamificationAPI.Models;
-using GamificationToIP.Context;
-using GamificationToIP.Models;
+using GamificationAPI.Context;
+using GamificationAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 
 
-namespace GamificationToIP.Seed
+namespace GamificationAPI.Seed
 {
     public class DatabaseSeeder
     {
@@ -28,14 +28,14 @@ namespace GamificationToIP.Seed
         {
             await ClearData(); // Clear existing data before seeding
 
-            using (StreamReader reader = new StreamReader("Seed//gamificationToIpData.json"))
+            using (StreamReader reader = new StreamReader("Seed//GamificationAPIData.json"))
             {
                 string jsonData = await reader.ReadToEndAsync();
-                dynamic gamificationToIpData = JsonConvert.DeserializeObject(jsonData);
+                dynamic GamificationAPIData = JsonConvert.DeserializeObject(jsonData);
 
                 _logger.LogInformation("This is an information message.");
 
-                foreach (var game in gamificationToIpData.games)
+                foreach (var game in GamificationAPIData.games)
                 {
                     var newGame = new Game
                     {
@@ -46,7 +46,7 @@ namespace GamificationToIP.Seed
                     await applicationDbContext.SaveChangesAsync();
                 }
 
-                foreach (var role in gamificationToIpData.roles)
+                foreach (var role in GamificationAPIData.roles)
                 {
                     var newRole = new Role
                     {
@@ -57,7 +57,7 @@ namespace GamificationToIP.Seed
                     await applicationDbContext.SaveChangesAsync();
                 }
 
-                foreach (var user in gamificationToIpData.users)
+                foreach (var user in GamificationAPIData.users)
                 {
                     int roleId = user.RoleId;
                     Role role = applicationDbContext.Set<Role>().Find(roleId);
@@ -75,7 +75,7 @@ namespace GamificationToIP.Seed
                     await applicationDbContext.SaveChangesAsync();
                 }
 
-                foreach (var test in gamificationToIpData.tests)
+                foreach (var test in GamificationAPIData.tests)
                 {
                     var newTest = new Test
                     {
@@ -121,7 +121,7 @@ namespace GamificationToIP.Seed
                 applicationDbContext.Set<Leaderboard>().Add(mainLeaderboard);
                 await applicationDbContext.SaveChangesAsync();
 
-                foreach (var subject in gamificationToIpData.subjects)
+                foreach (var subject in GamificationAPIData.subjects)
                 {
                     var newSubject = new Subject
                     {
