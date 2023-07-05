@@ -1,4 +1,123 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<ClassDiagram MajorVersion="1" MinorVersion="1">
-	<Font Name="Segoe UI" Size="9" />
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+  <Class Name="GamificationAPI.Models.Answer">
+    <Position X="21.75" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAAAAAAABAAEAAAAQAQAAAA=</HashCode>
+      <FileName>Models\Answer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GamificationAPI.Models.Badge">
+    <Position X="12.75" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACQCAAAAAgAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Badge.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GamificationAPI.Models.Game">
+    <Position X="18" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Models\Game.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GamificationAPI.Models.GeneratedTest">
+    <Position X="17.25" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAEAAAAQEAAAAAAAAAAAAAAAACAACAAA=</HashCode>
+      <FileName>Models\GeneratedTest.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GamificationAPI.Models.Group">
+    <Position X="12.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Group.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GamificationAPI.Models.GroupReturnModel">
+    <Position X="14" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAQAAAAAAAAAAACAAAAAAAA=</HashCode>
+      <FileName>Models\GroupReturnModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GamificationAPI.Models.HighScore">
+    <Position X="24.25" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAADAAAAAAAAAAgAAAAAAAAAAAAAAAAACAAAAAAAAAA=</HashCode>
+      <FileName>Models\HighScore.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GamificationAPI.Models.Leaderboard">
+    <Position X="22.25" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAEAAAAAAAAIAAAAQAAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Models\Leaderboard.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GamificationAPI.Models.Question">
+    <Position X="19.75" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAgAAAAAgAAEAAAAAAAAAABAQAAACAAAAAA=</HashCode>
+      <FileName>Models\Question.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GamificationAPI.Models.StudentQuestion">
+    <Position X="7.5" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABACAAAACAAAAAAAAAAAAAAAAABAAAAEAAAAAgQAAAA=</HashCode>
+      <FileName>Models\StudentQuestion.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GamificationAPI.Models.Role">
+    <Position X="6.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Role.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GamificationAPI.Models.Subject">
+    <Position X="19.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAMAAAAAAEEAAAAAAgAAAAACAAACAAAAAA=</HashCode>
+      <FileName>Models\Subject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GamificationAPI.Models.TeacherRegister">
+    <Position X="12" Y="8.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAwABAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\TeacherRegister.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GamificationAPI.Models.Test">
+    <Position X="19.75" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACQAAAAAAgAEAAAIAAAAAAAAAEAAAEAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Test.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GamificationAPI.Models.User">
+    <Position X="10.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAEAAAAIAABAIEQAAAAwAFAAAAAACAAAAAAAAAAQ=</HashCode>
+      <FileName>Models\User.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GamificationAPI.Models.UserCredentials">
+    <Position X="8.5" Y="8.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAgAAAAAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>Models\UserCredentials.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GamificationAPI.Models.UserRegister">
+    <Position X="10.25" Y="8.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAwABAAAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>Models\UserRegister.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>
