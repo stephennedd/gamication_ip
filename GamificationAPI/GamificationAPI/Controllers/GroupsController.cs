@@ -1,6 +1,6 @@
 ﻿using GamificationAPI.Models;
-using GamificationToIP.Context;
-using GamificationToIP.Models;
+using GamificationAPI.Context;
+using GamificationAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,7 +26,31 @@ namespace GamificationAPI.Controllers
             {
                 return BadRequest("No group name provided");
             }
+            var group = _dbContext.Groups.FirstOrDefault(g => g.Name == groupName);
+
+            if (group != null) 
+            { 
+                return BadRequest("Group with this name already exists");
+            }
             _dbContext.Groups.AddAsync(new Group { Name = groupName});
+            _dbContext.SaveChanges();
+            return Ok();
+        }
+        [Authorize(Roles = "Admin, Teacher")]
+        [HttpPatch]
+        [Route("{name}")]
+        public IActionResult EditGroup(string name, string newName)
+        {
+            if (string.IsNullOrWhiteSpace(newName))
+            {
+                return BadRequest("No group name provided");
+            }
+            var group = _dbContext.Groups.FirstOrDefault(g => g.Name == name);
+            if (group == null)
+            {
+                return NotFound();
+            }
+            group.Name = newName;
             _dbContext.SaveChanges();
             return Ok();
         }

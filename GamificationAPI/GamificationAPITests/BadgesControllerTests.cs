@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using GamificationAPI.Controllers;
 using GamificationAPI.Interfaces;
 using GamificationAPI.Models;
-using GamificationToIP.Context;
+using GamificationAPI.Context;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Moq;

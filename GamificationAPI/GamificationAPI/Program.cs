@@ -4,8 +4,8 @@ using Microsoft.OpenApi.Models;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
-using GamificationToIP.Context;
-using GamificationToIP.Seed;
+using GamificationAPI.Context;
+using GamificationAPI.Seed;
 using GamificationAPI.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 
@@ -134,6 +134,10 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
 
     var context = services.GetRequiredService<ApplicationDbContext>();
+    if(context.Database.GetPendingMigrations().Any())
+    {
+        context.Database.Migrate();
+    }
     SeedData(app);
 }
 app.Run();

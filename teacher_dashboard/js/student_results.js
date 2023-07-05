@@ -4,7 +4,7 @@ const leaderboardSelector = document.getElementById(
 	'leaderboard-selection-dropdown'
 );
 let groupName = null;
-let leaderboardName = 'main';
+let leaderboardName = 'Main';
 
 //var students = [];
 
@@ -47,7 +47,7 @@ async function fetchGroupNames() {
 		.find((row) => row.startsWith('jwt='))
 		.split('=')[1];
 	try {
-		const response = await fetch('https://localhost:7186/api/Groups', {
+		const response = await fetch('http://localhost:4434/api/Groups', {
 			method: 'GET',
 			headers: {
 				Authorization: `Bearer ${token}`,
@@ -73,7 +73,7 @@ async function fetchLeaderboardNames() {
 		.find((row) => row.startsWith('jwt='))
 		.split('=')[1];
 	try {
-		const response = await fetch('https://localhost:7186/api/Leaderboards', {
+		const response = await fetch('http://localhost:4434/api/Leaderboards', {
 			method: 'GET',
 			headers: {
 				Authorization: `Bearer ${token}`,
@@ -150,7 +150,7 @@ async function fetchLeaderboardData() {
 		let response;
 		if (groupName == null || groupName == 'All Students') {
 			response = await fetch(
-				`https://localhost:7186/api/Leaderboards/${leaderboardName}`,
+				`http://localhost:4434/api/Leaderboards/${leaderboardName}`,
 				{
 					method: 'GET',
 					headers: {
@@ -163,7 +163,7 @@ async function fetchLeaderboardData() {
 			let encodedGroupName = encodeURI(groupName);
 			console.log('encoded name: ' + encodedGroupName);
 			response = await fetch(
-				`https://localhost:7186/api/Leaderboards/${leaderboardName}?group=${encodedGroupName}`,
+				`http://localhost:4434/api/Leaderboards/${leaderboardName}?group=${encodedGroupName}`,
 				{
 					method: 'GET',
 					headers: {

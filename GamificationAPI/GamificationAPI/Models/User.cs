@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
-namespace GamificationToIP.Models;
+namespace GamificationAPI.Models;
 public class User
 {
     [Key]

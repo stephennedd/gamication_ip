@@ -1,10 +1,10 @@
 ﻿
 using GamificationAPI.Models;
-using GamificationToIP.Models;
+using GamificationAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Metadata;
 
-namespace GamificationToIP.Context
+namespace GamificationAPI.Context
 {
     public class ApplicationDbContext: DbContext
     {

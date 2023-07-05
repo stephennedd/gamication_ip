@@ -1,8 +1,7 @@
 using GamificationAPI.Interfaces;
 using GamificationAPI.Models;
-using GamificationToIP.Context;
-using GamificationToIP.Controllers;
-using GamificationToIP.Models;
+using GamificationAPI.Context;
+using GamificationAPI.Controllers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -72,35 +71,7 @@ namespace GamificationAPITests
             // Assert
             Assert.IsType<NotFoundResult>(result);
         }
-        /*
-        [Fact]
-        public async Task GetAllUsers_ReturnsListOfUsers_WhenUsersExist()
-        {
-            // Arrange
-            var users = new List<User> { new User { Id = 1, Name = "Alice" }, new User { Id = 2, Name = "Bob" } };
-            _mockUserService.Setup(svc => svc.GetUsersAsync()).ReturnsAsync(users);
 
-            // Act
-            var result = await _controller.GetAllUsers();
-
-            // Assert
-            var okResult = Assert.IsType<OkObjectResult>(result);
-            var returnedUsers = Assert.IsType<List<User>>(okResult.Value);
-            Assert.Equal(users, returnedUsers);
-        }
-        [Fact]
-        public async Task GetAllUsers_ReturnsNoContent_WhenNoUsersExist()
-        {
-            // Arrange
-            _mockUserService.Setup(svc => svc.GetUsersAsync()).ReturnsAsync(new List<User>());
-
-            // Act
-            var result = await _controller.GetAllUsers();
-
-            // Assert
-            Assert.IsType<NoContentResult>(result);
-        }
-        */
         [Fact]
         public async Task CreateStudent_ReturnsBadRequest_WhenUserExists()
         {

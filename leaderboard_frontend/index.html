@@ -1,224 +1,232 @@
 <!DOCTYPE html>
 <html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Leaderboard</title>
+		<link rel="stylesheet" href="./css/style.css" />
+	</head>
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leaderboard</title>
-    <link rel="stylesheet" href="./css/style.css">
-</head>
+	<body>
+		<!-- background -->
+		<div id="container"></div>
 
-<body>
-    <!-- background -->
-    <div id="container">
-    </div>
+		<div class="dropdown">
+			<button class="dropbtn">Select Leaderboard</button>
+			<div id="dropdown-content" class="dropdown-content">
+				<!-- Leaderboard options will be dynamically added here -->
+			</div>
+		</div>
 
-    <div class="dropdown">
-        <button class="dropbtn">Select Leaderboard</button>
-        <div id="dropdown-content" class="dropdown-content">
-            <!-- Leaderboard options will be dynamically added here -->
-        </div>
-    </div>
+		<!-- switch -->
+		<div class="switch-container">
+			<p>Show all Students</p>
+			<label class="switch">
+				<input type="checkbox" id="switch" />
+				<span class="slider"></span>
+			</label>
+		</div>
 
-    <!-- switch -->
-    <div class="switch-container">
-        <p>Show all Students</p>
-        <label class="switch">
-            <input type="checkbox" id="switch">
-            <span class="slider"></span>
-        </label>
-    </div>
+		<!-- title -->
+		<div class="title">
+			<h1>Leaderboard</h1>
+		</div>
 
-
-    <!-- title -->
-    <div class="title">
-        <h1>Leaderboard</h1>
-    </div>
-
-    <!-- buttons -->
-    <!-- <div class="buttons">
+		<!-- buttons -->
+		<!-- <div class="buttons">
         <button class="start_btn">Start Game</button>
         <button class="quit_btn">Quit</button>
     </div> -->
 
+		<!-- leaderboard -->
+		<div class="leaderboard">
+			<div class="leaderboard-container">
+				<table class="leaderboard-table">
+					<thead>
+						<tr>
+							<th>Position</th>
+							<th>Player Name</th>
+							<th>Score</th>
+							<th>Badges</th>
+						</tr>
+					</thead>
+					<tbody id="leaderboard-body">
+						<!-- Leaderboard data will be dynamically added here -->
+					</tbody>
+				</table>
+			</div>
+		</div>
 
-    <!-- leaderboard -->
-    <div class="leaderboard">
-        <div class="leaderboard-container">
-            <table class="leaderboard-table">
-                <thead>
-                    <tr>
-                        <th>Position</th>
-                        <th>Player Name</th>
-                        <th>Score</th>
-                        <th>Badges</th>
-                    </tr>
-                </thead>
-                <tbody id="leaderboard-body">
-                    <!-- Leaderboard data will be dynamically added here -->
-                </tbody>
-            </table>
-        </div>
-    </div>
+		<script>
+			let currentLeaderboard = 'Main'; // Default leaderboard name
+			let myGroup = false; // Default myGroup value
+			var token = document.cookie
+				.split('; ')
+				.find((row) => row.startsWith('jwt='))
+				.split('=')[1];
+			let leaderboardData = [
+				{
+					playerName: 'John',
+					score: 500,
+					badges: ['badge1.png', 'badge2.png'],
+				},
+				{ playerName: 'Emma', score: 400, badges: ['badge3.png'] },
+				{ playerName: 'Michael', score: 300, badges: [] },
+				{ playerName: 'Sophia', score: 200, badges: ['badge4.png'] },
+				{
+					playerName: 'William',
+					score: 100,
+					badges: ['badge5.png', 'badge6.png'],
+				},
+			];
+			async function getLeaderboards() {
+				try {
+					let response = await fetch('http://localhost:4434/api/Leaderboards', {
+						method: 'GET',
+						headers: {
+							Authorization: `Bearer ${token}`,
+							'Content-Type': 'application/json',
+						},
+					});
 
-<script>
-    let currentLeaderboard = 'Main'; // Default leaderboard name
-        let myGroup = false; // Default myGroup value
-        var token = document.cookie
-        .split('; ')
-        .find(row => row.startsWith('jwt='))
-        .split('=')[1];
-        let leaderboardData = [
-            { playerName: "John", score: 500, badges: ["badge1.png", "badge2.png"] },
-            { playerName: "Emma", score: 400 , badges: ["badge3.png"]},
-            { playerName: "Michael", score: 300, badges: []  },
-            { playerName: "Sophia", score: 200 , badges: ["badge4.png"]},
-            { playerName: "William", score: 100, badges: ["badge5.png", "badge6.png"] },
-        ];
-        async function getLeaderboards() {
-    try {
-        let response = await fetch('https://localhost:7186/api/Leaderboards', {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }
-        });
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
+					if (!response.ok) {
+						throw new Error(`HTTP error! status: ${response.status}`);
+					}
 
-        let data = await response.json();
-        console.log('Received leaderboard data:', data); 
+					let data = await response.json();
+					console.log('Received leaderboard data:', data);
 
-        // Extract the leaderboard objects
-        const leaderboards = data.$values;
-        console.log('Leaderboard objects:', leaderboards); 
+					// Extract the leaderboard objects
+					const leaderboards = data.$values;
+					console.log('Leaderboard objects:', leaderboards);
 
-        // Extract leaderboard names
-        const leaderboardNames = leaderboards.map(leaderboard => leaderboard.name);
-        console.log('Extracted leaderboard names:', leaderboardNames);
+					// Extract leaderboard names
+					const leaderboardNames = leaderboards.map(
+						(leaderboard) => leaderboard.name
+					);
+					console.log('Extracted leaderboard names:', leaderboardNames);
 
-        const dropdownContent = document.getElementById('dropdown-content');
-        dropdownContent.innerHTML = ''; // Clear existing leaderboard options
+					const dropdownContent = document.getElementById('dropdown-content');
+					dropdownContent.innerHTML = ''; // Clear existing leaderboard options
 
-        leaderboardNames.forEach((name) => {
-            const a = document.createElement('a');
-            a.href = '#';
-            a.className = 'dropdown-link';
-            a.innerText = name;
-            a.addEventListener('click', function(e) {
-                e.preventDefault(); // Prevent the default click action
-                currentLeaderboard = name; // Set the current leaderboard
-                getDataFromAPI(); // Update the leaderboard
-            });
-            dropdownContent.appendChild(a);
-        });
+					leaderboardNames.forEach((name) => {
+						const a = document.createElement('a');
+						a.href = '#';
+						a.className = 'dropdown-link';
+						a.innerText = name;
+						a.addEventListener('click', function (e) {
+							e.preventDefault(); // Prevent the default click action
+							currentLeaderboard = name; // Set the current leaderboard
+							getDataFromAPI(); // Update the leaderboard
+						});
+						dropdownContent.appendChild(a);
+					});
+				} catch (error) {
+					console.log('Fetch Error: ', error);
+				}
+			}
 
-    } catch (error) {
-        console.log('Fetch Error: ', error);
-    }
-}
+			// Function to populate the leaderboard table
+			function populateLeaderboard() {
+				// Sort the leaderboard data based on scores in descending order
+				leaderboardData.sort((a, b) => b.score - a.score);
 
-        // Function to populate the leaderboard table
-        function populateLeaderboard() {
-            // Sort the leaderboard data based on scores in descending order
-            leaderboardData.sort((a, b) => b.score - a.score);
+				const leaderboardBody = document.getElementById('leaderboard-body');
+				leaderboardBody.innerHTML = ''; // Clear existing leaderboard data
 
-            const leaderboardBody = document.getElementById('leaderboard-body');
-            leaderboardBody.innerHTML = ''; // Clear existing leaderboard data
+				leaderboardData.forEach((entry, index) => {
+					const position = index + 1;
 
-            leaderboardData.forEach((entry, index) => {
-                const position = index + 1;
-
-                const row = document.createElement('tr');
-                row.innerHTML = `
+					const row = document.createElement('tr');
+					row.innerHTML = `
                     <td>${position}</td>
                     <td>${entry.playerName}</td>
                     <td>${entry.score}</td>
                     
                 `;
-                leaderboardBody.appendChild(row);
-            });
-        }
-        async function getDataFromAPI() {
-    
+					leaderboardBody.appendChild(row);
+				});
+			}
+			async function getDataFromAPI() {
+				try {
+					let response;
+					if (myGroup == true) {
+						response = await fetch(
+							'http://localhost:4434/api/Leaderboards/' +
+								currentLeaderboard +
+								`?group=mygroup`,
+							{
+								method: 'GET',
+								headers: {
+									Authorization: `Bearer ${token}`,
+									'Content-Type': 'application/json',
+								},
+							}
+						);
+					} else {
+						response = await fetch(
+							'http://localhost:4434/api/Leaderboards/' + currentLeaderboard,
+							{
+								method: 'GET',
+								headers: {
+									Authorization: `Bearer ${token}`,
+									'Content-Type': 'application/json',
+								},
+							}
+						);
+					}
+					if (!response.ok) {
+						throw new Error(`HTTP error! status: ${response.status}`);
+					}
 
-    try {
-        let response;
-          if(myGroup == true ){
-         response = await fetch('https://localhost:7186/api/Leaderboards/' + currentLeaderboard + `?group=mygroup`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }    
-        });
-    }
-     
-    else{
-         response = await fetch('https://localhost:7186/api/Leaderboards/' + currentLeaderboard, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }
-        });
-    }
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
+					let data = await response.json();
+					console.log('Received data:', data); // Print the raw data
 
-        let data = await response.json();
-        console.log('Received data:', data); // Print the raw data
+					// Extract highScores array
+					let highScores = data.highScores.$values;
 
-        // Extract highScores array
-        let highScores = data.highScores.$values;
+					console.log('Extracted highScores:', highScores); // Print the extracted highScores
 
-        console.log('Extracted highScores:', highScores); // Print the extracted highScores
+					// Map the highScores array to an array of simplified objects
+					leaderboardData = highScores.reduce((result, scoreEntry) => {
+						console.log('Processing scoreEntry:', scoreEntry); // Print each scoreEntry being processed
 
-        // Map the highScores array to an array of simplified objects
-        leaderboardData = highScores.reduce((result, scoreEntry) => {
-            console.log('Processing scoreEntry:', scoreEntry); // Print each scoreEntry being processed
+						if (scoreEntry.user) {
+							result.push({
+								playerName: scoreEntry.user.userId,
+								score: scoreEntry.score,
+								badges: [], // Add badge logic here if available
+							});
+						}
 
-            if (scoreEntry.user) {
-                result.push({
-                    playerName: scoreEntry.user.userId,
-                    score: scoreEntry.score,
-                    badges: [] // Add badge logic here if available
-                });
-            }
+						return result;
+					}, []);
 
-            return result;
-        }, []);
+					// Call populateLeaderboard() to update the leaderboard
+					populateLeaderboard();
+				} catch (error) {
+					console.log('Fetch Error: ', error);
+				}
+			}
 
-        // Call populateLeaderboard() to update the leaderboard
-        populateLeaderboard();
-    } catch (error) {
-        console.log('Fetch Error: ', error);
-    }
-}
+			// Call the function to populate the leaderboard on page load
+			getDataFromAPI();
+			// Call the function to populate the leaderboard names on page load
+			getLeaderboards();
+			document.getElementById('switch').addEventListener('change', (event) => {
+				myGroup = event.target.checked; // This will set myGroup to true if the checkbox is checked, and false if it's not
+				getDataFromAPI(); // Update the leaderboard when the switch is toggled
+			});
+		</script>
 
-        // Call the function to populate the leaderboard on page load
-        getDataFromAPI();
-        // Call the function to populate the leaderboard names on page load
-getLeaderboards();
-document.getElementById('switch').addEventListener('change', (event) => {
-    myGroup = event.target.checked; // This will set myGroup to true if the checkbox is checked, and false if it's not
-    getDataFromAPI(); // Update the leaderboard when the switch is toggled
-});
-    </script>
-
-    <script src="./js/starfield.js"></script>
-    <script>
-        //  Get the container and turn it into a starfield.
-        var container = document.getElementById('container');
-        var starfield = new Starfield();
-        starfield.initialise(container);
-        starfield.start();
-    </script>
-</body>
-
+		<script src="./js/starfield.js"></script>
+		<script>
+			//  Get the container and turn it into a starfield.
+			var container = document.getElementById('container');
+			var starfield = new Starfield();
+			starfield.initialise(container);
+			starfield.start();
+		</script>
+	</body>
 </html>
