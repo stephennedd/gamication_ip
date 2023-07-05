@@ -1,4 +1,5 @@
 let subjectsToBeDeleted;
+const apiURL = 'https://aad-gamification.azurewebsites.net/';
 
 document.getElementById("user-form").addEventListener("submit", function(event) {
     event.preventDefault(); // Prevent the form from submitting normally
@@ -43,7 +44,7 @@ document.getElementById("user-form").addEventListener("submit", function(event) 
 
             console.log(teacherRegister);
             console.log(admin);
-fetch(`https://localhost:7186/api/Users/Admin?admin=${admin}`, {
+fetch(`${apiURL}api/Users/Admin?admin=${admin}`, {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
@@ -80,7 +81,7 @@ fetch(`https://localhost:7186/api/Users/Admin?admin=${admin}`, {
   deleteQuizLink.addEventListener('click', async function (event) {
     event.preventDefault();
     try {
-      const response = await fetch('https://localhost:7186/api/subjects');
+      const response = await fetch(`${apiURL}api/subjects`);
       const data = await response.json();
       subjectsToBeDeleted = data;
       console.log(subjectsToBeDeleted);

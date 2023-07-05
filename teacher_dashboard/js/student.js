@@ -1,3 +1,6 @@
+const apiURL = 'https://aad-gamification.azurewebsites.net/';
+// const apiURL = 'https://localhost:7186/';
+
 // Adding a student
 let students;
 let chosenStudent;
@@ -23,7 +26,7 @@ document.getElementById('ban-student-link').addEventListener('click', function(e
 			.find((row) => row.startsWith('jwt='))
 			.split('=')[1];
     // Perform the fetch request to delete the student
-   await fetch(`https://localhost:7186/api/Users/${userId}`, {
+   await fetch(`${apiURL}api/Users/${userId}`, {
       method: 'DELETE',
       headers: {
           'Content-Type': 'application/json',
@@ -58,7 +61,7 @@ document.getElementById('ban-student-link').addEventListener('click', function(e
 			.find((row) => row.startsWith('jwt='))
 			.split('=')[1];
     console.log(token);
-    const url = `https://localhost:7186/api/users/ban/${id}`;
+    const url = `${apiURL}api/users/ban/${id}`;
   
     // Prepare the request body
     const requestBody = JSON.stringify(isBanned);
@@ -90,7 +93,7 @@ async function fetchStudents(event,linkType) {
  // event.preventDefault(); // Prevent the default behavior of the link click
 
   // Perform the fetch request to get all existing students
-  await fetch('https://localhost:7186/api/Users/role/students') // Replace '/api/students' with the appropriate API endpoint
+  await fetch(`${apiURL}api/Users/role/students`) // Replace '/api/students' with the appropriate API endpoint
     .then(response => response.json())
     .then(data => {
       // Do something with the received students data
@@ -334,7 +337,7 @@ async function confirmStudentUpdate(button) {
       });
 
     // Perform the fetch request to delete the student
-     await fetch(`https://localhost:7186/api/Users/students/${chosenStudent.Id}`, {
+     await fetch(`${apiURL}api/Users/students/${chosenStudent.Id}`, {
       method: 'PUT',
       headers: {
           'Content-Type': 'application/json',

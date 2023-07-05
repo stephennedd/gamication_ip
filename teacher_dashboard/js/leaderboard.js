@@ -1,4 +1,4 @@
-
+const apiURL = 'https://aad-gamification.azurewebsites.net/';
 let oldName = null;
 
 // Event handler for form submit
@@ -84,7 +84,7 @@ async function populateLeaderboardTable() {
         .find(row => row.startsWith('jwt='))
         .split('=')[1];  
     try {
-        const response = await fetch('https://localhost:7186/api/Leaderboards/', {
+        const response = await fetch(`${apiURL}api/Leaderboards/`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -211,7 +211,7 @@ async function createLeaderboard(){
         }
         let encodedleaderboardName = encodeURI(leaderboardName);
 
-        let response = await fetch(`https://localhost:7186/api/Leaderboards?leaderboardName=${encodedleaderboardName}`,
+        let response = await fetch(`${apiURL}api/Leaderboards?leaderboardName=${encodedleaderboardName}`,
             {
                 method: 'POST',
                 headers: {
@@ -250,7 +250,7 @@ async function deleteLeaderboardAction(){
         }
         let encodedleaderboardName = encodeURI(leaderboardName);
 
-        response = await fetch(`https://localhost:7186/api/Leaderboards/${encodedleaderboardName}`,
+        response = await fetch(`${apiURL}api/Leaderboards/${encodedleaderboardName}`,
             {
                 method: 'DELETE',
                 headers: {
@@ -285,7 +285,7 @@ async function updateLeaderboard(oldName, newName){
         let encodedoldName = encodeURI(oldName);
         let encodednewName = encodeURI(newName);
         console.log("old name: "+oldName+" new name: "+newName);
-        response = await fetch(`https://localhost:7186/api/Leaderboards/${encodedoldName}?newLeaderboardName=${encodednewName}`,
+        response = await fetch(`${apiURL}api/Leaderboards/${encodedoldName}?newLeaderboardName=${encodednewName}`,
             {
                 method: 'PUT',
                 headers: {

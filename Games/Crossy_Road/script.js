@@ -776,7 +776,7 @@ async function sendScore(score) {
 		}
 
 		response = await fetch(
-			`https://localhost:7186/api/HighScores?score=${score}&leaderboardName=${subject}`,
+			`https://aad-gamification.azurewebsites.net/api/HighScores?score=${score}&leaderboardName=${subject}`,
 			{
 				method: 'POST',
 				headers: {

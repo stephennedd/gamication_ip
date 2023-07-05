@@ -26,6 +26,8 @@ let achievementSound = new Audio('./assets/sounds/achievement.mp3');
 
 let studentResult;
 
+let apiURL = 'https://aad-gamification.azurewebsites.net/';
+
 // if mute button clicked
 mute_btn.onclick = () => {
 	if (bgSound.muted) {
@@ -40,7 +42,7 @@ mute_btn.onclick = () => {
 async function getGeneratedTestForStudent() {
 	const subjectName = localStorage.getItem('subject'); // Replace with your desired subject name
 	const response = await fetch(
-		`https://localhost:7186/api/subjects/${subjectName}/test`
+		`${apiURL}api/subjects/${subjectName}/test`
 	);
 	const data = await response.json();
 	let testId = data;
@@ -58,7 +60,7 @@ async function getGeneratedTestForStudent() {
 	///console.log(studentId);
 	try {
 		// Fetch data from the API
-		const response = await fetch('https://localhost:7186/api/generatedTests', {
+		const response = await fetch('${apiURL}api/generatedTests', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -71,7 +73,7 @@ async function getGeneratedTestForStudent() {
 		});
 
 		const response2 = await fetch(
-			`https://localhost:7186/api/generatedTests/${studentId}/1`
+			`${apiURL}api/generatedTests/${studentId}/1`
 		);
 		const data = await response2.json();
 		questions = data['Questions'];
@@ -236,7 +238,7 @@ let crossIconTag = '<div class="icon cross"><i class="fas fa-times"></i></div>';
 async function getStudentResult(studentId) {
 	try {
 		const response = await fetch(
-			`https://localhost:7186/api/generatedTests/studentResults?studentId=${studentId}&generatedTestId=${generatedTestId}`
+			`${apiURL}api/generatedTests/studentResults?studentId=${studentId}&generatedTestId=${generatedTestId}`
 		);
 		const data = await response.json();
 		studentResult = data;
@@ -252,7 +254,7 @@ async function submitAnswer(answerId, studentQuestionId) {
 	try {
 		// Perform your fetch request here with the selected option
 		await fetch(
-			`https://localhost:7186/api/generatedTests/studentQuestions/${studentQuestionId}/answer`,
+			`${apiURL}api/generatedTests/studentQuestions/${studentQuestionId}/answer`,
 			{
 				method: 'POST',
 				headers: {

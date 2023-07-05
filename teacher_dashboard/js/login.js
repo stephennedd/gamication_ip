@@ -1,3 +1,6 @@
+const apiURL = 'https://aad-gamification.azurewebsites.net/';
+//const apiURL = 'https://localhost:7186/';
+
 document.getElementById("loginForm").addEventListener("submit", function(event) {
   event.preventDefault(); // Prevent the form from submitting normally
 
@@ -11,7 +14,7 @@ document.getElementById("loginForm").addEventListener("submit", function(event) 
   };
 
   // Send a POST request to the new login endpoint
-  fetch("https://localhost:7186/api/Tokens", {
+  fetch(`${apiURL}api/Tokens`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"

@@ -1,3 +1,6 @@
+const apiURL = 'https://aad-gamification.azurewebsites.net/';
+// const apiURL = 'https://localhost:7186/';
+
 const tableHeader = document.getElementById('student-results-card-header');
 const groupSelector = document.getElementById('group-selection-dropdown');
 const leaderboardSelector = document.getElementById(
@@ -47,7 +50,7 @@ async function fetchGroupNames() {
 		.find((row) => row.startsWith('jwt='))
 		.split('=')[1];
 	try {
-		const response = await fetch('https://localhost:7186/api/Groups', {
+		const response = await fetch(`${apiURL}api/Groups`, {
 			method: 'GET',
 			headers: {
 				Authorization: `Bearer ${token}`,
@@ -73,7 +76,7 @@ async function fetchLeaderboardNames() {
 		.find((row) => row.startsWith('jwt='))
 		.split('=')[1];
 	try {
-		const response = await fetch('https://localhost:7186/api/Leaderboards', {
+		const response = await fetch(`${apiURL}api/Leaderboards`, {
 			method: 'GET',
 			headers: {
 				Authorization: `Bearer ${token}`,
@@ -150,7 +153,7 @@ async function fetchLeaderboardData() {
 		let response;
 		if (groupName == null || groupName == 'All Students') {
 			response = await fetch(
-				`https://localhost:7186/api/Leaderboards/${leaderboardName}`,
+				`${apiURL}api/Leaderboards/${leaderboardName}`,
 				{
 					method: 'GET',
 					headers: {
@@ -163,7 +166,7 @@ async function fetchLeaderboardData() {
 			let encodedGroupName = encodeURI(groupName);
 			console.log('encoded name: ' + encodedGroupName);
 			response = await fetch(
-				`https://localhost:7186/api/Leaderboards/${leaderboardName}?group=${encodedGroupName}`,
+				`${apiURL}api/Leaderboards/${leaderboardName}?group=${encodedGroupName}`,
 				{
 					method: 'GET',
 					headers: {

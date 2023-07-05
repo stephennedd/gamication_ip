@@ -10,14 +10,14 @@ function checkAuth() {
     // User is authenticated, redirect to dashboard
     if (!window.location.href.includes("admin-panel.html")) {
       setTimeout(function() {
-        window.location.href = "pages/admin-panel.html";
+        window.location.href = "https://adminpanelaad.z6.web.core.windows.net/pages/admin-panel.html";
       }, 800);
     }
   } else {
     console.log("User is not authenticated");
     // User is not authenticated, redirect to login
     setTimeout(function() {
-      this.window.location.href = "http://127.0.0.1:5501/teacher_dashboard/pages/login.html";
+      this.window.location.href = "https://adminpanelaad.z6.web.core.windows.net/pages/login.html";
     }, 800);
   }
 }

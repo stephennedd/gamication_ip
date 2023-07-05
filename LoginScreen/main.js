@@ -1,6 +1,7 @@
 // Get the dynamic parameter from the URL
 const urlParams = new URLSearchParams(window.location.search);
 const nameOfSubject = urlParams.get('subject');
+const apiURL = 'https://aad-gamification.azurewebsites.net/';
 
 localStorage.setItem('subject', nameOfSubject);
 
@@ -129,7 +130,7 @@ document.addEventListener('DOMContentLoaded', function () {
 				userId: studentID,
 				password: password,
 			};
-			fetch('https://localhost:7186/api/Tokens', {
+			fetch(`${apiURL}api/Tokens`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -173,10 +174,10 @@ document.addEventListener('DOMContentLoaded', function () {
 						setIndicatorPosition(1);
 					} else {
 						const subjectName = localStorage.getItem("subject"); 
-						const response = await fetch(`https://localhost:7186/api/subjects/${subjectName}/game`)
+						const response = await fetch(`${apiURL}api/subjects/${subjectName}/game`)
                         const gameName = await response.text();
 						localStorage.setItem("gameName",gameName);
-						window.location.href = '../ArcadeMachine';
+						window.location.href = '../ArcadeMachine/index.html';
 					}
 				})
 				.catch(function (error) {
@@ -214,7 +215,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 			displayTextOneCharacterAtATime(welcomeElement, 'Creating user...');
 
-			fetch('https://localhost:7186/api/Users', {
+			fetch(`${apiURL}api/Users`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -311,7 +312,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			.split('; ')
 			.find((row) => row.startsWith('jwt='))
 			.split('=')[1];
-		fetch('https://localhost:7186/api/Tokens', {
+		fetch(`${apiURL}api/Tokens`, {
 			method: 'GET',
 			headers: {
 				Authorization: `Bearer ${token}`,
@@ -364,7 +365,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			.split('; ')
 			.find((row) => row.startsWith('jwt='))
 			.split('=')[1];
-		fetch(`https://localhost:7186/api/Users/Group?groupName=${groupName}`, {
+		fetch(`${apiURL}api/Users/Group?groupName=${groupName}`, {
 			method: 'PATCH',
 			headers: {
 				Authorization: `Bearer ${token}`,
@@ -384,7 +385,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			.find((row) => row.startsWith('jwt='))
 			.split('=')[1];
 
-		fetch('https://localhost:7186/api/Users/' + code, {
+		fetch(`${apiURL}api/Users/` + code, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -430,7 +431,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	// For group selection
 	async function fetchGroupNames() {
 		try {
-			const response = await fetch('https://localhost:7186/api/Groups', {
+			const response = await fetch(`${apiURL}api/Groups`, {
 				method: 'GET',
 				headers: {
 					Authorization: `Bearer ${token}`,

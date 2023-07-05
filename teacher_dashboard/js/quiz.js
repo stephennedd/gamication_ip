@@ -1,3 +1,5 @@
+const apiURL = 'https://aad-gamification.azurewebsites.net/';
+// const apiURL = 'https://localhost:7186/';
 let subjects;
 let chosenSubject;
 let numberOfExistingQuestions;
@@ -25,7 +27,7 @@ form.addEventListener('submit', (e) => {
 
   console.log(apiRequest);
 
-  fetch('https://localhost:7186/api/subjects', {
+  fetch(`${apiURL}api/subjects`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -52,7 +54,7 @@ editQuizLink.addEventListener('click', async function (event) {
   event.preventDefault();
 
   try {
-    const response = await fetch('https://localhost:7186/api/subjects');
+    const response = await fetch(`${apiURL}api/subjects`);
     const data = await response.json();
     subjects = data;
     // Store the subjects data in localStorage
@@ -83,7 +85,7 @@ async function removeQuiz(button,subject) {
       // TODO send the delete request to the server
 
       console.log(subject.Id);
-     await fetch(`https://localhost:7186/api/subjects/?id=${subject.Id}`, {
+     await fetch(`${apiURL}api/subjects/?id=${subject.Id}`, {
         method: 'DELETE',
       })
         .then(response => {
@@ -102,7 +104,7 @@ async function removeQuiz(button,subject) {
           console.error('Error deleting subject:', error.message);
         });
 
-        const response = await fetch('https://localhost:7186/api/subjects');
+        const response = await fetch(`${apiURL}api/subjects`);
         const data = await response.json();
         subjectsToBeDeleted = data;
         console.log(subjectsToBeDeleted);
@@ -381,7 +383,7 @@ async function removeEditModalQuestion(button,quizId,questionId) {
     }
   }
    // Send chosenSubject via API using fetch
- await fetch('https://localhost:7186/api/subjects', {
+ await fetch(`${apiURL}api/subjects`, {
   method: 'PUT',
   headers: {
     'Content-Type': 'application/json'
@@ -419,7 +421,7 @@ async function removeEditModalQuestion(button,quizId,questionId) {
     }
     
     try {
-      const response = await fetch('https://localhost:7186/api/subjects');
+      const response = await fetch(`${apiURL}api/subjects`);
       const data = await response.json();
       subjects = data;
       // Store the subjects data in localStorage
@@ -489,7 +491,7 @@ if (numberOfExistingQuestions >= index + 1) {
   chosenSubject.Test.Title = document.getElementById('modal-quiz-name').value;
   //console.log(document.getElementById('modal-quiz-week').value);
   // Send chosenSubject via API using fetch
- await fetch('https://localhost:7186/api/subjects', {
+ await fetch(`${apiURL}api/subjects`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json'
@@ -510,7 +512,7 @@ if (numberOfExistingQuestions >= index + 1) {
     });
 
     try {
-      const response = await fetch('https://localhost:7186/api/subjects');
+      const response = await fetch(`${apiURL}api/subjects`);
       const data = await response.json();
       subjects = data;
       // Store the subjects data in localStorage

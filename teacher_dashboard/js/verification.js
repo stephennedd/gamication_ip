@@ -1,4 +1,6 @@
 const inputs = ["input1", "input2", "input3", "input4", "input5", "input6"];
+const apiURL = 'https://aad-gamification.azurewebsites.net/';
+//const apiURL = 'https://localhost:7186/';
 
 inputs.map((id) => {
   const input = document.getElementById(id);
@@ -41,7 +43,7 @@ $(document).ready(function(){
     .find(row => row.startsWith('jwt='))
     .split('=')[1];
 
-fetch('https://localhost:7186/api/Users/' + code, {
+fetch(`${apiURL}api/Users/` + code, {
   method: 'POST', // or 'PUT'
   headers: {
     'Content-Type': 'application/json',

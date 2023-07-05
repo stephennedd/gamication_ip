@@ -1,5 +1,4 @@
-
-
+const apiURL = "https://aad-gamification.azurewebsites.net/";
 // let groupName = " ";
 
 
@@ -72,7 +71,7 @@ async function createGroup() {
         }
         let encodedGroupName = encodeURI(groupName);
 
-        let response = await fetch(`https://localhost:7186/api/Groups?groupName=${encodedGroupName}`,
+        let response = await fetch(`${apiURL}api/Groups?groupName=${encodedGroupName}`,
             {
                 method: 'POST',
                 headers: {
@@ -117,7 +116,7 @@ async function populateGroupsTable() {
             .find(row => row.startsWith('jwt='))
             .split('=')[1];
 
-        let response = await fetch('https://localhost:7186/api/Groups', {
+        let response = await fetch(`${apiURL}api/Groups`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,  // replace `token` with your actual token variable

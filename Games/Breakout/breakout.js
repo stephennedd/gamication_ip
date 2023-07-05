@@ -5,12 +5,12 @@ class BootScene extends Phaser.Scene {
 	}
 
 	preload() {
-		this.load.image('ball', 'assets/images/ball.png');
-		this.load.image('paddle', 'assets/images/paddle.png');
+		this.load.image('ball', 'Assets/Images/all.png');
+		this.load.image('paddle', 'Assets/Images/paddle.png');
 		this.brickColors.forEach((color) => {
-			this.load.image(color, 'assets/images/' + color + '.png');
+			this.load.image(color, 'Assets/Images/' + color + '.png');
 		});
-		this.load.image('heart', 'assets/images/heart.png');
+		this.load.image('heart', 'Assets/Images/heart.png');
 	}
 
 	create() {
@@ -553,7 +553,7 @@ async function sendScore(score) {
 		}
 
 		response = await fetch(
-			`https://localhost:7186/api/HighScores?score=${score}&leaderboardName=${subject}`,
+			`https://https://aad-gamification.azurewebsites.net/api/HighScores?score=${score}&leaderboardName=${subject}`,
 			{
 				method: 'POST',
 				headers: {
