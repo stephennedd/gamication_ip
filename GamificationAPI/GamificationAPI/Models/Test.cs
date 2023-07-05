@@ -1,7 +1,7 @@
 ﻿using GamificationAPI.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace GamificationToIP.Models
+namespace GamificationAPI.Models
 {
     public class Test
     {

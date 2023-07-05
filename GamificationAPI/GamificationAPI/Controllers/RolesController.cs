@@ -1,5 +1,5 @@
 ﻿using GamificationAPI.Models;
-using GamificationToIP.Context;
+using GamificationAPI.Context;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;

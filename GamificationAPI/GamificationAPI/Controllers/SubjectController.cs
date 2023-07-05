@@ -1,7 +1,7 @@
 ﻿﻿using GamificationAPI.Interfaces;
 using GamificationAPI.Models;
-using GamificationToIP.Context;
-using GamificationToIP.Models;
+using GamificationAPI.Context;
+using GamificationAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -58,6 +58,7 @@ public class SubjectController : ControllerBase
         return gameName;
     }
 
+
     [HttpGet("{subjectName}/test")]
     public ActionResult<int> GetTestId(string subjectName)
     {
@@ -104,6 +105,11 @@ public class SubjectController : ControllerBase
     public async Task<IActionResult> DeleteSubject(int id)
     {
         Subject subject = await _subjectService.DeleteSubject(id);
+
+        if (subject == null)
+        {
+            return NotFound(); // Subject not found, return 404 status code
+        }
 
         return Ok();
     }

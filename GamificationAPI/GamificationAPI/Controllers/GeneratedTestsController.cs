@@ -1,7 +1,7 @@
 using GamificationAPI.Interfaces;
 using GamificationAPI.Models;
-using GamificationToIP.Context;
-using GamificationToIP.Models;
+using GamificationAPI.Context;
+using GamificationAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -23,12 +23,20 @@ public class GeneratedTestController : ControllerBase
     public async Task<IActionResult> GetGeneratedTests()
     {
         var generatedTests = await _generatedTestService.GetGeneratedTests();
+        if (generatedTests == null)
+        {
+            return NotFound(); // generatedTests not found, return 404 status code
+        }
         return Ok(generatedTests);
     }
     [HttpGet("{id}")]
     public async Task<IActionResult> GetGeneratedTestById(int id)
     {
         var generatedTest = await _generatedTestService.GetGeneratedTestById(id);
+        if (generatedTest == null)
+        {
+            return NotFound(); // generatedTest not found, return 404 status code
+        }
         return Ok(generatedTest);
     }
     [HttpPost]
@@ -57,6 +65,11 @@ public class GeneratedTestController : ControllerBase
     public async Task<ActionResult<GeneratedTestDto>> GetGeneratedTest(int studentId, int testId)
     {
         var generatedTest = await _generatedTestService.GetGeneratedTest(studentId,testId);
+
+        if (generatedTest == null)
+        {
+            return NotFound(); // generatedTest not found, return 404 status code
+        }
 
         var jsonSettings = new JsonSerializerSettings
         {

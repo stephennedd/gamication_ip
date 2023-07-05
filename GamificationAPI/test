@@ -1,0 +1,20 @@
+# Rest of the Dockerfile remains unchanged
+
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+
+# Install the dotnet-ef tool
+RUN dotnet tool install --global dotnet-ef --version 7.0.0
+
+# Add the tool to the PATH
+ENV PATH="${PATH}:/root/.dotnet/tools"
+
+# Add the following lines to the Dockerfile to run the database commands
+RUN apt-get update \
+    && apt-get install -y postgresql-client \
+    && apt-get clean
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]

@@ -1,11 +1,13 @@
 ﻿
 using GamificationAPI.Interfaces;
-using GamificationToIP.Context;
-using GamificationToIP.Models;
+using GamificationAPI.Models;
+using GamificationAPI.Context;
+using GamificationAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using SendGrid.Helpers.Mail;
+using static System.Net.Mime.MediaTypeNames;
 
 
 [Route("api/tests")]
@@ -26,6 +28,11 @@ public class TestController : ControllerBase
     public async Task<ActionResult<TestDto>> GetTest(int id)
     {
         var test = await _testService.GetTestByIdAsync(id);
+
+        if (test == null)
+        {
+            return NotFound(); // Test not found, return 404 status code
+        }
         var jsonSettings = new JsonSerializerSettings
         {
             ReferenceLoopHandling = ReferenceLoopHandling.Ignore
@@ -40,6 +47,12 @@ public class TestController : ControllerBase
     public async Task<ActionResult<TestDto>> GetTestQuestions(int id)
     {
         var questions = await _testService.GetQuestionsByTestIdAsync(id);
+
+        if (questions == null)
+        {
+            return NotFound(); // Test not found, return 404 status code
+        }
+
         var jsonSettings = new JsonSerializerSettings
         {
             ReferenceLoopHandling = ReferenceLoopHandling.Ignore

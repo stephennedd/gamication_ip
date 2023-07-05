@@ -27,7 +27,6 @@ var td;
 var tb;
 var zoneL;
 var zoneR;
-var rocket;
 var spring;
 var star;
 var enemy_n;
@@ -37,6 +36,7 @@ let life = 1;
 let invincible = false;
 let isProcessing = false;
 let scoreMultiplier = 1;
+let sentScore = false;
 
 export class GameScene extends Phaser.Scene {
 	constructor() {
@@ -47,12 +47,10 @@ export class GameScene extends Phaser.Scene {
 		// Load your assets here
 		this.load.image('tile-n', 'public/images/blue.png');
 		this.load.image('player', 'public/images/player.png');
-		this.load.image('playerBoosted', '.public/images/rocketHighBoost.png');
 		this.load.image('tile-b', 'public/images/red.png');
 		this.load.image('tile-d', 'public/images/yellow.png');
 		this.load.image('spring', 'public/images/spring.png');
 		this.load.image('star', 'public/images/star.png');
-		this.load.image('rocket', 'public/images/bomb.png');
 		this.load.image('enemy-n', 'public/images/bomb.png');
 		this.load.image('enemy-s', 'public/images/bomb.png');
 		this.load.image('bullet', 'public/images/bomb.png');
@@ -60,7 +58,7 @@ export class GameScene extends Phaser.Scene {
 		/*
 		
 		
-		this.load.svg("rocket", "assets/");
+
 		this.load.svg("enemy-n", "assets/enemy-n-01.svg", {scale: 2.7});
 		this.load.svg("enemy-s", "assets/enemy-s-01.svg", {scale: 2.7});
 		this.load.image("bullet", "assets/laser.png")
@@ -531,7 +529,11 @@ export class GameScene extends Phaser.Scene {
 		let multipliedScore = score * scoreMultiplier;
 		console.log('score = ' + score);
 		console.log(multipliedScore);
+		if(sentScore == false){
+			sentScore = true;
 		sendScore(multipliedScore);
+		console.log('sent score');
+		}
 		// Show Game Over Text
 		GameOverText.visible = true;
 
@@ -560,11 +562,15 @@ export class GameScene extends Phaser.Scene {
 		enemySgroup.clear();
 
 		player.setAlpha(0.45);
-
+		player.setGravityY(0);
+		player.setVelocity(0, 0);
+		
 		//add event listener for retry
 		this.input.on('pointerdown', () => {
+			sentScore = false;
 			this.scene.restart();
-		});
+		}
+		);
 	}
 	FallOff() {
 		life -= 1;
@@ -602,6 +608,7 @@ export class GameScene extends Phaser.Scene {
 		} else if (player.body.velocity.x < -400) player.body.velocity.x = -400;
 	}
 }
+
 async function sendScore(score) {
 	try {
 		let response;

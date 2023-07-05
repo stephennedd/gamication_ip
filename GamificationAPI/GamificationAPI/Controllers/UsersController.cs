@@ -1,7 +1,7 @@
 ﻿
 using Microsoft.AspNetCore.Mvc;
-using GamificationToIP.Context;
-using GamificationToIP.Models;
+using GamificationAPI.Context;
+using GamificationAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using GamificationAPI.Interfaces;
 using GamificationAPI.Models;
@@ -15,7 +15,7 @@ using BCrypt.Net;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
-namespace GamificationToIP.Controllers
+namespace GamificationAPI.Controllers
 {
   //  [Authorize(Roles = "Admin, Teacher, Student")]
     [Route("api/[controller]")]
