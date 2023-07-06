@@ -1,4 +1,4 @@
-﻿using GamificationToIP.Models;
+﻿using GamificationAPI.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 

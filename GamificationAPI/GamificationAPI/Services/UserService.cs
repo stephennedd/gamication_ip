@@ -1,9 +1,9 @@
 ﻿
 using GamificationAPI.Interfaces;
 using GamificationAPI.Models;
-using GamificationToIP.Context;
-using GamificationToIP.Controllers;
-using GamificationToIP.Models;
+using GamificationAPI.Context;
+using GamificationAPI.Controllers;
+using GamificationAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SendGrid.Helpers.Mail;

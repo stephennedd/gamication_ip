@@ -71,7 +71,7 @@ async function getGeneratedTestForStudent() {
 		});
 
 		const response2 = await fetch(
-			`http://localhost:4434/api/generatedTests/${studentId}/1`
+			`https://localhost:7186/api/generatedTests/${studentId}/${testId}`
 		);
 		const data = await response2.json();
 		questions = data['Questions'];

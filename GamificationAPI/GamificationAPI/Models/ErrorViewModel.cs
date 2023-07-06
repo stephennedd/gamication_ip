@@ -1,4 +1,4 @@
-namespace GamificationToIP.Models
+namespace GamificationAPI.Models
 {
     public class ErrorViewModel
     {

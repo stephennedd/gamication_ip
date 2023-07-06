@@ -1,7 +1,7 @@
 ﻿
 using GamificationAPI.Interfaces;
 using GamificationAPI.Models;
-using GamificationToIP.Context;
+using GamificationAPI.Context;
 using Microsoft.EntityFrameworkCore;
 
 public class HighScoreService : IHighScores

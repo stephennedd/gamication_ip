@@ -1,7 +1,7 @@
 ﻿
 using Microsoft.AspNetCore.Mvc;
-using GamificationToIP.Context;
-using GamificationToIP.Models;
+using GamificationAPI.Context;
+using GamificationAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using GamificationAPI.Interfaces;
 using GamificationAPI.Models;
@@ -15,7 +15,7 @@ using BCrypt.Net;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
-namespace GamificationToIP.Controllers
+namespace GamificationAPI.Controllers
 {
   //  [Authorize(Roles = "Admin, Teacher, Student")]
     [Route("api/[controller]")]
@@ -126,8 +126,9 @@ namespace GamificationToIP.Controllers
                 }
                 
                 await _userService.AddUserAsync(newUser);
-                //TODO: Send email with verification token to UserId + @domain
-                EmailDto Email = new EmailDto { To = "t6666349@gmail.com", Subject = "Verify your account", Body = $"Your verification token is: {newUser.VerificationCode}" };
+                //Send email with password to UserId + @domain
+                string studentMail = userCredentials.UserId + "@student.saxion.nl";
+                EmailDto Email = new EmailDto { To = studentMail, Subject = "Verify your account", Body = $"Your verification token is: {newUser.VerificationCode}" };
                 _emailService.SendEmail(Email);
                 return CreatedAtAction("GetUser", new { UserId = newUser.UserId }, newUser);
             }
@@ -178,8 +179,9 @@ namespace GamificationToIP.Controllers
                 }
                 newUser.IsVerified = true;
                 await _userService.AddUserAsync(newUser);
-                //TODO: Send email with password to UserId + @domain
-                EmailDto Email = new EmailDto { To = "t6666349@gmail.com", Subject = "Your Gamification Password", Body = $"Your new Password is: {generatedCode} You can change it any time" };
+                //Send email with password to UserId + @domain
+                string teacherMail = teacherRegister.UserId + "@saxion.nl";
+                EmailDto Email = new EmailDto { To = teacherMail, Subject = "Your Gamification Password", Body = $"Your new Password is: {generatedCode} You can change it any time" };
                 _emailService.SendEmail(Email);
                 return CreatedAtAction("GetUser", new { UserId = newUser.UserId }, newUser);
             }

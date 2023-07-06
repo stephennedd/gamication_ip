@@ -36,6 +36,7 @@ let life = 1;
 let invincible = false;
 let isProcessing = false;
 let scoreMultiplier = 1;
+let sentScore = false;
 
 export class GameScene extends Phaser.Scene {
 	constructor() {
@@ -528,7 +529,11 @@ export class GameScene extends Phaser.Scene {
 		let multipliedScore = score * scoreMultiplier;
 		console.log('score = ' + score);
 		console.log(multipliedScore);
+		if(sentScore == false){
+			sentScore = true;
 		sendScore(multipliedScore);
+		console.log('sent score');
+		}
 		// Show Game Over Text
 		GameOverText.visible = true;
 
@@ -557,11 +562,15 @@ export class GameScene extends Phaser.Scene {
 		enemySgroup.clear();
 
 		player.setAlpha(0.45);
-
+		player.setGravityY(0);
+		player.setVelocity(0, 0);
+		
 		//add event listener for retry
 		this.input.on('pointerdown', () => {
+			sentScore = false;
 			this.scene.restart();
-		});
+		}
+		);
 	}
 	FallOff() {
 		life -= 1;
@@ -599,6 +608,7 @@ export class GameScene extends Phaser.Scene {
 		} else if (player.body.velocity.x < -400) player.body.velocity.x = -400;
 	}
 }
+
 async function sendScore(score) {
 	try {
 		let response;
