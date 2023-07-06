@@ -187,13 +187,13 @@ public class GeneratedTestService : IGeneratedTests
         var hasUnansweredQuestions = studentQuestions.Any(sq => sq.AnswerId == null);
         if (!hasUnansweredQuestions)
         {
-            // Get the next generated test with unanswered questions
             generatedTest = await _dbContext.GeneratedTest
                 .Include(gt => gt.Test)
                 .Include(gt => gt.Test.Questions)
                 .ThenInclude(q => q.Answers)
-                .FirstOrDefaultAsync(gt => gt.StudentId == studentId && gt.Id > generatedTest.Id
-                    && _dbContext.StudentQuestions.Any(sq => sq.GeneratedTestId == gt.Id && sq.AnswerId == null));
+                .FirstOrDefaultAsync(gt => gt.StudentId == studentId && gt.TestId == testId && gt.Id > generatedTest.Id
+                && _dbContext.StudentQuestions.Any(sq => sq.GeneratedTestId == gt.Id && sq.AnswerId == null));
+
 
             if (generatedTest == null)
             {

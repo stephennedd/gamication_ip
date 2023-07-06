@@ -1,66 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Arcade</title>
-		<link rel="stylesheet" href="main.css" />
-		<script defer src="main.js"></script>
-		<link
-			rel="icon"
-			type="image/png"
-			sizes="32x32"
-			href="Media/Images/favicon-32x32.png" />
-	</head>
-	<body>
-		<div id="corridor">
-			<img src="Media/Images/background.png" id="background" />
 
-			<img
-				src="Media/Images/Arcade Machine - Saxion with bottom and screen.png"
-				id="machine"
-	         			class="blur" />
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Arcade</title>
+	<link rel="stylesheet" href="main.css" />
+	<script defer src="main.js"></script>
+	<link rel="icon" type="image/png" sizes="32x32" href="Media/Images/favicon-32x32.png" />
+</head>
 
-			<iframe
-				src="../quiz_frontend/index.html"
-				id="quiz"
-				class="hide crt screen"></iframe>
+<body>
+	<div id="corridor">
+		<img src="Media/Images/background.png" id="background" />
 
-			<iframe
-				src="../leaderboard_frontend/index.html"
-				id="leaderboard"
-				class="hide crt screen"></iframe>
+		<img src="Media/Images/Arcade Machine - Saxion with bottom and screen.png" id="machine" class="blur" />
 
-			<!-- <iframe
+		<iframe src="../quiz_frontend/index.html" id="quiz" class="hide crt screen"></iframe>
+
+		<iframe src="../leaderboard_frontend/index.html" id="leaderboard" class="hide crt screen"></iframe>
+
+		<!-- <iframe
 				src="../Games/Breakout/index.html"
 				id="game"
 				class="hide crt screen"></iframe> -->
-				<iframe id="game" class="hide crt screen"></iframe>
-		</div>
+		<iframe id="game" class="hide crt screen"></iframe>
+	</div>
 
-		<div id="buttonsPanel">
-			<img src="Media/Images/up.png" id="animate" />
+	<div id="buttonsPanel">
+		<img src="Media/Images/up.png" id="animate" />
 
-			<img src="Media/Images/Quiz.png" id="showQuiz" class="hide" />
-			<img src="Media/Images/Play.png" id="showGame" class="hide" />
-			<img
-				src="Media/Images/leaderboard.png"
-				id="leaderboardButton"
-				class="hide" />
+		<img src="Media/Images/quiz.png" id="showQuiz" class="hide" />
+		<img src="Media/Images/play.png" id="showGame" class="hide" />
+		<img src="Media/Images/leaderboard.png" id="leaderboardButton" class="hide" />
 
-			<img src="Media/Images/downPressed.png" id="back" />
-		</div>
+		<img src="Media/Images/downPressed.png" id="back" />
+	</div>
 
-		<script>
-			// Get the value of the "game" variable from localStorage
-			var gameName = localStorage.getItem("gameName");
-		  
-			// Update the src attribute of the iframe
-			if (gameName) {
-			  var iframe = document.getElementById("game");
-			  iframe.src = "../Games/" + gameName.replace(/ /g, "_") + "/index.html";
-			}
-		</script>
-	</body>
+	<script>
+		// Get the value of the "game" variable from localStorage
+		var gameName = localStorage.getItem("gameName");
+
+		// Update the src attribute of the iframe
+		if (gameName) {
+			var iframe = document.getElementById("game");
+			iframe.src = "../Games/" + gameName.replace(/ /g, "_") + "/index.html";
+		}
+	</script>
+</body>
+
 </html>

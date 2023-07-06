@@ -73,7 +73,7 @@ async function getGeneratedTestForStudent() {
 		});
 
 		const response2 = await fetch(
-			`${apiURL}api/generatedTests/${studentId}/1`
+			`${apiURL}api/generatedTests/${studentId}/${testId}`
 		);
 		const data = await response2.json();
 		questions = data['Questions'];
