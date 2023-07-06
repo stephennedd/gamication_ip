@@ -5,6 +5,8 @@ using GamificationToIP.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Authorization;
+
 
 //[Route("api/generatedTests")]
 [Authorize(Roles = "Admin, Teacher, Student", Policy = "IsVerified")]
