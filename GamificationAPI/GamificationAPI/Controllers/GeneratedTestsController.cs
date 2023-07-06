@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 
 
 [Route("api/generatedTests")]
-//[Authorize(Roles = "Admin, Teacher, Student", Policy = "IsVerified")]
+[Authorize(Roles = "Admin, Teacher, Student", Policy = "IsVerified")]
 //[Route("api/[controller]")]
 [ApiController]
 public class GeneratedTestController : ControllerBase
@@ -23,7 +23,7 @@ public class GeneratedTestController : ControllerBase
     }
 
     // GET: api/scoreboard
-   // [AllowAnonymous]
+    [AllowAnonymous]
     [HttpGet]
     public async Task<IActionResult> GetGeneratedTests()
     {
@@ -34,7 +34,7 @@ public class GeneratedTestController : ControllerBase
         }
         return Ok(generatedTests);
     }
-   // [AllowAnonymous]
+    [AllowAnonymous]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetGeneratedTestById(int id)
     {
@@ -45,7 +45,7 @@ public class GeneratedTestController : ControllerBase
         }
         return Ok(generatedTest);
     }
-    //[AllowAnonymous]
+    [AllowAnonymous]
     [HttpPost]
     //[FromBody] GenerateTestRequest requestBody
     public async Task<IActionResult> GenerateTestAsync([FromBody] GenerateTestRequest requestBody)
@@ -57,7 +57,7 @@ public class GeneratedTestController : ControllerBase
         var generatedTest = await _generatedTestService.GenerateTest(studentId,testId,numberOfQuestions);
         return Ok(generatedTest.Id);
     }
-    //[AllowAnonymous]
+    [AllowAnonymous]
     [HttpPost("studentQuestions/{studentQuestionId}/answer")]
     public async Task<ActionResult<string>> SaveStudentAnswer(int studentQuestionId, [FromBody] GenerateUpdateStudentAnswer requestBody)
     {
@@ -67,7 +67,7 @@ public class GeneratedTestController : ControllerBase
 
         return response;
     }
-   // [AllowAnonymous]
+    [AllowAnonymous]
     [HttpGet("{studentId}/{testId}")]
     public async Task<ActionResult<GeneratedTestDto>> GetGeneratedTest(int studentId, int testId)
     {
@@ -87,7 +87,7 @@ public class GeneratedTestController : ControllerBase
 
         return Content(json, "application/json");
     }
-   // [AllowAnonymous]
+    [AllowAnonymous]
     [HttpGet("studentResults")]
     public async Task<ActionResult<Double>> CalculateStudentResult(int studentId, int generatedTestId)
     {
