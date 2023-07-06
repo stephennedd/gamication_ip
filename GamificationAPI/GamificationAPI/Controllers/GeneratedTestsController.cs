@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
-[Route("api/generatedTests")]
+//[Route("api/generatedTests")]
+[Authorize(Roles = "Admin, Teacher, Student", Policy = "IsVerified")]
+[Route("api/[controller]")]
 [ApiController]
 public class GeneratedTestController : ControllerBase
 {
