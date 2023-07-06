@@ -85,9 +85,13 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(builder =>
     {
-        builder.AllowAnyOrigin()
+        builder.WithOrigins("https://arcademachine.z6.web.core.windows.net")
                .AllowAnyMethod()
-               .AllowAnyHeader();
+               .AllowAnyHeader()
+               .AllowCredentials()
+               .SetIsOriginAllowedToAllowWildcardSubdomains()
+               .WithExposedHeaders("Content-Disposition")
+               .SetPreflightMaxAge(TimeSpan.FromMinutes(10));
     });
 });
 
