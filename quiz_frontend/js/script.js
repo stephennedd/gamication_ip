@@ -64,18 +64,18 @@ async function getGeneratedTestForStudent() {
 	//var studentId = decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
 	///console.log(studentId);
 	try {
-		// // Fetch data from the API
-		// const response = await fetch(`${apiURL}api/generatedTests`, {
-		// 	method: 'POST',
-		// 	headers: {
-		// 		'Content-Type': 'application/json',
-		// 	},
-		// 	body: JSON.stringify({
-		// 		studentId: studentId,
-		// 		testId: testId,
-		// 		numberOfQuestions: 5,
-		// 	}),
-		// });
+		// Fetch data from the API
+		const response = await fetch(`${apiURL}api/generatedTests`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				studentId: studentId,
+				testId: testId,
+				numberOfQuestions: 5,
+			}),
+		});
 
 		const response2 = await fetch(
 			`${apiURL}api/generatedTests/${studentId}/${testId}`, {
