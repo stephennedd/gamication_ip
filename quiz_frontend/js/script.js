@@ -40,15 +40,18 @@ mute_btn.onclick = () => {
 };
 
 async function getGeneratedTestForStudent() {
-	const subjectName = localStorage.getItem('subject'); // Replace with your desired subject name
-	const response = await fetch(
-		`${apiURL}api/subjects/${subjectName}/test`, {
-			mode: 'no-cors'
-		}
-	);
-	const data = await response.json();
-	let testId = data;
-	console.log(`Test ID for ${subjectName}: ${testId}`);
+	const subjectName = localStorage.getItem('subject'); // Replace with your desired subject 
+	let testId = 1;
+	try {
+		const response = await fetch(
+			`${apiURL}api/subjects/${subjectName}/test`
+		);
+		const data = await response.json();
+		testId = data;
+		console.log(`Test ID for ${subjectName}: ${testId}`);
+	} catch (error) {
+		console.error('Error fetching test:', error);
+	}
 
 	var token = document.cookie
 		.split('; ')
@@ -61,23 +64,23 @@ async function getGeneratedTestForStudent() {
 	//var studentId = decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
 	///console.log(studentId);
 	try {
-		// Fetch data from the API
-		const response = await fetch(`${apiURL}api/generatedTests`, {
-			method: 'POST',
-			headers: {
-				mode: 'no-cors',
-				contentType: 'application/json',
-				// 'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-				studentId: studentId,
-				testId: testId,
-				numberOfQuestions: 5,
-			}),
-		});
+		// // Fetch data from the API
+		// const response = await fetch(`${apiURL}api/generatedTests`, {
+		// 	method: 'POST',
+		// 	headers: {
+		// 		'Content-Type': 'application/json',
+		// 	},
+		// 	body: JSON.stringify({
+		// 		studentId: studentId,
+		// 		testId: testId,
+		// 		numberOfQuestions: 5,
+		// 	}),
+		// });
 
 		const response2 = await fetch(
-			`${apiURL}api/generatedTests/${studentId}/${testId}`
+			`${apiURL}api/generatedTests/${studentId}/${testId}`, {
+				mode: 'no-cors'
+			}
 		);
 		const data = await response2.json();
 		questions = data['Questions'];
