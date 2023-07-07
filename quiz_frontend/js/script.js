@@ -42,7 +42,9 @@ mute_btn.onclick = () => {
 async function getGeneratedTestForStudent() {
 	const subjectName = localStorage.getItem('subject'); // Replace with your desired subject name
 	const response = await fetch(
-		`${apiURL}api/subjects/${subjectName}/test`
+		`${apiURL}api/subjects/${subjectName}/test`, {
+			mode: 'no-cors'
+		}
 	);
 	const data = await response.json();
 	let testId = data;
@@ -63,7 +65,9 @@ async function getGeneratedTestForStudent() {
 		const response = await fetch('${apiURL}api/generatedTests', {
 			method: 'POST',
 			headers: {
-				'Content-Type': 'application/json',
+				mode: 'no-cors',
+				contentType: 'application/json',
+				// 'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
 				studentId: studentId,

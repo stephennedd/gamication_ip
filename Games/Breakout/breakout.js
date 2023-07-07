@@ -1,3 +1,4 @@
+const apiURL = 'aad-gamification.azurewebsites.net/';
 class BootScene extends Phaser.Scene {
 	constructor() {
 		super({ key: 'BootScene' });
@@ -5,7 +6,7 @@ class BootScene extends Phaser.Scene {
 	}
 
 	preload() {
-		this.load.image('ball', 'Assets/Images/all.png');
+		this.load.image('ball', 'Assets/Images/ball.png');
 		this.load.image('paddle', 'Assets/Images/paddle.png');
 		this.brickColors.forEach((color) => {
 			this.load.image(color, 'Assets/Images/' + color + '.png');
@@ -553,8 +554,9 @@ async function sendScore(score) {
 		}
 
 		response = await fetch(
-			`https://https://aad-gamification.azurewebsites.net/api/HighScores?score=${score}&leaderboardName=${subject}`,
+			`${apiURL}api/HighScores?score=${score}&leaderboardName=${subject}`,
 			{
+				mode: 'no-cors',
 				method: 'POST',
 				headers: {
 					Authorization: `Bearer ${token}`,
