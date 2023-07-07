@@ -44,7 +44,6 @@ export class GameScene extends Phaser.Scene {
 	}
 
 	preload() {
-		// Load your assets here
 		this.load.image('tile-n', 'public/images/blue.png');
 		this.load.image('player', 'public/images/player.png');
 		this.load.image('tile-b', 'public/images/red.png');
@@ -54,15 +53,6 @@ export class GameScene extends Phaser.Scene {
 		this.load.image('enemy-n', 'public/images/bomb.png');
 		this.load.image('enemy-s', 'public/images/bomb.png');
 		this.load.image('bullet', 'public/images/bomb.png');
-
-		/*
-		
-		
-
-		this.load.svg("enemy-n", "assets/enemy-n-01.svg", {scale: 2.7});
-		this.load.svg("enemy-s", "assets/enemy-s-01.svg", {scale: 2.7});
-		this.load.image("bullet", "assets/laser.png")
-        */
 	}
 
 	create() {
@@ -217,6 +207,20 @@ export class GameScene extends Phaser.Scene {
 		if (this.key_right.isDown) player.body.velocity.x = 330;
 		else if (this.key_left.isDown) player.body.velocity.x = -330;
 		else player.body.velocity.x = 0;
+
+		// Fix for scroling parent window
+		window.addEventListener(
+			'keydown',
+			function (e) {
+				var keys = { 37: 1, 38: 1, 39: 1, 40: 1 };
+
+				if (keys[e.keyCode]) {
+					e.preventDefault();
+					return false;
+				}
+			},
+			false
+		);
 
 		/* Device Orientation */
 		window.addEventListener('deviceorientation', this.handleOrientation, true);
@@ -430,7 +434,7 @@ export class GameScene extends Phaser.Scene {
 	spawnTile(x, y, type) {
 		tile = tilesGroup.create(x, y, type);
 		tile.setImmovable();
-
+		tile.setScale(2);
 		return tile;
 	}
 
@@ -438,6 +442,7 @@ export class GameScene extends Phaser.Scene {
 	spawnTileBreak(x, y, type) {
 		tile = breakTilesGroup.create(x, y, type);
 		tile.setImmovable();
+		tile.setScale(2);
 		return tile;
 	}
 
@@ -445,6 +450,7 @@ export class GameScene extends Phaser.Scene {
 	spawnTileDis(x, y, type) {
 		tile = DisTilesGroup.create(x, y, type);
 		tile.setImmovable();
+		tile.setScale(2);
 		return tile;
 	}
 
@@ -452,6 +458,7 @@ export class GameScene extends Phaser.Scene {
 	spawnSpring(x, y, type) {
 		spring = springGroup.create(x, y, type);
 		spring.setImmovable();
+		spring.setScale(0.03);
 		return spring;
 	}
 
@@ -527,12 +534,9 @@ export class GameScene extends Phaser.Scene {
 
 	GameOver() {
 		let multipliedScore = score * scoreMultiplier;
-		console.log('score = ' + score);
-		console.log(multipliedScore);
-		if(sentScore == false){
+		if (sentScore == false) {
 			sentScore = true;
-		sendScore(multipliedScore);
-		console.log('sent score');
+			sendScore(multipliedScore);
 		}
 		// Show Game Over Text
 		GameOverText.visible = true;
@@ -564,13 +568,12 @@ export class GameScene extends Phaser.Scene {
 		player.setAlpha(0.45);
 		player.setGravityY(0);
 		player.setVelocity(0, 0);
-		
+
 		//add event listener for retry
 		this.input.on('pointerdown', () => {
 			sentScore = false;
 			this.scene.restart();
-		}
-		);
+		});
 	}
 	FallOff() {
 		life -= 1;
@@ -596,7 +599,7 @@ export class GameScene extends Phaser.Scene {
 	handleOrientation(e) {
 		var dx = e.gamma;
 		var edx = (dx / 3.5) ** 4;
-		console.log(dx, edx);
+
 		if (dx < 0) {
 			player.body.velocity.x = -edx;
 		} else {
@@ -617,7 +620,7 @@ async function sendScore(score) {
 			.find((row) => row.startsWith('jwt='))
 			.split('=')[1];
 		const subject = localStorage.getItem('subject');
-		console.log('subject = ' + subject);
+
 		// Ensure groupName is not empty or undefined
 		if (!score) {
 			console.error('Invalid or empty score!');
@@ -639,7 +642,6 @@ async function sendScore(score) {
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}
 
-		console.log('Leaderboard updated successfully:');
 		return true;
 	} catch (error) {
 		console.log('Fetch Error: ', error);

@@ -21,8 +21,6 @@ document
 		//   userRole: capitalizedRole
 		// };
 
-		// console.log(data);
-
 		let admin = true; // Set the admin value
 
 		if (userRole == 'admin') {
@@ -43,8 +41,6 @@ document
 			.find((row) => row.startsWith('jwt='))
 			.split('=')[1];
 
-		console.log(teacherRegister);
-		console.log(admin);
 		fetch(`http://localhost:4434/api/Users/Admin?admin=${admin}`, {
 			method: 'POST',
 			headers: {
@@ -55,16 +51,12 @@ document
 		})
 			.then((response) => {
 				if (!response.ok) {
-					console.log(response);
 					throw new Error('Request failed.');
 				}
 				// If request is successful, resolve the promise by returning the request response
 				return response.json();
 			})
 			.then((data) => {
-				// Process the response data
-				console.log(data);
-				// show success message
 				$('#add-user-success-modal').modal('show');
 			})
 			.catch((error) => {
@@ -83,7 +75,7 @@ deleteQuizLink.addEventListener('click', async function (event) {
 		const response = await fetch('http://localhost:4434/api/subjects');
 		const data = await response.json();
 		subjectsToBeDeleted = data;
-		console.log(subjectsToBeDeleted);
+
 		localStorage.setItem(
 			'subjectsDataForRemovePage',
 			JSON.stringify(subjectsToBeDeleted)
@@ -99,7 +91,6 @@ deleteQuizLink.addEventListener('click', async function (event) {
 
 // Check if subjects data exists in localStorage on page load
 window.addEventListener('DOMContentLoaded', function () {
-	//console.log(localStorage.getItem('subjectsDataForRemovePage'))
 	const storedSubjects = localStorage.getItem('subjectsDataForRemovePage');
 
 	if (storedSubjects) {
@@ -114,7 +105,6 @@ function populateTable2(subjects) {
 
 	// Function to create a table row based on a subject object
 	function createTableRow(subject) {
-		//console.log(subject);
 		const tr = document.createElement('tr');
 		tr.setAttribute('data-quiz-id', subject.Test.Id);
 		tr.setAttribute('data-quiz-name', subject.Test.Title);
