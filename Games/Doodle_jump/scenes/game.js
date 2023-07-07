@@ -208,6 +208,20 @@ export class GameScene extends Phaser.Scene {
 		else if (this.key_left.isDown) player.body.velocity.x = -330;
 		else player.body.velocity.x = 0;
 
+		// Fix for scroling parent window
+		window.addEventListener(
+			'keydown',
+			function (e) {
+				var keys = { 37: 1, 38: 1, 39: 1, 40: 1 };
+
+				if (keys[e.keyCode]) {
+					e.preventDefault();
+					return false;
+				}
+			},
+			false
+		);
+
 		/* Device Orientation */
 		window.addEventListener('deviceorientation', this.handleOrientation, true);
 

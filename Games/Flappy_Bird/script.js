@@ -133,6 +133,20 @@ function play() {
 			}
 		});
 
+		// Fix for scroling parent window
+		window.addEventListener(
+			'keydown',
+			function (e) {
+				var keys = { 37: 1, 38: 1, 39: 1, 40: 1 };
+
+				if (keys[e.keyCode]) {
+					e.preventDefault();
+					return false;
+				}
+			},
+			false
+		);
+
 		if (bird_props.top <= 0 || bird_props.bottom >= background.bottom) {
 			game_state = 'End';
 			message.style.left = '28vw';
