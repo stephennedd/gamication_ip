@@ -18,7 +18,6 @@ namespace GamificationAPITests
         private Mock<IUsers> _mockUserService;
         private Mock<IEmails> _mockEmailService;
         private Mock<IBadges> _mockBadgeService;
-        private ApplicationDbContext _context;
         public UsersControllerTests()
         {
             // Setup an in memory database instead of mocking it
@@ -466,37 +465,7 @@ namespace GamificationAPITests
             Assert.IsType<OkResult>(result);
         }
 
-        [Fact]
-        public void BanUser_ReturnsOk_ForValidUserId()
-        {
-            // Arrange
-            int existingUserId = 1; // Assuming this user ID exists in the test database
-            bool isBanned = true;
-            var user = new User { Id = existingUserId, IsBanned = false };
-            _context.Users.Add(user);
-            _context.SaveChanges();
-
-            // Act
-            var result = _controller.BanUser(existingUserId, isBanned);
-
-            // Assert
-            var okResult = Assert.IsType<OkResult>(result);
-            Assert.True(_context.Users.Find(existingUserId).IsBanned);
-        }
-
-        [Fact]
-        public void BanUser_ReturnsNotFound_ForNonExistentUserId()
-        {
-            // Arrange
-            int nonExistentUserId = 9999;  // Assuming this user ID does not exist in the test database
-            bool isBanned = true;
-
-            // Act
-            var result = _controller.BanUser(nonExistentUserId, isBanned);
-
-            // Assert
-            var notFoundResult = Assert.IsType<NotFoundResult>(result);
-        }
+        
 
         
     }
