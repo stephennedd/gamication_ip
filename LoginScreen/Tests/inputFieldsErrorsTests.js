@@ -105,7 +105,6 @@ describe('Testing if errors for input fields are handled correctly', function ()
 		assert.strictEqual(errorMessage, 'Passwords do not match.');
 	});
 
-	// TODO error messages on verification
 	// it('Should display error messages correctly on Verification form', async function () {
 	// 	this.timeout(30000); // Increase the timeout
 	// 	await driver.get('http://localhost:5501/LoginScreen/'); // Go to the Verification Screen

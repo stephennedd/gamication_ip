@@ -107,6 +107,4 @@ describe('Testing Project login page if all elements are displayed correctly', f
 		assert.strictEqual(await firstNameField.isDisplayed(), false);
 		assert.strictEqual(await lastNameField.isDisplayed(), false);
 	});
-
-	// TODO check if verification is showing up
 });

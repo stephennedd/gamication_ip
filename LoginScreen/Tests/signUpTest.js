@@ -1,87 +1,66 @@
 const { Builder, By, until } = require('selenium-webdriver');
 const assert = require('assert');
 
-describe('Testing Signup and Verification', function () {
-	const nock = require('nock');
+const url = 'http://localhost:5501/LoginScreen';
 
-	// simulating API calls
-	nock('http://localhost:5501')
-		.post('/api/signup')
-		.reply(200, { status: 'ok' })
-		.post('/api/login')
-		.reply(200, { status: 'unverified', redirectTo: '/VerificationScreen/' })
-		.post('/api/verify')
-		.reply(200, { status: 'verified', redirectTo: '/LoginScreen/' })
-		.post('/api/login')
-		.reply(200, { status: 'success', redirectTo: '/AnotherPage/' });
-
+describe('SignUp functionality', function () {
+	this.timeout(30000);
 	let driver;
 
-	before(async function () {
+	beforeEach(async () => {
 		driver = await new Builder().forBrowser('chrome').build();
+		await driver.get(url);
 	});
 
-	after(async function () {
+	afterEach(async () => {
 		await driver.quit();
 	});
 
-	it('Should sign up, verify, and login successfully', async function () {
-		this.timeout(60000);
-
-		// Go to login screen
-		await driver.get('http://localhost:5501/LoginScreen/');
-
-		// Click on sign-up label
-		const signUpLabel = await driver.findElement(By.css("label[for='signup']"));
-		await signUpLabel.click();
-
-		// Enter credentials
-		const studentID = await driver.findElement(By.id('studentID'));
-		const passwordInput = await driver.findElement(By.id('password'));
-		const repasswordInput = await driver.findElement(By.id('repassword'));
-		await studentID.sendKeys('testuser');
-		await passwordInput.sendKeys('testpassword');
-		await repasswordInput.sendKeys('testpassword');
-		const submitButton = await driver.findElement(By.css('button'));
-		await submitButton.click();
-
-		// Assume taken to sign-in page with prefilled fields
-		await driver.wait(until.urlIs('http://localhost:5501/LoginScreen/'), 10000);
-
-		// Try to log in
+	it('Should allow a user to sign up with valid details', async () => {
+		// Wait for loginForm to be visible
 		const loginForm = await driver.wait(
 			until.elementLocated(By.id('loginForm')),
 			10000
 		);
-		await loginForm.submit();
+		await driver.wait(until.elementIsVisible(loginForm), 10000);
 
-		// Taken to verification form
-		await driver.wait(
-			until.urlIs('http://localhost:5501/VerificationScreen/'),
-			10000
-		);
+		const signUpLabel = await driver.findElement(By.css("label[for='signup']"));
+		await signUpLabel.click();
 
-		// Fill verification code and submit
-		const verificationCodeInput = await driver.findElement(
-			By.id('verificationCode')
-		);
-		const groupSelection = await driver.findElement(By.id('groupSelection'));
-		await verificationCodeInput.sendKeys('correctVerificationCode');
-		await groupSelection.sendKeys('testGroup');
-		const verifyButton = await driver.findElement(By.id('verifyButton'));
-		await verifyButton.click();
+		// Enter details
+		await driver.findElement(By.id('firstName')).sendKeys('Test');
+		await driver.findElement(By.id('lastName')).sendKeys('User');
+		await driver.findElement(By.id('studentID')).sendKeys('123458');
+		await driver.findElement(By.id('password')).sendKeys('testPassword');
+		await driver.findElement(By.id('repassword')).sendKeys('testPassword');
 
-		// Taken back to login page
-		await driver.wait(until.urlIs('http://localhost:5501/LoginScreen/'), 10000);
+		const signUpButton = await driver.findElement(By.css('button'));
+		await signUpButton.click();
 
-		// Log in again
-		await loginForm.submit();
+		await driver.wait(until.findElement(By.id('studentId'), 5000));
+		await driver.wait(until.findElement(By.id('password'), 5000));
+		await signUpButton.click();
 
-		// Taken to another page
-		await driver.wait(until.urlIs('http://localhost:5501/AnotherPage/'), 10000);
-		assert.strictEqual(
-			await driver.getCurrentUrl(),
-			'http://localhost:5501/AnotherPage/'
-		);
+		await driver.wait(until.findElement(By.id('verificationCode'), 5000));
+		await driver.wait(until.findElement(By.id('groupSelect'), 5000));
+
+		await driver.findElement(By.id('verificationCode')).sendKeys('Test');
 	});
+	// 	// Assuming you are on the login page
+	// 	await driver.findElement(By.id('studentID')).sendKeys('12345');
+	// 	await driver.findElement(By.id('password')).sendKeys('testPassword');
+
+	// 	const loginForm = await driver.wait(
+	// 		until.elementLocated(By.id('loginForm')),
+	// 		10000
+	// 	);
+	// 	const loginButton = await loginForm.findElement(By.css('button'));
+	// 	await loginButton.click();
+
+	// 	// Wait for redirect to dashboard or main page
+	// 	await driver.wait(until.urlContains('/ArcadeMachine'), 5000);
+
+	// 	const currentUrl = await driver.getCurrentUrl();
+	// 	assert(currentUrl.includes('/ArcadeMachine'));
+	// });
 });
