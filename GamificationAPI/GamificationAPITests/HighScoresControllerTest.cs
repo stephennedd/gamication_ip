@@ -6,12 +6,12 @@ using Microsoft.EntityFrameworkCore;
 using Moq;
 using System.Security.Claims;
 using System;
-using GamificationToIP.Context;
 using GamificationAPI.Models;
-using GamificationToIP.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using GamificationAPI.Context;
+
 namespace GamificationAPITests
 {
     public class HighScoresControllerTest
