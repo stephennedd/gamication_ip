@@ -1,7 +1,7 @@
 ﻿using GamificationAPI.Interfaces;
 using GamificationAPI.Models;
-using GamificationToIP.Context;
-using GamificationToIP.Models;
+using GamificationAPI.Context;
+using GamificationAPI.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace GamificationAPI.Services

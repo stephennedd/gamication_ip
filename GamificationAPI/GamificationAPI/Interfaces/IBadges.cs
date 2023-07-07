@@ -1,5 +1,5 @@
 ﻿using GamificationAPI.Models;
-using GamificationToIP.Models;
+using GamificationAPI.Models;
 
 namespace GamificationAPI.Interfaces
 {

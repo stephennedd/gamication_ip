@@ -1,5 +1,5 @@
 ﻿
-using GamificationToIP.Models;
+using GamificationAPI.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace GamificationAPI.Models

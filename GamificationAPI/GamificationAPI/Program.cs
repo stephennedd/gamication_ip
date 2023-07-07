@@ -4,8 +4,8 @@ using Microsoft.OpenApi.Models;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
-using GamificationToIP.Context;
-using GamificationToIP.Seed;
+using GamificationAPI.Context;
+using GamificationAPI.Seed;
 using GamificationAPI.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 
