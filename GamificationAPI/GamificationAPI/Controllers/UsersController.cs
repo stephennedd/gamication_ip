@@ -237,14 +237,15 @@ namespace GamificationAPI.Controllers
                         return NotFound("User with this ID does not exist");
                     }
                     await _userService.UpdateUserAsync(User);
+                    return Ok(User);
                 }
                 catch (Exception ex)
                 {
                     return BadRequest(ex.Message);
                 }
-                return NoContent();
+                
             }
-            return Ok(User);
+            return BadRequest();
         }
         [Authorize(Policy = "IsVerified")]
         [HttpPatch]

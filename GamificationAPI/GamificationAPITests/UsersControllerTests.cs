@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using System.Security.Claims;
+using SendGrid.Helpers.Mail;
 
 namespace GamificationAPITests
 {
@@ -17,6 +18,7 @@ namespace GamificationAPITests
         private Mock<IUsers> _mockUserService;
         private Mock<IEmails> _mockEmailService;
         private Mock<IBadges> _mockBadgeService;
+        private ApplicationDbContext _context;
         public UsersControllerTests()
         {
             // Setup an in memory database instead of mocking it
@@ -155,40 +157,72 @@ namespace GamificationAPITests
         }
 
         [Fact]
-        public async Task DeleteUser_ReturnsNoContent_WhenUserIsDeleted()
+        public async Task DeleteUser_ReturnsOk_WhenUserSuccessfullyDeleted()
         {
             // Arrange
-            var userId = "12345";
-            var mockUserService = new Mock<IUsers>();
-            mockUserService.Setup(service => service.UserExistsAsync(userId))
-                .ReturnsAsync(true);  // Simulate a user exists with this UserId
-            var mockEmailService = new Mock<IEmails>();
-            var mockBadgeService = new Mock<IBadges>();
-            var context = new ApplicationDbContext(_options);
-            var controller = new UsersController(context, mockUserService.Object, mockEmailService.Object, mockBadgeService.Object);
-            // Act
-            var result = await controller.DeleteUser(userId);
-            // Assert
-            Assert.IsType<NotFoundResult>(result);  // Expecting a NoContent response
-        }
+            var validUserId = "validUser";
 
+            var userToDelete = new User
+            {
+                UserId = validUserId,
+                Password = "password",
+                Name = "Name",
+                Surname = "Surname"
+            };
+
+            _mockUserService.Setup(s => s.UserExistsAsync(validUserId)).ReturnsAsync(true);
+            _mockUserService.Setup(s => s.GetUserByIdAsync(validUserId)).ReturnsAsync(userToDelete);
+            _mockUserService.Setup(s => s.DeleteUserAsync(validUserId)).Returns(Task.CompletedTask);
+
+            _controller.ControllerContext = new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext(),
+            };
+            _controller.ControllerContext.HttpContext.Request.Headers["Authorization"] = "Bearer mock_token";
+            _controller.ControllerContext.HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+        new Claim(ClaimTypes.Role, "Admin")
+            }));
+
+            // Act
+            var result = await _controller.DeleteUser(validUserId);
+
+            // Assert
+            Assert.IsType<OkResult>(result);
+        }
         [Fact]
-        public async Task UpdateUser_ReturnsNoContent_WhenUserIsUpdated()
+        public async Task UpdateUser_ReturnsUpdatedUser_WhenUserSuccessfullyUpdated()
         {
             // Arrange
-            var userId = "12345";
-            var user = new User { UserId = "12345", Name = "John", Surname = "Doe" };
-            var mockUserService = new Mock<IUsers>();
-            mockUserService.Setup(service => service.UserExistsAsync(userId))
-                .ReturnsAsync(true);  // Simulate a user exists with this UserId
-            var mockEmailService = new Mock<IEmails>();
-            var mockBadgeService = new Mock<IBadges>();
-            var context = new ApplicationDbContext(_options);
-            var controller = new UsersController(context, mockUserService.Object, mockEmailService.Object, mockBadgeService.Object);
+            var validUserId = "validUser";
+            var userToUpdate = new User
+            {
+                UserId = validUserId,
+                Password = "newPassword",
+                Name = "New Name",
+                Surname = "New Surname"
+            };
+
+            _mockUserService.Setup(s => s.UserExistsAsync(validUserId)).ReturnsAsync(true);
+            _mockUserService.Setup(s => s.UpdateUserAsync(userToUpdate)).Returns(Task.CompletedTask);
+
+            _controller.ControllerContext = new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext(),
+            };
+            _controller.ControllerContext.HttpContext.Request.Headers["Authorization"] = "Bearer mock_token";
+            _controller.ControllerContext.HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+        new Claim(ClaimTypes.Name, validUserId)
+            }));
+
             // Act
-            var result = await controller.UpdateUser(userId, user);
+            var result = await _controller.UpdateUser(validUserId, userToUpdate);
+
             // Assert
-            Assert.IsType<NoContentResult>(result);  // Expecting a NoContent response
+            var okResult = Assert.IsType<OkObjectResult>(result);
+            var returnedUser = Assert.IsType<User>(okResult.Value);
+            Assert.Equal(userToUpdate, returnedUser);
         }
 
 
@@ -432,7 +466,38 @@ namespace GamificationAPITests
             Assert.IsType<OkResult>(result);
         }
 
+        [Fact]
+        public void BanUser_ReturnsOk_ForValidUserId()
+        {
+            // Arrange
+            int existingUserId = 1; // Assuming this user ID exists in the test database
+            bool isBanned = true;
+            var user = new User { Id = existingUserId, IsBanned = false };
+            _context.Users.Add(user);
+            _context.SaveChanges();
 
+            // Act
+            var result = _controller.BanUser(existingUserId, isBanned);
 
+            // Assert
+            var okResult = Assert.IsType<OkResult>(result);
+            Assert.True(_context.Users.Find(existingUserId).IsBanned);
+        }
+
+        [Fact]
+        public void BanUser_ReturnsNotFound_ForNonExistentUserId()
+        {
+            // Arrange
+            int nonExistentUserId = 9999;  // Assuming this user ID does not exist in the test database
+            bool isBanned = true;
+
+            // Act
+            var result = _controller.BanUser(nonExistentUserId, isBanned);
+
+            // Assert
+            var notFoundResult = Assert.IsType<NotFoundResult>(result);
+        }
+
+        
     }
 }
