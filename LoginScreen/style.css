@@ -37,7 +37,7 @@ button span {
 }
 
 #loginForm {
-	transform: translateY(-120px);
+	transform: translateY(-85px) scaleY(0.75);
 }
 
 #loginForm.signin #wrapper {
@@ -166,7 +166,7 @@ select {
 	width: 450px;
 	transition: all 0.3s cubic-bezier(0.6, 0, 0.4, 1);
 	margin-bottom: 50px;
-	transform: translateY(-120px);
+	transform: scaleY(0.75) translateY(-25px);
 }
 
 .hidden {

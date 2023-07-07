@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		const resetRadio = document.getElementById('reset');
 		const verificationRadio = document.getElementById('verify');
 
-		// get label for verification radio button
+		const singupLabel = labels[2];
 		const verifyLabel = labels[1];
 
 		// Reset styles and hide error message
@@ -162,6 +162,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
 					if (decodedToken.IsVerified == 'False') {
 						displayTextOneCharacterAtATime(welcomeElement, verificationText);
+						signUpRadio.classList.add('hidden');
+						singupLabel.classList.add('hidden');
 						studentIDInput.classList.add('hidden');
 						verificationRadio.classList.remove('hide');
 						verifyLabel.classList.remove('hide');
@@ -353,23 +355,6 @@ document.addEventListener('DOMContentLoaded', function () {
 				errorElement.style.display = 'block';
 			});
 	}
-	function assignGroup() {
-		let token = document.cookie
-			.split('; ')
-			.find((row) => row.startsWith('jwt='))
-			.split('=')[1];
-		fetch(`http://localhost:4434/api/Users/Group?groupName=${groupName}`, {
-			method: 'PATCH',
-			headers: {
-				Authorization: `Bearer ${token}`,
-				'Content-Type': 'application/json',
-			},
-		}).catch(function (error) {
-			console.error(error);
-			displayTextOneCharacterAtATime(errorElement, 'Assigning group failed.');
-			errorElement.style.display = 'block';
-		});
-	}
 	function verifyCode(code) {
 		let token = document.cookie
 			.split('; ')
@@ -458,4 +443,30 @@ document.addEventListener('DOMContentLoaded', function () {
 			console.log(groupName);
 		});
 	}
+	function assignGroup() {
+		let token = document.cookie
+			.split('; ')
+			.find((row) => row.startsWith('jwt='))
+			.split('=')[1];
+		fetch(`http://localhost:4434/api/Users/Group?groupName=${groupName}`, {
+			method: 'PATCH',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json',
+			},
+		}).catch(function (error) {
+			console.error(error);
+			displayTextOneCharacterAtATime(errorElement, 'Assigning group failed.');
+			errorElement.style.display = 'block';
+		});
+	}
 });
+
+module.exports = {
+	refreshJWT,
+	parseJwt,
+	verifyCode,
+	fetchGroupNames,
+	populateGroupsDropdown,
+	assignGroup,
+};
