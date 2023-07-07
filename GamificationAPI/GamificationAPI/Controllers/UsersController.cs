@@ -17,7 +17,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace GamificationAPI.Controllers
 {
-  //  [Authorize(Roles = "Admin, Teacher, Student")]
+  
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
