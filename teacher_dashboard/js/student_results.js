@@ -24,10 +24,8 @@ async function getStudents(allStudents) {
 	students = [];
 
 	if (allStudents) {
-		console.log('getting all-students');
 		// TODO get all students and store in students array
 	} else {
-		console.log('getting my-students');
 		// TODO get my students and store in students array
 	}
 
@@ -86,11 +84,9 @@ async function fetchLeaderboardNames() {
 		}
 
 		let data = await response.json();
-		console.log('Received leaderboard data:', data);
 
 		// Extract the leaderboard objects
 		const leaderboards = data.$values;
-		console.log('Leaderboard objects:', leaderboards);
 
 		// Extract leaderboard names
 		const leaderboardNames = leaderboards.map(
@@ -98,9 +94,7 @@ async function fetchLeaderboardNames() {
 		);
 
 		populateLeaderboardsDropdown(leaderboardNames);
-	} catch (error) {
-		console.log('Fetch Error: ', error);
-	}
+	} catch (error) {}
 }
 
 function populateGroupsDropdown(groups) {
@@ -146,7 +140,6 @@ async function fetchLeaderboardData() {
 		.find((row) => row.startsWith('jwt='))
 		.split('=')[1];
 	try {
-		console.log('groupname: ' + groupName);
 		let response;
 		if (groupName == null || groupName == 'All Students') {
 			response = await fetch(
@@ -161,7 +154,7 @@ async function fetchLeaderboardData() {
 			);
 		} else {
 			let encodedGroupName = encodeURI(groupName);
-			console.log('encoded name: ' + encodedGroupName);
+
 			response = await fetch(
 				`http://localhost:4434/api/Leaderboards/${leaderboardName}?group=${encodedGroupName}`,
 				{
@@ -172,7 +165,6 @@ async function fetchLeaderboardData() {
 					},
 				}
 			);
-			console.log('we are here');
 		}
 		if (!response.ok) {
 			throw new Error(`HTTP error! status: ${response.status}`);
@@ -204,7 +196,7 @@ async function fetchLeaderboardData() {
 				}
 			})
 			.sort((a, b) => b.score - a.score);
-		console.log(data);
+
 		populateLeaderboard(leaderboardData);
 	} catch (error) {
 		console.log('Fetch Error: ', error);
@@ -213,7 +205,6 @@ async function fetchLeaderboardData() {
 fetchLeaderboardData();
 
 function populateLeaderboard(leaderboardData) {
-	console.log('Populating leaderboard');
 	// Clear the table
 	$('#student-results-table').empty();
 
@@ -225,7 +216,6 @@ function populateLeaderboard(leaderboardData) {
 }
 
 groupSelector.addEventListener('change', function () {
-	console.log('Group changed to: ' + groupSelector.value);
 	tableHeader.innerHTML = 'Group ' + groupSelector.value;
 	// TODO get the students from the selected group
 	// TODO update the students table

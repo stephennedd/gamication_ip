@@ -4,8 +4,6 @@ const nameOfSubject = urlParams.get('subject');
 
 localStorage.setItem('subject', nameOfSubject);
 
-console.log(nameOfSubject);
-
 let token;
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -227,7 +225,7 @@ document.addEventListener('DOMContentLoaded', function () {
 					if (!response.ok) {
 						throw new Error('Failed to create user');
 					}
-					console.log(response);
+
 					return response.json();
 				})
 				.then(function (data) {
@@ -267,7 +265,7 @@ document.addEventListener('DOMContentLoaded', function () {
 				errorElement.style.display = 'block';
 				return;
 			}
-			console.log('I need healing' + groupName);
+
 			if (groupName === '' || groupName === null) {
 				displayTextOneCharacterAtATime(
 					errorElement,
@@ -450,12 +448,11 @@ document.addEventListener('DOMContentLoaded', function () {
 			var option = document.createElement('option');
 			option.text = group.name;
 			option.value = group.name;
-			console.log(group.name);
+
 			dropdown.appendChild(option);
 		});
 		dropdown.addEventListener('change', function () {
 			groupName = this.value; // update the label
-			console.log(groupName);
 		});
 	}
 });

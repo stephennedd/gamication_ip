@@ -806,8 +806,6 @@ async function sendScore(score) {
 			.find((row) => row.startsWith('jwt='))
 			.split('=')[1];
 		const subject = localStorage.getItem('subject');
-		console.log('subject = ' + subject);
-		// Ensure groupName is not empty or undefined
 		if (!score) {
 			console.error('Invalid or empty score!');
 			return;
@@ -828,7 +826,6 @@ async function sendScore(score) {
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}
 
-		console.log('Leaderboard updated successfully:');
 		return true;
 	} catch (error) {
 		console.log('Fetch Error: ', error);
