@@ -62,7 +62,7 @@ async function getGeneratedTestForStudent() {
 	///console.log(studentId);
 	try {
 		// Fetch data from the API
-		const response = await fetch('${apiURL}api/generatedTests', {
+		const response = await fetch(`${apiURL}api/generatedTests`, {
 			method: 'POST',
 			headers: {
 				mode: 'no-cors',

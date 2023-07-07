@@ -83,15 +83,15 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(builder =>
+    options.AddDefaultPolicy(policy =>
     {
-        builder.WithOrigins("https://arcademachine.z6.web.core.windows.net")
-               .AllowAnyMethod()
-               .AllowAnyHeader()
-               .AllowCredentials()
-               .SetIsOriginAllowedToAllowWildcardSubdomains()
-               .WithExposedHeaders("Content-Disposition")
-               .SetPreflightMaxAge(TimeSpan.FromMinutes(10));
+        policy.WithOrigins("https://arcademachine.z6.web.core.windows.net")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials()
+            .SetIsOriginAllowedToAllowWildcardSubdomains()
+            .WithExposedHeaders("Content-Disposition")
+            .SetPreflightMaxAge(TimeSpan.FromMinutes(10));
     });
 });
 
