@@ -126,7 +126,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors();
+app.UseCors(builder =>
+{
+    builder.WithOrigins("https://arcademachine.z6.web.core.windows.net")
+        .AllowAnyMethod()
+        .AllowAnyHeader();
+});
 
 app.UseHttpsRedirection();
 app.UseAuthentication();

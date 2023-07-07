@@ -1,3 +1,5 @@
+const apiURL = 'https://aad-gamification.azurewebsites.net/';
+
 //selecting all required elements
 const start_btn = document.querySelector('.start_btn button');
 const info_box = document.querySelector('.info_box');
@@ -26,8 +28,6 @@ let achievementSound = new Audio('./assets/sounds/achievement.mp3');
 
 let studentResult;
 
-let apiURL = 'https://aad-gamification.azurewebsites.net/';
-
 // if mute button clicked
 mute_btn.onclick = () => {
 	if (bgSound.muted) {
@@ -40,18 +40,13 @@ mute_btn.onclick = () => {
 };
 
 async function getGeneratedTestForStudent() {
-	const subjectName = localStorage.getItem('subject'); // Replace with your desired subject 
-	let testId = 1;
-	try {
-		const response = await fetch(
-			`${apiURL}api/subjects/${subjectName}/test`
-		);
-		const data = await response.json();
-		testId = data;
-		console.log(`Test ID for ${subjectName}: ${testId}`);
-	} catch (error) {
-		console.error('Error fetching test:', error);
-	}
+	const subjectName = localStorage.getItem('subject'); // Replace with your desired subject name
+	const response = await fetch(
+		`${apiURL}api/subjects/${subjectName}/test`
+	);
+	const data = await response.json();
+	let testId = data;
+	console.log(`Test ID for ${subjectName}: ${testId}`);
 
 	var token = document.cookie
 		.split('; ')
@@ -78,9 +73,7 @@ async function getGeneratedTestForStudent() {
 		});
 
 		const response2 = await fetch(
-			`${apiURL}api/generatedTests/${studentId}/${testId}`, {
-				mode: 'no-cors'
-			}
+			`${apiURL}api/generatedTests/${studentId}/${testId}`
 		);
 		const data = await response2.json();
 		questions = data['Questions'];
