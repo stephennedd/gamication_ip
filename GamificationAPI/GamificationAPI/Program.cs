@@ -80,18 +80,16 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
     });
 
-
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(policy =>
+    options.AddPolicy( name: MyAllowSpecificOrigins,
+        policy =>
     {
-        policy.WithOrigins("https://arcademachine.z6.web.core.windows.net")
+        policy.WithOrigins("https://arcademachine.z6.web.core.windows.net", 
+                           "https://adminpanelaad.z6.web.core.windows.net")
             .AllowAnyMethod()
-            .AllowAnyHeader()
-            .AllowCredentials()
-            .SetIsOriginAllowedToAllowWildcardSubdomains()
-            .WithExposedHeaders("Content-Disposition")
-            .SetPreflightMaxAge(TimeSpan.FromMinutes(10));
+            .AllowAnyHeader();
     });
 });
 
@@ -126,7 +124,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors();
+app.UseCors(MyAllowSpecificOrigins);
 
 app.UseHttpsRedirection();
 app.UseAuthentication();
