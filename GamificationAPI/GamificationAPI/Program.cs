@@ -13,7 +13,6 @@ using System.Text.Json.Serialization;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
 using GamificationAPI.Services;
-using Microsoft.AspNetCore.Cors.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -59,22 +58,6 @@ builder.Services.AddTransient<IStudentQuestions, StudentQuestionService>();
 builder.Services.AddTransient<IEmails, EmailService>();
 builder.Services.AddTransient<ISubjects, SubjectService>();
 
-var corsBuilder = new CorsPolicyBuilder();
-corsBuilder.WithOrigins("https://arcademachine.z6.web.core.windows.net")
-           .AllowAnyMethod()
-           .AllowAnyHeader()
-           .AllowCredentials()
-           .SetIsOriginAllowedToAllowWildcardSubdomains()
-           .WithExposedHeaders("Content-Disposition")
-           .SetPreflightMaxAge(TimeSpan.FromMinutes(10));
-
-var corsPolicy = corsBuilder.Build();
-
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("MyCorsPolicy", corsPolicy);
-});
-
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("IsVerified", policy =>
@@ -98,7 +81,19 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 
-
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.WithOrigins("https://arcademachine.z6.web.core.windows.net")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials()
+            .SetIsOriginAllowedToAllowWildcardSubdomains()
+            .WithExposedHeaders("Content-Disposition")
+            .SetPreflightMaxAge(TimeSpan.FromMinutes(10));
+    });
+});
 
 var app = builder.Build();
 if (args.Length == 1 && args[0].ToLower() == "seeddata")
@@ -131,12 +126,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors(builder =>
-{
-    builder.WithOrigins("https://arcademachine.z6.web.core.windows.net")
-        .AllowAnyMethod()
-        .AllowAnyHeader();
-});
+app.UseCors();
 
 app.UseHttpsRedirection();
 app.UseAuthentication();
