@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 
 
 [Route("api/generatedTests")]
-[Authorize(Roles = "Admin, Teacher, Student", Policy = "IsVerified")]
+[Authorize(Roles = "Admin, Teacher, Student")]
 //[Route("api/[controller]")]
 [ApiController]
 public class GeneratedTestController : ControllerBase
