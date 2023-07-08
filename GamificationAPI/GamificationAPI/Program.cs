@@ -86,8 +86,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy( name: MyAllowSpecificOrigins,
         policy =>
     {
-        policy.WithOrigins("https://arcademachine.z6.web.core.windows.net", 
-                           "https://adminpanelaad.z6.web.core.windows.net")
+        policy.AllowAnyOrigin()
             .AllowAnyMethod()
             .AllowAnyHeader();
     });
