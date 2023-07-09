@@ -37,6 +37,7 @@ git clone
 ```sh
 cd ArcadeMachine
 ```
+or go to the url: https://arcademachineaad.z6.web.core.windows.net/?subject=Programming%20fundamentals
 
 4. Run the admin panel frontend using the instructions in the frontend folder
    [click here to see instructions on running the frontend.](/teacher_dashboard/README.md)
