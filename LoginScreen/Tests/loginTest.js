@@ -29,8 +29,8 @@ describe('SignIn functionality and handling wrong credentials', function () {
 
 		const loginButton = await loginForm.findElement(By.css('button'));
 
-		await driver.findElement(By.id('studentID')).sendKeys('666');
-		await driver.findElement(By.id('password')).sendKeys('polonez');
+		await driver.findElement(By.id('studentID')).sendKeys('1111');
+		await driver.findElement(By.id('password')).sendKeys('password123');
 		await loginButton.click();
 
 		// Wait for redirect

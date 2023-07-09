@@ -145,6 +145,13 @@
 					leaderboardBody.appendChild(row);
 				});
 			}
+			document.addEventListener('keydown', function (event) {
+				if (event.key === 'L' || event.keyCode === 76) {
+					// L button was pressed
+					getDataFromAPI();
+					// Your code here
+				}
+			});
 			async function getDataFromAPI() {
 				try {
 					let response;

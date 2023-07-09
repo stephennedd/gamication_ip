@@ -16,7 +16,7 @@ body {
 }
 
 #game {
-	border: solid black 2px;
+	/* border: solid black 2px; */
 	width: 800px;
 	height: 600px;
 }

@@ -177,9 +177,9 @@ describe('Checking', function () {
 		await driver.wait(until.elementIsVisible(studentIDInput), 10000);
 
 		// Enter details
-		studentIDInput.sendKeys('3920');
-		passwordInput.sendKeys('testPassword');
-		repasswordInput.sendKeys('testPassword');
+		studentIDInput.sendKeys('8888');
+		passwordInput.sendKeys('password123');
+		repasswordInput.sendKeys('password123');
 
 		const Button = await driver.findElement(By.css('button'));
 		await Button.click();
