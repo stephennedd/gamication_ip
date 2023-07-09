@@ -8,17 +8,17 @@ using Newtonsoft.Json;
 using Microsoft.AspNetCore.Authorization;
 
 
-//[Authorize(Roles = "Admin, Teacher, Student")]
+[Authorize(Roles = "Admin, Teacher, Student")]
 [Route("api/[controller]")]
 [ApiController]
 public class GeneratedTestController : ControllerBase
 {
     private readonly IGeneratedTests _generatedTestService;
-    private readonly ApplicationDbContext _dbContext;
-    public GeneratedTestController(IGeneratedTests generatedTestService, ApplicationDbContext dbContext)
+    //private readonly ApplicationDbContext _dbContext;
+    public GeneratedTestController(IGeneratedTests generatedTestService)
     {
         _generatedTestService = generatedTestService;
-        _dbContext = dbContext; 
+        //_dbContext = dbContext; 
     }
 
     // GET: api/scoreboard
@@ -45,7 +45,7 @@ public class GeneratedTestController : ControllerBase
         return Ok(generatedTest);
     }
 
-
+    [AllowAnonymous]
     [HttpPost]
     //[FromBody] GenerateTestRequest requestBody
     public async Task<IActionResult> GenerateTestAsync([FromBody] GenerateTestRequest requestBody)
@@ -58,7 +58,7 @@ public class GeneratedTestController : ControllerBase
         return Ok(generatedTest.Id);
     }
     
-    //[AllowAnonymous]
+    [AllowAnonymous]
     [HttpPost("studentQuestions/{studentQuestionId}/answer")]
     public async Task<ActionResult<string>> SaveStudentAnswer(int studentQuestionId, [FromBody] GenerateUpdateStudentAnswer requestBody)
     {
