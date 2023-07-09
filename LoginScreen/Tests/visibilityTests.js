@@ -13,7 +13,7 @@ describe('Testing Project login page if all elements are displayed correctly', f
 		await driver.quit();
 	});
 
-	it('Should have the correct Main Text displayed', async function () {
+	it('INT019 - Should have the correct Main Text displayed', async function () {
 		this.timeout(10000);
 		await driver.get('http://localhost:5501/LoginScreen/');
 
@@ -36,7 +36,7 @@ describe('Testing Project login page if all elements are displayed correctly', f
 		);
 	});
 
-	it('Should have login input fields and login button after the main text is displayed', async function () {
+	it('INT020 - Should have login input fields and login button after the main text is displayed', async function () {
 		this.timeout(10000);
 		await driver.get('http://localhost:5501/LoginScreen/');
 
@@ -53,7 +53,7 @@ describe('Testing Project login page if all elements are displayed correctly', f
 		assert.strictEqual(isLoginButtonDisplayed, true);
 	});
 
-	it('Should toggle between Sign In and Sign Up form', async function () {
+	it('INT021 - Should toggle between Sign In and Sign Up form', async function () {
 		this.timeout(20000);
 		await driver.get('http://localhost:5501/LoginScreen/');
 
@@ -107,6 +107,4 @@ describe('Testing Project login page if all elements are displayed correctly', f
 		assert.strictEqual(await firstNameField.isDisplayed(), false);
 		assert.strictEqual(await lastNameField.isDisplayed(), false);
 	});
-
-	// TODO check if verification is showing up
 });

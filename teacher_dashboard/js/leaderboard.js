@@ -5,7 +5,6 @@ $('#create-leaderboard-form').submit(function (e) {
 	// get the form data
 	var formData = $(this).serializeArray();
 	// Convert form data to JSON
-	console.log(formData);
 
 	const jsonData = {};
 	for (let i = 0; i < formData.length; i++) {
@@ -28,18 +27,13 @@ $('#update-leaderboard-form').submit(function (e) {
 	// get the form data
 	var formData = $(this).serializeArray();
 	// Convert form data to JSON
-	console.log(formData);
 
 	const jsonData = {};
 	for (let i = 0; i < formData.length; i++) {
 		jsonData[formData[i].name] = formData[i].value;
 	}
 
-	// Log JSON data
-	console.log(JSON.stringify(jsonData));
 	let newName = jsonData['leaderboard-name'];
-	console.log('New name = ' + newName);
-	console.log('Leaderboard name = ' + oldName);
 	e.preventDefault(); // Prevent the form from submitting for now
 	updateLeaderboard(oldName, newName);
 });
@@ -47,11 +41,8 @@ $('#update-leaderboard-form').submit(function (e) {
 // Deleting a leaderboard
 function deleteLeaderboard(button) {
 	if (confirm('Are you sure you want to delete this leaderboard?')) {
-		console.log('Deleting leaderboard');
-
 		// Get the leaderboard id from the data attribute
 		leaderboardName = button.value;
-		console.log('Leaderboard id: ' + leaderboardName);
 
 		let x = deleteLeaderboardAction();
 
@@ -92,11 +83,10 @@ async function populateLeaderboardTable() {
 		let data = await response.json();
 
 		let leaderboards = data.$values.map((item) => item.name);
-		console.log('--> leaderboards: ' + leaderboards);
+
 		// Store the subjects data in localStorage
 		localStorage.setItem('leaderboardsData', JSON.stringify(leaderboards));
 
-		console.log('Leaderboards data retrieved');
 		// Clear the table
 		leaderboardTable.innerHTML = '';
 		updateLeaderboardTable.innerHTML = '';
@@ -176,7 +166,6 @@ function createUpdateLeaderboardTableRow(leaderboard) {
 $('#update-leaderboard-modal').on('show.bs.modal', function (event) {
 	const button = $(event.relatedTarget); // Button that triggered the modal
 	const leaderboardId = button.parents('tr').attr('data-id'); // Extract info from data-* attributes
-	console.log('Leaderboard id: ' + leaderboardId);
 
 	// Get the leaderboard data from localStorage
 	const leaderboards = JSON.parse(localStorage.getItem('leaderboardsData'));
@@ -184,7 +173,7 @@ $('#update-leaderboard-modal').on('show.bs.modal', function (event) {
 	const leaderboard = leaderboards.find(
 		(leaderboard) => leaderboard === leaderboardId
 	);
-	console.log('update Leaderboard: ' + leaderboard);
+
 	oldName = leaderboard;
 
 	// Populate the form
@@ -221,8 +210,6 @@ async function createLeaderboard() {
 			alert(`Failed to add leaderboard. error code: ${response.status} `);
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}
-
-		console.log('Leaderboard added successfully:');
 
 		// show success message
 		$('#create-leaderboard-success-modal').modal('show');
@@ -262,7 +249,6 @@ async function deleteLeaderboardAction() {
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}
 
-		console.log('Leaderboard deleted successfully:');
 		return true;
 	} catch (error) {
 		console.log('Fetch Error: ', error);
@@ -283,7 +269,7 @@ async function updateLeaderboard(oldName, newName) {
 		}
 		let encodedoldName = encodeURI(oldName);
 		let encodednewName = encodeURI(newName);
-		console.log('old name: ' + oldName + ' new name: ' + newName);
+
 		response = await fetch(
 			`http://localhost:4434/api/Leaderboards/${encodedoldName}?newLeaderboardName=${encodednewName}`,
 			{
@@ -302,7 +288,7 @@ async function updateLeaderboard(oldName, newName) {
 		$('#update-leaderboard-modal').modal('hide');
 		$('#edit-leaderboard-success-modal').modal('show');
 		populateLeaderboardTable();
-		console.log('Leaderboard updated successfully:');
+
 		return true;
 	} catch (error) {
 		console.log('Fetch Error: ', error);

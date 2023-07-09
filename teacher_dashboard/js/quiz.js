@@ -23,8 +23,6 @@ form.addEventListener('submit', (e) => {
 		gameId: gameId,
 	};
 
-	console.log(apiRequest);
-
 	fetch('http://localhost:4434/api/subjects', {
 		method: 'POST',
 		headers: {
@@ -34,7 +32,6 @@ form.addEventListener('submit', (e) => {
 	})
 		.then((response) => {
 			if (response.ok) {
-				console.log('API request successful');
 				$('#add-subject-success-modal').modal('show'); // Show success modal
 				// redirect to the student dashboard
 			} else {
@@ -82,7 +79,6 @@ async function removeQuiz(button, subject) {
 	if (confirm('Are you sure you want to delete this quiz?')) {
 		// TODO send the delete request to the server
 
-		console.log(subject.Id);
 		await fetch(`http://localhost:4434/api/subjects/?id=${subject.Id}`, {
 			method: 'DELETE',
 		})
@@ -94,7 +90,6 @@ async function removeQuiz(button, subject) {
 			})
 			.then((data) => {
 				// Handle the successful response
-				console.log('Subject deleted successfully');
 				// Perform any necessary actions or update the UI accordingly
 			})
 			.catch((error) => {
@@ -105,7 +100,7 @@ async function removeQuiz(button, subject) {
 		const response = await fetch('http://localhost:4434/api/subjects');
 		const data = await response.json();
 		subjectsToBeDeleted = data;
-		console.log(subjectsToBeDeleted);
+
 		localStorage.setItem(
 			'subjectsDataForRemovePage',
 			JSON.stringify(subjectsToBeDeleted)
@@ -246,10 +241,6 @@ $(document).ready(function () {
 			}
 		});
 
-		// Log JSON data
-		console.log(JSON.stringify(jsonData));
-
-		console.log('Form submitted');
 		e.preventDefault(); // Prevent the form from submitting for now
 		// TODO: Submit the form using Ajax
 	});
@@ -260,7 +251,7 @@ function removeQuestion(button) {
 	// Get the question container
 	var row = button.parentNode.parentNode;
 	const subjectId = row.dataset.quizId;
-	console.log(subjectId);
+
 	const questionContainer = button.parentNode.parentNode.parentNode.parentNode;
 	// Remove the question container
 	questionContainer.remove();
@@ -417,7 +408,6 @@ async function removeEditModalQuestion(button, quizId, questionId) {
 	})
 		.then((response) => {
 			if (response.ok) {
-				console.log('Quiz updated successfully');
 				// dismiss the modal
 				// $('#edit-quiz-modal').modal('hide');
 			} else {
@@ -429,7 +419,6 @@ async function removeEditModalQuestion(button, quizId, questionId) {
 		});
 
 	// TODO: submit the form using to server
-	// console.log('Quiz updated');
 	// dismiss the modal
 	//$('#edit-quiz-modal').modal('hide');
 
@@ -467,8 +456,6 @@ $('#edit-quiz-form').submit(function (e) {
 	const jsonData = {};
 	for (let i = 0; i < formData.length; i++) {
 		jsonData[formData[i].name] = formData[i].value;
-
-		console.log(jsonData);
 
 		e.preventDefault();
 
@@ -518,7 +505,7 @@ async function confirmQuizUpdate(button, subjects) {
 
 		//chosenSubject.WeekNumber = document.getElementById('modal-quiz-week').value;
 		chosenSubject.Test.Title = document.getElementById('modal-quiz-name').value;
-		//console.log(document.getElementById('modal-quiz-week').value);
+
 		// Send chosenSubject via API using fetch
 		await fetch('http://localhost:4434/api/subjects', {
 			method: 'PUT',
@@ -553,7 +540,6 @@ async function confirmQuizUpdate(button, subjects) {
 		populateTable(subjects);
 
 		// TODO: submit the form using to server
-		console.log('Quiz updated');
 		// dismiss the modal
 		$('#edit-quiz-modal').modal('hide');
 	}

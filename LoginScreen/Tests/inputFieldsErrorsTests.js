@@ -13,7 +13,7 @@ describe('Testing if errors for input fields are handled correctly', function ()
 		await driver.quit();
 	});
 
-	it('Should display error messages correctly on Sign-In form', async function () {
+	it('INT024 - Should display error messages correctly on Sign-In form', async function () {
 		this.timeout(30000); // Increase the timeout
 		await driver.get('http://localhost:5501/LoginScreen/');
 
@@ -48,7 +48,7 @@ describe('Testing if errors for input fields are handled correctly', function ()
 		assert.strictEqual(errorMessage, 'Please fill in all fields.');
 	});
 
-	it('Should display error messages correctly on Sign-Up form', async function () {
+	it('INT025 - Should display error messages correctly on Sign-Up form', async function () {
 		this.timeout(30000);
 		await driver.get('http://localhost:5501/LoginScreen/');
 
@@ -105,7 +105,6 @@ describe('Testing if errors for input fields are handled correctly', function ()
 		assert.strictEqual(errorMessage, 'Passwords do not match.');
 	});
 
-	// TODO error messages on verification
 	// it('Should display error messages correctly on Verification form', async function () {
 	// 	this.timeout(30000); // Increase the timeout
 	// 	await driver.get('http://localhost:5501/LoginScreen/'); // Go to the Verification Screen

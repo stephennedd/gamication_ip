@@ -1,0 +1,772 @@
+﻿{
+	"games": [
+		{
+			"GameName": "Breakout"
+		},
+		{
+			"GameName": "Flappy Bird"
+		},
+		{
+			"GameName": "Doodle Jump"
+		},
+		{
+			"GameName": "Crossy Road"
+		},
+		{
+			"GameName": "Dino Run"
+		},
+		{
+			"GameName": "Endless Runner"
+		}
+	],
+
+	"subjects": [
+		{
+			"SubjectTitle": "Programming fundamentals",
+			"WeekNumber": 1,
+			"TestId": 1,
+			"GameId": 1
+		},
+		{
+			"SubjectTitle": "Blockchain fundamentals",
+			"WeekNumber": 2,
+			"TestId": 2,
+			"GameId": 2
+		},
+		{
+			"SubjectTitle": "Python fundamentals",
+			"WeekNumber": 3,
+			"TestId": 3,
+			"GameId": 3
+		},
+		{
+			"SubjectTitle": "Javascript fundamentals",
+			"WeekNumber": 4,
+			"TestId": 4,
+			"GameId": 4
+		},
+		{
+			"SubjectTitle": "Data structures fundamentals",
+			"WeekNumber": 5,
+			"TestId": 5,
+			"GameId": 5
+		},
+		{
+			"SubjectTitle": "Object-Oriented Programming Concepts",
+			"WeekNumber": 6,
+			"TestId": 6,
+			"GameId": 6
+		}
+	],
+	"students": [
+		{
+			"FirstName": "John",
+			"MiddleName": "Doe",
+			"LastName": "Smith",
+			"Email": "john@example.com",
+			"Password": "password123",
+			"IsBanned": false
+		},
+		{
+			"FirstName": "Jane",
+			"MiddleName": "",
+			"LastName": "Doe",
+			"Email": "jane@example.com",
+			"Password": "password456",
+			"IsBanned": true
+		},
+		{
+			"FirstName": "Alice",
+			"MiddleName": "L",
+			"LastName": "Johnson",
+			"Email": "alice@example.com",
+			"Password": "password789",
+			"IsBanned": false
+		}
+	],
+	"roles": [
+		{
+			"Id": "1",
+			"Name": "Student"
+		},
+		{
+			"Id": "2",
+			"Name": "Teacher"
+		},
+		{
+			"Id": "3",
+			"Name": "Admin"
+		}
+	],
+	"groups": [
+		{
+			"Id": "1",
+			"Name": "Group 1"
+		},
+		{
+			"Id": "2",
+			"Name": "Group 2"
+		}
+	],
+	"leaderboards": [
+		{
+			"Name": "main"
+		},
+		{
+			"Name": "game1"
+		},
+		{
+			"Name": "game2"
+		}
+	],
+	"highscores": [
+		{
+			"LeaderboardName": "main",
+			"Score": "260",
+			"UserId": "1111"
+		},
+		{
+			"LeaderboardName": "main",
+			"Score": "200",
+			"UserId": "2222"
+		}
+	],
+	"users": [
+		{
+			"UserId": "JohnDoe",
+			"Password": "$2a$12$zFMGB9ktpEaIHqYb67/Dbuu04gPMDg8VdpdXzd.AirurAa4.M4AMy",
+			"RoleId": "2"
+		},
+		{
+			"UserId": "Admin",
+			"Password": "$2a$12$zFMGB9ktpEaIHqYb67/Dbuu04gPMDg8VdpdXzd.AirurAa4.M4AMy",
+			"RoleId": "3"
+		}
+	],
+	"tests": [
+		{
+			"description": "Test your knowledge of HTML basics.",
+			"image_url": "https://example.com/test-image.jpg",
+			"questions": [
+				{
+					"question": "What does HTML stand for?",
+					"correct_answer": "Hyper Text Markup Language",
+					"selected_answer": "",
+					"answers": [
+						{
+							"identifier": "A",
+							"answer": "Hyper Text Preprocessor"
+						},
+						{
+							"identifier": "B",
+							"answer": "Hyper Text Markup Language"
+						},
+						{
+							"identifier": "C",
+							"answer": "Hyper Text Multiple Language"
+						},
+						{
+							"identifier": "D",
+							"answer": "Hyper Tool Multi Language"
+						}
+					]
+				},
+				{
+					"question": "What does CSS stand for?",
+					"correct_answer": "Cascading Style Sheet",
+					"selected_answer": "",
+					"answers": [
+						{
+							"identifier": "A",
+							"answer": "Common Style Sheet"
+						},
+						{
+							"identifier": "B",
+							"answer": "Colorful Style Sheet"
+						},
+						{
+							"identifier": "C",
+							"answer": "Computer Style Sheet"
+						},
+						{
+							"identifier": "D",
+							"answer": "Cascading Style Sheet"
+						}
+					]
+				},
+				{
+					"question": "What does SQL stand for?",
+					"correct_answer": "Structured Query Language",
+					"selected_answer": "",
+					"answers": [
+						{
+							"identifier": "A",
+							"answer": "Stylish Question Language"
+						},
+						{
+							"identifier": "B",
+							"answer": "Stylesheet Query Language"
+						},
+						{
+							"identifier": "C",
+							"answer": "Statement Question Language"
+						},
+						{
+							"identifier": "D",
+							"answer": "Structured Query Language"
+						}
+					]
+				},
+				{
+					"question": "What does PHP stand for?",
+					"correct_answer": "Hypertext Preprocessor",
+					"selected_answer": "",
+					"answers": [
+						{
+							"identifier": "A",
+							"answer": "Hypertext Preprocessor"
+						},
+						{
+							"identifier": "B",
+							"answer": "Hypertext Programming"
+						},
+						{
+							"identifier": "C",
+							"answer": "Hypertext Preprogramming"
+						},
+						{
+							"identifier": "D",
+							"answer": "Hometext Preprocessor"
+						}
+					]
+				},
+				{
+					"question": "What does XML stand for?",
+					"correct_answer": "eXtensible Markup Language",
+					"selected_answer": "",
+					"answers": [
+						{
+							"identifier": "A",
+							"answer": "eXtensible Markup Language"
+						},
+						{
+							"identifier": "B",
+							"answer": "eXecutable Multiple Language"
+						},
+						{
+							"identifier": "C",
+							"answer": "eXTra Multi-Program Language"
+						},
+						{
+							"identifier": "D",
+							"answer": "eXamine Multiple Language"
+						}
+					]
+				}
+			],
+			"time_seconds": 300,
+			"title": "HTML Basics Test"
+		},
+		{
+			"title": "Blockchain Fundamentals",
+			"image_url": "https://example.com/blockchain.jpg",
+			"description": "This course provides an introduction to blockchain technology and its applications.",
+			"time_seconds": 3600,
+			"questions": [
+				{
+					"question": "What is a blockchain?",
+					"correct_answer": "A decentralized and distributed digital ledger.",
+					"selected_answer": "",
+					"answers": [
+						{
+							"identifier": "A",
+							"answer": "A decentralized and distributed digital ledger."
+						},
+						{
+							"identifier": "B",
+							"answer": "A type of cryptocurrency."
+						},
+						{
+							"identifier": "C",
+							"answer": "A centralized database managed by a single authority."
+						},
+						{
+							"identifier": "D",
+							"answer": "A technology used for cloud storage."
+						}
+					]
+				},
+				{
+					"question": "Which of the following is a characteristic of blockchain?",
+					"correct_answer": "Immutability",
+					"selected_answer": "",
+					"answers": [
+						{
+							"identifier": "A",
+							"answer": "High scalability"
+						},
+						{
+							"identifier": "B",
+							"answer": "Low security"
+						},
+						{
+							"identifier": "C",
+							"answer": "Immutability"
+						},
+						{
+							"identifier": "D",
+							"answer": "Centralized control"
+						}
+					]
+				},
+				{
+					"question": "What is a smart contract?",
+					"correct_answer": "Self-executing contract with predefined rules.",
+					"selected_answer": "",
+					"answers": [
+						{
+							"identifier": "A",
+							"answer": "A contract that can only be executed by a lawyer."
+						},
+						{
+							"identifier": "B",
+							"answer": "A contract that requires physical signatures."
+						},
+						{
+							"identifier": "C",
+							"answer": "A contract used for real estate transactions."
+						},
+						{
+							"identifier": "D",
+							"answer": "Self-executing contract with predefined rules."
+						}
+					]
+				},
+				{
+					"question": "What is the role of miners in a blockchain network?",
+					"correct_answer": "To validate and add new transactions to the blockchain.",
+					"selected_answer": "",
+					"answers": [
+						{
+							"identifier": "A",
+							"answer": "To encrypt data stored in the blockchain."
+						},
+						{
+							"identifier": "B",
+							"answer": "To manage user wallets."
+						},
+						{
+							"identifier": "C",
+							"answer": "To create new cryptocurrencies."
+						},
+						{
+							"identifier": "D",
+							"answer": "To validate and add new transactions to the blockchain."
+						}
+					]
+				}
+			]
+		},
+		{
+			"title": "Python Programming Basics",
+			"image_url": "https://example.com/python-programming.jpg",
+			"description": "This test assesses your understanding of basic Python programming concepts.",
+			"time_seconds": 1800,
+			"questions": [
+				{
+					"question": "What is the correct syntax to print 'Hello, World!' in Python?",
+					"correct_answer": "print('Hello, World!')",
+					"selected_answer": "",
+					"answers": [
+						{
+							"identifier": "A",
+							"answer": "print('Hello, Python!')"
+						},
+						{
+							"identifier": "B",
+							"answer": "print('Hello, World!')"
+						},
+						{
+							"identifier": "C",
+							"answer": "print('Hello')"
+						},
+						{
+							"identifier": "D",
+							"answer": "print('World!')"
+						}
+					]
+				},
+				{
+					"question": "Which data type is used to store a sequence of characters in Python?",
+					"correct_answer": "String",
+					"selected_answer": "",
+					"answers": [
+						{
+							"identifier": "A",
+							"answer": "Integer"
+						},
+						{
+							"identifier": "B",
+							"answer": "Float"
+						},
+						{
+							"identifier": "C",
+							"answer": "Boolean"
+						},
+						{
+							"identifier": "D",
+							"answer": "String"
+						}
+					]
+				},
+				{
+					"question": "What is the result of 3 + 2 * 4?",
+					"correct_answer": "11",
+					"selected_answer": "",
+					"answers": [
+						{
+							"identifier": "A",
+							"answer": "20"
+						},
+						{
+							"identifier": "B",
+							"answer": "15"
+						},
+						{
+							"identifier": "C",
+							"answer": "11"
+						},
+						{
+							"identifier": "D",
+							"answer": "9"
+						}
+					]
+				},
+				{
+					"question": "Which keyword is used to define a function in Python?",
+					"correct_answer": "def",
+					"selected_answer": "",
+					"answers": [
+						{
+							"identifier": "A",
+							"answer": "function"
+						},
+						{
+							"identifier": "B",
+							"answer": "define"
+						},
+						{
+							"identifier": "C",
+							"answer": "func"
+						},
+						{
+							"identifier": "D",
+							"answer": "def"
+						}
+					]
+				}
+			]
+		},
+		{
+			"title": "JavaScript Fundamentals",
+			"image_url": "https://example.com/javascript-fundamentals.jpg",
+			"description": "This test evaluates your knowledge of basic JavaScript concepts.",
+			"time_seconds": 2400,
+			"questions": [
+				{
+					"question": "Which keyword is used to declare a variable in JavaScript?",
+					"correct_answer": "var",
+					"selected_answer": "",
+					"answers": [
+						{
+							"identifier": "A",
+							"answer": "let"
+						},
+						{
+							"identifier": "B",
+							"answer": "var"
+						},
+						{
+							"identifier": "C",
+							"answer": "const"
+						},
+						{
+							"identifier": "D",
+							"answer": "variable"
+						}
+					]
+				},
+				{
+					"question": "What is the output of the following code?\n\nconsole.log(2 + '2');",
+					"correct_answer": "22",
+					"selected_answer": "",
+					"answers": [
+						{
+							"identifier": "A",
+							"answer": "4"
+						},
+						{
+							"identifier": "B",
+							"answer": "22"
+						},
+						{
+							"identifier": "C",
+							"answer": "Error"
+						},
+						{
+							"identifier": "D",
+							"answer": "undefined"
+						}
+					]
+				},
+				{
+					"question": "Which method is used to add an element to the end of an array in JavaScript?",
+					"correct_answer": "push()",
+					"selected_answer": "",
+					"answers": [
+						{
+							"identifier": "A",
+							"answer": "add()"
+						},
+						{
+							"identifier": "B",
+							"answer": "concat()"
+						},
+						{
+							"identifier": "C",
+							"answer": "push()"
+						},
+						{
+							"identifier": "D",
+							"answer": "append()"
+						}
+					]
+				},
+				{
+					"question": "What is the purpose of the 'this' keyword in JavaScript?",
+					"correct_answer": "To refer to the current object",
+					"selected_answer": "",
+					"answers": [
+						{
+							"identifier": "A",
+							"answer": "To create a new object"
+						},
+						{
+							"identifier": "B",
+							"answer": "To refer to the parent object"
+						},
+						{
+							"identifier": "C",
+							"answer": "To call a function recursively"
+						},
+						{
+							"identifier": "D",
+							"answer": "To refer to the current object"
+						}
+					]
+				}
+			]
+		},
+
+		{
+			"title": "Data Structures and Algorithms",
+			"image_url": "https://example.com/data-structures.jpg",
+			"description": "This test assesses your understanding of various data structures and algorithms.",
+			"time_seconds": 3000,
+			"questions": [
+				{
+					"question": "What is the time complexity of accessing an element in an array?",
+					"correct_answer": "O(1)",
+					"selected_answer": "",
+					"answers": [
+						{
+							"identifier": "A",
+							"answer": "O(log n)"
+						},
+						{
+							"identifier": "B",
+							"answer": "O(n)"
+						},
+						{
+							"identifier": "C",
+							"answer": "O(1)"
+						},
+						{
+							"identifier": "D",
+							"answer": "O(n^2)"
+						}
+					]
+				},
+				{
+					"question": "Which data structure follows the Last-In-First-Out (LIFO) principle?",
+					"correct_answer": "Stack",
+					"selected_answer": "",
+					"answers": [
+						{
+							"identifier": "A",
+							"answer": "Queue"
+						},
+						{
+							"identifier": "B",
+							"answer": "List"
+						},
+						{
+							"identifier": "C",
+							"answer": "Stack"
+						},
+						{
+							"identifier": "D",
+							"answer": "Heap"
+						}
+					]
+				},
+				{
+					"question": "What sorting algorithm has a worst-case time complexity of O(n^2)?",
+					"correct_answer": "Bubble Sort",
+					"selected_answer": "",
+					"answers": [
+						{
+							"identifier": "A",
+							"answer": "Merge Sort"
+						},
+						{
+							"identifier": "B",
+							"answer": "Quick Sort"
+						},
+						{
+							"identifier": "C",
+							"answer": "Bubble Sort"
+						},
+						{
+							"identifier": "D",
+							"answer": "Insertion Sort"
+						}
+					]
+				},
+				{
+					"question": "What is the purpose of a hash table?",
+					"correct_answer": "To store and retrieve data using key-value pairs",
+					"selected_answer": "",
+					"answers": [
+						{
+							"identifier": "A",
+							"answer": "To sort a collection of elements"
+						},
+						{
+							"identifier": "B",
+							"answer": "To perform arithmetic operations"
+						},
+						{
+							"identifier": "C",
+							"answer": "To implement recursion"
+						},
+						{
+							"identifier": "D",
+							"answer": "To store and retrieve data using key-value pairs"
+						}
+					]
+				}
+			]
+		},
+		{
+			"title": "Object-Oriented Programming Concepts",
+			"image_url": "https://example.com/oop-concepts.jpg",
+			"description": "This test evaluates your understanding of object-oriented programming principles.",
+			"time_seconds": 1800,
+			"questions": [
+				{
+					"question": "What is encapsulation in object-oriented programming?",
+					"correct_answer": "The bundling of data and methods that operate on that data",
+					"selected_answer": "",
+					"answers": [
+						{
+							"identifier": "A",
+							"answer": "The process of creating objects from classes"
+						},
+						{
+							"identifier": "B",
+							"answer": "The bundling of data and methods that operate on that data"
+						},
+						{
+							"identifier": "C",
+							"answer": "The ability of an object to take on many forms"
+						},
+						{
+							"identifier": "D",
+							"answer": "The process of reusing code from existing classes"
+						}
+					]
+				},
+				{
+					"question": "What is inheritance in object-oriented programming?",
+					"correct_answer": "The ability of a class to inherit properties and methods from a parent class",
+					"selected_answer": "",
+					"answers": [
+						{
+							"identifier": "A",
+							"answer": "The process of creating objects from classes"
+						},
+						{
+							"identifier": "B",
+							"answer": "The ability of a class to inherit properties and methods from a parent class"
+						},
+						{
+							"identifier": "C",
+							"answer": "The ability of an object to take on many forms"
+						},
+						{
+							"identifier": "D",
+							"answer": "The process of reusing code from existing classes"
+						}
+					]
+				},
+				{
+					"question": "What is polymorphism in object-oriented programming?",
+					"correct_answer": "The ability of an object to take on many forms",
+					"selected_answer": "",
+					"answers": [
+						{
+							"identifier": "A",
+							"answer": "The process of creating objects from classes"
+						},
+						{
+							"identifier": "B",
+							"answer": "The ability of a class to inherit properties and methods from a parent class"
+						},
+						{
+							"identifier": "C",
+							"answer": "The ability of an object to take on many forms"
+						},
+						{
+							"identifier": "D",
+							"answer": "The process of reusing code from existing classes"
+						}
+					]
+				},
+				{
+					"question": "What is abstraction in object-oriented programming?",
+					"correct_answer": "The process of hiding unnecessary details and exposing only essential information",
+					"selected_answer": "",
+					"answers": [
+						{
+							"identifier": "A",
+							"answer": "The process of creating objects from classes"
+						},
+						{
+							"identifier": "B",
+							"answer": "The ability of a class to inherit properties and methods from a parent class"
+						},
+						{
+							"identifier": "C",
+							"answer": "The ability of an object to take on many forms"
+						},
+						{
+							"identifier": "D",
+							"answer": "The process of hiding unnecessary details and exposing only essential information"
+						}
+					]
+				}
+			]
+		}
+	]
+}

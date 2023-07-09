@@ -4,8 +4,6 @@ const nameOfSubject = urlParams.get('subject');
 
 localStorage.setItem('subject', nameOfSubject);
 
-console.log(nameOfSubject);
-
 let token;
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -106,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		const resetRadio = document.getElementById('reset');
 		const verificationRadio = document.getElementById('verify');
 
-		// get label for verification radio button
+		const singupLabel = labels[2];
 		const verifyLabel = labels[1];
 
 		// Reset styles and hide error message
@@ -162,6 +160,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
 					if (decodedToken.IsVerified == 'False') {
 						displayTextOneCharacterAtATime(welcomeElement, verificationText);
+						signUpRadio.classList.add('hidden');
+						singupLabel.classList.add('hidden');
 						studentIDInput.classList.add('hidden');
 						verificationRadio.classList.remove('hide');
 						verifyLabel.classList.remove('hide');
@@ -227,7 +227,7 @@ document.addEventListener('DOMContentLoaded', function () {
 					if (!response.ok) {
 						throw new Error('Failed to create user');
 					}
-					console.log(response);
+
 					return response.json();
 				})
 				.then(function (data) {
@@ -267,7 +267,7 @@ document.addEventListener('DOMContentLoaded', function () {
 				errorElement.style.display = 'block';
 				return;
 			}
-			console.log('I need healing' + groupName);
+
 			if (groupName === '' || groupName === null) {
 				displayTextOneCharacterAtATime(
 					errorElement,
@@ -348,27 +348,10 @@ document.addEventListener('DOMContentLoaded', function () {
 				}
 			})
 			.catch(function (error) {
-				console.error(error);
-				displayTextOneCharacterAtATime(errorElement, 'Verification failed.');
-				errorElement.style.display = 'block';
+				// console.error(error);
+				// displayTextOneCharacterAtATime(errorElement, 'Verification failed.');
+				// errorElement.style.display = 'block';
 			});
-	}
-	function assignGroup() {
-		let token = document.cookie
-			.split('; ')
-			.find((row) => row.startsWith('jwt='))
-			.split('=')[1];
-		fetch(`http://localhost:4434/api/Users/Group?groupName=${groupName}`, {
-			method: 'PATCH',
-			headers: {
-				Authorization: `Bearer ${token}`,
-				'Content-Type': 'application/json',
-			},
-		}).catch(function (error) {
-			console.error(error);
-			displayTextOneCharacterAtATime(errorElement, 'Assigning group failed.');
-			errorElement.style.display = 'block';
-		});
 	}
 	function verifyCode(code) {
 		let token = document.cookie
@@ -407,11 +390,11 @@ document.addEventListener('DOMContentLoaded', function () {
 						setIndicatorPosition(0);
 					}, 1500);
 				} else {
-					displayTextOneCharacterAtATime(
-						errorElement,
-						'Verification code incorrect.'
-					);
-					errorElement.style.display = 'block';
+					// displayTextOneCharacterAtATime(
+					// 	errorElement,
+					// 	'Verification code incorrect.'
+					// );
+					// errorElement.style.display = 'block';
 				}
 			})
 			.catch((error) => {
@@ -450,12 +433,37 @@ document.addEventListener('DOMContentLoaded', function () {
 			var option = document.createElement('option');
 			option.text = group.name;
 			option.value = group.name;
-			console.log(group.name);
+
 			dropdown.appendChild(option);
 		});
 		dropdown.addEventListener('change', function () {
 			groupName = this.value; // update the label
-			console.log(groupName);
+		});
+	}
+	function assignGroup() {
+		let token = document.cookie
+			.split('; ')
+			.find((row) => row.startsWith('jwt='))
+			.split('=')[1];
+		fetch(`http://localhost:4434/api/Users/Group?groupName=${groupName}`, {
+			method: 'PATCH',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json',
+			},
+		}).catch(function (error) {
+			console.error(error);
+			displayTextOneCharacterAtATime(errorElement, 'Assigning group failed.');
+			errorElement.style.display = 'block';
 		});
 	}
 });
+
+module.exports = {
+	refreshJWT,
+	parseJwt,
+	verifyCode,
+	fetchGroupNames,
+	populateGroupsDropdown,
+	assignGroup,
+};
