@@ -23,9 +23,15 @@ form.addEventListener('submit', (e) => {
 		gameId: gameId,
 	};
 
+	let token = document.cookie
+			.split('; ')
+			.find((row) => row.startsWith('jwt='))
+			.split('=')[1];
+
 	fetch('http://localhost:4434/api/subjects', {
 		method: 'POST',
 		headers: {
+			Authorization: `Bearer ${token}`,
 			'Content-Type': 'application/json',
 		},
 		body: JSON.stringify(apiRequest),
@@ -49,7 +55,17 @@ editQuizLink.addEventListener('click', async function (event) {
 	event.preventDefault();
 
 	try {
-		const response = await fetch('http://localhost:4434/api/subjects');
+		let token = document.cookie
+			.split('; ')
+			.find((row) => row.startsWith('jwt='))
+			.split('=')[1];
+		const response = await fetch('http://localhost:4434/api/subjects',{
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json',
+			},
+		});
 		const data = await response.json();
 		subjects = data;
 		// Store the subjects data in localStorage
@@ -78,9 +94,16 @@ window.addEventListener('DOMContentLoaded', function () {
 async function removeQuiz(button, subject) {
 	if (confirm('Are you sure you want to delete this quiz?')) {
 		// TODO send the delete request to the server
-
-		await fetch(`http://localhost:4434/api/subjects/?id=${subject.Id}`, {
+        let token = document.cookie
+			.split('; ')
+			.find((row) => row.startsWith('jwt='))
+			.split('=')[1];
+		await fetch(`http://localhost:4434/api/subjects/?id=${subject.Id}`,{
 			method: 'DELETE',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json',
+			},
 		})
 			.then((response) => {
 				if (!response.ok) {
@@ -96,8 +119,14 @@ async function removeQuiz(button, subject) {
 				// Handle errors
 				console.error('Error deleting subject:', error.message);
 			});
-
-		const response = await fetch('http://localhost:4434/api/subjects');
+        
+		const response = await fetch('http://localhost:4434/api/subjects', {
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json',
+			},
+		});
 		const data = await response.json();
 		subjectsToBeDeleted = data;
 
@@ -398,10 +427,15 @@ async function removeEditModalQuestion(button, quizId, questionId) {
 			break;
 		}
 	}
+	let token = document.cookie
+			.split('; ')
+			.find((row) => row.startsWith('jwt='))
+			.split('=')[1];
 	// Send chosenSubject via API using fetch
 	await fetch('http://localhost:4434/api/subjects', {
 		method: 'PUT',
 		headers: {
+			Authorization: `Bearer ${token}`,
 			'Content-Type': 'application/json',
 		},
 		body: JSON.stringify(chosenSubject),
@@ -435,7 +469,17 @@ async function removeEditModalQuestion(button, quizId, questionId) {
 	}
 
 	try {
-		const response = await fetch('http://localhost:4434/api/subjects');
+		let token = document.cookie
+			.split('; ')
+			.find((row) => row.startsWith('jwt='))
+			.split('=')[1];
+		const response = await fetch('http://localhost:4434/api/subjects', {
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json',
+			},
+		});
 		const data = await response.json();
 		subjects = data;
 		// Store the subjects data in localStorage
@@ -507,16 +551,20 @@ async function confirmQuizUpdate(button, subjects) {
 		chosenSubject.Test.Title = document.getElementById('modal-quiz-name').value;
 
 		// Send chosenSubject via API using fetch
+		let token = document.cookie
+			.split('; ')
+			.find((row) => row.startsWith('jwt='))
+			.split('=')[1];
 		await fetch('http://localhost:4434/api/subjects', {
 			method: 'PUT',
 			headers: {
+				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify(chosenSubject),
 		})
 			.then((response) => {
 				if (response.ok) {
-					console.log('Quiz updated successfully');
 					// dismiss the modal
 					$('#edit-quiz-modal').modal('hide');
 				} else {
@@ -528,7 +576,17 @@ async function confirmQuizUpdate(button, subjects) {
 			});
 
 		try {
-			const response = await fetch('http://localhost:4434/api/subjects');
+			let token = document.cookie
+			.split('; ')
+			.find((row) => row.startsWith('jwt='))
+			.split('=')[1];
+			const response = await fetch('http://localhost:4434/api/subjects', {
+				method: 'GET',
+				headers: {
+					Authorization: `Bearer ${token}`,
+					'Content-Type': 'application/json',
+				},
+			});
 			const data = await response.json();
 			subjects = data;
 			// Store the subjects data in localStorage

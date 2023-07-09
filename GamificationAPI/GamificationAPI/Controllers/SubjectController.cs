@@ -6,8 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using SendGrid.Helpers.Mail;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
-
+[Authorize(Roles = "Admin, Teacher, Student", Policy = "IsVerified")]
 [Route("api/subjects")]
 [ApiController]
 public class SubjectController : ControllerBase

@@ -8,7 +8,7 @@ This repo contains the code for the gamification system for the Introduction to 
 
 ## Technologies
 
-Project was created with:
+The project was created with:
 
 ![Generic badge](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
 ![Generic badge](https://img.shields.io/badge/HTML-239120?style=for-the-badge&logo=html5&logoColor=white)
@@ -21,7 +21,7 @@ Project was created with:
 
 ## Getting Started
 
-To get a local copy up and running follow these steps.
+To get a local copy up and running, follow these steps:
 
 1. Clone the repo
 
@@ -30,7 +30,7 @@ git clone
 ```
 
 2. Run the backend using the instructions in the backend folder
-   [click here to see instructions on running backend](/GamificationAPI/README.md)
+   [click here to see instructions on running the backend.] (/GamificationAPI/README.md)
 
 3. To run the arcade machine, navigate to the arcade machine folder and start a live server
 
@@ -49,5 +49,7 @@ cd teacher_dashboard
 - [x] Login
 - [x] Register
 - [x] Admin/Teacher Dashboard
+- [x] Arcade System
 - [x] Games
+- [x] Quiz
 - [x] Leaderboard

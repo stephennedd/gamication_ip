@@ -72,7 +72,17 @@ const deleteQuizLink = document.getElementById('delete-quiz-link');
 deleteQuizLink.addEventListener('click', async function (event) {
 	event.preventDefault();
 	try {
-		const response = await fetch('http://localhost:4434/api/subjects');
+		let token = document.cookie
+			.split('; ')
+			.find((row) => row.startsWith('jwt='))
+			.split('=')[1];
+		const response = await fetch('http://localhost:4434/api/subjects',{
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json',
+			},
+		});
 		const data = await response.json();
 		subjectsToBeDeleted = data;
 
