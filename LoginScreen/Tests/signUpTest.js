@@ -16,7 +16,7 @@ describe('SignUp functionality', function () {
 		await driver.quit();
 	});
 
-	it('Should allow a user to sign up with valid details', async () => {
+	it('INT022 - Should allow a user to sign up with valid details', async () => {
 		// Wait for loginForm to be visible
 		const loginForm = await driver.wait(
 			until.elementLocated(By.id('loginForm')),
