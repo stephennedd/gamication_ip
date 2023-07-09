@@ -74,7 +74,7 @@ async function getGeneratedTestForStudent() {
 		});
 
 		const response2 = await fetch(
-			`${apiURL}api/generatedTests/${studentId}/${testId}`
+			`${apiURL}api/generatedTest/${studentId}/${testId}`
 		);
 		const data = await response2.json();
 		questions = data['Questions'];
@@ -239,7 +239,7 @@ let crossIconTag = '<div class="icon cross"><i class="fas fa-times"></i></div>';
 async function getStudentResult(studentId) {
 	try {
 		const response = await fetch(
-			`${apiURL}api/generatedTests/studentResults?studentId=${studentId}&generatedTestId=${generatedTestId}`
+			`${apiURL}api/generatedTest/studentResults?studentId=${studentId}&generatedTestId=${generatedTestId}`
 		);
 		const data = await response.json();
 		studentResult = data;
@@ -255,7 +255,7 @@ async function submitAnswer(answerId, studentQuestionId) {
 	try {
 		// Perform your fetch request here with the selected option
 		await fetch(
-			`${apiURL}api/generatedTests/studentQuestions/${studentQuestionId}/answer`,
+			`${apiURL}api/generatedTest/studentQuestions/${studentQuestionId}/answer`,
 			{
 				method: 'POST',
 				headers: {
