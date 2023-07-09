@@ -8,9 +8,8 @@ using Newtonsoft.Json;
 using Microsoft.AspNetCore.Authorization;
 
 
-[Route("api/generatedTests")]
 [Authorize(Roles = "Admin, Teacher, Student")]
-//[Route("api/[controller]")]
+[Route("api/[controller]")]
 [ApiController]
 public class GeneratedTestController : ControllerBase
 {
@@ -45,7 +44,7 @@ public class GeneratedTestController : ControllerBase
         }
         return Ok(generatedTest);
     }
-    [AllowAnonymous]
+
     [HttpPost]
     //[FromBody] GenerateTestRequest requestBody
     public async Task<IActionResult> GenerateTestAsync([FromBody] GenerateTestRequest requestBody)

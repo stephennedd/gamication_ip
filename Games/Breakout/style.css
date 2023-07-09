@@ -13,6 +13,7 @@ body {
 	height: 100%;
 	font-family: 'Press Start 2P', cursive;
 	background: #000000;
+	overflow: hidden;
 }
 
 #game {

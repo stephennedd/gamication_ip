@@ -1,4 +1,4 @@
-const apiURL = 'aad-gamification.azurewebsites.net/';
+const apiURL = 'https://aad-gamification.azurewebsites.net/';
 class BootScene extends Phaser.Scene {
 	constructor() {
 		super({ key: 'BootScene' });
@@ -556,7 +556,6 @@ async function sendScore(score) {
 		response = await fetch(
 			`${apiURL}api/HighScores?score=${score}&leaderboardName=${subject}`,
 			{
-				mode: 'no-cors',
 				method: 'POST',
 				headers: {
 					Authorization: `Bearer ${token}`,
