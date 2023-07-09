@@ -464,9 +464,22 @@ namespace GamificationAPITests
             // Assert
             Assert.IsType<OkResult>(result);
         }
+        [Fact]
+        public async Task BanUser_ReturnsNotFound_WhenUserDoesNotExist()
+        {
+            // Arrange
+            var userId = 1;
+            _mockUserService.Setup(service => service.GetUserByIdAsync(userId.ToString()))
+                .ReturnsAsync((User)null);
 
-        
+            // Act
+            var result =  _controller.BanUser(userId, true);
 
-        
+            // Assert
+            Assert.IsType<NotFoundResult>(result);
+        }
+       
+
+
     }
 }
