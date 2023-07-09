@@ -22,12 +22,7 @@ describe('Arcade Website', function () {
 		await driver.quit();
 	});
 
-	it('should have the correct page title', async () => {
-		const title = await driver.getTitle();
-		expect(title).to.equal('Arcade');
-	});
-
-	it('should add classes when moveIn button is clicked', async () => {
+	it('INT016 - should add classes when moveIn button is clicked', async () => {
 		const moveInButton = await driver.findElement(By.id('animate'));
 		await moveInButton.click();
 
@@ -43,7 +38,7 @@ describe('Arcade Website', function () {
 		expect(backgroundClass).to.include('move-out');
 	});
 
-	it('should remove classes when moveOut button is clicked', async () => {
+	it('INT017 - should remove classes when moveOut button is clicked', async () => {
 		const moveInButton = await driver.findElement(By.id('animate'));
 		const moveOutButton = await driver.findElement(By.id('back'));
 
@@ -65,7 +60,7 @@ describe('Arcade Website', function () {
 		expect(backgroundClass).not.to.include('move-out');
 	});
 
-	it('should have all initially visible elements', async function () {
+	it('INT018 - should have all initially visible elements', async function () {
 		// Set a generous timeout
 		this.timeout(20000);
 

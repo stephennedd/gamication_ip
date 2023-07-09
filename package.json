@@ -1,10 +1,7 @@
 {
 	"scripts": {
 		"LoginScreenTests": "mocha LoginScreen/Tests/*.js",
-		"ArcadeTests": "mocha ArcadeMachine/Tests/*.js",
-		"IndividualFunctions": "mocha LoginScreen/Tests/IndividualFunctions.js",
-		"LoginTest": "mocha LoginScreen/Tests/LoginTest.js",
-		"SignUpTest": "mocha LoginScreen/Tests/SignUpTest.js"
+		"ArcadeTests": "mocha ArcadeMachine/Tests/*.js"
 	},
 	"dependencies": {
 		"chai": "^4.3.7",

@@ -1,0 +1,60 @@
+body {
+	background-color: #000;
+	color: #0f0;
+	font-family: 'Courier New', Courier, monospace;
+	height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.container {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	grid-gap: 50px;
+}
+
+.subject {
+	border: 1px solid #0f0;
+	padding: 20px;
+	text-align: center;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	height: 200px;
+	width: 200px;
+	background-size: cover;
+	filter: blur(5px);
+	position: relative;
+	overflow: hidden;
+}
+
+.subject:before {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 20px;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+.subject:after {
+	content: attr(data-description);
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	color: #0f0;
+	background: #000;
+	padding: 2px;
+	text-align: center;
+}
+
+.subject:hover {
+	filter: blur(0);
+}
+
+.subject:hover:before {
+	background-color: rgba(0, 255, 0, 0.2);
+	color: #000;
+}

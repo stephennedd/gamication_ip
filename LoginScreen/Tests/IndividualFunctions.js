@@ -14,7 +14,7 @@ describe('Checking', function () {
 		await driver.quit();
 	});
 
-	it('Should correctly parse a JWT token', async function () {
+	it('INT026 - Should correctly parse a JWT token', async function () {
 		this.timeout(30000);
 
 		await driver.get('http://127.0.0.1:5501/LoginScreen/');
@@ -159,7 +159,7 @@ describe('Checking', function () {
 	// 	);
 	// });
 
-	it('Should populate the groups dropdown with data fetched from the server', async () => {
+	it('INT027 - Should populate the groups dropdown with data fetched from the server', async () => {
 		this.timeout(30000);
 
 		const loginForm = await driver.wait(
