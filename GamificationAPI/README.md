@@ -1,6 +1,6 @@
 # API for GamificationToIP
 
-tech stack: .NET 6.0, C#, PostgreSQL, Entity Framework Core, Docker
+tech stack:
 ![Generic badge](https://img.shields.io/badge/.NET-6.0-green.svg)
 ![Generic badge](https://img.shields.io/badge/C%23-9.0-blue.svg)
 ![Generic badge](https://img.shields.io/badge/PostgreSQL-13.4-blue.svg)
