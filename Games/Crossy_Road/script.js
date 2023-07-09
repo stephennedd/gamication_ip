@@ -1,3 +1,17 @@
+// Fix for scroling parent window
+window.addEventListener(
+	'keydown',
+	function (e) {
+		var keys = { 37: 1, 38: 1, 39: 1, 40: 1 };
+
+		if (keys[e.keyCode]) {
+			e.preventDefault();
+			return false;
+		}
+	},
+	false
+);
+
 const counterDOM = document.getElementById('counter');
 const endDOM = document.getElementById('end');
 const gameLives = document.getElementById('lives');
@@ -8,8 +22,6 @@ let highScore = 0;
 let scoreMultiplier = 1;
 const gameDataLife = localStorage.getItem('extraLife');
 const gameDataScore = localStorage.getItem('scoreMultiplier');
-console.log(`extraLife: ${gameDataLife}`);
-console.log(`scoreMultiplier: ${gameDataScore}`);
 if (gameDataLife === 'true') {
 	lives = 4;
 }
@@ -732,7 +744,6 @@ function animate(timestamp) {
 			const carMinX = vechicle.position.x - (vechicleLength * zoom) / 2;
 			const carMaxX = vechicle.position.x + (vechicleLength * zoom) / 2;
 			if (chickenMaxX > carMinX && chickenMinX < carMaxX) {
-				console.log('hit');
 				resetGame();
 				//endDOM.style.visibility = 'visible';
 			}
@@ -749,7 +760,7 @@ function resetGame() {
 		lanes.forEach((lane) => scene.remove(lane.mesh));
 		initaliseValues();
 		// Game over logic (e.g., display game over screen, restart the game)
-		console.log('Game Over');
+
 		endDOM.style.visibility = 'visible';
 	} else {
 		lanes.forEach((lane) => scene.remove(lane.mesh));
@@ -768,7 +779,7 @@ async function sendScore(score) {
 			.find((row) => row.startsWith('jwt='))
 			.split('=')[1];
 		const subject = localStorage.getItem('subject');
-		console.log('subject = ' + subject);
+
 		// Ensure groupName is not empty or undefined
 		if (!score) {
 			console.error('Invalid or empty score!');
@@ -790,7 +801,6 @@ async function sendScore(score) {
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}
 
-		console.log('Leaderboard updated successfully:');
 		return true;
 	} catch (error) {
 		console.log('Fetch Error: ', error);

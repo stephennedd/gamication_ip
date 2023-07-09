@@ -95,17 +95,14 @@
 					}
 
 					let data = await response.json();
-					console.log('Received leaderboard data:', data);
 
 					// Extract the leaderboard objects
 					const leaderboards = data.$values;
-					console.log('Leaderboard objects:', leaderboards);
 
 					// Extract leaderboard names
 					const leaderboardNames = leaderboards.map(
 						(leaderboard) => leaderboard.name
 					);
-					console.log('Extracted leaderboard names:', leaderboardNames);
 
 					const dropdownContent = document.getElementById('dropdown-content');
 					dropdownContent.innerHTML = ''; // Clear existing leaderboard options
@@ -181,17 +178,12 @@
 					}
 
 					let data = await response.json();
-					console.log('Received data:', data); // Print the raw data
 
 					// Extract highScores array
 					let highScores = data.highScores.$values;
 
-					console.log('Extracted highScores:', highScores); // Print the extracted highScores
-
 					// Map the highScores array to an array of simplified objects
 					leaderboardData = highScores.reduce((result, scoreEntry) => {
-						console.log('Processing scoreEntry:', scoreEntry); // Print each scoreEntry being processed
-
 						if (scoreEntry.user) {
 							result.push({
 								playerName: scoreEntry.user.userId,

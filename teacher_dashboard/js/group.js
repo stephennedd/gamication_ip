@@ -1,6 +1,4 @@
-
- let oldGroupName = null;
-
+let oldGroupName = null;
 
 $(document).ready(function () {
 	populateGroupsTable();
@@ -11,12 +9,10 @@ function editGroup(button) {
 	// open modal
 	$('#edit-group-modal').modal('show');
 
-    // get the group name
-     groupName = button.parentNode.parentNode.cells[0].innerHTML;
-     oldGroupName = groupName;
-     console.log("Old group name = " + groupName);
-    $('#edit-group-name').val(groupName);
-
+	// get the group name
+	groupName = button.parentNode.parentNode.cells[0].innerHTML;
+	oldGroupName = groupName;
+	$('#edit-group-name').val(groupName);
 }
 
 // handle the edit group form submit
@@ -29,14 +25,9 @@ $('#edit-group-form').submit(function (event) {
 	var json = JSON.stringify(formData);
 	// TODO send the edit request to the server
 
-
-    let newGroupName = JSON.parse(json).name;
-    
-    console.log("Group name = " + oldGroupName);
-    console.log("New name = " + newGroupName);
-    event.preventDefault();
-    updateGroup(oldGroupName, newGroupName);
-
+	let newGroupName = JSON.parse(json).name;
+	event.preventDefault();
+	updateGroup(oldGroupName, newGroupName);
 });
 
 function addUser(button) {
@@ -52,9 +43,6 @@ $('#add-user-to-group-form').submit(function (event) {
 	};
 
 	var json = JSON.stringify(formData);
-	// TODO send the add user request to the server
-
-	console.log(json);
 	event.preventDefault();
 });
 
@@ -140,12 +128,9 @@ async function populateGroupsTable() {
 		}
 
 		let data = await response.json();
-		console.log('Received data:', data); // Print the raw data
 
 		// Extract groups array
 		let groups = data.$values;
-
-		console.log('Extracted groups:', groups); // Print the extracted groups
 
 		// Get a reference to the table body
 		let tableBody = document.querySelector('#groups-table tbody');
@@ -186,47 +171,44 @@ async function populateGroupsTable() {
 
 // refresh the groups table
 function refreshGroupsTable() {
-
-    populateGroupsTable();
+	populateGroupsTable();
 }
-async function updateGroup(oldGroupName, newGroupName){
-    try {
-        let response;
-        var token = document.cookie
-            .split('; ')
-            .find(row => row.startsWith('jwt='))
-            .split('=')[1];
+async function updateGroup(oldGroupName, newGroupName) {
+	try {
+		let response;
+		var token = document.cookie
+			.split('; ')
+			.find((row) => row.startsWith('jwt='))
+			.split('=')[1];
 
-        // Ensure groupName is not empty or undefined
-        if (!oldGroupName || oldGroupName.trim() === '' || !newGroupName) {
-            console.error("Invalid or empty Group name!");
-            return;
-        }
-        let encodedoldGroupName = encodeURI(oldGroupName);
-        let encodednewGroupName = encodeURI(newGroupName);
-        console.log("old name: "+oldGroupName+" new name: "+newGroupName);
-        response = await fetch(`https://localhost:7186/api/Groups/${encodedoldGroupName}?newName=${encodednewGroupName}`,
-            {
-                method: 'PATCH',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                },
-            });
+		// Ensure groupName is not empty or undefined
+		if (!oldGroupName || oldGroupName.trim() === '' || !newGroupName) {
+			console.error('Invalid or empty Group name!');
+			return;
+		}
+		let encodedoldGroupName = encodeURI(oldGroupName);
+		let encodednewGroupName = encodeURI(newGroupName);
+		response = await fetch(
+			`https://localhost:7186/api/Groups/${encodedoldGroupName}?newName=${encodednewGroupName}`,
+			{
+				method: 'PATCH',
+				headers: {
+					Authorization: `Bearer ${token}`,
+					'Content-Type': 'application/json',
+				},
+			}
+		);
 
-        if (!response.ok) {
-            alert(`Failed to update Group. error code: ${response.status} `);
-            //throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        $('#edit-group-modal').modal('hide');
+		if (!response.ok) {
+			alert(`Failed to update Group. error code: ${response.status} `);
+			//throw new Error(`HTTP error! status: ${response.status}`);
+		}
+		$('#edit-group-modal').modal('hide');
 
-
-        console.log('Group updated successfully:');
-        refreshGroupsTable();
-        return true;
-    } catch (error) {
-        console.log('Fetch Error: ', error);
-        alert(`Failed to update group. error code: ${error} `);
-    }
+		refreshGroupsTable();
+		return true;
+	} catch (error) {
+		console.log('Fetch Error: ', error);
+		alert(`Failed to update group. error code: ${error} `);
+	}
 }
-

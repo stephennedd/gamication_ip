@@ -40,12 +40,9 @@ async function deleteStudent(userId) {
 		.then((response) => {
 			if (response.ok) {
 				// Student deletion successful
-
-				console.log(`Student with ID ${userId} deleted successfully.`);
 				// Perform any additional actions or updates on the UI if needed
 			} else {
 				// Student deletion failed
-				console.error('Error:', response.status);
 				// Handle the error or display an appropriate error message
 			}
 		})
@@ -63,7 +60,7 @@ async function updateBannedStatus(id, isBanned) {
 		.split('; ')
 		.find((row) => row.startsWith('jwt='))
 		.split('=')[1];
-	console.log(token);
+
 	const url = `http://localhost:4434/api/users/ban/${id}`;
 
 	// Prepare the request body
@@ -79,10 +76,8 @@ async function updateBannedStatus(id, isBanned) {
 	})
 		.then((response) => {
 			if (response.ok) {
-				console.log('User banned status updated successfully.');
 				// Handle the success case if needed
 			} else {
-				console.error('Error updating user banned status:', response.status);
 				// Handle the error case if needed
 			}
 		})
@@ -103,7 +98,6 @@ async function fetchStudents(event, linkType) {
 			students = data;
 			localStorage.setItem('studentsData', JSON.stringify(students));
 			if (linkType == 'update') {
-				console.log(students);
 				populateTableWithData(students, tableBody);
 				window.location.href = '#update-student';
 			} else if (linkType == 'delete') {
@@ -309,10 +303,6 @@ $(document).ready(function () {
 			}
 		});
 
-		// Log JSON data
-		console.log(JSON.stringify(jsonData));
-
-		console.log('Form submitted');
 		e.preventDefault(); // Prevent the form from submitting for now
 		// TODO: Submit the form using Ajax
 	});
@@ -376,11 +366,6 @@ async function confirmStudentUpdate(button) {
 		)
 			.then((response) => {
 				if (response.ok) {
-					// Student deletion successful
-
-					console.log(
-						`Student with ID ${chosenStudent.UserId} deleted successfully.`
-					);
 					// Perform any additional actions or updates on the UI if needed
 				} else {
 					// Student deletion failed

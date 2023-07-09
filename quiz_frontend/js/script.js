@@ -44,18 +44,15 @@ async function getGeneratedTestForStudent() {
 	);
 	const data = await response.json();
 	let testId = data;
-	console.log(`Test ID for ${subjectName}: ${testId}`);
 
 	var token = document.cookie
 		.split('; ')
 		.find((row) => row.startsWith('jwt='))
 		.split('=')[1];
 	var decodedToken = parseJwt(token);
-	console.log(decodedToken);
+
 	var studentId = decodedToken['Id'];
-	console.log(studentId);
-	//var studentId = decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
-	///console.log(studentId);
+
 	try {
 		// Fetch data from the API
 		const response = await fetch('http://localhost:4434/api/generatedTests', {
@@ -71,13 +68,11 @@ async function getGeneratedTestForStudent() {
 		});
 
 		const response2 = await fetch(
-			`https://localhost:7186/api/generatedTests/${studentId}/${testId}`
+			`http://localhost:4434/api/generatedTests/${studentId}/${testId}`
 		);
 		const data = await response2.json();
 		questions = data['Questions'];
 		generatedTestId = data['Id'];
-		console.log(generatedTestId);
-		console.log(questions);
 	} catch (error) {
 		console.error('Error fetching questions:', error);
 	}
@@ -180,7 +175,7 @@ next_btn.onclick = async () => {
 			.find((row) => row.startsWith('jwt='))
 			.split('=')[1];
 		var decodedToken = parseJwt(token);
-		console.log(decodedToken);
+
 		var studentId = decodedToken['Id'];
 		await getStudentResult(studentId);
 		clearInterval(counter); //clear counter
@@ -240,7 +235,6 @@ async function getStudentResult(studentId) {
 		);
 		const data = await response.json();
 		studentResult = data;
-		console.log(studentResult);
 	} catch (error) {
 		console.error('Error submitting answer:', error);
 	}
@@ -263,8 +257,6 @@ async function submitAnswer(answerId, studentQuestionId) {
 				}),
 			}
 		);
-
-		console.log('Answer submitted successfully!');
 	} catch (error) {
 		console.error('Error submitting answer:', error);
 	}
@@ -284,21 +276,16 @@ async function optionSelected(answer) {
 		userScore += 1; //upgrading score value with 1
 		answer.classList.add('correct'); //adding green color to correct selected option
 		answer.insertAdjacentHTML('beforeend', tickIconTag); //adding tick icon to correct selected option
-		console.log('Correct Answer');
-		console.log('Your correct answers = ' + userScore);
-		//Yehor
-		console.log(questions.length);
 		updateProgress(userScore, questions.length);
 	} else {
 		answer.classList.add('incorrect'); //adding red color to correct selected option
 		answer.insertAdjacentHTML('beforeend', crossIconTag); //adding cross icon to correct selected option
-		console.log('Wrong Answer');
+
 		for (i = 0; i < allOptions; i++) {
 			if (option_list.children[i].textContent == correcAns) {
 				//if there is an option which is matched to an array answer
 				option_list.children[i].setAttribute('class', 'option correct'); //adding green color to matched option
 				option_list.children[i].insertAdjacentHTML('beforeend', tickIconTag); //adding tick icon to matched option
-				console.log('Auto selected correct answer.');
 			}
 		}
 	}
@@ -315,7 +302,6 @@ function showResult() {
 	const replayBtn = result_box.querySelector('.buttons .restart');
 	const playBtn = result_box.querySelector('.buttons .play');
 
-	console.log('Result is ' + studentResult);
 	if (studentResult >= achievementList[0]) {
 		replayBtn.style.display = 'none'; // Display the "Replay Quiz" button
 		playBtn.style.display = 'block'; // Display the "Replay Quiz" button
@@ -442,7 +428,6 @@ async function updateProgress(correctAnswers, totalQuestions) {
 			achievementText.innerHTML = text;
 			achievementIcon.innerHTML = icon;
 			achievmentTitle.innerHTML = title;
-			console.log('Achievement unlocked: ' + text);
 			achievement.classList.add('show-achievement');
 
 			setTimeout(function () {

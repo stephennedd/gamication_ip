@@ -25,7 +25,7 @@ document
 					// Invalid credentials, display an error message
 					throw new Error('Invalid username or password');
 				}
-				console.log('Eliza');
+
 				// Successful login, handle the response (e.g., store token/session, redirect)
 				return response.json();
 			})
@@ -46,7 +46,6 @@ document
 						'http://schemas.microsoft.com/ws/2008/06/identity/claims/role'
 					];
 				localStorage.setItem('role', userRole);
-				// console.log(data);
 
 				// Redirect to the admin panel or perform other necessary actions
 				window.location.href = 'admin-panel.html';
