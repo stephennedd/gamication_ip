@@ -38,11 +38,11 @@ git clone
 cd ArcadeMachine
 ```
 
-4. To run the teacher dashboard, navigate to the teacher dashboard folder and run the index.html file
+4. Run the admin panel frontend using the instructions in the frontend folder
+   [click here to see instructions on running the frontend.] (/teacher_dashboard/README.md)
 
-```sh
-cd teacher_dashboard
-```
+   or go to the url: https://adminpanelaad.z6.web.core.windows.net/pages/login.html
+
 
 ## Features
 
