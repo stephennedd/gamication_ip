@@ -30,7 +30,7 @@ git clone
 ```
 
 2. Run the backend using the instructions in the backend folder
-   [click here to see instructions on running the backend.] (/GamificationAPI/README.md)
+   [click here to see instructions on running the backend.](/GamificationAPI/README.md)
 
 3. To run the arcade machine, navigate to the arcade machine folder and start a live server
 
@@ -39,7 +39,7 @@ cd ArcadeMachine
 ```
 
 4. Run the admin panel frontend using the instructions in the frontend folder
-   [click here to see instructions on running the frontend.] (/teacher_dashboard/README.md)
+   [click here to see instructions on running the frontend.](/teacher_dashboard/README.md)
 
    or go to the url: https://adminpanelaad.z6.web.core.windows.net/pages/login.html
 
