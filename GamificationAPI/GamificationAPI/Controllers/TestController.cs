@@ -8,8 +8,10 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using SendGrid.Helpers.Mail;
 using static System.Net.Mime.MediaTypeNames;
+using System.Data;
+using Microsoft.AspNetCore.Authorization;
 
-
+[Authorize(Roles = "Admin, Teacher, Student", Policy = "IsVerified")]
 [Route("api/tests")]
 [ApiController]
 public class TestController : ControllerBase

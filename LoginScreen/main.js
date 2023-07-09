@@ -172,9 +172,20 @@ document.addEventListener('DOMContentLoaded', function () {
 						verificationRadio.checked = true;
 						setIndicatorPosition(1);
 					} else {
+						let token = document.cookie
+			.split('; ')
+			.find((row) => row.startsWith('jwt='))
+			.split('=')[1];
 						const subjectName = localStorage.getItem('subject');
 						const response = await fetch(
-							`http://localhost:4434/api/subjects/${subjectName}/game`
+							`http://localhost:4434/api/subjects/${subjectName}/game`,
+							{
+								method: 'GET',
+								headers: {
+									Authorization: `Bearer ${token}`,
+									'Content-Type': 'application/json',
+								},
+							}
 						);
 						const gameName = await response.text();
 						localStorage.setItem('gameName', gameName);

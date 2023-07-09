@@ -38,17 +38,25 @@ mute_btn.onclick = () => {
 };
 
 async function getGeneratedTestForStudent() {
-	const subjectName = localStorage.getItem('subject'); // Replace with your desired subject name
-	const response = await fetch(
-		`http://localhost:4434/api/subjects/${subjectName}/test`
-	);
-	const data = await response.json();
-	let testId = data;
-
 	var token = document.cookie
 		.split('; ')
 		.find((row) => row.startsWith('jwt='))
 		.split('=')[1];
+
+	const subjectName = localStorage.getItem('subject'); // Replace with your desired subject name
+	const response = await fetch(
+		`http://localhost:4434/api/subjects/${subjectName}/test`,
+		{
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json',
+			},
+		}
+	);
+	const data = await response.json();
+	let testId = data;
+
 	var decodedToken = parseJwt(token);
 
 	var studentId = decodedToken['Id'];
@@ -58,6 +66,7 @@ async function getGeneratedTestForStudent() {
 		const response = await fetch('http://localhost:4434/api/generatedTests', {
 			method: 'POST',
 			headers: {
+				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
@@ -68,7 +77,12 @@ async function getGeneratedTestForStudent() {
 		});
 
 		const response2 = await fetch(
-			`http://localhost:4434/api/generatedTests/${studentId}/${testId}`
+			`http://localhost:4434/api/generatedTests/${studentId}/${testId}`, {
+				method: 'GET',
+				headers: {
+					Authorization: `Bearer ${token}`,
+					'Content-Type': 'application/json',
+				},}
 		);
 		const data = await response2.json();
 		questions = data['Questions'];
@@ -229,9 +243,19 @@ let tickIconTag = '<div class="icon tick"><i class="fas fa-check"></i></div>';
 let crossIconTag = '<div class="icon cross"><i class="fas fa-times"></i></div>';
 
 async function getStudentResult(studentId) {
+	let token = document.cookie
+			.split('; ')
+			.find((row) => row.startsWith('jwt='))
+			.split('=')[1];
 	try {
 		const response = await fetch(
-			`http://localhost:4434/api/generatedTests/studentResults?studentId=${studentId}&generatedTestId=${generatedTestId}`
+			`http://localhost:4434/api/generatedTests/studentResults?studentId=${studentId}&generatedTestId=${generatedTestId}`, {
+				method: 'GET',
+				headers: {
+					Authorization: `Bearer ${token}`,
+					'Content-Type': 'application/json',
+				},
+			}
 		);
 		const data = await response.json();
 		studentResult = data;
@@ -242,6 +266,10 @@ async function getStudentResult(studentId) {
 
 // Function to handle the student's answer submission
 async function submitAnswer(answerId, studentQuestionId) {
+	let token = document.cookie
+			.split('; ')
+			.find((row) => row.startsWith('jwt='))
+			.split('=')[1];
 	// Perform your fetch request here with the selected option
 	try {
 		// Perform your fetch request here with the selected option
@@ -250,6 +278,7 @@ async function submitAnswer(answerId, studentQuestionId) {
 			{
 				method: 'POST',
 				headers: {
+					Authorization: `Bearer ${token}`,
 					'Content-Type': 'application/json',
 				},
 				body: JSON.stringify({
