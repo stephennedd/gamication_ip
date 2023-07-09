@@ -40,6 +40,7 @@ mute_btn.onclick = () => {
 };
 
 async function getGeneratedTestForStudent() {
+	console.log('getGeneratedTestForStudent() called');
 	const subjectName = localStorage.getItem('subject'); // Replace with your desired subject name
 	const response = await fetch(
 		`${apiURL}api/subjects/${subjectName}/test`
@@ -57,7 +58,6 @@ async function getGeneratedTestForStudent() {
 	var studentId = decodedToken['Id'];
 	console.log(studentId);
 	//var studentId = decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
-	console.log(studentId);
 	console.log(testId);
 	try {
 		// Fetch data from the API

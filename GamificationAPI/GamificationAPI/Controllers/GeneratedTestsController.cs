@@ -14,11 +14,11 @@ using Microsoft.AspNetCore.Authorization;
 public class GeneratedTestController : ControllerBase
 {
     private readonly IGeneratedTests _generatedTestService;
-    //private readonly ApplicationDbContext _dbContext;
-    public GeneratedTestController(IGeneratedTests generatedTestService)
+    private readonly ApplicationDbContext _dbContext;
+    public GeneratedTestController(IGeneratedTests generatedTestService, ApplicationDbContext dbContext)
     {
         _generatedTestService = generatedTestService;
-        //_dbContext = dbContext; 
+        _dbContext = dbContext; 
     }
 
     // GET: api/scoreboard
