@@ -23,7 +23,7 @@ $('#edit-group-form').submit(function (event) {
 	};
 
 	var json = JSON.stringify(formData);
-	// TODO send the edit request to the server
+
 
 	let newGroupName = JSON.parse(json).name;
 	event.preventDefault();
@@ -201,7 +201,7 @@ async function updateGroup(oldGroupName, newGroupName) {
 
 		if (!response.ok) {
 			alert(`Failed to update Group. error code: ${response.status} `);
-			//throw new Error(`HTTP error! status: ${response.status}`);
+			
 		}
 		$('#edit-group-modal').modal('hide');
 

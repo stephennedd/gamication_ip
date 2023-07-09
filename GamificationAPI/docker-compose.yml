@@ -26,10 +26,7 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=IPgamification
      restart: always
-   #  volumes:
-   #   - app_data:/var/lib/postgresql/data
+
      networks:
       - dev
 
-#volumes:
- # app_data:
