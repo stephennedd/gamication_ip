@@ -57,10 +57,11 @@ async function getGeneratedTestForStudent() {
 	var studentId = decodedToken['Id'];
 	console.log(studentId);
 	//var studentId = decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
-	///console.log(studentId);
+	console.log(studentId);
+	console.log(testId);
 	try {
 		// Fetch data from the API
-		const response = await fetch(`${apiURL}api/generatedTests`, {
+		const response = await fetch(`${apiURL}api/generatedTest`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',

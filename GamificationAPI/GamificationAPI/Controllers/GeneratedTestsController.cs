@@ -45,6 +45,7 @@ public class GeneratedTestController : ControllerBase
         return Ok(generatedTest);
     }
 
+    [AllowAnonymous]
     [HttpPost]
     //[FromBody] GenerateTestRequest requestBody
     public async Task<IActionResult> GenerateTestAsync([FromBody] GenerateTestRequest requestBody)
