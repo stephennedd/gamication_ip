@@ -137,11 +137,11 @@
 
 					const row = document.createElement('tr');
 					row.innerHTML = `
-                    <td>${position}</td>
-                    <td>${entry.playerName}</td>
-                    <td>${entry.score}</td>
-                    
-                `;
+			                    <td>${position}</td>
+			                    <td>${entry.playerName}</td>
+			                    <td>${entry.score}</td>
+
+			                `;
 					leaderboardBody.appendChild(row);
 				});
 			}
@@ -203,7 +203,16 @@
 			}
 
 			// Call the function to populate the leaderboard on page load
+			// Kliknij se kurwa l żeby odświeżyć leaderboard jak nikt nie paczy ;)
+			document.addEventListener('keydown', (event) => {
+				if (event.isComposing || event.keyCode === 76) {
+					return;
+				}
+				getDataFromAPI();
+			});
+
 			getDataFromAPI();
+
 			// Call the function to populate the leaderboard names on page load
 			getLeaderboards();
 			document.getElementById('switch').addEventListener('change', (event) => {
