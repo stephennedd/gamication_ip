@@ -172,24 +172,7 @@ document.addEventListener('DOMContentLoaded', function () {
 						verificationRadio.checked = true;
 						setIndicatorPosition(1);
 					} else {
-						let token = document.cookie
-			.split('; ')
-			.find((row) => row.startsWith('jwt='))
-			.split('=')[1];
-						const subjectName = localStorage.getItem('subject');
-						const response = await fetch(
-							`http://localhost:4434/api/subjects/${subjectName}/game`,
-							{
-								method: 'GET',
-								headers: {
-									Authorization: `Bearer ${token}`,
-									'Content-Type': 'application/json',
-								},
-							}
-						);
-						const gameName = await response.text();
-						localStorage.setItem('gameName', gameName);
-						window.location.href = '../ArcadeMachine';
+						assignGame();
 					}
 				})
 				.catch(function (error) {
@@ -296,6 +279,15 @@ document.addEventListener('DOMContentLoaded', function () {
 			refreshJWT();
 		}
 	});
+	async function assignGame() {
+		const subjectName = localStorage.getItem('subject');
+		const response = await fetch(
+			`http://localhost:4434/api/subjects/${subjectName}/game`
+		);
+		const gameName = await response.text();
+		localStorage.setItem('gameName', gameName);
+		window.location.href = '../ArcadeMachine';
+	}
 
 	function parseJwt(token) {
 		const base64Url = token.split('.')[1];
@@ -355,7 +347,7 @@ document.addEventListener('DOMContentLoaded', function () {
 					loginForm.classList.replace('signin', 'verify');
 					setIndicatorPosition(1);
 				} else {
-					window.location.href = '../ArcadeMachine';
+					assignGame();
 				}
 			})
 			.catch(function (error) {

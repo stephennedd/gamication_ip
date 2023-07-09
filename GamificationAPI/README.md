@@ -1,7 +1,12 @@
 # API for GamificationToIP
 
+<<<<<<< HEAD
 tech stack: .NET 7.0, C#, PostgreSQL, Entity Framework Core, Docker
 ![Generic badge](https://img.shields.io/badge/.NET-7.0-green.svg)
+=======
+tech stack:
+![Generic badge](https://img.shields.io/badge/.NET-6.0-green.svg)
+>>>>>>> 5663f156e2ab443f502e224e8abd645e7334edad
 ![Generic badge](https://img.shields.io/badge/C%23-9.0-blue.svg)
 ![Generic badge](https://img.shields.io/badge/PostgreSQL-13.4-blue.svg)
 ![Generic badge](https://img.shields.io/badge/Entity%20Framework%20Core-6.0.0-blue.svg)
