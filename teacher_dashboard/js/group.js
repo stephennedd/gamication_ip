@@ -189,7 +189,7 @@ async function updateGroup(oldGroupName, newGroupName) {
 		let encodedoldGroupName = encodeURI(oldGroupName);
 		let encodednewGroupName = encodeURI(newGroupName);
 		response = await fetch(
-			`https://localhost:7186/api/Groups/${encodedoldGroupName}?newName=${encodednewGroupName}`,
+			`http://localhost:4434/api/Groups/${encodedoldGroupName}?newName=${encodednewGroupName}`,
 			{
 				method: 'PATCH',
 				headers: {

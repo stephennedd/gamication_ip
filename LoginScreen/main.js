@@ -348,9 +348,9 @@ document.addEventListener('DOMContentLoaded', function () {
 				}
 			})
 			.catch(function (error) {
-				console.error(error);
-				displayTextOneCharacterAtATime(errorElement, 'Verification failed.');
-				errorElement.style.display = 'block';
+				// console.error(error);
+				// displayTextOneCharacterAtATime(errorElement, 'Verification failed.');
+				// errorElement.style.display = 'block';
 			});
 	}
 	function verifyCode(code) {
@@ -390,11 +390,11 @@ document.addEventListener('DOMContentLoaded', function () {
 						setIndicatorPosition(0);
 					}, 1500);
 				} else {
-					displayTextOneCharacterAtATime(
-						errorElement,
-						'Verification code incorrect.'
-					);
-					errorElement.style.display = 'block';
+					// displayTextOneCharacterAtATime(
+					// 	errorElement,
+					// 	'Verification code incorrect.'
+					// );
+					// errorElement.style.display = 'block';
 				}
 			})
 			.catch((error) => {
