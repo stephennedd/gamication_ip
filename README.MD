@@ -1,6 +1,6 @@
 ![Logo](teacher_dashboard/assets/images/lg_saxion.png)
 
-## Saxion Gamification System - Introduction to Programming
+## Saxion Gamification System
 
 ![Generic badge](https://img.shields.io/badge/Version-1.0.0-009c82.svg)
 
